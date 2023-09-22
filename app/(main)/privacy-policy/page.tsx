@@ -1,8 +1,5 @@
 "use client";
 
-import Navigation from "components/nav";
-import Footer from "components/footer";
-
 import Markdown from "react-markdown";
 
 const content = `
@@ -42,9 +39,9 @@ If you have any further questions about this privacy policy, please send an emai
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="max-w-2xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-5xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
       <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-        <div className="prose my-auto">
+        <div className="prose max-w-fit text-justify">
           <Markdown>{content}</Markdown>
         </div>
       </div>

@@ -15,7 +15,7 @@ export default function DefaultLayout({
     <html
       lang="en"
       className={clsx(
-        "h-full bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-sky-400 to-indigo-900",
+        "h-full bg-gradient-to-l from-blue-500 via-blue-700 to-blue-800",
         publicSans.className
       )}
     >

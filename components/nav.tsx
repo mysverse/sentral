@@ -33,6 +33,12 @@ function Navigation() {
       current: false,
       hidden: true
     },
+    {
+      name: "Terms of Service",
+      href: "/terms-of-service",
+      current: false,
+      hidden: true
+    },
     // {
     //   name: "Server Status",
     //   href: "https://myx.yan.gg/status",

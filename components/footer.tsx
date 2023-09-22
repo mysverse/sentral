@@ -9,6 +9,7 @@ import { isStandalonePWA } from "./utils";
 const footerNavigation = {
   main: [
     { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms of Service", href: "/terms-of-service" },
     { name: "Main Website", href: "https://mysver.se" },
     { name: "Blog", href: "https://blog.mysver.se" }
     // { name: "Blog", href: "https://blog.yan3321.com" },

@@ -59,23 +59,13 @@ export const authOptions: NextAuthOptions = {
       if (account) {
         token.accessToken = account.access_token;
         token.picture = derivedProfile?.picture;
-        console.dir(profile);
-        // token.sub = profile?.sub;
-        // token.picture = profile?.picture;
-        // token = user?.id;
       }
       return token;
     },
     session({ session, token }) {
-      // I skipped the line below coz it gave me a TypeError
-      // session.accessToken = token.accessToken;
       if (session.user && token.sub) {
         session.user.id = token.sub;
-        // session.user.picture = token.picture || undefined;
       }
-
-      // console.dir(session);
-
       return session;
     }
   }

@@ -1,9 +1,3 @@
-import { NextPage } from "next";
-import Head from "next/head";
-
-import Footer from "components/footer";
-
-import Navigation from "components/nav";
 import MysverseStats from "components/bandarStats";
 import { getServerSession } from "next-auth";
 import { authOptions } from "app/api/auth/[...nextauth]/route";

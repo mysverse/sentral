@@ -1,6 +1,7 @@
 import SignInButton from "components/signIn";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import FeatureImage from "public/img/bandar_feature_image.webp";
@@ -27,7 +28,14 @@ export default async function LoginPage() {
                 Welcome to Sentral (Beta)
               </h2>
               <p className="mt-3 text-sm leading-6 text-gray-200">
-                The official companion web app for MYSverse and MYSverse Sim.
+                The official companion web app for{" "}
+                <Link
+                  href="https://mysver.se/"
+                  className="font-semibold text-gray-100 hover:text-gray-200 underline hover:no-underline"
+                >
+                  MYSverse
+                </Link>{" "}
+                and MYSverse Sim.
               </p>
               <p className="mt-3 text-sm leading-6 text-gray-200">
                 This site uses the Roblox Open Cloud and OAuth 2.0 APIs for data
@@ -35,12 +43,12 @@ export default async function LoginPage() {
               </p>
               <p className="mt-3 text-sm leading-6 text-gray-200">
                 {"Don't have a Roblox account? "}
-                <a
+                <Link
                   href="https://www.roblox.com/"
                   className="font-semibold text-gray-100 hover:text-gray-200 underline hover:no-underline"
                 >
                   Sign up here!
-                </a>
+                </Link>
               </p>
             </div>
 
@@ -51,13 +59,31 @@ export default async function LoginPage() {
                 </div>
               </div>
             </div>
+
+            <p className="mt-10 text-sm leading-6 text-gray-300">
+              {"Read our "}
+              <Link
+                href="/privacy-policy"
+                className="font-medium text-gray-200 hover:text-gray-300 underline hover:no-underline"
+              >
+                privacy policy
+              </Link>
+              {" and "}
+              <Link
+                href="/terms-of-service"
+                className="font-medium text-gray-200 hover:text-gray-300 underline hover:no-underline"
+              >
+                terms of service
+              </Link>
+            </p>
           </div>
         </div>
+
         <div className="relative hidden w-0 flex-1 lg:block">
           <Image
             className="absolute inset-0 h-full w-full object-cover"
             src={FeatureImage}
-            alt=""
+            alt="Feature image of Bandar"
             width={200}
             height={200}
             priority={true}
