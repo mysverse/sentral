@@ -7,10 +7,10 @@ import { Metadata } from "next";
 import { env } from "process";
 
 export const metadata: Metadata = {
+  metadataBase: env.NEXTAUTH_URL ? new URL(env.NEXTAUTH_URL) : undefined,
   title: "Sentral",
   description:
-    "Sentral is the official hub and companion app for MYSverse, serving game statistics, analytics tools, and a lot more to come!",
-  metadataBase: env.NEXT_URL ? new URL(env.NEXT_URL) : undefined
+    "Sentral is the official hub and companion app for MYSverse, serving game statistics, analytics tools, and a lot more to come!"
 };
 
 export default function RootLayout({
