@@ -1,0 +1,86 @@
+import NextAuth, { DefaultSession, NextAuthOptions, Profile } from "next-auth";
+import { env } from "process";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+    } & DefaultSession["user"];
+  }
+}
+
+interface RobloxProfile {
+  name: string;
+  nickname: string;
+  preferred_username: string;
+  created_at: number;
+  profile: string;
+  picture: string;
+}
+
+export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: "/auth/login"
+  },
+  providers: [
+    {
+      id: "roblox",
+      name: "Roblox",
+      wellKnown:
+        "https://apis.roblox.com/oauth/.well-known/openid-configuration",
+      type: "oauth",
+      clientId: env.ROBLOX_CLIENT_ID,
+      clientSecret: env.ROBLOX_CLIENT_SECRET,
+      authorization: {
+        params: { scope: "openid profile" }
+      },
+      client: {
+        authorization_signed_response_alg: "ES256",
+        id_token_signed_response_alg: "ES256"
+      },
+      httpOptions: {
+        timeout: 30 * 1000
+      },
+      checks: ["pkce", "state", "nonce"],
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.preferred_username,
+          nickname: profile.nickname,
+          picture: profile.picture
+        };
+      }
+    }
+  ],
+  callbacks: {
+    jwt({ token, account, user, profile }) {
+      type DerivedProfile = Profile & RobloxProfile;
+      const derivedProfile = profile as DerivedProfile;
+      if (account) {
+        token.accessToken = account.access_token;
+        token.picture = derivedProfile?.picture;
+        console.dir(profile);
+        // token.sub = profile?.sub;
+        // token.picture = profile?.picture;
+        // token = user?.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      // I skipped the line below coz it gave me a TypeError
+      // session.accessToken = token.accessToken;
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+        // session.user.picture = token.picture || undefined;
+      }
+
+      // console.dir(session);
+
+      return session;
+    }
+  }
+};
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
