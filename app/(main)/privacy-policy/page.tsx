@@ -9,13 +9,13 @@ import Footer from "components/footer";
 import Markdown from "react-markdown";
 
 const content = `
-**MYX Labs** ("we", "us", or "our"), the developers and maintainers of this web application, take your privacy very seriously, and hence this privacy policy serves to inform you, the user, of the ways our application may affect you in that regard.
+**MYSverse** ("we", "us", or "our"), the developers and maintainers of this web application "Sentral", take your privacy very seriously, and hence this privacy policy serves to inform you, the user, of the ways our application may affect you in that regard.
 
 ### What data we collect from you
 
-While at present we do not collect any information from your browser activity on the web application itself (e.g. clicks, pages visited), we reserve the right to do so in the future.
+We use Plausible web analytics to collect anonymised data about your visit, such as pages visited.
 
-We currently do not utilise server-side cookies, but we implement local browser storage to save certain settings (e.g. if a popup has been acknowledged).
+We use cookies for authentication purposes, and we implement local browser storage to save certain settings (e.g. if a popup has been acknowledged).
 
 The usage of our various products, such as MECS and GenTag may produce logs, which may include but is not limited to data that you specify in your request, such as:
 - Your query input (e.g. the player name / user ID for MECS, nicknames for GenTag)
@@ -24,7 +24,7 @@ The usage of our various products, such as MECS and GenTag may produce logs, whi
 
 ### How your data is collected and stored
 
-Most logs never leave the server they are hosted on, but in certain cases, these logs may be shared with 3rd party services, such as Discord, which is secured by authenticating and limiting access to this data to authorised individuals only.
+Most logs never leave the server they are hosted on, but in certain cases, these logs may be shared with 3rd party services, such as Plausible, which is secured by authenticating and limiting access to this data to authorised individuals only.
 
 Since most of the APIs are open source on GitHub, you may review the source code to identify how exactly the data is being collected and processed.
 
@@ -32,13 +32,15 @@ Since most of the APIs are open source on GitHub, you may review the source code
 
 We use the collected data as metrics and as a form of abuse prevention.
 
+Web analytics help us identify specific areas of improvement.
+
 Metrics such as the query data help us to identify trends and improvements we can make to our products, while data such as the IP address and date/time can be used to blacklist abusers to ensure a better user experience for legitimate visitors.
 
 We do not share your data to any party for marketing purposes, and any 3rd party involved in the data collection process is strictly for logging purposes only.
 
 ### Enquiries
 
-If you have any further questions about this privacy policy, please send an email to Lead Developer Yan at [myxlabs@yan.gg](mailto:myxlabs@yan.gg).
+If you have any further questions about this privacy policy, please send an email to Lead Developer Yan at [yan@mysver.se](mailto:yan@mysver.se).
 `;
 
 function Main() {
