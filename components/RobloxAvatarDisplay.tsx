@@ -15,7 +15,7 @@ export default function RobloxAvatarDisplay({
   return (
     <a
       onClick={() => {
-        signOut();
+        signOut({ redirect: true, callbackUrl: "/auth/login" });
       }}
       className="group block flex-shrink-0 hover:cursor-pointer hover:opacity-75"
     >

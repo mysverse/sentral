@@ -1,19 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { NextPage } from "next";
-import Head from "next/head";
-
-import Footer from "components/footer";
 
 import QueryModalContent from "components/mecs/mecsModalContent";
 
-import Navigation from "components/nav";
-import { isStandalonePWA } from "components/utils";
-import { useUserData } from "components/swr";
+import AuditStats from "components/auditStats";
 import MECSFAQ from "components/mecs/mecsFaq";
 import StaffStats from "components/mecs/staffStats";
-import AuditStats from "components/auditStats";
+import { useUserData } from "components/swr";
+import { isStandalonePWA } from "components/utils";
 // import { useRouter } from "next/router";
 import MECSChart from "components/mecs/mecsChart";
 import MECSChart2 from "components/mecs/mecsChart2";
@@ -222,93 +217,47 @@ function MECSForm() {
   );
 }
 
-function Main() {
+export default function MecsPage() {
   return (
-    <>
-      <Head>
-        <title>MECS</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta property="og:title" content="MECS" />
-        <meta property="og:site_name" content="MYX Labs" />
-        <meta property="og:url" content="https://myx.yan.gg/mecs" />
-        <meta
-          property="og:description"
-          content="Easily perform MYS player analysis with just a username. A MYX Labs donationware project."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://myx.yan.gg/img/mecs/og_image_v2.png"
-        />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MECS by MYX Labs" />
-        <meta
-          name="twitter:description"
-          content="Easily perform MYS player analysis with just a username. A MYX Labs donationware project."
-        />
-        <meta
-          name="twitter:image"
-          content="https://myx.yan.gg/img/mecs/og_image_v2.png"
-        />
-      </Head>
-
-      <main>
-        <div className="flex flex-col h-screen">
-          <Navigation />
-          <div className="-mt-32 flex">
-            <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
-                <MECSForm />
-              </div>
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-                <AuditStats />
-              </div>
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-                <StaffStats limit={4} />
-              </div>
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  Memberships granted and rejected
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Trend and values over the last 12 months
-                </p>
-                <div className="mt-6">
-                  <div className="relative h-[24rem] w-[99%]">
-                    <MECSChart />
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  Membership approval rate
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Trend and values over the last 12 months
-                </p>
-                <div className="mt-6">
-                  <div className="relative h-[24rem] w-[99%]">
-                    <MECSChart2 />
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-                <MECSFAQ />
-              </div>
-            </div>
+    <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+        <MECSForm />
+      </div>
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+        <AuditStats />
+      </div>
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+        <StaffStats limit={4} />
+      </div>
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900">
+          Memberships granted and rejected
+        </h3>
+        <p className="mt-1 text-sm text-gray-500">
+          Trend and values over the last 12 months
+        </p>
+        <div className="mt-6">
+          <div className="relative h-[24rem] w-[99%]">
+            <MECSChart />
           </div>
-          <Footer />
         </div>
-      </main>
-
-      {/* Footer section */}
-    </>
+      </div>
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900">
+          Membership approval rate
+        </h3>
+        <p className="mt-1 text-sm text-gray-500">
+          Trend and values over the last 12 months
+        </p>
+        <div className="mt-6">
+          <div className="relative h-[24rem] w-[99%]">
+            <MECSChart2 />
+          </div>
+        </div>
+      </div>
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+        <MECSFAQ />
+      </div>
+    </div>
   );
 }
-
-const Home: NextPage = () => {
-  return Main();
-};
-
-export default Home;

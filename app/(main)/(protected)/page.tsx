@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { isStandalonePWA } from "components/utils";
-import Navigation from "components/nav";
-import Footer from "components/footer";
 import GeneralFAQ from "components/generalFaq";
 
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
@@ -17,10 +15,7 @@ import MECSOGImage from "public/img/mecs/feature_image.webp";
 import GenTagOGImage from "public/img/gentag/feature_image.webp";
 import GrowthOGImage from "public/img/growth/feature_image.webp";
 import InvoteOGImage from "public/img/invote/feature_image.webp";
-
-import { getServerSession } from "next-auth";
-import { authOptions } from "app/api/auth/[...nextauth]/route";
-
+import TracerOGImage from "public/img/tracer/feature_image.webp";
 const links = [
   {
     name: "Tracer",
@@ -32,7 +27,7 @@ const links = [
     logo: TracerLogo,
     version: "v1.0.0",
     news: "Initial release for Bandar",
-    image: MECSOGImage
+    image: TracerOGImage
   },
   {
     name: "MECS",
@@ -129,113 +124,13 @@ function AppList() {
   );
 }
 
-function RobloxAvatarDisplay({
-  id,
-  name,
-  image
-}: {
-  id: string;
-  name: string;
-  image: string;
-}) {
+export default function MainPage() {
   return (
-    <a href="#" className="group block flex-shrink-0">
-      <div className="flex items-center">
-        <div>
-          <Image
-            className="inline-block h-9 w-9 rounded-full"
-            src={image}
-            alt="Headshot"
-            width={150}
-            height={150}
-          />
-        </div>
-        <div className="ml-3">
-          <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-            {`@${name}`}
-          </p>
-          <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-            {id}
-          </p>
-        </div>
+    <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
+      <AppList />
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+        <GeneralFAQ />
       </div>
-    </a>
-  );
-}
-
-export default async function Page() {
-  const session = await getServerSession(authOptions);
-  return (
-    <>
-      {/* <Head>
-      <title>Dashboard</title>
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      <meta property="og:title" content="Dashboard" />
-      <meta property="og:site_name" content="MYX Labs" />
-      <meta property="og:url" content="https://myx.yan.gg/app" />
-      <meta
-        property="og:description"
-        content="Your gateway to a selection of web services catered to the MYS community. A @yan3321 project."
-      />
-      <meta property="og:type" content="website" />
-      <meta
-        property="og:image"
-        content="https://myx.yan.gg/img/og_image_v2.png"
-      />
-
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="MYX Labs App Dashboard" />
-      <meta
-        name="twitter:description"
-        content="Your gateway to a selection of web services catered to the MYS community. A @yan3321 project."
-      />
-      <meta
-        name="twitter:image"
-        content="https://myx.yan.gg/img/og_image_v2.png"
-      />
-    </Head> */}
-
-      <main>
-        <div className="flex flex-col h-screen">
-          <Navigation />
-          <div className="-mt-32 flex">
-            <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
-              <AppList />
-              {/* <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-              <div className="m-4 mt-8 sm:gap-6 flex flex-wrap justify-center align-center">
-                <a
-                  className="my-auto"
-                  href="https://play.google.com/store/apps/details?id=com.yan3321.myxlabs&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
-                >
-                  <Image
-                    alt="Get it on Google Play"
-                    height={125 * 0.65}
-                    width={323 * 0.65}
-                    src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                  />
-                </a>
-                <a
-                  className="my-auto"
-                  href="https://www.microsoft.com/store/apps/9PBHCH55SMPL"
-                >
-                  <Image
-                    alt="Get it on Microsoft"
-                    height={156 * 0.35}
-                    width={432 * 0.35}
-                    src="https://getbadgecdn.azureedge.net/images/English_L.png"
-                  />
-                </a>
-              </div>
-            </div> */}
-
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-                <GeneralFAQ />
-              </div>
-            </div>
-          </div>
-          <Footer />
-        </div>
-      </main>
-    </>
+    </div>
   );
 }

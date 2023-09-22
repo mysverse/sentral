@@ -14,14 +14,16 @@ import Link from "next/link";
 import { clsx } from "clsx";
 // import DonationStats from "./donationStats";
 import PrivacyBanner from "./privacy/privacyBanner";
-import AnnouncementBanner from "./announcement";
+// import AnnouncementBanner from "./announcement";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import RobloxAvatarDisplay from "./RobloxAvatarDisplay";
+import { useEffect } from "react";
 
 function Navigation() {
   const pathname = usePathname();
+
   const { data: session } = useSession();
   const navigation = [
     { name: "Home", href: "/", current: false },

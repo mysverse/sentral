@@ -419,7 +419,9 @@ export interface BandarData {
   MYS_Devices_1: MYSDevices1;
   GE11_Registeredv2: boolean;
   SessionTimeKeeper: number;
-  TimeOnMAF: number;
+  TimeOnMAF?: number;
+  TimeOnPDRM?: number;
+  TimeOnMYT?: number;
   MYS_Message_2: MYSMessage2;
   GE13_Votes_1: boolean;
   MYS_Quest_2: MYSQuest2;

@@ -11,7 +11,7 @@ const faqs = [
     answer: `MYSverse Sentral, or just Sentral, is the official hub and companion app for MYSverse, serving game statistics, analytics tools, and a lot more to come!`
   },
   {
-    question: "Wait... isn't this a copy of MYX Labs?",
+    question: "This looks familiar, is Sentral related to MYX Labs?",
     answer: `Since the developer of MYX Labs joined the MYSverse project, most of its current architecture has been shared. However, there have been a lot of backend changes to accomodate the new Roblox authentication flow, and a new, more efficient application UI will be introduced in due time.`
   },
   {

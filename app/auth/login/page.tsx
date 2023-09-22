@@ -1,17 +1,20 @@
-import { authOptions } from "app/api/auth/[...nextauth]/route";
 import SignInButton from "components/signIn";
-import { getServerSession } from "next-auth";
+
 import Image from "next/image";
-import { redirect } from "next/navigation";
+
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import FeatureImage from "public/img/bandar_feature_image.webp";
 
-export default async function Example() {
-  const session = await getServerSession(authOptions);
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "app/api/auth/[...nextauth]/route";
+// import { redirect } from "next/navigation";
 
-  if (session) {
-    return redirect("/");
-  }
+export default async function LoginPage() {
+  // const session = await getServerSession(authOptions);
+
+  // if (session) {
+  //   return redirect("/");
+  // }
 
   return (
     <>
@@ -57,6 +60,7 @@ export default async function Example() {
             alt=""
             width={200}
             height={200}
+            priority={true}
           />
         </div>
       </div>

@@ -1,8 +1,5 @@
 "use client";
 
-import { NextPage } from "next";
-import Head from "next/head";
-
 import Navigation from "components/nav";
 import Footer from "components/footer";
 
@@ -43,58 +40,14 @@ We do not share your data to any party for marketing purposes, and any 3rd party
 If you have any further questions about this privacy policy, please send an email to Lead Developer Yan at [yan@mysver.se](mailto:yan@mysver.se).
 `;
 
-function Main() {
+export default function PrivacyPolicyPage() {
   return (
-    <>
-      <Head>
-        <title>Privacy Policy</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta property="og:title" content="Privacy Policy" />
-        <meta property="og:site_name" content="MYX Labs" />
-        <meta property="og:url" content="https://myx.yan.gg/app" />
-        <meta
-          property="og:description"
-          content="Privacy policy of your to a selection of web services catered to the MYS community. A @yan3321 project."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://myx.yan.gg/img/og_image_v2.png"
-        />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MYX Labs Privacy Policy" />
-        <meta
-          name="twitter:description"
-          content="Privacy policy of your gateway to a selection of web services catered to the MYS community. A @yan3321 project."
-        />
-        <meta
-          name="twitter:image"
-          content="https://myx.yan.gg/img/og_image_v2.png"
-        />
-      </Head>
-
-      <main>
-        <div className="flex flex-col h-screen">
-          <Navigation />
-          <div className="-mt-32 flex">
-            <div className="max-w-2xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-                <div className="prose my-auto">
-                  <Markdown>{content}</Markdown>
-                </div>
-              </div>
-            </div>
-          </div>
-          <Footer />
+    <div className="max-w-2xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+        <div className="prose my-auto">
+          <Markdown>{content}</Markdown>
         </div>
-      </main>
-    </>
+      </div>
+    </div>
   );
 }
-
-const Home: NextPage = () => {
-  return Main();
-};
-
-export default Home;

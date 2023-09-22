@@ -1,10 +1,5 @@
 "use client";
 
-import { NextPage } from "next";
-import Head from "next/head";
-import Footer from "components/footer";
-
-import Navigation from "components/nav";
 import { Pie, Doughnut, Bar } from "react-chartjs-2";
 
 import {
@@ -576,7 +571,7 @@ function SeatsParliamentMap({
   return <ElectionSeatMap colours={frequencySort(colours)} />;
 }
 
-function Main() {
+export default function InvotePage() {
   const { stats: seriesIdentifiers } = useInvoteSeriesIdentifiers(true);
 
   const [series, setSeries] = useState<string>();
@@ -603,154 +598,111 @@ function Main() {
   }, [series, seriesIdentifiers]);
 
   return (
-    <>
-      <Head>
-        <title>inVote</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta property="og:title" content="inVote" />
-        <meta property="og:site_name" content="MYX Labs" />
-        <meta property="og:url" content="https://myx.yan.gg/invote" />
-        <meta
-          property="og:description"
-          content="Voting statistics for community elections. A MYX Labs donationware project."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://myx.yan.gg/img/invote/og_image.png"
-        />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="inVote by MYX Labs" />
-        <meta
-          name="twitter:description"
-          content="Voting statistics for community elections. A MYX Labs donationware project."
-        />
-        <meta
-          name="twitter:image"
-          content="https://myx.yan.gg/img/invote/og_image.png"
-        />
-      </Head>
-
-      <main>
-        <div className="flex flex-col h-screen">
-          <Navigation />
-          <div className="-mt-32 flex">
-            <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
-                <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-                  <div>
-                    <div>
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">
-                        Election series selection
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        Select a series to view the results
-                      </p>
-                    </div>
-                    <div className="sm:max-w-full sm:w-full sm:flex">
-                      <div className="min-w-0 flex flex-1 rounded-md shadow-sm">
-                        <select
-                          id="series_identifier"
-                          name="series_identifier"
-                          className="mt-3 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-slate-500 focus:outline-none focus:ring-slate-500 sm:text-sm"
-                          onChange={(e) => {
-                            const index = parseInt(e.target.value);
-                            if (seriesIdentifiers) {
-                              const selectedSeries = seriesIdentifiers[index];
-                              if (selectedSeries) {
-                                setSeries(selectedSeries);
-                              }
-                            }
-                          }}
-                          defaultValue={!seriesIdentifiers ? "hidden" : 0}
-                          disabled={!seriesIdentifiers}
-                        >
-                          {seriesIdentifiers ? (
-                            seriesIdentifiers.map((name, index) => (
-                              <option key={index} value={index}>
-                                {name}
-                              </option>
-                            ))
-                          ) : (
-                            <option hidden disabled value="hidden">
-                              Loading...
-                            </option>
-                          )}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+    <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+        <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <div>
+            <div>
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
+                Election series selection
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">
+                Select a series to view the results
+              </p>
+            </div>
+            <div className="sm:max-w-full sm:w-full sm:flex">
+              <div className="min-w-0 flex flex-1 rounded-md shadow-sm">
+                <select
+                  id="series_identifier"
+                  name="series_identifier"
+                  className="mt-3 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-slate-500 focus:outline-none focus:ring-slate-500 sm:text-sm"
+                  onChange={(e) => {
+                    const index = parseInt(e.target.value);
+                    if (seriesIdentifiers) {
+                      const selectedSeries = seriesIdentifiers[index];
+                      if (selectedSeries) {
+                        setSeries(selectedSeries);
+                      }
+                    }
+                  }}
+                  defaultValue={!seriesIdentifiers ? "hidden" : 0}
+                  disabled={!seriesIdentifiers}
+                >
+                  {seriesIdentifiers ? (
+                    seriesIdentifiers.map((name, index) => (
+                      <option key={index} value={index}>
+                        {name}
+                      </option>
+                    ))
+                  ) : (
+                    <option hidden disabled value="hidden">
+                      Loading...
+                    </option>
+                  )}
+                </select>
               </div>
-
-              {stats && seatStats ? (
-                <>
-                  <h3 className="text-lg font-medium text-gray-900 text-center mt-6 mb-4">
-                    Votes by Party
-                  </h3>
-
-                  {stats ? (
-                    stats.some((item) => item.results.hidden) ? (
-                      <h3 className="italic text-gray-900 text-center mt-6 mb-4">
-                        {
-                          "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
-                        }
-                      </h3>
-                    ) : null
-                  ) : null}
-
-                  <div className="bg-white rounded-lg shadow px-5 py-8 sm:px-6-">
-                    <VoteShareChart stats={stats} />
-                  </div>
-
-                  <div className="mt-6 mb-8 sm:px-6-">
-                    <Stats1 stats={stats} />
-                  </div>
-
-                  <h3 className="mt-8 mb-6 text-lg font-medium leading-6 text-gray-900 text-center">
-                    Votes by Polling Session
-                  </h3>
-                  <div className="bg-white rounded-lg shadow px-5 py-8 sm:px-6-">
-                    <VoteSection stats={stats} />
-                  </div>
-                  <h3 className="mt-8 mb-6 text-lg font-medium leading-6 text-gray-900 text-center">
-                    Parliament Seats Distribution
-                  </h3>
-                  <div className="mb-8">
-                    <Stats3 stats={stats} />
-                  </div>
-                  <div className="bg-white rounded-lg shadow px-5 py-8 mb-8 sm:px-6-">
-                    <div className="flex justify-center">
-                      <SeatsGeoMap stats={stats} seatStats={seatStats} />
-                    </div>
-                  </div>
-                  <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    <div className="bg-white rounded-lg shadow px-5 py-8">
-                      <div className="flex justify-center h-48 w-full">
-                        <SeatsParliamentMap
-                          stats={stats}
-                          seatStats={seatStats}
-                        />
-                      </div>
-                    </div>
-                    <div className="bg-white rounded-lg shadow px-5 py-8">
-                      <SeatsPieChart stats={stats} />
-                    </div>
-                  </dl>
-                </>
-              ) : (
-                <div className="px-5 py-32 h-screen sm:px-6-">
-                  <Spinner />
-                </div>
-              )}
             </div>
           </div>
-          <Footer />
         </div>
-      </main>
-    </>
+      </div>
+
+      {stats && seatStats ? (
+        <>
+          <h3 className="text-lg font-medium text-gray-900 text-center mt-6 mb-4">
+            Votes by Party
+          </h3>
+
+          {stats ? (
+            stats.some((item) => item.results.hidden) ? (
+              <h3 className="italic text-gray-900 text-center mt-6 mb-4">
+                {
+                  "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
+                }
+              </h3>
+            ) : null
+          ) : null}
+
+          <div className="bg-white rounded-lg shadow px-5 py-8 sm:px-6-">
+            <VoteShareChart stats={stats} />
+          </div>
+
+          <div className="mt-6 mb-8 sm:px-6-">
+            <Stats1 stats={stats} />
+          </div>
+
+          <h3 className="mt-8 mb-6 text-lg font-medium leading-6 text-gray-900 text-center">
+            Votes by Polling Session
+          </h3>
+          <div className="bg-white rounded-lg shadow px-5 py-8 sm:px-6-">
+            <VoteSection stats={stats} />
+          </div>
+          <h3 className="mt-8 mb-6 text-lg font-medium leading-6 text-gray-900 text-center">
+            Parliament Seats Distribution
+          </h3>
+          <div className="mb-8">
+            <Stats3 stats={stats} />
+          </div>
+          <div className="bg-white rounded-lg shadow px-5 py-8 mb-8 sm:px-6-">
+            <div className="flex justify-center">
+              <SeatsGeoMap stats={stats} seatStats={seatStats} />
+            </div>
+          </div>
+          <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="bg-white rounded-lg shadow px-5 py-8">
+              <div className="flex justify-center h-48 w-full">
+                <SeatsParliamentMap stats={stats} seatStats={seatStats} />
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow px-5 py-8">
+              <SeatsPieChart stats={stats} />
+            </div>
+          </dl>
+        </>
+      ) : (
+        <div className="px-5 py-32 h-screen sm:px-6-">
+          <Spinner />
+        </div>
+      )}
+    </div>
   );
 }
-
-export default Main;
