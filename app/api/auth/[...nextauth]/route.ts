@@ -60,6 +60,7 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token;
         token.picture = derivedProfile?.picture;
       }
+      console.dir(profile);
       return token;
     },
     session({ session, token }) {
