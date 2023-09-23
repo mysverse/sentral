@@ -87,7 +87,7 @@ function Navigation() {
                         <SentralLogo
                           height={43}
                           width={128}
-                          alt="MYX Labs Logo"
+                          alt="MYSverse Sentral Logo"
                           className="fill-white"
                         />
                       </Link>
@@ -141,7 +141,7 @@ function Navigation() {
                   ) : null}
                   <div className="flex lg:hidden">
                     {/* Mobile menu button */}
-                    <Disclosure.Button className="bg-blue-500 p-2 rounded-md inline-flex items-center justify-center text-blue-200 hover:text-white hover:bg-blue-500 hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white">
+                    <Disclosure.Button className="bg-gradient-to-r from-blue-500 via-blue-700 to-blue-800 p-2 rounded-md inline-flex items-center justify-center text-blue-200 hover:text-white hover:bg-blue-500 hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon
@@ -160,27 +160,29 @@ function Navigation() {
               </div>
 
               <Disclosure.Panel className="lg:hidden">
-                <div className="px-2 pt-2 pb-3 space-y-1">
-                  {navigation
-                    .filter((item) => !item.hidden)
-                    .map((item) => (
-                      <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className={clsx(
-                          item.current
-                            ? "bg-blue-700 text-white"
-                            : "text-white hover:bg-blue-500 hover:bg-opacity-75",
-                          "block rounded-md py-2 px-3 text-base font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </Disclosure.Button>
-                    ))}
+                <div className="flex flex-col divide-y divide-blue-300/25">
+                  <div className="px-2 pt-2 pb-3 space-y-1">
+                    {navigation
+                      .filter((item) => !item.hidden)
+                      .map((item) => (
+                        <Disclosure.Button
+                          key={item.name}
+                          as="a"
+                          href={item.href}
+                          className={clsx(
+                            item.current
+                              ? "bg-blue-700 text-white"
+                              : "text-white hover:bg-blue-500 hover:bg-opacity-75",
+                            "block rounded-md py-2 px-3 text-base font-medium"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
+                          {item.name}
+                        </Disclosure.Button>
+                      ))}
+                  </div>
                   {session?.user.image && session?.user.name ? (
-                    <div className="block lg:hidden mx-3">
+                    <div className="block lg:hidden px-3 py-6">
                       <RobloxAvatarDisplay
                         id={session.user.id}
                         image={session.user.image}
