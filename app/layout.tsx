@@ -22,6 +22,7 @@ export default function RootLayout({
     <PlausibleProvider
       domain="sentral.mysver.se"
       customDomain="https://plausible.yan.gg"
+      exclude="/auth/*"
     >
       <SessionProvider>{children}</SessionProvider>
     </PlausibleProvider>
