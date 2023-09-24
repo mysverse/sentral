@@ -6,6 +6,8 @@ import { MYSverseData, useMysverseData } from "./swr";
 import clsx from "clsx";
 import DefaultTransitionLayout from "./transition";
 
+import CountUp from "react-countup";
+
 function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
   const stats = [
     {
@@ -20,12 +22,7 @@ function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
     },
     {
       name: "Currency",
-      value: bandarData.bandar_ringgit.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })
-      // change: "+54.02%",
-      // changeType: "negative"
+      value: <CountUp end={bandarData.bandar_ringgit} decimals={2} />
     },
     {
       name: "Cars owned",
@@ -89,7 +86,7 @@ function PosStats({
   const stats = [
     {
       name: "Level",
-      value: posStats.Level
+      value: <CountUp end={posStats.Level} />
     },
     {
       name: "Current XP",
