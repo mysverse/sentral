@@ -17,10 +17,5 @@ export default async function Navigation() {
       />
     ) : null;
 
-  return (
-    <>
-      <PrivacyBanner />
-      <NavMenu avatar={avatar} />
-    </>
-  );
+  return <NavMenu avatar={avatar} />;
 }

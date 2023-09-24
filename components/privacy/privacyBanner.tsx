@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
-const key = "privacy_modal_0";
+const key = "privacy_tos_modal_0";
 
 export default function PrivacyBanner() {
   const [privacyShown, setPrivacyShown] = useState<boolean | undefined>();
@@ -49,29 +49,28 @@ export default function PrivacyBanner() {
           <Link
             href="/privacy-policy"
             onClick={savePrivacyShown}
-            className="font-semibold text-slate-700 underline hover:no-underline"
+            className="font-semibold text-blue-600 underline hover:no-underline"
           >
             privacy policy
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="/terms-of-service"
+            onClick={savePrivacyShown}
+            className="font-semibold text-blue-600 underline hover:no-underline"
+          >
+            terms of service
           </Link>
           .
         </p>
         <div className="mt-4 flex items-center gap-x-5">
-          <Link href="/privacy-policy">
-            <button
-              type="button"
-              onClick={savePrivacyShown}
-              className="rounded-md bg-slate-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
-            >
-              Read privacy policy
-            </button>
-          </Link>
-
-          {/* <button
+          <button
             type="button"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={savePrivacyShown}
+            className="rounded-md bg-blue-600 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
-            Reject all
-          </button> */}
+            Agree and continue
+          </button>
         </div>
       </div>
     </div>
