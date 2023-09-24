@@ -17,7 +17,7 @@ export default function AuditStats() {
     const latest = new Date(stats.timeRange.latest);
     return (
       <>
-        <h2 className="text-lg leading-6 font-medium text-gray-900 inline">
+        <h2 className="inline text-lg font-medium leading-6 text-gray-900">
           Cumulative audit statistics
         </h2>
 
@@ -31,7 +31,7 @@ export default function AuditStats() {
           <span className="font-medium">{latest.toDateString()}</span>
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 my-3">
+        <div className="my-3 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
           <div className="flex flex-col">
             <dt className="order-2 text-base font-medium text-gray-500">
               accuracy rate (DAR)*

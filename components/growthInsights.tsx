@@ -34,7 +34,7 @@ function StatDisplay(stats: statistics[]) {
         {stats.map((item) => (
           <div
             key={item.id}
-            className="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 rounded-lg shadow overflow-hidden"
+            className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6"
           >
             <dt>
               <div
@@ -49,11 +49,11 @@ function StatDisplay(stats: statistics[]) {
               >
                 <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
-              <p className="ml-16 text-sm font-medium text-gray-500 truncate">
+              <p className="ml-16 truncate text-sm font-medium text-gray-500">
                 {item.name}
               </p>
             </dt>
-            <dd className="ml-16 pb-6 flex items-baseline sm:pb-7">
+            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
               <p className="text-2xl font-semibold text-gray-900">
                 {item.stat}
               </p>
@@ -68,12 +68,12 @@ function StatDisplay(stats: statistics[]) {
                 >
                   {item.changeType === "increase" ? (
                     <ArrowUpIcon
-                      className="self-center flex-shrink-0 h-4 w-4 mr-1 text-green-500"
+                      className="mr-1 h-4 w-4 flex-shrink-0 self-center text-green-500"
                       aria-hidden="true"
                     />
                   ) : (
                     <ArrowDownIcon
-                      className="self-center flex-shrink-0 h-4 w-4 mr-1 text-red-500"
+                      className="mr-1 h-4 w-4 flex-shrink-0 self-center text-red-500"
                       aria-hidden="true"
                     />
                   )}
@@ -85,7 +85,7 @@ function StatDisplay(stats: statistics[]) {
                   {item.change}
                 </p>
               ) : null}
-              <div className="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6">
+              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
                 <p className="text-sm font-normal text-slate-500">
                   {item.subtitle}
                   <span className="sr-only"> {item.name} stats</span>

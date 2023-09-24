@@ -34,7 +34,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
   }
   return (
     <>
-      <h2 className="text-lg mb-6 leading-6 font-medium text-gray-900">
+      <h2 className="mb-6 text-lg font-medium leading-6 text-gray-900">
         {`Ranking history`}
       </h2>
       <div className="flow-root">
@@ -52,7 +52,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                 <div className="relative pb-8">
                   {eventIdx !== history.length - 1 ? (
                     <span
-                      className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+                      className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
                       aria-hidden="true"
                     />
                   ) : null}
@@ -63,7 +63,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           event.correct || !reviewable
                             ? "bg-gray-400"
                             : "bg-red-400",
-                          "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
+                          "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white"
                         )}
                       >
                         {event.action === "Grant" ? (
@@ -79,7 +79,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                         )}
                       </span>
                     </div>
-                    <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                    <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                       <div>
                         <p className="text-sm text-gray-500">
                           {event.action === "Grant"
@@ -111,18 +111,18 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           {reviewable ? (
                             <>
                               {event.correct ? (
-                                <span className="inline-block sm:inline sm:ml-3 px-2 py-1 text-slate-500 text-xs font-medium bg-slate-100 rounded-md">
+                                <span className="inline-block rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500 sm:ml-3 sm:inline">
                                   Correct decision
                                 </span>
                               ) : (
-                                <span className="inline-block sm:inline sm:ml-3 px-2 py-1 text-slate-500 text-xs font-medium bg-slate-100 rounded-md">
+                                <span className="inline-block rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500 sm:ml-3 sm:inline">
                                   Wrong decision
                                 </span>
                               )}
                               {!event.correct &&
                               event.action === "Refusal" &&
                               eventIdx === 0 ? (
-                                <span className="ml-3 px-2 py-1 text-slate-500 text-xs font-medium bg-slate-100 rounded-md">
+                                <span className="ml-3 rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500">
                                   Appeal suggested
                                 </span>
                               ) : null}
@@ -130,7 +130,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           ) : null}
                         </p>
                       </div>
-                      <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                      <div className="whitespace-nowrap text-right text-sm text-gray-500">
                         <time
                           dateTime={event.timestamps.action.substring(0, 10)}
                         >
@@ -259,8 +259,8 @@ function BlacklistSlideover({
                             className={clsx(
                               tab.value === type
                                 ? "border-slate-500 text-slate-600"
-                                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
-                              "whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm hover:cursor-pointer"
+                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                              "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium hover:cursor-pointer"
                             )}
                             onClick={(e) => setType(tab.value)}
                           >
@@ -289,7 +289,7 @@ function BlacklistSlideover({
                       )
                       .map((item) => (
                         <li key={item.id}>
-                          <div className="group relative flex items-center py-6 px-5">
+                          <div className="group relative flex items-center px-5 py-6">
                             <a
                               href={
                                 type === "groups"
@@ -309,7 +309,7 @@ function BlacklistSlideover({
                                       ? item.name
                                       : `@${item.name}`}
                                   </p>
-                                  <p className="whitespace-normal text-sm w-72 text-gray-500">
+                                  <p className="w-72 whitespace-normal text-sm text-gray-500">
                                     {item.reason}
                                   </p>
                                 </div>
@@ -555,7 +555,7 @@ export default function QueryModalContent({
       />
       {!loading && !error ? (
         <>
-          <div className="flex flex-col sm:flex-row items-center sm:space-x-5 mb-6">
+          <div className="mb-6 flex flex-col items-center sm:flex-row sm:space-x-5">
             <div className="flex-shrink-0">
               <div className="relative">
                 <Image
@@ -573,7 +573,7 @@ export default function QueryModalContent({
                   alt={`Profile picture of player @${apiResponse.user.username}`}
                 />
                 <span
-                  className="absolute inset-0 shadow-inner rounded-full"
+                  className="absolute inset-0 rounded-full shadow-inner"
                   aria-hidden="true"
                 />
               </div>
@@ -601,11 +601,11 @@ export default function QueryModalContent({
               </p>
             </div>
           </div>
-          <h2 className="text-lg leading-6 font-medium text-gray-900">
+          <h2 className="text-lg font-medium leading-6 text-gray-900">
             {`Criteria results`}
           </h2>
           {apiResponse.user.exempt ? (
-            <div className="rounded-md bg-blue-50 p-4 my-4">
+            <div className="my-4 rounded-md bg-blue-50 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <InformationCircleIcon
@@ -622,7 +622,7 @@ export default function QueryModalContent({
               </div>
             </div>
           ) : pass ? (
-            <div className="rounded-md bg-green-50 p-4 my-4">
+            <div className="my-4 rounded-md bg-green-50 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <CheckCircleIcon
@@ -639,7 +639,7 @@ export default function QueryModalContent({
               </div>
             </div>
           ) : (
-            <div className="rounded-md bg-red-50 p-4 my-4">
+            <div className="my-4 rounded-md bg-red-50 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <XCircleIcon
@@ -653,7 +653,7 @@ export default function QueryModalContent({
                     {`${failReasons.length}`} mandatory criteria:
                   </h3>
                   <div className="mt-2 text-sm text-red-700">
-                    <ul role="list" className="list-disc pl-5 space-y-1">
+                    <ul role="list" className="list-disc space-y-1 pl-5">
                       {failReasons.map((reason, index) => (
                         <li key={index}>{reason}</li>
                       ))}
@@ -664,7 +664,7 @@ export default function QueryModalContent({
             </div>
           )}
           <div>
-            <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">
+            <h2 className="text-xs font-medium uppercase tracking-wide text-gray-500">
               Mandatory criteria
             </h2>
             <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -698,13 +698,13 @@ export default function QueryModalContent({
                       key={item.name}
                       className={clsx(
                         item.pass ? "bg-white" : "bg-red-50",
-                        "px-3 py-3 outline outline-gray-200 outline-1 rounded-lg overflow-hidden sm:p-3"
+                        "overflow-hidden rounded-lg px-3 py-3 outline outline-1 outline-gray-200 sm:p-3"
                       )}
                     >
                       <dt
                         className={clsx(
                           item.pass ? "text-gray-500" : "text-red-700",
-                          "text-sm font-medium truncate"
+                          "truncate text-sm font-medium"
                         )}
                       >
                         {item.title}
@@ -723,7 +723,7 @@ export default function QueryModalContent({
               })}
             </dl>
           </div>
-          <h2 className="mt-6 text-gray-500 text-xs font-medium uppercase tracking-wide">
+          <h2 className="mt-6 text-xs font-medium uppercase tracking-wide text-gray-500">
             Trust factor scoring criteria
           </h2>
           <ul
@@ -736,7 +736,7 @@ export default function QueryModalContent({
                 return (
                   <li
                     key={card.name}
-                    className="col-span-1 flex shadow-sm rounded-md"
+                    className="col-span-1 flex rounded-md shadow-sm"
                   >
                     <div
                       className={clsx(
@@ -745,7 +745,7 @@ export default function QueryModalContent({
                           : card.pass
                           ? "bg-green-500"
                           : "bg-red-500",
-                        "flex-shrink-0 flex items-center justify-center w-16 text-white text-sm font-medium rounded-l-md"
+                        "flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
                       )}
                     >
                       {card.displayText === "PASS" ? (
@@ -756,12 +756,12 @@ export default function QueryModalContent({
                         card.displayText
                       )}
                     </div>
-                    <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                      <div className="flex-1 px-4 py-2 truncate text-sm">
-                        <span className="text-gray-900 font-medium hover:text-gray-600">
+                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
+                      <div className="flex-1 truncate px-4 py-2 text-sm">
+                        <span className="font-medium text-gray-900 hover:text-gray-600">
                           {card.title}
                         </span>
-                        <p className="text-gray-500 truncate">
+                        <p className="truncate text-gray-500">
                           {card.subtitle}
                         </p>
                       </div>
@@ -771,7 +771,7 @@ export default function QueryModalContent({
               }
             })}
           </ul>
-          <h2 className="mt-6 text-gray-500 text-xs font-medium uppercase tracking-wide">
+          <h2 className="mt-6 text-xs font-medium uppercase tracking-wide text-gray-500">
             Miscallaneous information
           </h2>
           <ul role="list" className="mt-3 grid grid-cols-1 gap-3">
@@ -781,7 +781,7 @@ export default function QueryModalContent({
                 return (
                   <li
                     key={card.name}
-                    className="col-span-1 flex shadow-sm rounded-md"
+                    className="col-span-1 flex rounded-md shadow-sm"
                   >
                     <div
                       className={clsx(
@@ -790,7 +790,7 @@ export default function QueryModalContent({
                           : card.pass
                           ? "bg-green-500"
                           : "bg-red-500",
-                        "flex-shrink-0 flex items-center justify-center w-16 text-white text-sm font-medium rounded-l-md"
+                        "flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
                       )}
                     >
                       {card.displayText === "PASS" ? (
@@ -801,9 +801,9 @@ export default function QueryModalContent({
                         card.displayText
                       )}
                     </div>
-                    <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                      <div className="flex-1 px-4 py-2 text-sm truncate">
-                        <span className="text-gray-900 font-medium hover:text-gray-600">
+                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
+                      <div className="flex-1 truncate px-4 py-2 text-sm">
+                        <span className="font-medium text-gray-900 hover:text-gray-600">
                           {card.title}
                         </span>
                         <p className="text-gray-500">{card.subtitle}</p>
@@ -822,15 +822,15 @@ export default function QueryModalContent({
           {apiResponse.tests.blacklist.metadata?.src?.docs &&
           !isStandalonePWA() ? (
             <>
-              <div className="flex justify-center mt-6 my-3">
-                <div className="relative z-0 inline-flex shadow-sm rounded-md">
+              <div className="my-3 mt-6 flex justify-center">
+                <div className="relative z-0 inline-flex rounded-md shadow-sm">
                   <button
                     type="button"
                     onClick={(e) => {
                       setType("users");
                       setOpen(true);
                     }}
-                    className="h-full relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500"
+                    className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
                   >
                     List of blacklisted individuals
                   </button>
@@ -840,7 +840,7 @@ export default function QueryModalContent({
                       setType("groups");
                       setOpen(true);
                     }}
-                    className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500"
+                    className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
                   >
                     List of blacklisted groups
                   </button>
@@ -852,14 +852,14 @@ export default function QueryModalContent({
       ) : error ? (
         <>
           <div className="sm:flex sm:items-start">
-            <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
               <ExclamationCircleIcon
                 className="h-6 w-6 text-red-600"
                 aria-hidden="true"
               />
             </div>
-            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 className="text-lg font-medium leading-6 text-gray-900">
                 Uh oh, we hit a snag
               </h3>
               <div className="mt-2">

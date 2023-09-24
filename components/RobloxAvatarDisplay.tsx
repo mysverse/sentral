@@ -19,19 +19,19 @@ export default function RobloxAvatarDisplay({
       }}
       className="group block flex-shrink-0 hover:cursor-pointer hover:opacity-75"
     >
-      <div className="flex flex-row lg:flex-row-reverse items-center">
+      <div className="flex flex-row items-center lg:flex-row-reverse">
         <Image
-          className="inline-block h-14 w-14 lg:h-10 lg:w-10 rounded-full bg-gray-100 drop-shadow-sm"
+          className="inline-block h-14 w-14 rounded-full bg-gray-100 drop-shadow-sm lg:h-10 lg:w-10"
           src={image}
           alt={`Profile picture of @${name}`}
           width={150}
           height={150}
         />
-        <div className="ml-3 mr-0 text-left lg:text-right lg:mr-3 lg:ml-0">
-          <p className="text-base lg:text-sm font-medium text-white">
+        <div className="ml-3 mr-0 text-left lg:ml-0 lg:mr-3 lg:text-right">
+          <p className="text-base font-medium text-white lg:text-sm">
             {`@${name}`}
           </p>
-          <p className="text-sm lg:text-xs font-regular text-white">Sign out</p>
+          <p className="font-regular text-sm text-white lg:text-xs">Sign out</p>
         </div>
       </div>
     </a>

@@ -17,10 +17,10 @@ export default function StaffStats({ limit }: { limit?: number }) {
 
   return !loading && !error ? (
     <>
-      <h2 className="text-lg leading-6 font-medium text-gray-900 inline">
+      <h2 className="inline text-lg font-medium leading-6 text-gray-900">
         {limit ? `Most active membership staff` : `All membership staff`}
       </h2>
-      <span className="ml-3 text-sm inline hover:underline text-slate-800">
+      <span className="ml-3 inline text-sm text-slate-800 hover:underline">
         {limit ? (
           <Link href="/mecs/staff">View staff page</Link>
         ) : (
@@ -28,11 +28,11 @@ export default function StaffStats({ limit }: { limit?: number }) {
         )}
       </span>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-6 my-3">
+      <div className="my-3 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
         {(limit ? stats.slice(0, limit) : stats).map((item) => (
           <div
             key={item.officer.id}
-            className="flex flex-col md:flex-row items-center md:space-x-5"
+            className="flex flex-col items-center md:flex-row md:space-x-5"
           >
             <div className="flex-shrink-0">
               <div className="relative">
@@ -57,7 +57,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
                     alt={`Profile picture of player @${item.officer.name}`}
                   />
                   <span
-                    className="absolute inset-0 shadow-inner rounded-full"
+                    className="absolute inset-0 rounded-full shadow-inner"
                     aria-hidden="true"
                   />
                 </a>

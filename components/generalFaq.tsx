@@ -21,7 +21,7 @@ const faqs = [
         Sentral is developed by{" "}
         <a
           href="https://twitter.com/yan3321"
-          className="underline hover:no-underline text-blue-700"
+          className="text-blue-700 underline hover:no-underline"
         >
           {" "}
           @yan3321
@@ -38,7 +38,7 @@ const faqs = [
         For everything regarding MYSverse web infrastructure, contact Yan at{" "}
         <a
           href="mailto:yan@mysver.se"
-          className="underline hover:no-underline text-blue-700"
+          className="text-blue-700 underline hover:no-underline"
         >
           yan@mysver.se
         </a>
@@ -55,7 +55,7 @@ const faqs = [
         features from MYX Labs are available on their{" "}
         <a
           href="https://github.com/myx-labs"
-          className="underline hover:no-underline text-blue-700"
+          className="text-blue-700 underline hover:no-underline"
         >
           GitHub
         </a>
@@ -68,7 +68,7 @@ const faqs = [
 export default function GeneralFAQ() {
   return (
     <div className="divide-y-2 divide-gray-200">
-      <h2 className="text-lg leading-6 font-medium text-gray-900">
+      <h2 className="text-lg font-medium leading-6 text-gray-900">
         About MYSverse Sentral
       </h2>
       <dl className="mt-4 space-y-3 divide-y divide-gray-200">
@@ -77,11 +77,11 @@ export default function GeneralFAQ() {
             {({ open }) => (
               <>
                 <dt className="text-base">
-                  <Disclosure.Button className="text-left w-full flex justify-between items-start text-gray-400">
+                  <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-400">
                     <span className="font-medium text-gray-900">
                       {faq.question}
                     </span>
-                    <span className="ml-6 h-7 flex items-center">
+                    <span className="ml-6 flex h-7 items-center">
                       <ChevronDownIcon
                         className={clsx(
                           open ? "-rotate-180" : "rotate-0",

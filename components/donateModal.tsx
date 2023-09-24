@@ -38,11 +38,11 @@ export default function DonateModal() {
     <Transition.Root show={open && !donateShown} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed z-10 inset-0 overflow-y-auto"
+        className="fixed inset-0 z-10 overflow-y-auto"
         onClose={() => {}}
         initialFocus={buttonRef}
       >
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -57,7 +57,7 @@ export default function DonateModal() {
 
           {/* This element is to trick the browser into centering the modal contents. */}
           <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            className="hidden sm:inline-block sm:h-screen sm:align-middle"
             aria-hidden="true"
           >
             &#8203;
@@ -71,9 +71,9 @@ export default function DonateModal() {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+            <div className="relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:align-middle">
               <div>
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                   <CurrencyDollarIcon
                     className="h-6 w-6 text-green-600"
                     aria-hidden="true"
@@ -82,7 +82,7 @@ export default function DonateModal() {
                 <div className="mt-3 text-center sm:mt-5">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg leading-6 font-medium text-gray-900"
+                    className="text-lg font-medium leading-6 text-gray-900"
                   >
                     {`You're using`} 100% free donationware
                   </Dialog.Title>
@@ -91,12 +91,12 @@ export default function DonateModal() {
                       {`Hey! I'm Yan, the developer and maintainer of MYX Labs.`}{" "}
                       You may have noticed some upgrades all around.
                     </p>
-                    <p className="text-sm text-gray-500 mt-3">
+                    <p className="mt-3 text-sm text-gray-500">
                       I have recently discovered that hosting this project is
                       taking a sizable burden on my personal finances, more than
                       I originally anticipated.
                     </p>
-                    <p className="text-sm text-gray-500 mt-3">
+                    <p className="mt-3 text-sm text-gray-500">
                       If you are able, I implore you to seriously consider
                       pitching in. You may visit the{" "}
                       <a
@@ -109,7 +109,7 @@ export default function DonateModal() {
                       </a>{" "}
                       to see the current state of funding.
                     </p>
-                    <p className="text-sm text-gray-500 mt-3">
+                    <p className="mt-3 text-sm text-gray-500">
                       With any luck, this will be the only time you see a
                       message like this.
                     </p>
@@ -124,7 +124,7 @@ export default function DonateModal() {
                 >
                   <button
                     type="button"
-                    className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-800 text-base font-medium text-white hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 sm:text-sm disabled:bg-slate-200"
+                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-slate-800 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:bg-slate-200 sm:text-sm"
                     onClick={() => {
                       saveDonateShown();
                       setOpen(false);

@@ -37,7 +37,7 @@ export default function PrivacyBanner() {
     <div
       className={clsx(
         hidden ? "hidden" : "",
-        "z-10 pointer-events-none fixed inset-x-0 bottom-0 px-6 pb-6"
+        "pointer-events-none fixed inset-x-0 bottom-0 z-10 px-6 pb-6"
       )}
     >
       <div className="pointer-events-auto mx-auto max-w-2xl rounded-xl bg-white p-6 shadow-lg ring-1 ring-gray-900/10">

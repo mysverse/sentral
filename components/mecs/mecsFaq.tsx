@@ -45,7 +45,7 @@ const faqs = [
 export default function MECSFAQ() {
   return (
     <div className="divide-y-2 divide-gray-200">
-      <h2 className="text-lg leading-6 font-medium text-gray-900">
+      <h2 className="text-lg font-medium leading-6 text-gray-900">
         Common questions
       </h2>
       <dl className="mt-4 space-y-3 divide-y divide-gray-200">
@@ -54,11 +54,11 @@ export default function MECSFAQ() {
             {({ open }) => (
               <>
                 <dt className="text-base">
-                  <Disclosure.Button className="text-left w-full flex justify-between items-start text-gray-400">
+                  <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-400">
                     <span className="font-medium text-gray-900">
                       {faq.question}
                     </span>
-                    <span className="ml-6 h-7 flex items-center">
+                    <span className="ml-6 flex h-7 items-center">
                       <ChevronDownIcon
                         className={clsx(
                           open ? "-rotate-180" : "rotate-0",

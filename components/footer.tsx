@@ -52,7 +52,7 @@ export default function Footer() {
   return (
     <>
       <footer className="mt-24 bg-gradient-to-r from-blue-500 via-blue-700 to-blue-800 sm:mt-12">
-        <div className="mx-auto max-w-md pb-12 px-4 overflow-hidden sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="mx-auto max-w-md overflow-hidden px-4 pb-12 sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
           {/* <div className="mx-4 my-10 gap-8 flex flex-wrap justify-center align-center">
             <a
               className="my-auto"
@@ -94,11 +94,11 @@ export default function Footer() {
               </a>
             ))}
           </div>
-          <p className="mt-8 text-center font-light text-sm text-white">
+          <p className="mt-8 text-center text-sm font-light text-white">
             &copy; {new Date().getFullYear()} MYSverse Digital Ventures
             (AS0469188-M).
           </p>
-          <p className="mt-2 text-center font-light text-sm text-white">
+          <p className="mt-2 text-center text-sm font-light text-white">
             All trademarks are property of their respective owners.
           </p>
         </div>
