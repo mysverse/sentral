@@ -9,7 +9,7 @@ const key = "donate_modal_0";
 
 export default function DonateModal() {
   const [open, setOpen] = useState(true);
-  let buttonRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const [donateShown, setDonateShown] = useState<boolean>(() => {
     if (typeof window !== "undefined") {

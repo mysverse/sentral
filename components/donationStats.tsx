@@ -5,8 +5,7 @@ import Markdown from "react-markdown";
 import { useOpenCollectiveMemberStats } from "./swr";
 
 export default function DonationStats() {
-  const { apiResponse, isLoading, isError } =
-    useOpenCollectiveMemberStats(true);
+  const { apiResponse } = useOpenCollectiveMemberStats(true);
   // const [index, setIndex] = useState(-1);
   const [donationText, setDonationText] = useState<JSX.Element>();
 
@@ -15,7 +14,7 @@ export default function DonationStats() {
       const validDonors = apiResponse.filter(
         (item) => item.totalAmountDonated > 0
       );
-      let selectedIndex = Math.floor(Math.random() * validDonors.length);
+      const selectedIndex = Math.floor(Math.random() * validDonors.length);
       //   while (selectedIndex === index || index < 0) {
       //     selectedIndex = Math.floor(Math.random() * validDonors.length);
       //   }

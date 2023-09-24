@@ -148,7 +148,7 @@ export default class GrowthUtils {
             }
           }
           break;
-        default:
+        default: {
           const removeSuffixes = (string: string) => {
             const suffixes = ["-D", "-W", "-M"];
             for (const suffix of suffixes) {
@@ -195,6 +195,7 @@ export default class GrowthUtils {
             }
           }
           break;
+        }
       }
     }
 
@@ -320,8 +321,8 @@ export default class GrowthUtils {
   getLastMonthGrowth() {
     const monthData = this.getMonthData();
     const data = monthData.slice().reverse();
-    let currentSum = data[0].previousMonthGrowth || 0;
-    let previousSum = data[1].previousMonthGrowth || 0;
+    const currentSum = data[0].previousMonthGrowth || 0;
+    const previousSum = data[1].previousMonthGrowth || 0;
 
     return {
       current: currentSum,
@@ -391,8 +392,8 @@ export default class GrowthUtils {
   getLastDayGrowth() {
     const interpolatedData = this.interpolatedData;
     const data = interpolatedData.slice().reverse();
-    let currentSum = data[0][1] - data[1][1];
-    let previousSum = data[1][1] - data[2][1];
+    const currentSum = data[0][1] - data[1][1];
+    const previousSum = data[1][1] - data[2][1];
     return {
       current: currentSum,
       previous: previousSum,

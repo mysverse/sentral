@@ -355,7 +355,7 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
       {arrests.map((arrest) => {
         const timeArrest = new Date(arrest.Time_Arrest);
         const timeRelease = new Date(arrest.Time_Release);
-        const [x, y, z] = arrest.Location_Arrest;
+        const [x, , z] = arrest.Location_Arrest;
         return (
           <li
             key={arrest.Reference}

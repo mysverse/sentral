@@ -42,17 +42,17 @@ export default function GrowthPage() {
   );
   const [selectedMonth, setSelectedMonth] = useState<DisplayMonth>(months[0]);
 
-  let growthUtils: GrowthUtils = null as any;
+  let growthUtils: GrowthUtils | undefined = undefined;
 
   if (!isLoading && !isError) {
     growthUtils = new GrowthUtils(growthData);
   }
 
   return (
-    <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto my-auto max-w-7xl flex-grow px-4 sm:px-6 lg:px-8">
       {growthUtils ? (
         <DefaultTransitionLayout show={true} appear={true}>
-          <div className="bg-white rounded-lg shadow py-6 px-1 sm:px-5">
+          <div className="rounded-lg bg-white px-1 py-6 shadow sm:px-5">
             {/* chart won't scale properly without width class: https://stackoverflow.com/a/70191511 */}
             <div className="relative h-[28rem] w-[99%]">
               <GrowthChart
@@ -62,7 +62,7 @@ export default function GrowthPage() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 justify-center gap-6 bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-8">
+          <div className="mt-8 grid grid-cols-1 justify-center gap-6 rounded-lg bg-white px-5 py-6 shadow sm:grid-cols-2 sm:px-6">
             <RadioGroup
               value={logarithmic ? "logarithmic" : "linear"}
               onChange={(e) => {
@@ -81,12 +81,12 @@ export default function GrowthPage() {
                       clsx(
                         !option.disabled
                           ? "cursor-pointer focus:outline-none"
-                          : "opacity-25 cursor-not-allowed",
-                        active ? "ring-2 ring-offset-2 ring-blue-500" : "",
+                          : "cursor-not-allowed opacity-25",
+                        active ? "ring-2 ring-blue-500 ring-offset-2" : "",
                         checked
-                          ? "bg-blue-600 border-transparent text-white hover:bg-blue-700"
-                          : "bg-white border-gray-200 text-gray-900 hover:bg-gray-50",
-                        "border rounded-md py-3 px-2 flex items-center justify-center text-sm font-medium sm:flex-1 sm:px-6"
+                          ? "border-transparent bg-blue-600 text-white hover:bg-blue-700"
+                          : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50",
+                        "flex items-center justify-center rounded-md border px-2 py-3 text-sm font-medium sm:flex-1 sm:px-6"
                       )
                     }
                     disabled={option.disabled}
@@ -99,6 +99,7 @@ export default function GrowthPage() {
             <Listbox
               value={selectedMonthValue}
               onChange={(value) => {
+                if (!growthUtils) return;
                 const month = months
                   .concat(growthUtils.getDisplayOptionsArray())
                   .find((e) => e.value === value);
@@ -111,7 +112,7 @@ export default function GrowthPage() {
               {({ open }) => (
                 <>
                   <div className="relative my-auto flex flex-grow">
-                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-slate-500 focus:border-slate-500 sm:text-sm">
+                    <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pl-3 pr-10 text-left shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 sm:text-sm">
                       <div className="flex items-center">
                         <span
                           aria-label={
@@ -121,14 +122,14 @@ export default function GrowthPage() {
                             selectedMonth.valid
                               ? "bg-green-400"
                               : "bg-gray-200",
-                            "flex-shrink-0 inline-block h-2 w-2 rounded-full"
+                            "inline-block h-2 w-2 flex-shrink-0 rounded-full"
                           )}
                         />
                         <span className="ml-3 block truncate">
                           {selectedMonth.name}
                         </span>
                       </div>
-                      <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                         <ArrowsUpDownIcon
                           className="h-5 w-5 text-gray-400"
                           aria-hidden="true"
@@ -143,18 +144,18 @@ export default function GrowthPage() {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                      <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {months
-                          .concat(growthUtils.getDisplayOptionsArray())
+                          .concat(growthUtils?.getDisplayOptionsArray() || [])
                           .map((month, index) => (
                             <Listbox.Option
                               key={index}
                               className={({ active }) =>
                                 clsx(
                                   active
-                                    ? "text-white bg-slate-700"
+                                    ? "bg-slate-700 text-white"
                                     : "text-gray-900",
-                                  "cursor-default select-none relative py-2 pl-3 pr-9"
+                                  "relative cursor-default select-none py-2 pl-3 pr-9"
                                 )
                               }
                               value={month.value}
@@ -168,7 +169,7 @@ export default function GrowthPage() {
                                         month.valid
                                           ? "bg-green-400"
                                           : "bg-gray-200",
-                                        "flex-shrink-0 inline-block h-2 w-2 rounded-full"
+                                        "inline-block h-2 w-2 flex-shrink-0 rounded-full"
                                       )}
                                       aria-hidden="true"
                                     />
@@ -231,7 +232,7 @@ export default function GrowthPage() {
           </div>
         </DefaultTransitionLayout>
       ) : (
-        <div className="bg-white rounded-lg shadow px-5 py-32 sm:px-6- h-[60vh]">
+        <div className="sm:px-6- h-[60vh] rounded-lg bg-white px-5 py-32 shadow">
           <Spinner />
         </div>
       )}

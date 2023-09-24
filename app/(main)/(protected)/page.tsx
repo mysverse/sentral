@@ -78,33 +78,28 @@ const links = [
 function AppList() {
   return (
     <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-      {links.map((link, index) => (
-        <DefaultTransitionLayout
-          show={true}
-          key={link.href}
-          appear={true}
-          duration={index * 10000}
-        >
-          <li className="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 overflow-hidden">
+      {links.map((link) => (
+        <DefaultTransitionLayout show={true} key={link.href} appear={true}>
+          <li className="col-span-1 flex flex-col divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-center shadow">
             <Image src={link.image} alt={"Marketing image for " + link.title} />
-            <div className="flex-1 flex flex-col p-8">
+            <div className="flex flex-1 flex-col p-8">
               {/* <link.logo className="w-36 my-3 flex-shrink-0 mx-auto fill-slate-700" /> */}
-              <h2 className="text-gray-900 text-xl font-semibold">
+              <h2 className="text-xl font-semibold text-gray-900">
                 {link.name}
               </h2>
-              <h3 className="text-gray-700 text-sm font-medium">
+              <h3 className="text-sm font-medium text-gray-700">
                 {link.title}
               </h3>
-              <dl className="mt-3 flex-grow flex flex-col justify-between">
+              <dl className="mt-3 flex flex-grow flex-col justify-between">
                 <dt className="sr-only">Description</dt>
-                <dd className="text-gray-500 text-sm">{link.description}</dd>
+                <dd className="text-sm text-gray-500">{link.description}</dd>
                 <dt className="sr-only">Status</dt>
                 <dd className="mt-3">
-                  <span className="px-2 py-1 text-slate-500 text-xs font-medium bg-slate-100 rounded-md">
+                  <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500">
                     {link.version}
                   </span>
                   {link.news ? (
-                    <span className="ml-3 text-slate-400 text-xs font-medium italic">
+                    <span className="ml-3 text-xs font-medium italic text-slate-400">
                       {link.news}
                     </span>
                   ) : null}
@@ -113,13 +108,13 @@ function AppList() {
             </div>
             <div>
               <div className="-mt-px flex divide-x divide-gray-200">
-                <div className="w-0 flex-1 flex">
+                <div className="flex w-0 flex-1">
                   <Link
                     href={link.href}
-                    className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+                    className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
                   >
                     <ArrowTopRightOnSquareIcon
-                      className="w-5 h-5 text-gray-400"
+                      className="h-5 w-5 text-gray-400"
                       aria-hidden="true"
                     />
                     <span className="ml-3">Launch applet</span>
@@ -136,9 +131,9 @@ function AppList() {
 
 export default function MainPage() {
   return (
-    <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto my-auto max-w-7xl flex-grow px-4 sm:px-6 lg:px-8">
       <AppList />
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+      <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
         <GeneralFAQ />
       </div>
     </div>

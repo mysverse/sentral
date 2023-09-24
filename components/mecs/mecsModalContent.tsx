@@ -41,7 +41,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
         <ul role="list" className="-mb-8">
           {history.map((event, eventIdx) => {
             let reviewable = false;
-            let automated = event.officer === 2334567007;
+            const automated = event.officer === 2334567007;
             if (event.timestamps.review && !automated) {
               reviewable =
                 new Date(event.timestamps.action).toDateString() ===
@@ -262,7 +262,7 @@ function BlacklistSlideover({
                                 : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                               "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium hover:cursor-pointer"
                             )}
-                            onClick={(e) => setType(tab.value)}
+                            onClick={() => setType(tab.value)}
                           >
                             {tab.name}
                           </div>
@@ -398,7 +398,7 @@ export default function QueryModalContent({
               : "FAIL";
 
           switch (key) {
-            case "age":
+            case "age": {
               const days = result.values.current;
               const duration = days * 24 * 60 * 60 * 1000;
               title = "Account Age";
@@ -415,6 +415,7 @@ export default function QueryModalContent({
                       round: true
                     });
               break;
+            }
 
             default:
               break;
@@ -826,7 +827,7 @@ export default function QueryModalContent({
                 <div className="relative z-0 inline-flex rounded-md shadow-sm">
                   <button
                     type="button"
-                    onClick={(e) => {
+                    onClick={() => {
                       setType("users");
                       setOpen(true);
                     }}
@@ -836,7 +837,7 @@ export default function QueryModalContent({
                   </button>
                   <button
                     type="button"
-                    onClick={(e) => {
+                    onClick={() => {
                       setType("groups");
                       setOpen(true);
                     }}

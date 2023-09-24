@@ -93,7 +93,7 @@ function frequencySort(arr: string[]) {
       i: number;
     };
   }
-  let d: arrayCount = {};
+  const d: arrayCount = {};
   arr = JSON.parse(JSON.stringify(arr));
   arr.forEach(
     (i, index) =>
@@ -161,7 +161,7 @@ function SeatChart({
   dataset: VoteData[];
 }) {
   return (
-    <div className="relative w-full h-48">
+    <div className="relative h-48 w-full">
       <Pie
         data={{
           labels: hidden ? [] : dataset.map((data) => data.name),
@@ -542,20 +542,20 @@ export default function InvotePage() {
   }, [series, seriesIdentifiers]);
 
   return (
-    <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+    <div className="mx-auto my-auto max-w-7xl flex-grow px-4 sm:px-6 lg:px-8">
+      <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
             <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg font-medium leading-6 text-gray-900">
                 Election series selection
               </h3>
               <p className="mt-1 text-sm text-gray-500">
                 Select a series to view the results
               </p>
             </div>
-            <div className="sm:max-w-full sm:w-full sm:flex">
-              <div className="min-w-0 flex flex-1 rounded-md shadow-sm">
+            <div className="sm:flex sm:w-full sm:max-w-full">
+              <div className="flex min-w-0 flex-1 rounded-md shadow-sm">
                 <select
                   id="series_identifier"
                   name="series_identifier"
@@ -592,13 +592,13 @@ export default function InvotePage() {
 
       {stats && seatStats ? (
         <DefaultTransitionLayout show={true} appear={true}>
-          <h3 className="text-lg font-medium text-gray-900 text-center mt-6 mb-4">
+          <h3 className="mb-4 mt-6 text-center text-lg font-medium text-gray-900">
             Votes by Party
           </h3>
 
           {stats ? (
             stats.some((item) => item.results.hidden) ? (
-              <h3 className="italic text-gray-900 text-center mt-6 mb-4">
+              <h3 className="mb-4 mt-6 text-center italic text-gray-900">
                 {
                   "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
                 }
@@ -606,44 +606,44 @@ export default function InvotePage() {
             ) : null
           ) : null}
 
-          <div className="bg-white rounded-lg shadow px-5 py-8 sm:px-6-">
+          <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
             <VoteShareChart stats={stats} />
           </div>
 
-          <div className="mt-6 mb-8 sm:px-6-">
+          <div className="sm:px-6- mb-8 mt-6">
             <Stats1 stats={stats} />
           </div>
 
-          <h3 className="mt-8 mb-6 text-lg font-medium leading-6 text-gray-900 text-center">
+          <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
             Votes by Polling Session
           </h3>
-          <div className="bg-white rounded-lg shadow px-5 py-8 sm:px-6-">
+          <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
             <VoteSection stats={stats} />
           </div>
-          <h3 className="mt-8 mb-6 text-lg font-medium leading-6 text-gray-900 text-center">
+          <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
             Parliament Seats Distribution
           </h3>
           <div className="mb-8">
             <Stats3 stats={stats} />
           </div>
-          <div className="bg-white rounded-lg shadow px-5 py-8 mb-8 sm:px-6-">
+          <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow">
             <div className="flex justify-center">
               <SeatsGeoMap stats={stats} seatStats={seatStats} />
             </div>
           </div>
           <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="bg-white rounded-lg shadow px-5 py-8">
-              <div className="flex justify-center h-48 w-full">
+            <div className="rounded-lg bg-white px-5 py-8 shadow">
+              <div className="flex h-48 w-full justify-center">
                 <SeatsParliamentMap stats={stats} seatStats={seatStats} />
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow px-5 py-8">
+            <div className="rounded-lg bg-white px-5 py-8 shadow">
               <SeatsPieChart stats={stats} />
             </div>
           </dl>
         </DefaultTransitionLayout>
       ) : (
-        <div className="px-5 py-32 h-screen sm:px-6-">
+        <div className="sm:px-6- h-screen px-5 py-32">
           <Spinner />
         </div>
       )}

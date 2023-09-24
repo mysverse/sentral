@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
     }
   ],
   callbacks: {
-    jwt({ token, account, user, profile }) {
+    jwt({ token, account, profile }) {
       type DerivedProfile = Profile & RobloxProfile;
       const derivedProfile = profile as DerivedProfile;
       if (account) {
@@ -70,7 +70,7 @@ export const authOptions: NextAuthOptions = {
     }
   },
   events: {
-    signIn({ user, account, profile, isNewUser }) {
+    signIn({ profile }) {
       console.log(profile);
     }
   }

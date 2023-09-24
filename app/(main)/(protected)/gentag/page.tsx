@@ -34,9 +34,9 @@ function NametagImage(
 
   if (isError || isLoading) {
     return (
-      <div className="h-full flex">
+      <div className="flex h-full">
         <ArrowPathIcon
-          className="h-16 w-16 m-auto text-slate-200"
+          className="m-auto h-16 w-16 text-slate-200"
           aria-hidden="true"
         />
       </div>
@@ -46,7 +46,7 @@ function NametagImage(
   const url = URL.createObjectURL(image);
 
   return (
-    <div className="h-full flex">
+    <div className="flex h-full">
       <a
         href={preview ? undefined : url}
         className="m-auto"
@@ -75,7 +75,7 @@ function NametagImage(
 }
 
 function NametagForm() {
-  const { templates, isError, isLoading } = useNametagTemplates(true);
+  const { templates, isLoading } = useNametagTemplates(true);
   const [name, setName] = useState<string>("");
   const [changeFlag, setChangeFlag] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -101,7 +101,7 @@ function NametagForm() {
 
   return (
     <>
-      <div className="relative block h-36 w-36 mb-8 border-2 border-gray-300 border-dashed rounded-lg">
+      <div className="relative mb-8 block h-36 w-36 rounded-lg border-2 border-dashed border-gray-300">
         {image}
       </div>
 
@@ -112,7 +112,7 @@ function NametagForm() {
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
             <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg font-medium leading-6 text-gray-900">
                 Generate nametag
               </h3>
               <p className="mt-1 text-sm text-gray-500">
@@ -151,7 +151,7 @@ function NametagForm() {
                       />
                     </span>
 
-                    <span className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
+                    <span className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800">
                       <a
                         href="https://create.roblox.com/dashboard/creations/upload?assetType=TShirt"
                         target="_blank"
@@ -164,7 +164,7 @@ function NametagForm() {
                 ) : null}
               </p>
             </div>
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="nametag_name"
@@ -179,7 +179,7 @@ function NametagForm() {
                     id="nametag_name"
                     autoComplete="nametag_name"
                     placeholder="12 characters max"
-                    className="shadow-sm focus:ring-slate-500 focus:border-slate-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
                     maxLength={12}
                     onChange={(e) => {
                       setName(e.target.value);
@@ -202,7 +202,7 @@ function NametagForm() {
                     id="nametag_type"
                     name="nametag_type"
                     autoComplete="nametag_type"
-                    className="shadow-sm focus:ring-slate-500 focus:border-slate-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
                     onChange={(e) => {
                       const index = parseInt(e.target.value);
                       setCurrentIndex(index);
@@ -230,9 +230,9 @@ function NametagForm() {
               </div>
             </div>
           </div>
-          <div className="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+          <div className="space-y-6 divide-y divide-gray-200 pt-8 sm:space-y-5 sm:pt-10">
             <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg font-medium leading-6 text-gray-900">
                 Options
               </h3>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
@@ -244,10 +244,10 @@ function NametagForm() {
             </div>
             {!isStandalonePWA() ? (
               <>
-                <div className="space-y-6 sm:space-y-5 divide-y divide-gray-200">
+                <div className="space-y-6 divide-y divide-gray-200 sm:space-y-5">
                   <div className="pt-6 sm:pt-5">
                     <div role="group" aria-labelledby="label-notifications">
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
+                      <div className="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
                         <div>
                           <div
                             className="mb-3 text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
@@ -264,7 +264,7 @@ function NametagForm() {
                                   id="preview-enable"
                                   name="preview"
                                   type="radio"
-                                  className="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300"
+                                  className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
                                   checked={preview}
                                   value="enable"
                                   onChange={(e) =>
@@ -283,7 +283,7 @@ function NametagForm() {
                                   id="preview-disable"
                                   name="preview"
                                   type="radio"
-                                  className="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300"
+                                  className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
                                   checked={!preview}
                                   value="disable"
                                   onChange={(e) =>
@@ -306,10 +306,10 @@ function NametagForm() {
                 </div>
               </>
             ) : null}
-            <div className="space-y-6 sm:space-y-5 divide-y divide-gray-200">
+            <div className="space-y-6 divide-y divide-gray-200 sm:space-y-5">
               <div className="pt-6 sm:pt-5">
                 <div role="group" aria-labelledby="label-notifications">
-                  <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
+                  <div className="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
                     <div>
                       <div
                         className="mb-3 text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
@@ -329,7 +329,7 @@ function NametagForm() {
                               id="addtshirt-enable"
                               name="addtshirt"
                               type="radio"
-                              className="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300"
+                              className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
                               checked={addTShirt}
                               value="enable"
                               onChange={(e) =>
@@ -348,7 +348,7 @@ function NametagForm() {
                               id="addtshirt-disable"
                               name="addtshirt"
                               type="radio"
-                              className="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300"
+                              className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
                               checked={!addTShirt}
                               value="disable"
                               onChange={(e) =>
@@ -371,24 +371,24 @@ function NametagForm() {
             </div>
             {addTShirt ? (
               <>
-                <div className="sm:mt-5 space-y-6 sm:space-y-5">
-                  <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                <div className="space-y-6 sm:mt-5 sm:space-y-5">
+                  <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:pt-5">
                     <label
                       htmlFor="tshirt_id"
                       className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                     >
                       T-Shirt ID
                     </label>
-                    <div className="mt-1 sm:mt-0 sm:col-span-2">
-                      <div className="max-w-lg flex rounded-md shadow-sm">
-                        <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                    <div className="mt-1 sm:col-span-2 sm:mt-0">
+                      <div className="flex max-w-lg rounded-md shadow-sm">
+                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
                           roblox.com/catalog/
                         </span>
                         <input
                           type="number"
                           name="tshirt_id"
                           id="tshirt_id"
-                          className="flex-1 block w-full focus:ring-slate-500 focus:border-slate-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                          className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
                           min={1}
                           step={1}
                           defaultValue={currentTShirtID}
@@ -444,7 +444,7 @@ function NametagForm() {
                 });
               }}
               disabled={!templates}
-              className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
+              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
             >
               Generate
             </button>
@@ -457,9 +457,9 @@ function NametagForm() {
 
 export default function GentagPage() {
   return (
-    <div className="max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
       <DefaultTransitionLayout show={true} appear={true}>
-        <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+        <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
           <div className="rounded-lg">
             <NametagForm />
           </div>

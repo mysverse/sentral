@@ -1,18 +1,15 @@
 "use client";
 
 import { Transition } from "@headlessui/react";
-import clsx from "clsx";
 import { ReactNode } from "react";
 
 export default function DefaultTransitionLayout({
   show,
   appear,
-  duration,
   children
 }: {
   show: boolean;
   appear: boolean;
-  duration?: number;
   children: ReactNode;
 }) {
   return (
