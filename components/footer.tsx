@@ -2,6 +2,7 @@
 
 import { SVGProps } from "react";
 import { isStandalonePWA } from "./utils";
+import Link from "next/link";
 
 // import PlayStoreBadge from "public/img/store_badges/store_badge_google.svg";
 // import MicrosoftStoreBadge from "public/img/store_badges/store_badge_microsoft.svg";
@@ -72,12 +73,12 @@ export default function Footer() {
           >
             {footerNavigation.main.map((item) => (
               <div key={item.name} className="px-5 py-2">
-                <a
+                <Link
                   href={item.href}
                   className="text-base text-white hover:text-gray-200"
                 >
                   {item.name}
-                </a>
+                </Link>
               </div>
             ))}
           </nav>
