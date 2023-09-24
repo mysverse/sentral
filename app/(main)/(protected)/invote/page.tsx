@@ -25,6 +25,7 @@ import {
 import ElectionMap from "components/electionMap";
 import ElectionSeatMap from "components/electionSeatMap";
 import Spinner from "components/spinner";
+import DefaultTransitionLayout from "components/transition";
 
 ChartJS.register(
   ArcElement,
@@ -322,63 +323,6 @@ function Stats1({ stats }: { stats: InvoteStatsTimestamp[] }) {
   );
 }
 
-function Stats2({ stats }: { stats: InvoteStatsTimestamp[] }) {
-  if (!stats) return null;
-
-  interface stat {
-    name: string;
-    stat: string;
-  }
-
-  const statsObject = getStatsObject(stats);
-
-  const total = Object.values(statsObject).reduce((a, b) => a + b, 0);
-
-  const ignoreKeys = ["ROSAK"];
-
-  const filtered = Object.keys(statsObject)
-    .filter((key) => !ignoreKeys.includes(key))
-    .reduce((obj: StatNumber, key) => {
-      obj[key] = statsObject[key];
-      return obj;
-    }, {});
-
-  const valid = Object.values(filtered).reduce((a, b) => a + b, 0);
-  const invalid = total - valid;
-
-  const newStats: stat[] = [
-    {
-      name: "Total Votes",
-      stat: total.toString()
-    },
-    { name: "Valid Votes", stat: valid.toString() },
-    { name: "Invalid Votes", stat: invalid.toString() }
-  ];
-
-  return (
-    <div>
-      <h3 className="text-lg font-medium leading-6 text-gray-900 text-center">
-        Votes Validity
-      </h3>
-      <dl className="mt-5 grid grid-cols-2 gap-6 sm:grid-cols-3">
-        {newStats.map((item) => (
-          <div
-            key={item.name}
-            className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
-          >
-            <dt className="truncate text-sm font-medium text-gray-500">
-              {item.name === "ROSAK" ? "Invalid" : item.name}
-            </dt>
-            <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-              {item.stat}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </div>
-  );
-}
-
 function Stats3({ stats }: { stats: InvoteStatsTimestamp[] }) {
   if (!stats) return null;
 
@@ -647,7 +591,7 @@ export default function InvotePage() {
       </div>
 
       {stats && seatStats ? (
-        <>
+        <DefaultTransitionLayout show={true} appear={true}>
           <h3 className="text-lg font-medium text-gray-900 text-center mt-6 mb-4">
             Votes by Party
           </h3>
@@ -697,7 +641,7 @@ export default function InvotePage() {
               <SeatsPieChart stats={stats} />
             </div>
           </dl>
-        </>
+        </DefaultTransitionLayout>
       ) : (
         <div className="px-5 py-32 h-screen sm:px-6-">
           <Spinner />

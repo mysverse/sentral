@@ -4,6 +4,7 @@ import humanizeDuration from "humanize-duration";
 import Spinner from "./spinner";
 import { MYSverseData, useMysverseData } from "./swr";
 import clsx from "clsx";
+import DefaultTransitionLayout from "./transition";
 
 function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
   const stats = [
@@ -499,7 +500,11 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
 }
 
 export default function MysverseStats({ userId }: { userId: string }) {
-  const { apiResponse: data } = useMysverseData(true, userId);
+  const {
+    apiResponse: data,
+    isLoading,
+    isError
+  } = useMysverseData(true, userId);
   return (
     <div>
       {data ? (
@@ -509,9 +514,9 @@ export default function MysverseStats({ userId }: { userId: string }) {
               Bandar Insights
             </h3>
           </header>
-
-          <BandarStats bandarData={data.bandarData} />
-
+          <DefaultTransitionLayout show={!!data} appear={true}>
+            <BandarStats bandarData={data.bandarData} />
+          </DefaultTransitionLayout>
           <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-8">
             <header className="mb-6">
               <h3 className="text-xl font-bold mb-2">Arrests</h3>
@@ -534,11 +539,13 @@ export default function MysverseStats({ userId }: { userId: string }) {
             <Summons summons={data.summons} />
           </div>
         </>
-      ) : (
+      ) : null}
+
+      {isLoading || isError ? (
         <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 flex justify-center items-center h-[50vh]">
           <Spinner />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

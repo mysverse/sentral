@@ -14,6 +14,7 @@ import MECSChart from "components/mecs/mecsChart";
 import MECSChart2 from "components/mecs/mecsChart2";
 import { usePlausible } from "next-plausible";
 import { useSearchParams } from "next/navigation";
+import DefaultTransitionLayout from "components/transition";
 
 const regex = /^(?=^[^_]+_?[^_]+$)\w{3,20}$/;
 
@@ -220,44 +221,46 @@ function MECSForm() {
 export default function MecsPage() {
   return (
     <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
-        <MECSForm />
-      </div>
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-        <AuditStats />
-      </div>
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-        <StaffStats limit={4} />
-      </div>
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
-          Memberships granted and rejected
-        </h3>
-        <p className="mt-1 text-sm text-gray-500">
-          Trend and values over the last 12 months
-        </p>
-        <div className="mt-6">
-          <div className="relative h-[24rem] w-[99%]">
-            <MECSChart />
+      <DefaultTransitionLayout show={true} appear={true}>
+        <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+          <MECSForm />
+        </div>
+        <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+          <AuditStats />
+        </div>
+        <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+          <StaffStats limit={4} />
+        </div>
+        <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
+            Memberships granted and rejected
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">
+            Trend and values over the last 12 months
+          </p>
+          <div className="mt-6">
+            <div className="relative h-[24rem] w-[99%]">
+              <MECSChart />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
-          Membership approval rate
-        </h3>
-        <p className="mt-1 text-sm text-gray-500">
-          Trend and values over the last 12 months
-        </p>
-        <div className="mt-6">
-          <div className="relative h-[24rem] w-[99%]">
-            <MECSChart2 />
+        <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
+            Membership approval rate
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">
+            Trend and values over the last 12 months
+          </p>
+          <div className="mt-6">
+            <div className="relative h-[24rem] w-[99%]">
+              <MECSChart2 />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-        <MECSFAQ />
-      </div>
+        <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
+          <MECSFAQ />
+        </div>
+      </DefaultTransitionLayout>
     </div>
   );
 }

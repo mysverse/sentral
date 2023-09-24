@@ -12,6 +12,7 @@ import GrowthInsights from "components/growthInsights";
 import GrowthUtils from "components/growthUtils";
 import Spinner from "components/spinner";
 import { Fragment, useState } from "react";
+import DefaultTransitionLayout from "components/transition";
 
 const chartAxisOptions = [
   { name: "Linear", value: "linear", disabled: false },
@@ -50,7 +51,7 @@ export default function GrowthPage() {
   return (
     <div className="max-w-7xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
       {growthUtils ? (
-        <>
+        <DefaultTransitionLayout show={true} appear={true}>
           <div className="bg-white rounded-lg shadow py-6 px-1 sm:px-5">
             {/* chart won't scale properly without width class: https://stackoverflow.com/a/70191511 */}
             <div className="relative h-[28rem] w-[99%]">
@@ -228,7 +229,7 @@ export default function GrowthPage() {
               used to calculate values due to incomplete data
             </p>
           </div>
-        </>
+        </DefaultTransitionLayout>
       ) : (
         <div className="bg-white rounded-lg shadow px-5 py-32 sm:px-6- h-[60vh]">
           <Spinner />
