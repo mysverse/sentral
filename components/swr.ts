@@ -17,13 +17,7 @@ const endpoints = {
   mysverse: process.env.NEXT_PUBLIC_MYSVERSE_FETCHER_URL
 };
 
-const fetcher = async (input: RequestInfo, init: RequestInit) => {
-  const res = await fetch(input, init);
-  if (!res.ok) {
-    throw new Error((res.json() as any).error);
-  }
-  return res.json();
-};
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export function useGrowthData(shouldFetch: boolean) {
   const { data, error } = useSWR(
@@ -343,8 +337,8 @@ export function useCombinedBlacklistData(shouldFetch: boolean) {
   };
 }
 
-const blobFetcher = async (input: RequestInfo, init: RequestInit) => {
-  const res = await fetch(input, init);
+const blobFetcher = async (input: RequestInfo) => {
+  const res = await fetch(input);
   if (!res.ok) {
     throw new Error((res.json() as any).error);
   }

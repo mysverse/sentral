@@ -33,7 +33,7 @@ export default async function LoginPage() {
                   The official companion web app for{" "}
                   <Link
                     href="https://mysver.se/"
-                    className="font-semibold text-gray-100 hover:text-gray-200 underline hover:no-underline"
+                    className="font-semibold text-gray-100 underline hover:text-gray-200 hover:no-underline"
                   >
                     MYSverse
                   </Link>{" "}
@@ -47,13 +47,12 @@ export default async function LoginPage() {
                   {"Don't have a Roblox account? "}
                   <Link
                     href="https://www.roblox.com/"
-                    className="font-semibold text-gray-100 hover:text-gray-200 underline hover:no-underline"
+                    className="font-semibold text-gray-100 underline hover:text-gray-200 hover:no-underline"
                   >
                     Sign up here!
                   </Link>
                 </p>
               </div>
-
               <div className="mt-10">
                 <div className="mt-10">
                   <div className="mt-6 grid grid-cols-1 gap-4">
@@ -66,14 +65,14 @@ export default async function LoginPage() {
                 {"Read our "}
                 <Link
                   href="/privacy-policy"
-                  className="font-medium text-gray-200 hover:text-gray-300 underline hover:no-underline"
+                  className="font-medium text-gray-200 underline hover:text-gray-300 hover:no-underline"
                 >
                   privacy policy
                 </Link>
                 {" and "}
                 <Link
                   href="/terms-of-service"
-                  className="font-medium text-gray-200 hover:text-gray-300 underline hover:no-underline"
+                  className="font-medium text-gray-200 underline hover:text-gray-300 hover:no-underline"
                 >
                   terms of service
                 </Link>
