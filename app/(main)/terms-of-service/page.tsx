@@ -1,5 +1,4 @@
-"use client";
-
+import DefaultTransitionLayout from "components/transition";
 import Markdown from "react-markdown";
 
 const content = `
@@ -131,12 +130,14 @@ MYSverse Digital Ventures
 
 export default function TermsOfServicePage() {
   return (
-    <div className="max-w-5xl my-auto flex-grow mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-6">
-        <div className="prose max-w-fit text-justify">
-          <Markdown>{content}</Markdown>
+    <DefaultTransitionLayout show={true} appear={true}>
+      <div className="mx-auto my-auto max-w-5xl flex-grow px-4 sm:px-6 lg:px-8">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+          <div className="prose max-w-fit text-justify">
+            <Markdown>{content}</Markdown>
+          </div>
         </div>
       </div>
-    </div>
+    </DefaultTransitionLayout>
   );
 }
