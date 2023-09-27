@@ -46,9 +46,15 @@ export default function LoginElement({
       >
         <div>
           <Logo className="h-20 w-auto fill-white" />
-          <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-100">
-            Welcome to Sentral (Beta)
-          </h2>
+          <header className="mt-8 flex items-center gap-x-2">
+            <h2 className="text-2xl font-bold leading-9 tracking-tight text-gray-100">
+              Welcome to Sentral
+            </h2>
+            <span className="mt-0.5 inline-flex items-center rounded-lg px-2 py-1 text-xs font-semibold uppercase tracking-wide text-gray-100 ring-1 ring-inset ring-white">
+              Beta
+            </span>
+          </header>
+
           <p className="mt-3 text-sm leading-6 text-gray-200">
             The official companion web app for{" "}
             <Link
