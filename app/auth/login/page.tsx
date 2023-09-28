@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import FeatureImage from "public/img/bandar_feature_image.webp";
+import FeatureImage from "public/img/mysverse_feature.webp";
 import LoginElement from "./loginElement";
 import { Suspense, useState } from "react";
 
@@ -23,8 +23,8 @@ export default function LoginPage() {
             }}
             src={FeatureImage}
             alt="Feature image of Bandar"
-            width={1919}
-            height={1000}
+            width={1024}
+            height={512}
             priority={true}
           />
         </div>
