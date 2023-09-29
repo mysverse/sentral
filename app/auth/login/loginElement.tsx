@@ -50,9 +50,9 @@ export default function LoginElement({
             <h2 className="text-2xl font-bold leading-9 tracking-tight text-gray-100">
               Welcome to Sentral
             </h2>
-            <span className="mt-0.5 inline-flex items-center rounded-lg px-2 py-1 text-xs font-semibold uppercase tracking-wide text-gray-100 ring-1 ring-inset ring-white">
+            {/* <span className="mt-0.5 inline-flex items-center rounded-lg px-2 py-1 text-xs font-semibold uppercase tracking-wide text-gray-100 ring-1 ring-inset ring-white">
               Beta
-            </span>
+            </span> */}
           </header>
 
           <p className="mt-3 text-sm leading-6 text-gray-200">
@@ -66,8 +66,8 @@ export default function LoginElement({
             and MYSverse Sim.
           </p>
           <p className="mt-3 text-sm leading-6 text-gray-200">
-            This site uses the Roblox Open Cloud and OAuth 2.0 APIs for data
-            fetching and authentication, which are still in beta.
+            Sign in conveniently and securely with Roblox to get access to your
+            game data - no separate account required.
           </p>
           <p className="mt-3 text-sm leading-6 text-gray-200">
             {"Don't have a Roblox account? "}
