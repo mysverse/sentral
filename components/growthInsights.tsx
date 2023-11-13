@@ -42,8 +42,8 @@ function StatDisplay(stats: statistics[]) {
                   item.changeType === "increase"
                     ? "bg-green-400"
                     : item.changeType === "decrease"
-                    ? "bg-red-400"
-                    : "bg-slate-500",
+                      ? "bg-red-400"
+                      : "bg-slate-500",
                   "absolute rounded-md p-3"
                 )}
               >
@@ -132,8 +132,8 @@ export default function GrowthInsights({
         sevenDayGrowth.current > sevenDayGrowth.previous
           ? "increase"
           : sevenDayGrowth.current < sevenDayGrowth.previous
-          ? "decrease"
-          : undefined
+            ? "decrease"
+            : undefined
     },
     {
       id: 2,
@@ -152,8 +152,8 @@ export default function GrowthInsights({
         threeMonthGrowth.current > threeMonthGrowth.previous
           ? "increase"
           : threeMonthGrowth.current < threeMonthGrowth.previous
-          ? "decrease"
-          : undefined
+            ? "decrease"
+            : undefined
     },
     {
       id: 3,
@@ -172,8 +172,8 @@ export default function GrowthInsights({
         lastDayGrowth.current > lastDayGrowth.previous
           ? "increase"
           : lastDayGrowth.current < lastDayGrowth.previous
-          ? "decrease"
-          : undefined
+            ? "decrease"
+            : undefined
     },
     {
       id: 4,
@@ -192,8 +192,8 @@ export default function GrowthInsights({
         lastMonthGrowth.current > lastMonthGrowth.previous
           ? "increase"
           : lastMonthGrowth.current < lastMonthGrowth.previous
-          ? "decrease"
-          : undefined
+            ? "decrease"
+            : undefined
     },
     {
       id: 5,

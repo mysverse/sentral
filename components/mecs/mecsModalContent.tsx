@@ -283,8 +283,8 @@ function BlacklistSlideover({
                           ? a.name.toLowerCase() > b.name.toLowerCase()
                             ? 1
                             : b.name.toLowerCase() > a.name.toLowerCase()
-                            ? -1
-                            : 0
+                              ? -1
+                              : 0
                           : 0
                       )
                       .map((item) => (
@@ -394,8 +394,8 @@ export default function QueryModalContent({
             typeof result.values.current === "number"
               ? `${result.values.current}`
               : result.status
-              ? "PASS"
-              : "FAIL";
+                ? "PASS"
+                : "FAIL";
 
           switch (key) {
             case "age": {
@@ -688,10 +688,10 @@ export default function QueryModalContent({
                         ind && group
                           ? "Multiple"
                           : ind
-                          ? "Individual"
-                          : group
-                          ? "Group"
-                          : "Yes";
+                            ? "Individual"
+                            : group
+                              ? "Group"
+                              : "Yes";
                     }
                   }
                   return (
@@ -744,8 +744,8 @@ export default function QueryModalContent({
                         card.informational === true
                           ? "bg-slate-400"
                           : card.pass
-                          ? "bg-green-500"
-                          : "bg-red-500",
+                            ? "bg-green-500"
+                            : "bg-red-500",
                         "flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
                       )}
                     >
@@ -789,8 +789,8 @@ export default function QueryModalContent({
                         card.informational === true
                           ? "bg-slate-400"
                           : card.pass
-                          ? "bg-green-500"
-                          : "bg-red-500",
+                            ? "bg-green-500"
+                            : "bg-red-500",
                         "flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
                       )}
                     >

@@ -1,6 +1,6 @@
 import RobloxAvatarDisplay from "./RobloxAvatarDisplay";
 import { getServerSession } from "next-auth";
-import { authOptions } from "app/api/auth/[...nextauth]/route";
+import { authOptions } from "app/api/auth/[...nextauth]/authOptions";
 import NavMenu from "./nav_menu";
 
 export default async function Navigation() {

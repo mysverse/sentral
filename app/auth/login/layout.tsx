@@ -1,10 +1,5 @@
 import { clsx } from "clsx";
-import { Public_Sans } from "next/font/google";
-
-const publicSans = Public_Sans({
-  subsets: ["latin"],
-  display: "swap"
-});
+import { publicSans } from "styles/fonts";
 
 export default function DefaultLayout({
   children
