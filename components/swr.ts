@@ -345,6 +345,19 @@ const blobFetcher = async (input: RequestInfo) => {
   return res.blob();
 };
 
+export interface RaceLeaderboard {
+  user: User;
+  image: string;
+  time: number;
+}
+
+export interface User {
+  hasVerifiedBadge: boolean;
+  id: number;
+  name: string;
+  displayName: string;
+}
+
 export function useNametagTemplates(shouldFetch: boolean) {
   const { data, error } = useSWR(
     shouldFetch ? `${endpoints.gentag}/nametag/options` : null,
@@ -493,6 +506,23 @@ export function useMysverseData(shouldFetch: boolean, userId?: string) {
 
   return {
     apiResponse: data as MYSverseData,
+    isLoading: !error && !data,
+    isError: error as Error
+  };
+}
+
+export function useMysverseLeaderboardData(shouldFetch: boolean) {
+  const url = new URL(`${endpoints.mysverse}/`);
+
+  url.searchParams.set("type", "lebuhraya_jersik_leaderboard");
+
+  const { data, error } = useSWRImmutable(
+    shouldFetch ? url.toString() : null,
+    fetcher
+  );
+
+  return {
+    apiResponse: data as RaceLeaderboard[],
     isLoading: !error && !data,
     isError: error as Error
   };

@@ -18,7 +18,7 @@ export default function LoginPage() {
         <div className="relative hidden w-0 flex-1 lg:block">
           <Image
             className="absolute inset-0 h-full w-full object-cover"
-            onLoadingComplete={() => {
+            onLoad={() => {
               setImageLoaded(true);
             }}
             src={FeatureImage}

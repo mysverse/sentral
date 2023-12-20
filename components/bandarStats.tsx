@@ -507,7 +507,7 @@ export default function MysverseStats({ userId }: { userId: string }) {
       {data ? (
         <>
           <header>
-            <h3 className="mb-10 text-center text-2xl font-bold text-white">
+            <h3 className="mb-10 text-center text-2xl font-bold text-slate-900">
               Bandar Insights
             </h3>
           </header>
