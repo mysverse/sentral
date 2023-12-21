@@ -1,8 +1,8 @@
 "use client";
 
+import { Avatar } from "components/catalyst/avatar";
 import { useMysverseLeaderboardData } from "components/swr";
 import DefaultTransitionLayout from "components/transition";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function LebuhrayaLeaderboard() {
@@ -65,25 +65,26 @@ export default function LebuhrayaLeaderboard() {
                       {person.email}
                     </td> */}
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <div className="flex items-center">
-                          <div className="h-11 w-11 flex-shrink-0">
-                            <Image
-                              width={11}
-                              height={11}
-                              className="h-11 w-11 rounded-full"
-                              src={person.image}
-                              alt=""
-                            />
-                          </div>
+                        <Link
+                          href={`https://roblox.com/users/${person.user.id}/profile`}
+                          target="=_blank"
+                          className="flex items-center"
+                        >
+                          <Avatar
+                            className="size-8 sm:size-11"
+                            src={person.image}
+                            initials={person.user.displayName.slice(0, 1)}
+                            square
+                          />
                           <div className="ml-4">
-                            <div className="font-medium text-gray-900 hover:underline">
-                              <Link
-                                href={`https://roblox.com/users/${person.user.id}/profile`}
-                                target="=_blank"
-                              >{`${person.user.displayName} (@${person.user.name})`}</Link>
+                            <div className="hidden font-medium text-gray-900 hover:underline sm:block">
+                              {`${person.user.displayName} (@${person.user.name})`}
+                            </div>
+                            <div className="block font-medium text-gray-900 hover:underline sm:hidden">
+                              {`@${person.user.name}`}
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {person.time}
