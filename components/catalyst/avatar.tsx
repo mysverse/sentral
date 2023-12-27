@@ -25,15 +25,15 @@ export function Avatar({
   alt = "",
   className,
   ...props
-}: AvatarProps & React.ComponentPropsWithoutRef<"span">) {
+}: AvatarProps & React.ComponentPropsWithoutRef<"div">) {
   return (
-    <span
+    <div
       data-slot="avatar"
       className={clsx(
         className,
 
         // Basic layout
-        "inline-grid align-middle *:col-start-1 *:row-start-1",
+        "inline-grid size-8 align-middle *:col-start-1 *:row-start-1 ",
 
         // Add the correct border radius
         square ? "rounded-[20%] *:rounded-[20%]" : "rounded-full *:rounded-full"
@@ -59,13 +59,21 @@ export function Avatar({
           </text>
         </svg>
       )}
-      {src && <Image src={src} alt={alt} />}
+      {src && (
+        <Image
+          src={src}
+          alt={alt}
+          width={0}
+          height={0}
+          className="h-auto w-full"
+        />
+      )}
       {/* Add an inset border that sits on top of the image */}
       <span
         className="ring-1 ring-inset ring-black/5 dark:ring-white/5 forced-colors:outline"
         aria-hidden="true"
       />
-    </span>
+    </div>
   );
 }
 
