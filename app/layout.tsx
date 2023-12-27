@@ -3,14 +3,54 @@ import PlausibleProvider from "next-plausible";
 
 import { SessionProvider } from "components/SessionProvider";
 
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { env } from "process";
+
+const APP_NAME = "Sentral";
+const APP_DEFAULT_TITLE = "MYSverse Sentral";
+const APP_TITLE_TEMPLATE = "%s - MYSverse Sentral";
+const APP_DESCRIPTION =
+  "Sentral is the official hub and companion app for MYSverse, serving game statistics, analytics tools, and a lot more to come!";
 
 export const metadata: Metadata = {
   metadataBase: env.NEXTAUTH_URL ? new URL(env.NEXTAUTH_URL) : undefined,
-  title: "Sentral",
-  description:
-    "Sentral is the official hub and companion app for MYSverse, serving game statistics, analytics tools, and a lot more to come!"
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE
+  },
+  description: APP_DESCRIPTION,
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_DEFAULT_TITLE
+    // startUpImage: [],
+  },
+  formatDetection: {
+    telephone: false
+  },
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE
+    },
+    description: APP_DESCRIPTION
+  },
+  twitter: {
+    card: "summary",
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE
+    },
+    description: APP_DESCRIPTION
+  }
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF"
 };
 
 export default function RootLayout({

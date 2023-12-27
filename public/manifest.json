@@ -1,7 +1,7 @@
 {
-  "name": "MYSverse Hub",
+  "name": "MYSverse Sentral",
   "description": "Game stats, tools and more for MYSverse gaming community",
-  "short_name": "MYSverse Hub",
+  "short_name": "Sentral",
   "icons": [
     {
       "src": "/img/favicons/favicon-72x72.png",
@@ -107,7 +107,7 @@
     }
   ],
   "scope": "/",
-  "start_url": "/?source=pwa",
+  "start_url": "/auth/login?source=pwa",
   "display": "standalone",
   "theme_color": "#1e293b",
   "background_color": "#e2e8f0"

@@ -1,12 +1,11 @@
-/** @type {import('next').NextConfig} */
+import withSerwistInit from "@serwist/next";
 
-const withPWA = require("next-pwa")({
-  disable: process.env.NODE_ENV === "development",
-  dest: "public"
-  // scope: "/app"
+const withSerwist = withSerwistInit({
+  swSrc: "app/sw.ts",
+  swDest: "public/sw.js"
 });
 
-const nextConfig = withPWA({
+export default withSerwist({
   // output: "export",
   reactStrictMode: true,
   images: {
@@ -22,5 +21,3 @@ const nextConfig = withPWA({
     return config;
   }
 });
-
-module.exports = nextConfig;
