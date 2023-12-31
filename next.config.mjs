@@ -6,6 +6,22 @@ const withSerwist = withSerwistInit({
 });
 
 export default withSerwist({
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.rbxcdn.com"
+      },
+      {
+        protocol: "https",
+        hostname: "**.yan3321.com"
+      },
+      {
+        protocol: "https",
+        hostname: "**.yan.gg"
+      }
+    ]
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
