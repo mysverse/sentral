@@ -63,8 +63,8 @@ export function Avatar({
         <Image
           src={src}
           alt={alt}
-          width={0}
-          height={0}
+          width={100}
+          height={100}
           className="h-auto w-full"
         />
       )}
