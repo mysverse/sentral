@@ -2,17 +2,10 @@ import withSerwistInit from "@serwist/next";
 
 const withSerwist = withSerwistInit({
   swSrc: "app/sw.ts",
-  swDest: "public/sw.js",
-  disable: process.env.NODE_ENV === "development"
+  swDest: "public/sw.js"
 });
 
 export default withSerwist({
-  // output: "export",
-  reactStrictMode: true,
-  images: {
-    unoptimized: true
-  },
-  optimizeFonts: false,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
