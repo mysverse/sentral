@@ -58,6 +58,7 @@ function NametagImage(
             width={128}
             src={url}
             alt={`Nametag with name "${name}"`}
+            unoptimized
           />
           <div
             className="absolute"

@@ -55,6 +55,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
                         : "/img/user_placeholder.webp"
                     }
                     alt={`Profile picture of player @${item.officer.name}`}
+                    unoptimized
                   />
                   <span
                     className="absolute inset-0 rounded-full shadow-inner"

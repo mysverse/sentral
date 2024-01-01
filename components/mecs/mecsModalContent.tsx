@@ -572,6 +572,7 @@ export default function QueryModalContent({
                       : "/img/user_placeholder.webp"
                   }
                   alt={`Profile picture of player @${apiResponse.user.username}`}
+                  unoptimized
                 />
                 <span
                   className="absolute inset-0 rounded-full shadow-inner"

@@ -66,6 +66,7 @@ export function Avatar({
           width={100}
           height={100}
           className="h-auto w-full"
+          unoptimized
         />
       )}
       {/* Add an inset border that sits on top of the image */}

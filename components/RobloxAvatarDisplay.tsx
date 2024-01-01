@@ -24,6 +24,7 @@ export default function RobloxAvatarDisplay({
           alt={`Profile picture of @${name}`}
           width={150}
           height={150}
+          unoptimized
         />
         <div className="ml-3 mr-0 text-left lg:ml-0 lg:mr-3 lg:text-right">
           <p className="text-base font-medium text-white lg:text-sm">
