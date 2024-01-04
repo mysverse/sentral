@@ -89,8 +89,8 @@ devDependencies:
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.4.0)
   '@types/humanize-duration':
-    specifier: ^3.27.3
-    version: 3.27.3
+    specifier: ^3.27.4
+    version: 3.27.4
   '@types/node':
     specifier: ^20.10.6
     version: 20.10.6
@@ -2524,8 +2524,8 @@ packages:
       '@types/unist': 3.0.2
     dev: false
 
-  /@types/humanize-duration@3.27.3:
-    resolution: {integrity: sha512-wiiiFYjnrYDJE/ujU7wS/NShqp12IKrejozjDtcejP0zYi+cjyjVcfZHwcFUDKVJ7tHGsmgeW2ED92ABIIjfpg==}
+  /@types/humanize-duration@3.27.4:
+    resolution: {integrity: sha512-yaf7kan2Sq0goxpbcwTQ+8E9RP6HutFBPv74T/IA/ojcHKhuKVlk2YFYyHhWZeLvZPzzLE3aatuQB4h0iqyyUA==}
     dev: true
 
   /@types/json-schema@7.0.15:
