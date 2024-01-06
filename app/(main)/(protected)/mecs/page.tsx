@@ -9,7 +9,6 @@ import MECSFAQ from "components/mecs/mecsFaq";
 import StaffStats from "components/mecs/staffStats";
 import { useUserData } from "components/swr";
 import { isStandalonePWA } from "components/utils";
-// import { useRouter } from "next/router";
 import MECSChart from "components/mecs/mecsChart";
 import MECSChart2 from "components/mecs/mecsChart2";
 import { usePlausible } from "next-plausible";

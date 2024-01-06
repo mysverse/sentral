@@ -13,12 +13,12 @@ export default function DefaultLayout({
       lang="en"
       className={clsx("h-full bg-slate-200", publicSans.className)}
     >
-      <body className="h-full">
-        <main className="h-screen">
-          <Navigation />
+      <body>
+        <Navigation />
+        <main>
           <div className="-mt-32">{children}</div>
-          <Footer />
         </main>
+        <Footer />
       </body>
     </html>
   );
