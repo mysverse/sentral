@@ -1,8 +1,7 @@
 "use client";
 
 import humanizeDuration from "humanize-duration";
-import Spinner from "./spinner";
-import { MYSverseData, useMysverseData } from "./swr";
+import { MYSverseData } from "./swr";
 import clsx from "clsx";
 import DefaultTransitionLayout from "./transition";
 
@@ -496,53 +495,38 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
   );
 }
 
-export default function MysverseStats({ userId }: { userId: string }) {
-  const {
-    apiResponse: data,
-    isLoading,
-    isError
-  } = useMysverseData(true, userId);
+export default function MysverseStats({ data }: { data: MYSverseData }) {
   return (
-    <div>
-      {data ? (
-        <>
-          <header>
-            <h3 className="mb-10 text-center text-2xl font-bold text-slate-900">
-              Bandar Insights
-            </h3>
-          </header>
-          <DefaultTransitionLayout show={!!data} appear={true}>
-            <BandarStats bandarData={data.bandarData} />
-          </DefaultTransitionLayout>
-          <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-            <header className="mb-6">
-              <h3 className="mb-2 text-xl font-bold">Arrests</h3>
-              <ul className="ml-4 flex list-disc flex-col gap-y-1">
-                <li className="opacity-80">{`Arrests are made by (roleplay) law enforcement officers for breaking major in-game laws.`}</li>
-                <li className="opacity-80">{`Players will be held inside a lock-up for a fixed time period, after which they are released and gameplay resumes.`}</li>
-              </ul>
-            </header>
-            <Arrests arrests={data.arrests} />
-          </div>
+    <>
+      <header>
+        <h3 className="mb-10 text-center text-2xl font-bold text-slate-900">
+          Bandar Insights
+        </h3>
+      </header>
+      <DefaultTransitionLayout show={!!data} appear={true}>
+        <BandarStats bandarData={data.bandarData} />
+      </DefaultTransitionLayout>
+      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <header className="mb-6">
+          <h3 className="mb-2 text-xl font-bold">Arrests</h3>
+          <ul className="ml-4 flex list-disc flex-col gap-y-1">
+            <li className="opacity-80">{`Arrests are made by (roleplay) law enforcement officers for breaking major in-game laws.`}</li>
+            <li className="opacity-80">{`Players will be held inside a lock-up for a fixed time period, after which they are released and gameplay resumes.`}</li>
+          </ul>
+        </header>
+        <Arrests arrests={data.arrests} />
+      </div>
 
-          <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-            <header className="mb-6">
-              <h3 className="mb-2 text-xl font-bold">Summonses</h3>
-              <ul className="ml-4 flex list-disc flex-col gap-y-1">
-                <li className="opacity-80">{`A summons is issued by a (roleplay) law enforcement officer for breaking minor in-game laws.`}</li>
-                <li className="opacity-80">{`The fine amount is typically deducted directly from the player's in-game bank account.`}</li>
-              </ul>
-            </header>
-            <Summons summons={data.summons} />
-          </div>
-        </>
-      ) : null}
-
-      {isLoading || isError ? (
-        <div className="flex h-[50vh] items-center justify-center rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-          <Spinner />
-        </div>
-      ) : null}
-    </div>
+      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <header className="mb-6">
+          <h3 className="mb-2 text-xl font-bold">Summonses</h3>
+          <ul className="ml-4 flex list-disc flex-col gap-y-1">
+            <li className="opacity-80">{`A summons is issued by a (roleplay) law enforcement officer for breaking minor in-game laws.`}</li>
+            <li className="opacity-80">{`The fine amount is typically deducted directly from the player's in-game bank account.`}</li>
+          </ul>
+        </header>
+        <Summons summons={data.summons} />
+      </div>
+    </>
   );
 }

@@ -1,17 +1,17 @@
 "use client";
 
 import { Avatar } from "components/catalyst/avatar";
-import { useMysverseLeaderboardData } from "components/swr";
+import { RaceLeaderboard } from "components/constants/types";
 import DefaultTransitionLayout from "components/transition";
 import Link from "next/link";
 
-export default function LebuhrayaLeaderboard() {
-  const { apiResponse: people } = useMysverseLeaderboardData(true);
-  if (!people) {
-    return null;
-  }
+export default function LebuhrayaLeaderboard({
+  data
+}: {
+  data: RaceLeaderboard[];
+}) {
   return (
-    <DefaultTransitionLayout show={!!people} appear={true}>
+    <DefaultTransitionLayout show={!!data} appear={true}>
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
@@ -51,7 +51,7 @@ export default function LebuhrayaLeaderboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {people
+                {data
                   .filter((person) => person.user)
                   .map((person, index) => (
                     <tr key={person.user.id}>
