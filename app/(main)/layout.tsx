@@ -13,9 +13,9 @@ export default function DefaultLayout({
       lang="en"
       className={clsx("h-full bg-slate-200", publicSans.className)}
     >
-      <body>
+      <body className="h-full">
         <Navigation />
-        <main>
+        <main className="min-h-[55vh]">
           <div className="-mt-32">{children}</div>
         </main>
         <Footer />

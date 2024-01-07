@@ -9,13 +9,7 @@ import {
   StaffDecision
 } from "./apiTypes";
 
-const endpoints = {
-  mecs: process.env.NEXT_PUBLIC_MECS_API_URL,
-  gentag: process.env.NEXT_PUBLIC_GENTAG_API_URL,
-  growth: process.env.NEXT_PUBLIC_GROWTH_API_URL,
-  invote: process.env.NEXT_PUBLIC_INVOTE_API_URL,
-  mysverse: process.env.NEXT_PUBLIC_MYSVERSE_FETCHER_URL
-};
+import { endpoints } from "./constants/endpoints";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -345,19 +339,6 @@ const blobFetcher = async (input: RequestInfo) => {
   return res.blob();
 };
 
-export interface RaceLeaderboard {
-  user: User;
-  image: string;
-  time: number;
-}
-
-export interface User {
-  hasVerifiedBadge: boolean;
-  id: number;
-  name: string;
-  displayName: string;
-}
-
 export function useNametagTemplates(shouldFetch: boolean) {
   const { data, error } = useSWR(
     shouldFetch ? `${endpoints.gentag}/nametag/options` : null,
@@ -506,23 +487,6 @@ export function useMysverseData(shouldFetch: boolean, userId?: string) {
 
   return {
     apiResponse: data as MYSverseData,
-    isLoading: !error && !data,
-    isError: error as Error
-  };
-}
-
-export function useMysverseLeaderboardData(shouldFetch: boolean) {
-  const url = new URL(`${endpoints.mysverse}/`);
-
-  url.searchParams.set("type", "lebuhraya_jersik_leaderboard");
-
-  const { data, error } = useSWRImmutable(
-    shouldFetch ? url.toString() : null,
-    fetcher
-  );
-
-  return {
-    apiResponse: data as RaceLeaderboard[],
     isLoading: !error && !data,
     isError: error as Error
   };
