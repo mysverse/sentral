@@ -10,11 +10,14 @@ import {
 import { endpoints } from "./constants/endpoints";
 import { RaceLeaderboard } from "./constants/types";
 
-async function fetchURL(url: string | null) {
+async function fetchURL(
+  url: string | URL | Request,
+  init?: RequestInit | undefined
+) {
   if (!url) {
     throw new Error("URL is null");
   }
-  const res = await fetch(url);
+  const res = await fetch(url, init);
   if (!res.ok) {
     throw new Error(await res.json());
   }
@@ -361,7 +364,10 @@ export async function getLeaderboardData() {
   const url = new URL(`${endpoints.mysverse}/`);
   url.searchParams.set("type", "lebuhraya_jersik_leaderboard");
 
-  const data: RaceLeaderboard[] = await fetchURL(url.toString());
+  const data: RaceLeaderboard[] = await fetchURL(url.toString(), {
+    next: { revalidate: 60 }
+  });
+
   return data;
 }
 
@@ -372,7 +378,9 @@ export async function getMysverseData(userId?: string) {
     url.searchParams.set("userId", userId);
   }
 
-  const data: MYSverseData = await fetchURL(url.toString());
+  const data: MYSverseData = await fetchURL(url.toString(), {
+    next: { revalidate: 60 }
+  });
 
   return data;
 }
