@@ -8,12 +8,11 @@ import {
   TimeScale,
   CategoryScale,
   Tooltip,
-  LinearScale
+  LinearScale,
+  ScriptableLineSegmentContext
 } from "chart.js";
 
 import "chartjs-adapter-date-fns";
-
-import GrowthUtils from "components/growthUtils";
 
 ChartJS.register(
   LineElement,
@@ -27,14 +26,20 @@ ChartJS.register(
 
 // ChartJS.defaults.font.family = "'JetBrains Mono', sans-serif";
 
+const skipped = (ctx: ScriptableLineSegmentContext, value: any) =>
+  ctx.p0.skip || ctx.p1.skip ? value : undefined;
+const down = (ctx: ScriptableLineSegmentContext, value: any) =>
+  ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+
 export default function GrowthChart({
-  growthUtils,
-  logarithmic,
-  displayOption
+  chartData,
+  logarithmic
 }: {
-  growthUtils: GrowthUtils;
+  chartData: {
+    labels: number[] | undefined;
+    data: number[];
+  };
   logarithmic: boolean;
-  displayOption: string;
 }) {
   return (
     <Line
@@ -68,7 +73,22 @@ export default function GrowthChart({
           }
         }
       }}
-      data={growthUtils.getLineChartData(displayOption)}
+      data={{
+        labels: chartData.labels,
+        datasets: [
+          {
+            label: "Member count",
+            borderColor: "rgb(3, 105, 161)",
+            segment: {
+              borderColor: (ctx) =>
+                skipped(ctx, "rgb(0,0,0,0.2)") || down(ctx, "rgb(192,75,75)"),
+              borderDash: (ctx) => skipped(ctx, [6, 6])
+            },
+            spanGaps: true,
+            data: chartData.data
+          }
+        ]
+      }}
     />
   );
 }
