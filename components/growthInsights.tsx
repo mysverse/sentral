@@ -5,7 +5,6 @@ import {
   UserGroupIcon
 } from "@heroicons/react/24/outline";
 import { clsx } from "clsx";
-import GrowthUtils from "./growthUtils";
 
 type HeroIcon = React.ForwardRefExoticComponent<
   Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
@@ -100,20 +99,48 @@ function StatDisplay(stats: statistics[]) {
 }
 
 export default function GrowthInsights({
-  growthUtils
+  sevenDayGrowth,
+  threeMonthGrowth,
+  lastMonthGrowth,
+  lastDayGrowth,
+  highestNumericGrowthMonth,
+  highestRelativeGrowthMonth
 }: {
-  growthUtils: GrowthUtils;
+  sevenDayGrowth: {
+    current: number;
+    previous: number;
+    interpolated: boolean;
+  };
+  threeMonthGrowth: {
+    current: number;
+    previous: number;
+    interpolated: boolean;
+  };
+  lastMonthGrowth: {
+    current: number;
+    previous: number;
+    interpolated: boolean;
+  };
+  lastDayGrowth: {
+    current: number;
+    previous: number;
+    interpolated: boolean;
+  };
+  highestNumericGrowthMonth: {
+    date: Date;
+    currentMonthGrowth?: number;
+    previousMonthGrowth?: number;
+    members: number;
+    interpolated: boolean;
+  };
+  highestRelativeGrowthMonth: {
+    date: Date;
+    currentMonthGrowth?: number;
+    previousMonthGrowth?: number;
+    members: number;
+    interpolated: boolean;
+  };
 }) {
-  const sevenDayGrowth = growthUtils.get7DaysGrowth();
-  const threeMonthGrowth = growthUtils.get3MonthsGrowth();
-
-  const lastMonthGrowth = growthUtils.getLastMonthGrowth();
-  const lastDayGrowth = growthUtils.getLastDayGrowth();
-
-  const highestNumericGrowthMonth = growthUtils.getHighestGrowthMonth();
-  const highestRelativeGrowthMonth =
-    growthUtils.getHighestRelativeGrowthMonth();
-
   const statList = [
     {
       id: 1,
@@ -203,8 +230,7 @@ export default function GrowthInsights({
         highestNumericGrowthMonth.date.toLocaleString("default", {
           month: "short",
           year: "numeric"
-        }) +
-        (growthUtils.isInterpolated(highestNumericGrowthMonth.date) ? "*" : ""),
+        }) + (highestNumericGrowthMonth.interpolated ? "*" : ""),
       icon: UserGroupIcon,
       change: `${highestNumericGrowthMonth.currentMonthGrowth?.toLocaleString()}`
       // changeType: "increase"
@@ -217,10 +243,7 @@ export default function GrowthInsights({
         highestRelativeGrowthMonth.date.toLocaleString("default", {
           month: "short",
           year: "numeric"
-        }) +
-        (growthUtils.isInterpolated(highestRelativeGrowthMonth.date)
-          ? "*"
-          : ""),
+        }) + (highestRelativeGrowthMonth.interpolated ? "*" : ""),
       icon: UserGroupIcon,
       change: `${(
         ((highestRelativeGrowthMonth.currentMonthGrowth || 0) /

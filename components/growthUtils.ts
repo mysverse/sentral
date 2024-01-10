@@ -202,6 +202,14 @@ export default class GrowthUtils {
     return lineChartData;
   }
 
+  getLineChartDataPure(displayOption: string) {
+    const data = this.getLineChartData(displayOption);
+    return {
+      labels: data.labels,
+      data: data.datasets[0].data
+    };
+  }
+
   getMembersForDate(inputDate: Date) {
     type memberResult = [number, boolean];
     const dateMembersArray = this.data;
@@ -432,20 +440,25 @@ export default class GrowthUtils {
 
   getHighestGrowthMonth() {
     const monthData = this.getMonthData();
-    return monthData.reduce((prev, current) =>
+    const result = monthData.reduce((prev, current) =>
       (prev.currentMonthGrowth || 0) > (current.currentMonthGrowth || 0)
         ? prev
         : current
     );
+
+    return { ...result, interpolated: this.isInterpolated(result.date) };
   }
 
   getHighestRelativeGrowthMonth() {
     const monthData = this.getMonthData();
-    return monthData.reduce((prev, current) => {
+
+    const result = monthData.reduce((prev, current) => {
       return (prev.currentMonthGrowth || 0) / prev.members >
         (current.currentMonthGrowth || 0) / current.members
         ? prev
         : current;
     });
+
+    return { ...result, interpolated: this.isInterpolated(result.date) };
   }
 }
