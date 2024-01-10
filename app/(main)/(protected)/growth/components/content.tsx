@@ -15,11 +15,16 @@ export default function GrowthPageContent({
 
   const displayOptions = growthUtils.getDisplayOptionsArray();
 
-  const displayOption = searchParams.displayOption
-    ? Array.isArray(searchParams.displayOption)
-      ? searchParams.displayOption[0]
-      : searchParams.displayOption
-    : searchParams.displayOption || "months";
+  let displayOption = "months"; // Default value
+  const displayOptionParam = searchParams.displayOption;
+
+  if (displayOptionParam) {
+    if (Array.isArray(displayOptionParam)) {
+      displayOption = displayOptionParam[0];
+    } else {
+      displayOption = displayOptionParam;
+    }
+  }
 
   const sevenDayGrowth = growthUtils.get7DaysGrowth();
   const threeMonthGrowth = growthUtils.get3MonthsGrowth();
