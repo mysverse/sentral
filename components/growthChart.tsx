@@ -49,7 +49,8 @@ export default function GrowthChart({
             type: "time",
             time: {
               // unit: "month",
-              tooltipFormat: "dd MMMM yyyy"
+              tooltipFormat: "dd MMMM yyyy",
+              round: "day"
             }
           },
           y: {
