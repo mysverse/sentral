@@ -38,6 +38,7 @@ export default function GrowthChart({
   chartData: {
     labels: number[] | undefined;
     data: number[];
+    increment: "day" | "week" | "month";
   };
   logarithmic: boolean;
 }) {
@@ -48,7 +49,7 @@ export default function GrowthChart({
           x: {
             type: "time",
             time: {
-              // unit: "month",
+              unit: chartData.increment,
               tooltipFormat: "dd MMMM yyyy",
               round: "day"
             }

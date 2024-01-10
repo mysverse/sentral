@@ -36,6 +36,7 @@ export default function GrowthChartSection({
   chartData: {
     labels: number[] | undefined;
     data: number[];
+    increment: "day" | "week" | "month";
   };
   displayOptions: DisplayMonth[];
 }) {

@@ -120,6 +120,7 @@ export default class GrowthUtils {
     };
 
     const data = this.interpolatedData;
+    let increment: "day" | "week" | "month" = "day";
 
     if (lineChartData.labels) {
       switch (displayOption) {
@@ -133,6 +134,7 @@ export default class GrowthUtils {
               );
             }
           }
+          increment = "week";
           break;
         case "months":
           for (const candidate of this.getRepresentativeDataset(
@@ -147,6 +149,7 @@ export default class GrowthUtils {
               );
             }
           }
+          increment = "month";
           break;
         default: {
           const removeSuffixes = (string: string) => {
@@ -181,6 +184,7 @@ export default class GrowthUtils {
                 );
               }
             }
+            increment = useMonths ? "month" : "week";
           } else if (useDays) {
             for (const [
               isoTimestamp,
@@ -193,20 +197,22 @@ export default class GrowthUtils {
                 interpolated ? NaN : memberCount
               );
             }
+            increment = "day";
           }
           break;
         }
       }
     }
 
-    return lineChartData;
+    return { lineChartData, increment };
   }
 
   getLineChartDataPure(displayOption: string) {
     const data = this.getLineChartData(displayOption);
     return {
-      labels: data.labels,
-      data: data.datasets[0].data
+      labels: data.lineChartData.labels,
+      data: data.lineChartData.datasets[0].data,
+      increment: data.increment
     };
   }
 
