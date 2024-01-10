@@ -12,7 +12,7 @@ import {
   Transition
 } from "@headlessui/react";
 import { clsx } from "clsx";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
@@ -26,11 +26,6 @@ interface DisplayMonth {
   value: string;
   valid: boolean;
 }
-
-const months: DisplayMonth[] = [
-  { name: "Cumulative (monthly)", value: "months", valid: true },
-  { name: "Cumulative (weekly)", value: "weeks", valid: true }
-];
 
 const GrowthChart = dynamic(() => import("components/growthChart"));
 
@@ -62,11 +57,30 @@ export default function GrowthChartSection({
 
   const [logarithmic, setLogarithmic] = useState(false);
 
+  const [months] = useState<DisplayMonth[]>(
+    [
+      { name: "Cumulative (monthly)", value: "months", valid: true },
+      { name: "Cumulative (weekly)", value: "weeks", valid: true }
+    ].concat(displayOptions)
+  );
+
   const [selectedMonthValue, setSelectedMonthValue] = useState<string>(
     months[0].value
   );
 
   const [selectedMonth, setSelectedMonth] = useState<DisplayMonth>(months[0]);
+
+  useEffect(() => {
+    function isValidDisplayOption(option: string | null) {
+      return months.find((month) => month.value === option);
+    }
+    const selectedOption = searchParams.get("displayOption");
+    const result = isValidDisplayOption(selectedOption);
+    if (result) {
+      setSelectedMonthValue(result.value);
+      setSelectedMonth(result);
+    }
+  }, [searchParams, months]);
 
   return (
     <>
@@ -111,9 +125,7 @@ export default function GrowthChartSection({
         <Listbox
           value={selectedMonthValue}
           onChange={(value) => {
-            const month = months
-              .concat(displayOptions)
-              .find((e) => e.value === value);
+            const month = months.find((e) => e.value === value);
             if (month) {
               setSelectedMonthValue(value);
               setSelectedMonth(month);
@@ -156,7 +168,7 @@ export default function GrowthChartSection({
                   leaveTo="opacity-0"
                 >
                   <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {months.concat(displayOptions).map((month, index) => (
+                    {months.map((month, index) => (
                       <ListboxOption
                         key={index}
                         className={({ active }) =>
