@@ -42,7 +42,7 @@ function StatDisplay(stats: statistics[]) {
                     ? "bg-green-400"
                     : item.changeType === "decrease"
                       ? "bg-red-400"
-                      : "bg-slate-500",
+                      : "bg-blue-500",
                   "absolute rounded-md p-3"
                 )}
               >
@@ -85,7 +85,7 @@ function StatDisplay(stats: statistics[]) {
                 </p>
               ) : null}
               <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                <p className="text-sm font-normal text-slate-500">
+                <p className="text-sm font-normal text-blue-500">
                   {item.subtitle}
                   <span className="sr-only"> {item.name} stats</span>
                 </p>

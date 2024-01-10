@@ -33,7 +33,8 @@ const down = (ctx: ScriptableLineSegmentContext, value: any) =>
 
 export default function GrowthChart({
   chartData,
-  logarithmic
+  logarithmic,
+  loading
 }: {
   chartData: {
     labels: number[] | undefined;
@@ -41,7 +42,15 @@ export default function GrowthChart({
     increment: "day" | "week" | "month";
   };
   logarithmic: boolean;
+  loading: boolean;
 }) {
+  if (loading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="h-48 w-48 animate-spin rounded-full border-b-8 border-blue-600"></div>
+      </div>
+    );
+  }
   return (
     <Line
       options={{
@@ -51,7 +60,7 @@ export default function GrowthChart({
             time: {
               unit: chartData.increment,
               tooltipFormat: "dd MMMM yyyy",
-              round: "day"
+              round: chartData.increment
             }
           },
           y: {

@@ -71,6 +71,8 @@ export default function GrowthChartSection({
 
   const [selectedMonth, setSelectedMonth] = useState<DisplayMonth>(months[0]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     function isValidDisplayOption(option: string | null) {
       return months.find((month) => month.value === option);
@@ -80,6 +82,7 @@ export default function GrowthChartSection({
     if (result) {
       setSelectedMonthValue(result.value);
       setSelectedMonth(result);
+      setLoading(false);
     }
   }, [searchParams, months]);
 
@@ -88,7 +91,11 @@ export default function GrowthChartSection({
       <div className="rounded-lg bg-white px-1 py-6 shadow sm:px-5">
         {/* chart won't scale properly without width class: https://stackoverflow.com/a/70191511 */}
         <div className="relative h-[28rem] w-[99%]">
-          <GrowthChart chartData={chartData} logarithmic={logarithmic} />
+          <GrowthChart
+            chartData={chartData}
+            logarithmic={logarithmic}
+            loading={loading}
+          />
         </div>
       </div>
       <div className="mt-8 grid grid-cols-1 justify-center gap-6 rounded-lg bg-white px-5 py-6 shadow sm:grid-cols-2 sm:px-6">
@@ -130,6 +137,7 @@ export default function GrowthChartSection({
             if (month) {
               setSelectedMonthValue(value);
               setSelectedMonth(month);
+              setLoading(true);
               router.replace(
                 pathname + "?" + createQueryString("displayOption", value),
                 { scroll: false }
