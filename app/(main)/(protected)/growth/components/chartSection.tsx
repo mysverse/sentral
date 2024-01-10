@@ -71,7 +71,7 @@ export default function GrowthChartSection({
 
   const [selectedMonth, setSelectedMonth] = useState<DisplayMonth>(months[0]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     function isValidDisplayOption(option: string | null) {
