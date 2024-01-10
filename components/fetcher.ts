@@ -16,7 +16,7 @@ async function fetchURL(url: string | null) {
   }
   const res = await fetch(url);
   if (!res.ok) {
-    throw new Error((await res.json()).error);
+    throw new Error(await res.json());
   }
   const data = await res.json();
   return data;
