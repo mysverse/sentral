@@ -115,7 +115,7 @@ export default function GrowthChartSection({
             if (month) {
               setSelectedMonthValue(value);
               setSelectedMonth(month);
-              router.push(
+              router.replace(
                 pathname + "?" + createQueryString("displayOption", value),
                 { scroll: false }
               );
