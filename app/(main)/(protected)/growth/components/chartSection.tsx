@@ -13,8 +13,8 @@ import {
 } from "@headlessui/react";
 import { clsx } from "clsx";
 import { Fragment, useCallback, useState } from "react";
-import GrowthChart from "components/growthChart";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 
 const chartAxisOptions = [
   { name: "Linear", value: "linear", disabled: false },
@@ -31,6 +31,8 @@ const months: DisplayMonth[] = [
   { name: "Cumulative (monthly)", value: "months", valid: true },
   { name: "Cumulative (weekly)", value: "weeks", valid: true }
 ];
+
+const GrowthChart = dynamic(() => import("components/growthChart"));
 
 export default function GrowthChartSection({
   chartData,

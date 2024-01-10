@@ -9,11 +9,12 @@ import MECSFAQ from "components/mecs/mecsFaq";
 import StaffStats from "components/mecs/staffStats";
 import { useUserData } from "components/swr";
 import { isStandalonePWA } from "components/utils";
-import MECSChart from "components/mecs/mecsChart";
-import MECSChart2 from "components/mecs/mecsChart2";
+const MECSChart = dynamic(() => import("components/mecs/mecsChart"));
+const MECSChart2 = dynamic(() => import("components/mecs/mecsChart2"));
 import { usePlausible } from "next-plausible";
 import { useSearchParams } from "next/navigation";
 import DefaultTransitionLayout from "components/transition";
+import dynamic from "next/dynamic";
 
 const regex = /^(?=^[^_]+_?[^_]+$)\w{3,20}$/;
 
