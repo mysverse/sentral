@@ -457,10 +457,9 @@ export default function QueryModalContent({
                   <>
                     <>{`Player is individually blacklisted ${
                       reason ? `(reason: "${reason}")` : null
-                    } and in ${apiResponse.tests.blacklist.metadata?.group
-                      .length} blacklisted group${
-                      array.length > 1 ? "s" : ""
-                    }`}</>
+                    } and in ${
+                      apiResponse.tests.blacklist.metadata?.group.length
+                    } blacklisted group${array.length > 1 ? "s" : ""}`}</>
                     <ul className="list-disc pl-4">
                       {array.map((group) => (
                         <li key={group.id}>
@@ -488,10 +487,9 @@ export default function QueryModalContent({
               } else if (group) {
                 failReasons.push(
                   <>
-                    <>{`Player is in ${apiResponse.tests.blacklist.metadata
-                      ?.group.length} blacklisted group${
-                      array.length > 1 ? "s" : ""
-                    }`}</>
+                    <>{`Player is in ${
+                      apiResponse.tests.blacklist.metadata?.group.length
+                    } blacklisted group${array.length > 1 ? "s" : ""}`}</>
                     <ul className="list-disc pl-4">
                       {array.map((group) => (
                         <li key={group.id}>
