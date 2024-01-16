@@ -1,11 +1,8 @@
-"use client";
-
 import humanizeDuration from "humanize-duration";
-import { MYSverseData } from "./swr";
 import clsx from "clsx";
 import DefaultTransitionLayout from "./transition";
-
-import CountUp from "react-countup";
+import { MYSverseData } from "./fetcher";
+import CountUp from "./Countup";
 
 function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
   const stats = [
@@ -500,7 +497,7 @@ export default function MysverseStats({ data }: { data: MYSverseData }) {
     <>
       <header>
         <h3 className="mb-10 text-center text-2xl font-bold text-slate-900">
-          Bandar Insights
+          Bandaraya Insights
         </h3>
       </header>
       <DefaultTransitionLayout show={!!data} appear={true}>
