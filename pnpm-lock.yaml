@@ -34,13 +34,13 @@ dependencies:
     version: 4.4.1
   chartjs-adapter-date-fns:
     specifier: ^3.0.0
-    version: 3.0.0(chart.js@4.4.1)(date-fns@3.2.0)
+    version: 3.0.0(chart.js@4.4.1)(date-fns@3.3.0)
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
   date-fns:
-    specifier: ^3.2.0
-    version: 3.2.0
+    specifier: ^3.3.0
+    version: 3.3.0
   humanize-duration:
     specifier: ^3.31.0
     version: 3.31.0
@@ -1347,7 +1347,7 @@ packages:
       babel-plugin-polyfill-corejs2: 0.4.8(@babel/core@7.23.7)
       babel-plugin-polyfill-corejs3: 0.8.7(@babel/core@7.23.7)
       babel-plugin-polyfill-regenerator: 0.5.5(@babel/core@7.23.7)
-      core-js-compat: 3.35.0
+      core-js-compat: 3.35.1
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -3120,7 +3120,7 @@ packages:
     dependencies:
       '@babel/core': 7.23.7
       '@babel/helper-define-polyfill-provider': 0.4.4(@babel/core@7.23.7)
-      core-js-compat: 3.35.0
+      core-js-compat: 3.35.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3257,14 +3257,14 @@ packages:
       '@kurkle/color': 0.3.2
     dev: false
 
-  /chartjs-adapter-date-fns@3.0.0(chart.js@4.4.1)(date-fns@3.2.0):
+  /chartjs-adapter-date-fns@3.0.0(chart.js@4.4.1)(date-fns@3.3.0):
     resolution: {integrity: sha512-Rs3iEB3Q5pJ973J93OBTpnP7qoGwvq3nUnoMdtxO+9aoJof7UFcRbWcIDteXuYd1fgAvct/32T9qaLyLuZVwCg==}
     peerDependencies:
       chart.js: '>=2.8.0'
       date-fns: '>=2.0.0'
     dependencies:
       chart.js: 4.4.1
-      date-fns: 3.2.0
+      date-fns: 3.3.0
     dev: false
 
   /chokidar@3.5.3:
@@ -3374,8 +3374,8 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /core-js-compat@3.35.0:
-    resolution: {integrity: sha512-5blwFAddknKeNgsjBzilkdQ0+YK8L1PfqPYq40NOYMYFSS38qj+hpTcLLWwpIwA2A5bje/x5jmVn2tzUMg9IVw==}
+  /core-js-compat@3.35.1:
+    resolution: {integrity: sha512-sftHa5qUJY3rs9Zht1WEnmkvXputCyDBczPnr7QDgL8n3qrF3CMXY4VPSYtOLLiOUJcah2WNXREd48iOl6mQIw==}
     dependencies:
       browserslist: 4.22.2
     dev: true
@@ -3458,8 +3458,8 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
 
-  /date-fns@3.2.0:
-    resolution: {integrity: sha512-E4KWKavANzeuusPi0jUjpuI22SURAznGkx7eZV+4i6x2A+IZxAMcajgkvuDAU1bg40+xuhW1zRdVIIM/4khuIg==}
+  /date-fns@3.3.0:
+    resolution: {integrity: sha512-xuouT0GuI2W8yXhCMn/AXbSl1Av3wu2hJXxMnnILTY3bYY0UgNK0qOwVXqdFBrobW5qbX1TuOTgMw7c2H2OuhA==}
     dev: false
 
   /debounce@1.2.1:
