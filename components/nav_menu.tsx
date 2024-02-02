@@ -19,7 +19,7 @@ import { ReactNode } from "react";
 export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
   const pathname = usePathname();
   const navigation = [
-    { name: "Home", href: "/", current: false },
+    { name: "Home", href: "/dashboard", current: false },
     {
       name: "Privacy Policy",
       href: "/privacy-policy",
@@ -39,20 +39,35 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
     // },
     {
       name: "Tracer",
-      href: "/tracer",
+      href: "/dashboard/tracer",
       logo: TracerLogo,
       current: false
     },
     {
       name: "MECS",
-      href: "/mecs",
+      href: "/dashboard/mecs",
       pages: ["staff"],
       logo: MECSLogo,
       current: false
     },
-    { name: "GenTag", href: "/gentag", logo: GentagLogo, current: false },
-    { name: "Growth", href: "/growth", logo: GrowthLogo, current: false },
-    { name: "inVote", href: "/invote", logo: InvoteLogo, current: false }
+    {
+      name: "GenTag",
+      href: "/dashboard/gentag",
+      logo: GentagLogo,
+      current: false
+    },
+    {
+      name: "Growth",
+      href: "/dashboard/growth",
+      logo: GrowthLogo,
+      current: false
+    },
+    {
+      name: "inVote",
+      href: "/dashboard/invote",
+      logo: InvoteLogo,
+      current: false
+    }
   ].map((obj) => ({
     ...obj,
     current:

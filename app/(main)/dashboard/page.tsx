@@ -25,7 +25,7 @@ const links = [
     description: isStandalonePWA()
       ? "View your statistics in MYSverse games"
       : "View your statistics in MYSverse games",
-    href: "/tracer",
+    href: "/dashboard/tracer",
     logo: TracerLogo,
     version: "v1.0.0",
     news: "Initial release for Bandar",
@@ -37,7 +37,7 @@ const links = [
     description: isStandalonePWA()
       ? "Verify membership criteria with a username"
       : "Verify membership criteria of any Roblox player",
-    href: "/mecs",
+    href: "/dashboard/mecs",
     logo: MECSLogo,
     version: "v2.4.1",
     news: "Fixed blacklist button layout",
@@ -47,7 +47,7 @@ const links = [
     name: "GenTag",
     title: "Nametag Generator",
     description: "Personalise virtual uniforms with nametags",
-    href: "/gentag",
+    href: "/dashboard/gentag",
     logo: GentagLogo,
     version: "v1.0.2",
     news: "Performance improvements",
@@ -57,7 +57,7 @@ const links = [
     name: "Growth",
     title: "Group Membership Analytics",
     description: "Visualised trends of community membership",
-    href: "/growth",
+    href: "/dashboard/growth",
     logo: GrowthLogo,
     version: "v1.1.1",
     news: "Colour and semantic adjustments",
@@ -67,7 +67,7 @@ const links = [
     name: "inVote",
     title: "Voting Statistics",
     description: "Presenting in-game community elections on the web",
-    href: "/invote",
+    href: "/dashboard/invote",
     logo: InvoteLogo,
     version: "v1.1.0",
     news: "Stacked bar chart for votes by party",

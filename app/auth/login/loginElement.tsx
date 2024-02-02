@@ -7,20 +7,17 @@ import SignInButton from "components/signIn";
 import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function LoginElement({
-  imageLoaded
-}: {
-  imageLoaded: boolean;
-}) {
-  const [show, setShow] = useState<boolean>(false);
+export default function LoginElement() {
+  // const [show, setShow] = useState<boolean>(false);
   const [authenticating, setAuthenticating] = useState<boolean>(false);
-  useEffect(() => {
-    if (imageLoaded) {
-      setShow(true);
-    }
-  }, [imageLoaded]);
+  // useEffect(() => {
+  //   if (imageLoaded) {
+  //     setShow(true);
+  //   }
+  // }, [imageLoaded]);
+
   return (
     <div className="relative flex h-full items-center justify-center">
       <Transition
@@ -36,7 +33,8 @@ export default function LoginElement({
       </Transition>
 
       <Transition
-        show={show}
+        show={!authenticating}
+        appear={true}
         enter="transform transition duration-[500ms] delay-75"
         enterFrom="opacity-0 -translate-y-36 scale-80"
         enterTo="opacity-100 translate-y-0 scale-100"
@@ -82,7 +80,7 @@ export default function LoginElement({
         <div className="mt-10">
           <div
             onClick={() => {
-              setShow(false);
+              // setShow(false);
               setAuthenticating(true);
             }}
             className="mt-6 grid grid-cols-1 gap-4"
