@@ -72,3 +72,42 @@ export interface BlacklistItem {
   reason?: string;
   name?: string;
 }
+
+// Request Type for Creating a Payout
+export interface CreatePayoutRequest {
+  userId: number;
+  amount: number;
+  reason: string;
+}
+
+// Response Type for Create Payout Request
+export interface CreatePayoutResponse {
+  success: boolean;
+  message: string;
+}
+
+// Request Type for Updating Payout Request Status
+export interface UpdatePayoutRequestStatus {
+  requestId: number;
+  status: "approved" | "rejected";
+}
+
+// Response Type for Updating Payout Request Status
+export interface UpdatePayoutRequestStatusResponse {
+  success: boolean;
+  message: string;
+}
+
+// Payout Request Data Type
+export interface PayoutRequestData {
+  id: number;
+  user_id: number;
+  amount: number;
+  reason: string;
+  status: string;
+}
+
+// Response Type for Fetching Pending Requests
+export interface PendingPayoutRequestsResponse {
+  requests: PayoutRequestData[];
+}

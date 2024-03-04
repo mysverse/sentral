@@ -2,7 +2,7 @@
 
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/20/solid";
-
+import FinsysLogo from "public/img/finsys/finsys.svg";
 import MECSLogo from "public/img/mecs/mecs_logo.svg";
 import GentagLogo from "public/img/gentag/gentag.svg";
 import GrowthLogo from "public/img/growth/myx_growth_logo.svg";
@@ -66,6 +66,12 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       name: "inVote",
       href: "/dashboard/invote",
       logo: InvoteLogo,
+      current: false
+    },
+    {
+      name: "FinSys",
+      href: "/dashboard/finsys",
+      logo: FinsysLogo,
       current: false
     }
   ].map((obj) => ({
