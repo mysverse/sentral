@@ -5,14 +5,13 @@ import { endpoints } from "components/constants/endpoints";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-export async function submitPayoutRequest(formData: FormData) {
+export async function submitPayoutRequest(prevState: any, formData: FormData) {
   const session = await getServerSession(authOptions);
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
   if (!session || !apiKey) {
     throw new Error("Unauthorized or missing API key");
   }
-
   // Construct the payload
   const payload = {
     userId: session.user.id,
@@ -44,10 +43,12 @@ export async function submitPayoutRequest(formData: FormData) {
 
   if (!response.ok) {
     // Handle errors
-    throw new Error(message);
+    return { error: message };
+    // throw new Error(message);
+  } else {
+    // Handle successful submission
+    // Optionally, mutate data or revalidate cache here
+    revalidatePath("/dashboard/finsys");
+    return { message: "ok" };
   }
-
-  // Handle successful submission
-  // Optionally, mutate data or revalidate cache here
-  revalidatePath("/dashboard/finsys");
 }

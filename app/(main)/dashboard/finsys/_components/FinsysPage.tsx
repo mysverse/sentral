@@ -1,7 +1,7 @@
 "use client";
 
 import { PayoutRequestData } from "components/apiTypes";
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   ArrowUpCircleIcon,
@@ -10,6 +10,8 @@ import {
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { submitPayoutRequest } from "actions/submitPayout";
+import { useFormState } from "react-dom";
+import toast from "react-hot-toast";
 
 const statuses: { [key: string]: string } = {
   pending: "text-yellow-700 bg-yellow-50 ring-yellow-600/20",
@@ -39,7 +41,7 @@ function PayoutRequestsTable({
       <table className="min-w-full divide-y divide-gray-300">
         <thead>
           <tr>
-            <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+            <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
               Amount (R$)
             </th>
             <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -60,7 +62,7 @@ function PayoutRequestsTable({
               )}
             >
               <td>
-                <div className="flex items-center gap-x-6 py-4">
+                <div className="flex items-center gap-x-6 py-3 pl-3">
                   {React.createElement(getStatusIcon(request.status), {
                     className: "h-6 w-6 text-gray-500",
                     "aria-hidden": "true"
@@ -89,15 +91,27 @@ function PayoutRequestsTable({
   );
 }
 
+const initialState = {
+  message: ""
+};
+
 function PayoutRequestComponent({
   payoutRequests
 }: {
   payoutRequests: PayoutRequestData[];
 }) {
+  const [state, formAction] = useFormState(submitPayoutRequest, initialState);
+  useEffect(() => {
+    // const message = state.message;
+    const error = state.error;
+    if (error) {
+      toast.error(error);
+    }
+  }, [state]);
   return (
     <div className="container mx-auto p-2">
       <h2 className="mb-4 text-lg font-medium">Submit a Payout Request</h2>
-      <form action={submitPayoutRequest} className="mb-6">
+      <form action={formAction} className="mb-6">
         <div className="mb-4">
           <label
             htmlFor="amount"
