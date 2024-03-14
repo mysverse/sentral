@@ -37,27 +37,33 @@ function PayoutRequestsTable({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {payoutRequests.map((request) => (
         <div key={request.id} className="flex flex-col rounded-lg border p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xl font-bold">
-              {request.amount} <span className="text-xl font-semibold">R$</span>
+          <div
+            className={clsx(
+              "flex items-center justify-between",
+              statuses[request.status]
+            )}
+          >
+            <span className="text-2xl font-bold">
+              <span className="mr-1 text-base font-medium">R$</span>
+              {request.amount}
             </span>
             <div
               className={clsx("flex items-center", statuses[request.status])}
             >
+              <span
+                className={"mr-2 text-sm font-medium uppercase tracking-widest"}
+              >
+                {request.status}
+              </span>
               {React.createElement(getStatusIcon(request.status), {
                 className: "h-6 w-6",
                 "aria-hidden": "true"
               })}
-              <span
-                className={"ml-2 text-sm font-medium uppercase tracking-widest"}
-              >
-                {request.status}
-              </span>
             </div>
           </div>
           <div className="mt-1">
             <p className="mt-1 text-sm text-gray-600">
-              {new Date(request.created_at).toLocaleString()}
+              Submitted {new Date(request.created_at).toLocaleString()}
             </p>
           </div>
           <div className="mt-2">
@@ -102,6 +108,9 @@ function PayoutRequestComponent({
             type="number"
             id="amount"
             name="amount"
+            min={"1"}
+            max={"100"}
+            placeholder="Maximum 100 R$ per request"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             required
           />
@@ -115,17 +124,23 @@ function PayoutRequestComponent({
           </label>
           <textarea
             id="reason"
+            placeholder={
+              "Promotion from rank X to rank Y \nList of items:\n1. https://roblox.com/catalog/123456/shirt\n2. https://roblox.com/catalog/245678/pants\n..."
+            }
             name="reason"
+            rows={5}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             required
           ></textarea>
         </div>
-        <button
-          type="submit"
-          className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Submit Request
-        </button>
+        <div className="flex flex-row">
+          <button
+            type="submit"
+            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Submit Request
+          </button>
+        </div>
       </form>
       <h2 className="mb-4 text-lg font-medium">Payout Requests</h2>
       <PayoutRequestsTable payoutRequests={payoutRequests} />
