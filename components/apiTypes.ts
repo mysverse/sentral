@@ -105,6 +105,8 @@ export interface PayoutRequestData {
   amount: number;
   reason: string;
   status: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // Response Type for Fetching Pending Requests

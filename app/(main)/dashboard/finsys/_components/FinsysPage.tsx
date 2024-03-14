@@ -3,20 +3,17 @@
 import { PayoutRequestData } from "components/apiTypes";
 import React, { useEffect } from "react";
 
-import {
-  ArrowUpCircleIcon,
-  ArrowDownCircleIcon,
-  ArrowPathIcon
-} from "@heroicons/react/20/solid";
+import { ClockIcon } from "@heroicons/react/20/solid";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { submitPayoutRequest } from "actions/submitPayout";
 import { useFormState } from "react-dom";
 import toast from "react-hot-toast";
 
 const statuses: { [key: string]: string } = {
-  pending: "text-yellow-700 bg-yellow-50 ring-yellow-600/20",
-  approved: "text-green-700 bg-green-50 ring-green-600/20",
-  rejected: "text-red-700 bg-red-50 ring-red-600/20"
+  pending: "text-yellow-700",
+  approved: "text-green-700",
+  rejected: "text-red-700"
 };
 
 function PayoutRequestsTable({
@@ -28,65 +25,47 @@ function PayoutRequestsTable({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "approved":
-        return ArrowUpCircleIcon;
+        return CheckCircleIcon;
       case "rejected":
-        return ArrowPathIcon;
+        return XCircleIcon;
       default:
-        return ArrowDownCircleIcon;
+        return ClockIcon;
     }
   };
 
   return (
-    <div className="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
-      <table className="min-w-full divide-y divide-gray-300">
-        <thead>
-          <tr>
-            <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-              Amount (R$)
-            </th>
-            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-              Status
-            </th>
-            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-              Reason
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {payoutRequests.map((request, idx) => (
-            <tr
-              key={request.id}
-              className={clsx(
-                idx === 0 ? "" : "border-t border-gray-200",
-                "relative py-4 pl-4 pr-3 sm:pl-6"
-              )}
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      {payoutRequests.map((request) => (
+        <div key={request.id} className="flex flex-col rounded-lg border p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xl font-bold">
+              {request.amount} <span className="text-xl font-semibold">R$</span>
+            </span>
+            <div
+              className={clsx("flex items-center", statuses[request.status])}
             >
-              <td>
-                <div className="flex items-center gap-x-6 py-3 pl-3">
-                  {React.createElement(getStatusIcon(request.status), {
-                    className: "h-6 w-6 text-gray-500",
-                    "aria-hidden": "true"
-                  })}
-                  <span className="text-sm text-gray-900">
-                    {request.amount}
-                  </span>
-                </div>
-              </td>
-              <td className="text-sm text-gray-500">
-                <span
-                  className={clsx(
-                    "rounded-md px-2 py-1 font-medium ring-1 ring-inset",
-                    statuses[request.status]
-                  )}
-                >
-                  {request.status}
-                </span>
-              </td>
-              <td className="text-sm text-gray-500">{request.reason}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              {React.createElement(getStatusIcon(request.status), {
+                className: "h-6 w-6",
+                "aria-hidden": "true"
+              })}
+              <span
+                className={"ml-2 text-sm font-medium uppercase tracking-widest"}
+              >
+                {request.status}
+              </span>
+            </div>
+          </div>
+          <div className="mt-1">
+            <p className="mt-1 text-sm text-gray-600">
+              {new Date(request.created_at).toLocaleString()}
+            </p>
+          </div>
+          <div className="mt-2">
+            <h3 className="text-sm font-semibold">Reason</h3>
+            <p className="mt-1 text-sm text-gray-600">{request.reason}</p>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
