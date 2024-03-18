@@ -21,9 +21,14 @@ export async function getPendingRequests(userId?: string) {
     }
   });
 
-  const data: PendingPayoutRequestsResponse = await res.json();
+  if (!res.ok) {
+    const data: PendingPayoutRequestsResponse = await res.json();
 
-  // console.log(data);
+    // console.log(data);
 
-  return data.requests;
+    return data.requests;
+  }
+
+  const data = await res.json();
+  throw new Error(data.error);
 }
