@@ -22,9 +22,9 @@ export default function StaffStats({ limit }: { limit?: number }) {
       </h2>
       <span className="ml-3 inline text-sm text-slate-800 hover:underline">
         {limit ? (
-          <Link href="/mecs/staff">View staff page</Link>
+          <Link href="/dashboard/mecs/staff">View staff page</Link>
         ) : (
-          <Link href="/mecs">Back to MECS</Link>
+          <Link href="/dashboard/mecs">Back to MECS</Link>
         )}
       </span>
 
