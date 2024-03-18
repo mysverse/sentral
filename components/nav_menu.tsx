@@ -16,9 +16,18 @@ import { usePathname } from "next/navigation";
 
 import { ReactNode } from "react";
 
+type NavigationItem = {
+  name: string;
+  href: string;
+  current: boolean;
+  hidden?: boolean;
+  logo?: any; // Replace `any` with a more specific type if needed
+};
+
 export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
   const pathname = usePathname();
-  const navigation = [
+
+  let navigation: NavigationItem[] = [
     { name: "Home", href: "/dashboard", current: false },
     {
       name: "Privacy Policy",
@@ -46,7 +55,6 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
     {
       name: "MECS",
       href: "/dashboard/mecs",
-      pages: ["staff"],
       logo: MECSLogo,
       current: false
     },
@@ -74,12 +82,38 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       logo: FinsysLogo,
       current: false
     }
-  ].map((obj) => ({
-    ...obj,
-    current:
-      pathname === obj.href ||
-      obj.pages?.some((page) => pathname === `${obj.href}/${page}`)
-  }));
+  ];
+
+  // Function to determine if the current path is a descendant of the nav item's path
+  const isCurrentPath = (
+    navItem: NavigationItem,
+    currentPath: string
+  ): boolean => {
+    return currentPath.startsWith(navItem.href);
+  };
+
+  // Find the navigation item that has the longest href matching the current path
+  const currentNavItem = navigation.reduce<NavigationItem | null>(
+    (currentLongest, navItem) => {
+      if (
+        isCurrentPath(navItem, pathname) &&
+        (!currentLongest || navItem.href.length > currentLongest.href.length)
+      ) {
+        return navItem;
+      }
+      return currentLongest;
+    },
+    null
+  );
+
+  // Map over the original navigation items to set the current property
+  navigation = navigation.map(
+    (obj): NavigationItem => ({
+      ...obj,
+      current: obj === currentNavItem
+    })
+  );
+
   const currentNav = navigation.find((value) => value.current);
 
   return (
