@@ -119,7 +119,7 @@ function PayoutRequestsTable({
               </div>
             )}
             {adminMode && request.status === "pending" ? (
-              <div className="mt-auto flex flex-row gap-x-2 self-end">
+              <div className="mt-auto flex flex-row gap-x-2 self-end pt-4">
                 <Button
                   onClick={async () => {
                     setLoading(true);

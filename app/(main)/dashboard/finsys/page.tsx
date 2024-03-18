@@ -22,14 +22,12 @@ export default async function Main() {
   // const testId = 31585182;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-        <DefaultTransitionLayout show={true} appear={true}>
-          <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-            <PayoutRequestComponent payoutRequests={data} />
-          </div>
-        </DefaultTransitionLayout>
-      </div>
+    <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
+      <DefaultTransitionLayout show={true} appear={true}>
+        <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+          <PayoutRequestComponent payoutRequests={data} />
+        </div>
+      </DefaultTransitionLayout>
     </div>
   );
 }
