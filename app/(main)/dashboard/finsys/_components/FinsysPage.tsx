@@ -1,80 +1,12 @@
 "use client";
 
 import { PayoutRequestData } from "components/apiTypes";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
-import { ClockIcon } from "@heroicons/react/20/solid";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import { submitPayoutRequest } from "actions/submitPayout";
 import { useFormState } from "react-dom";
 import toast from "react-hot-toast";
-
-const statuses: { [key: string]: string } = {
-  pending: "text-yellow-700",
-  approved: "text-green-700",
-  rejected: "text-red-700"
-};
-
-function PayoutRequestsTable({
-  payoutRequests
-}: {
-  payoutRequests: PayoutRequestData[];
-}) {
-  // Icon selection based on status
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "approved":
-        return CheckCircleIcon;
-      case "rejected":
-        return XCircleIcon;
-      default:
-        return ClockIcon;
-    }
-  };
-
-  return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {payoutRequests.map((request) => (
-        <div key={request.id} className="flex flex-col rounded-lg border p-4">
-          <div
-            className={clsx(
-              "flex items-center justify-between",
-              statuses[request.status]
-            )}
-          >
-            <span className="text-2xl font-bold">
-              <span className="mr-1 text-base font-medium">R$</span>
-              {request.amount}
-            </span>
-            <div
-              className={clsx("flex items-center", statuses[request.status])}
-            >
-              <span
-                className={"mr-2 text-sm font-medium uppercase tracking-widest"}
-              >
-                {request.status}
-              </span>
-              {React.createElement(getStatusIcon(request.status), {
-                className: "h-6 w-6",
-                "aria-hidden": "true"
-              })}
-            </div>
-          </div>
-          <div className="mt-1">
-            <p className="mt-1 text-sm text-gray-600">
-              Submitted {new Date(request.created_at).toLocaleString()}
-            </p>
-          </div>
-          <div className="mt-2">
-            <h3 className="text-sm font-semibold">Reason</h3>
-            <p className="mt-1 text-sm text-gray-600">{request.reason}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+import PayoutRequestsTable from "./PayoutRequestTable";
 
 const initialState = {
   message: ""
