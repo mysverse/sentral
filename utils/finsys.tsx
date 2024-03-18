@@ -21,7 +21,7 @@ export async function getPendingRequests(userId?: string) {
     }
   });
 
-  if (!res.ok) {
+  if (res.ok) {
     const data: PendingPayoutRequestsResponse = await res.json();
 
     // console.log(data);
