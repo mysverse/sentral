@@ -8,7 +8,8 @@ import { getPermissions } from "utils/finsys";
 
 export async function updatePayoutRequest(
   requestId: number,
-  approved: boolean
+  approved: boolean,
+  rejectionReason?: string
 ) {
   const session = await getServerSession(authOptions);
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
@@ -27,7 +28,8 @@ export async function updatePayoutRequest(
   const payload = {
     // userId: session.user.id,
     requestId,
-    status: approved ? "approved" : "rejected"
+    status: approved ? "approved" : "rejected",
+    rejectionReason
   };
 
   // Call the FinSys API to submit the payout request

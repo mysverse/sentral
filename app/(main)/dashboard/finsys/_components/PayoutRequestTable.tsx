@@ -37,6 +37,7 @@ function PayoutRequestsTable({
 }) {
   // Icon selection based on status
   const [loading, setLoading] = useState<boolean>(false);
+  const [rejectionReason, setRejectionReason] = useState<string>();
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "approved":
@@ -85,9 +86,18 @@ function PayoutRequestsTable({
             </div>
             <div className="mt-1">
               <p className="mt-1 text-sm text-gray-600">
-                Submitted {new Date(request.created_at).toLocaleString()}
+                Submitted {new Date(request.created_at).toLocaleString()},
+                updated {new Date(request.updated_at).toLocaleString()}
               </p>
             </div>
+            {request.status === "rejected" && request.rejection_reason && (
+              <div className="mt-2">
+                <h3 className="text-sm font-semibold">Rejection reason</h3>
+                <p className="mt-1 break-words text-sm text-gray-600">
+                  {request.rejection_reason}
+                </p>
+              </div>
+            )}
             <div className="mt-2">
               <h3 className="text-sm font-semibold">Reason</h3>
               <p className="mt-1 break-words text-sm text-gray-600">
@@ -118,54 +128,84 @@ function PayoutRequestsTable({
                 </p>
               </div>
             )}
-            {adminMode && request.status === "pending" ? (
-              <div className="mt-auto flex flex-row gap-x-2 self-end pt-4">
-                <Button
-                  onClick={async () => {
-                    setLoading(true);
 
-                    const response = await updatePayoutRequest(
-                      request.id,
-                      true
-                    );
+            {adminMode && request.status === "pending" && (
+              <>
+                <div>
+                  <label
+                    htmlFor="comment"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Rejection reason
+                  </label>
+                  <div className="mt-2">
+                    <textarea
+                      rows={4}
+                      name="comment"
+                      onChange={(e) => setRejectionReason(e.target.value)}
+                      id="comment"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      defaultValue={""}
+                    />
+                  </div>
+                </div>
+                <div className="mt-auto flex flex-row gap-x-2 self-end pt-4">
+                  <Button
+                    onClick={async () => {
+                      setLoading(true);
 
-                    if (response.error) {
-                      toast.error(response.error);
-                    } else if (response.message) {
-                      toast(response.message);
-                    }
+                      const response = await updatePayoutRequest(
+                        request.id,
+                        true
+                      );
 
-                    setLoading(false);
-                  }}
-                  disabled={loading}
-                  color="green"
-                >
-                  Approve
-                </Button>
-                <Button
-                  onClick={async () => {
-                    setLoading(true);
+                      if (response.error) {
+                        toast.error(response.error);
+                      } else if (response.message) {
+                        toast(response.message);
+                      }
 
-                    const response = await updatePayoutRequest(
-                      request.id,
-                      false
-                    );
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    color="green"
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      if (
+                        !(rejectionReason && rejectionReason.trim().length > 0)
+                      ) {
+                        return toast.error(
+                          "You must provide a rejection reason"
+                        );
+                      }
 
-                    if (response.error) {
-                      toast.error(response.error);
-                    } else if (response.message) {
-                      toast(response.message);
-                    }
+                      setLoading(true);
 
-                    setLoading(false);
-                  }}
-                  disabled={loading}
-                  color="red"
-                >
-                  Reject
-                </Button>
-              </div>
-            ) : null}
+                      const response = await updatePayoutRequest(
+                        request.id,
+                        false,
+                        rejectionReason
+                      );
+
+                      if (response.error) {
+                        toast.error(response.error);
+                      } else if (response.message) {
+                        toast(response.message);
+                      }
+
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    color="red"
+                  >
+                    Reject
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         );
       })}
