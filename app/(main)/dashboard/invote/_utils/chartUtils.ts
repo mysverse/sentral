@@ -4,6 +4,8 @@ export function getColourByName(name: string | null) {
   switch (name) {
     case "PDM":
       return "#12447E";
+    case "PAM":
+      return "#000000";
     case "PTA":
       return "#0000AD";
     case "BRM":
