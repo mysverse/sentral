@@ -24,8 +24,18 @@ export async function getPendingRequests(userId?: string) {
   if (res.ok) {
     const data: PendingPayoutRequestsResponse = await res.json();
 
-    // console.log(data);
-
+    data.requests.sort((a, b) => {
+      // First, prioritize pending requests
+      if (a.status === "pending" && b.status !== "pending") {
+        return -1;
+      } else if (a.status !== "pending" && b.status === "pending") {
+        return 1;
+      }
+      // Then, within the same status, sort by created_at in descending order
+      return (
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    });
     return data.requests;
   }
 
