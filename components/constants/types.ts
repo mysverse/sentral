@@ -5,8 +5,9 @@ export interface User {
   displayName: string;
 }
 
-export interface RaceLeaderboard {
+export interface Leaderboard {
   user: User;
   image: string;
-  time: number;
+  time?: number;
+  score?: number;
 }

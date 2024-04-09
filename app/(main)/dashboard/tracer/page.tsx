@@ -11,16 +11,28 @@ export default async function Main() {
     return null;
   }
 
-  const [leaderboardData, mysverseData] = await Promise.all([
-    getLeaderboardData(),
-    getMysverseData(session.user.id)
-  ]);
+  const [leaderboardData, weeklyData, schoolData, mysverseData] =
+    await Promise.all([
+      getLeaderboardData(),
+      getLeaderboardData("weekly"),
+      getLeaderboardData("school"),
+      getMysverseData(session.user.id)
+    ]);
 
   // const testId = 31585182;
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-      <LebuhrayaLeaderboard data={leaderboardData} />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <LebuhrayaLeaderboard limit={5} data={leaderboardData} order={1} />
+        <LebuhrayaLeaderboard
+          limit={5}
+          data={weeklyData}
+          type="weekly"
+          order={2}
+        />
+        <LebuhrayaLeaderboard limit={5} data={schoolData} type="school" />
+      </div>
       <div className="mt-8">
         <MysverseStats data={mysverseData} />
       </div>

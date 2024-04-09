@@ -8,7 +8,7 @@ import {
 } from "./apiTypes";
 
 import { endpoints } from "./constants/endpoints";
-import { RaceLeaderboard } from "./constants/types";
+import { Leaderboard } from "./constants/types";
 
 async function fetchURL(
   url: string | URL | Request,
@@ -360,11 +360,15 @@ export interface Summon {
   OffenceDescription: string;
 }
 
-export async function getLeaderboardData() {
+export async function getLeaderboardData(type?: string) {
   const url = new URL(`${endpoints.mysverse}/`);
   url.searchParams.set("type", "lebuhraya_jersik_leaderboard");
 
-  const data: RaceLeaderboard[] = await fetchURL(url.toString(), {
+  if (type) {
+    url.searchParams.set("leaderboardType", type);
+  }
+
+  const data: Leaderboard[] = await fetchURL(url.toString(), {
     next: { revalidate: 60 }
   });
 

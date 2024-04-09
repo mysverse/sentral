@@ -1,18 +1,62 @@
 "use client";
 
 import { Avatar } from "components/catalyst/avatar";
-import { RaceLeaderboard } from "components/constants/types";
+import { Leaderboard } from "components/constants/types";
 import DefaultTransitionLayout from "components/transition";
 import Link from "next/link";
+import DateUtils from "../_utils/DateUtils";
+import clsx from "clsx";
 
 export default function LebuhrayaLeaderboard({
-  data
+  type,
+  data,
+  limit,
+  order
 }: {
-  data: RaceLeaderboard[];
+  type?: string;
+  data: Leaderboard[];
+  limit?: number;
+  order?: number;
 }) {
+  const currentWeekInfo = DateUtils.getCurrentWeekInfo();
   return (
     <DefaultTransitionLayout show={!!data} appear={true}>
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div
+          className={clsx(
+            "flex h-16 flex-col items-center text-center align-middle text-lg font-bold",
+            order === 1 && "text-white",
+            order === 2 && "text-black lg:text-white",
+            !order && "text-black"
+          )}
+        >
+          {type === "school" ? (
+            <div className="my-auto">
+              <h2 className="text-sm font-normal uppercase tracking-widest">
+                SMK MYS II
+              </h2>
+              <h1>Top 5 Lebuhraya Quiz Students</h1>
+            </div>
+          ) : type === "weekly" ? (
+            <div className="my-auto">
+              <h2 className="text-sm font-normal uppercase tracking-widest">
+                {currentWeekInfo.startDate.toDateString()}
+                {" > "}
+                {currentWeekInfo.endDate.toDateString()}
+              </h2>
+              <h1>
+                Top 5 Lebuhraya Lap Times for Week {currentWeekInfo.weekNumber}
+              </h1>
+            </div>
+          ) : (
+            <div className="my-auto">
+              <h2 className="text-sm font-normal uppercase tracking-widest">
+                All-Time
+              </h2>
+              <h1>Top 5 Lebuhraya Lap Times</h1>
+            </div>
+          )}
+        </div>
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-300">
@@ -34,7 +78,7 @@ export default function LebuhrayaLeaderboard({
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Record Time
+                    {type === "school" ? "Quiz Score" : "Record Time"}
                   </th>
                   {/* <th
                     scope="col"
@@ -52,6 +96,7 @@ export default function LebuhrayaLeaderboard({
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {data
+                  .slice(0, limit ?? 100)
                   .filter((person) => person.user)
                   .map((person, index) => (
                     <tr key={person.user.id}>
@@ -87,7 +132,7 @@ export default function LebuhrayaLeaderboard({
                         </Link>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {person.time}
+                        {person.time ?? person.score}
                       </td>
                       {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <a
