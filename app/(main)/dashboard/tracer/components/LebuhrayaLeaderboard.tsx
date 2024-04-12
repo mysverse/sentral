@@ -92,7 +92,11 @@ export default function LebuhrayaLeaderboard({
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    {type === "school" ? "Quiz Score" : "Record Time"}
+                    {type === "school"
+                      ? "Quiz Score"
+                      : type === "food"
+                        ? "Food Score"
+                        : "Record Time"}
                   </th>
                   {/* <th
                     scope="col"
