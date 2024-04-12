@@ -50,10 +50,12 @@ function Stats1({ stats }: { stats: InvoteStatsTimestamp[] }) {
 
   const statsObject = getStatsObject(stats);
 
-  const newStats2 = Object.keys(statsObject).map((key) => ({
-    name: key,
-    stat: statsObject[key]
-  }));
+  const newStats2 = Object.keys(statsObject)
+    .map((key) => ({
+      name: key,
+      stat: statsObject[key]
+    }))
+    .sort((a, b) => b.stat - a.stat);
 
   return (
     <dl className="mt-5 grid grid-cols-2 gap-6 sm:grid-cols-4">
@@ -80,10 +82,12 @@ function Stats3({ stats }: { stats: InvoteStatsTimestamp[] }) {
   const statsObject = getStatsObject(stats);
   const seats = calculateSeats(statsObject);
 
-  const newStats2 = Object.keys(seats).map((key) => ({
-    name: key,
-    stat: seats[key]
-  }));
+  const newStats2 = Object.keys(seats)
+    .map((key) => ({
+      name: key,
+      stat: seats[key]
+    }))
+    .sort((a, b) => b.stat - a.stat);
 
   return (
     <dl className="mt-5 grid grid-cols-2 gap-6 sm:grid-cols-2">

@@ -17,10 +17,12 @@ export default function VoteShareChart({
 
   const statsObject = getStatsObject(stats);
 
-  const newStats2 = Object.keys(statsObject).map((key) => ({
-    name: key,
-    stat: statsObject[key]
-  }));
+  const newStats2 = Object.keys(statsObject)
+    .map((key) => ({
+      name: key,
+      stat: statsObject[key]
+    }))
+    .sort((a, b) => b.stat - a.stat);
 
   return (
     // {/* chart won't scale properly without width class: https://stackoverflow.com/a/70191511 */}
