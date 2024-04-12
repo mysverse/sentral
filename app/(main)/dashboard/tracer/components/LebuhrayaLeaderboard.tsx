@@ -7,6 +7,8 @@ import Link from "next/link";
 import DateUtils from "../_utils/DateUtils";
 import clsx from "clsx";
 
+const excludeUserIds = [1285847356];
+
 export default function LebuhrayaLeaderboard({
   type,
   data,
@@ -18,13 +20,17 @@ export default function LebuhrayaLeaderboard({
   limit?: number;
   order?: number;
 }) {
+  limit = limit ?? 100;
+  data = data
+    .filter((v) => !excludeUserIds.includes(v.user.id))
+    .slice(0, limit);
   const currentWeekInfo = DateUtils.getCurrentWeekInfo();
   return (
     <DefaultTransitionLayout show={!!data} appear={true}>
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div
           className={clsx(
-            "flex h-16 flex-col items-center text-center align-middle text-lg font-bold",
+            "flex h-20 flex-col items-center text-center align-middle text-lg font-bold",
             order === 1 && "text-white",
             order === 2 && "text-black lg:text-white",
             !order && "text-black"
@@ -35,7 +41,14 @@ export default function LebuhrayaLeaderboard({
               <h2 className="text-sm font-normal uppercase tracking-widest">
                 SMK MYS II
               </h2>
-              <h1>Top 5 Lebuhraya Quiz Students</h1>
+              <h1>Top {limit.toLocaleString()} Lebuhraya Quiz Students</h1>
+            </div>
+          ) : type === "food" ? (
+            <div className="my-auto">
+              <h2 className="text-sm font-normal uppercase tracking-widest">
+                Masjid Kampung Merbang
+              </h2>
+              <h1>Top {limit.toLocaleString()} Lebuhraya Buffet Eaters</h1>
             </div>
           ) : type === "weekly" ? (
             <div className="my-auto">
@@ -45,7 +58,8 @@ export default function LebuhrayaLeaderboard({
                 {currentWeekInfo.endDate.toDateString()}
               </h2>
               <h1>
-                Top 5 Lebuhraya Lap Times for Week {currentWeekInfo.weekNumber}
+                Top {limit.toLocaleString()} Lebuhraya Lap Times for Week{" "}
+                {currentWeekInfo.weekNumber}
               </h1>
             </div>
           ) : (
@@ -53,7 +67,7 @@ export default function LebuhrayaLeaderboard({
               <h2 className="text-sm font-normal uppercase tracking-widest">
                 All-Time
               </h2>
-              <h1>Top 5 Lebuhraya Lap Times</h1>
+              <h1>Top {limit.toLocaleString()} Lebuhraya Lap Times</h1>
             </div>
           )}
         </div>
@@ -96,7 +110,7 @@ export default function LebuhrayaLeaderboard({
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {data
-                  .slice(0, limit ?? 100)
+
                   .filter((person) => person.user)
                   .map((person, index) => (
                     <tr key={person.user.id}>

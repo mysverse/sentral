@@ -375,11 +375,11 @@ export async function getLeaderboardData(type?: string) {
   return data;
 }
 
-export async function getMysverseData(userId?: string) {
+export async function getMysverseData(userId?: number) {
   const url = new URL(`${endpoints.mysverse}/`);
 
   if (userId) {
-    url.searchParams.set("userId", userId);
+    url.searchParams.set("userId", userId.toString());
   }
 
   const data: MYSverseData = await fetchURL(url.toString(), {
