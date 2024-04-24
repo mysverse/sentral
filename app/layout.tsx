@@ -69,3 +69,5 @@ export default function RootLayout({
     </PlausibleProvider>
   );
 }
+
+export const runtime = "edge";
