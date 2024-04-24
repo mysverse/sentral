@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth, { DefaultSession, Profile } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -8,14 +8,14 @@ declare module "next-auth" {
   }
 }
 
-// interface RobloxProfile {
-//   name: string;
-//   nickname: string;
-//   preferred_username: string;
-//   created_at: number;
-//   profile: string;
-//   picture: string;
-// }
+interface RobloxProfile {
+  name: string;
+  nickname: string;
+  preferred_username: string;
+  created_at: number;
+  profile: string;
+  picture: string;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -48,13 +48,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }
   ],
   callbacks: {
-    async jwt({ token, account }) {
-      // type DerivedProfile = Profile & RobloxProfile;
-      // const derivedProfile = profile as DerivedProfile;
+    async jwt({ token, account, profile }) {
+      type DerivedProfile = Profile & RobloxProfile;
+      const derivedProfile = profile as DerivedProfile;
       if (account) {
         token.accessToken = account.access_token;
         token.sub = account.providerAccountId;
-        // token.picture = derivedProfile?.picture;
+        token.picture = derivedProfile?.picture;
       }
       return token;
     },
