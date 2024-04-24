@@ -4,7 +4,6 @@ import PlausibleProvider from "next-plausible";
 import { SessionProvider } from "components/SessionProvider";
 
 import { Metadata, Viewport } from "next";
-import { env } from "process";
 
 const APP_NAME = "Sentral";
 const APP_DEFAULT_TITLE = "MYSverse Sentral";
@@ -13,7 +12,9 @@ const APP_DESCRIPTION =
   "Sentral is the official hub and companion app for MYSverse, serving game statistics, analytics tools, and a lot more to come!";
 
 export const metadata: Metadata = {
-  metadataBase: env.NEXTAUTH_URL ? new URL(env.NEXTAUTH_URL) : undefined,
+  metadataBase: process.env.AUTH_URL
+    ? new URL(process.env.AUTH_URL)
+    : undefined,
   applicationName: APP_NAME,
   title: {
     default: APP_DEFAULT_TITLE,
