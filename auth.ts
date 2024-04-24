@@ -1,5 +1,4 @@
 import NextAuth, { DefaultSession } from "next-auth";
-import { env } from "process";
 
 declare module "next-auth" {
   interface Session {
@@ -25,8 +24,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       name: "Roblox",
       issuer: "https://apis.roblox.com/oauth/",
       type: "oidc",
-      clientId: env.ROBLOX_CLIENT_ID,
-      clientSecret: env.ROBLOX_CLIENT_SECRET,
+      clientId: process.env.ROBLOX_CLIENT_ID,
+      clientSecret: process.env.ROBLOX_CLIENT_SECRET,
       authorization: {
         params: { scope: "openid profile" }
       },
