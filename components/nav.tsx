@@ -1,10 +1,9 @@
+import { auth } from "auth";
 import RobloxAvatarDisplay from "./RobloxAvatarDisplay";
-import { getServerSession } from "next-auth";
-import { authOptions } from "app/api/auth/[...nextauth]/authOptions";
 import NavMenu from "./nav_menu";
 
 export default async function Navigation() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   const avatar =
     session?.user.image && session?.user.name ? (

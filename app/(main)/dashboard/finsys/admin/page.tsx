@@ -1,13 +1,12 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "app/api/auth/[...nextauth]/authOptions";
 // import { getLeaderboardData, getMysverseData } from "components/fetcher";
 
 import DefaultTransitionLayout from "components/transition";
 import { getPendingRequests, getPermissions } from "utils/finsys";
 import PayoutRequestsTable from "../_components/PayoutRequestTable";
+import { auth } from "auth";
 
 export default async function Main() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session) {
     return null;
@@ -30,7 +29,7 @@ export default async function Main() {
     );
   }
 
-  return <>Not authroised</>;
+  return <>Not authorised</>;
 
   // const [leaderboardData, mysverseData] = await Promise.all([
   //   getLeaderboardData(),

@@ -1,4 +1,4 @@
-import { DefaultSession, NextAuthOptions, Profile } from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import { env } from "process";
 
 declare module "next-auth" {
@@ -9,26 +9,22 @@ declare module "next-auth" {
   }
 }
 
-interface RobloxProfile {
-  name: string;
-  nickname: string;
-  preferred_username: string;
-  created_at: number;
-  profile: string;
-  picture: string;
-}
+// interface RobloxProfile {
+//   name: string;
+//   nickname: string;
+//   preferred_username: string;
+//   created_at: number;
+//   profile: string;
+//   picture: string;
+// }
 
-export const authOptions: NextAuthOptions = {
-  pages: {
-    signIn: "/auth/login"
-  },
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     {
       id: "roblox",
       name: "Roblox",
-      wellKnown:
-        "https://apis.roblox.com/oauth/.well-known/openid-configuration",
-      type: "oauth",
+      issuer: "https://apis.roblox.com/oauth/",
+      type: "oidc",
       clientId: env.ROBLOX_CLIENT_ID,
       clientSecret: env.ROBLOX_CLIENT_SECRET,
       authorization: {
@@ -38,10 +34,10 @@ export const authOptions: NextAuthOptions = {
         authorization_signed_response_alg: "ES256",
         id_token_signed_response_alg: "ES256"
       },
-      httpOptions: {
+      options: {
         timeout: 30 * 1000
       },
-      checks: ["pkce", "state", "nonce"],
+      checks: ["pkce", "state"],
       profile(profile) {
         return {
           id: profile.sub,
@@ -53,25 +49,29 @@ export const authOptions: NextAuthOptions = {
     }
   ],
   callbacks: {
-    jwt({ token, account, profile }) {
-      type DerivedProfile = Profile & RobloxProfile;
-      const derivedProfile = profile as DerivedProfile;
+    async jwt({ token, account }) {
+      // type DerivedProfile = Profile & RobloxProfile;
+      // const derivedProfile = profile as DerivedProfile;
       if (account) {
         token.accessToken = account.access_token;
-        token.picture = derivedProfile?.picture;
+        token.sub = account.providerAccountId;
+        // token.picture = derivedProfile?.picture;
       }
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       if (session.user && token.sub) {
         session.user.id = token.sub;
       }
       return session;
     }
   },
+  pages: {
+    signIn: "/auth/login"
+  },
   events: {
     signIn({ profile }) {
       console.log(profile);
     }
   }
-};
+});

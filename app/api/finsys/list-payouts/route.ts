@@ -1,9 +1,8 @@
-import { authOptions } from "app/api/auth/[...nextauth]/authOptions";
-import { getServerSession } from "next-auth";
+import { auth } from "auth";
 import { getPendingRequests } from "utils/finsys";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session) {
     const data = await getPendingRequests(session.user.id);

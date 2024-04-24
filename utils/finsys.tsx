@@ -40,6 +40,7 @@ export async function getPendingRequests(userId?: string) {
   }
 
   const data = await res.json();
+
   throw new Error(data.error);
 }
 

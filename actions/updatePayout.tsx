@@ -1,8 +1,6 @@
 "use server";
-
-import { authOptions } from "app/api/auth/[...nextauth]/authOptions";
+import { auth } from "auth";
 import { endpoints } from "components/constants/endpoints";
-import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { getPermissions } from "utils/finsys";
 
@@ -11,7 +9,7 @@ export async function updatePayoutRequest(
   approved: boolean,
   rejectionReason?: string
 ) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
   if (!session || !apiKey) {
