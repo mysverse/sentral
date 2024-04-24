@@ -27,3 +27,5 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env: # Or as an environment variable
+          super_secret: ${{ secrets.AUTH_SECRET }}
