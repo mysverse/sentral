@@ -18,6 +18,7 @@ export default function Error({
 
   return (
     <Transition
+      as="div"
       show={true}
       appear={true}
       enter="transform transition duration-[400ms]"

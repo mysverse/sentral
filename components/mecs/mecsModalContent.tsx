@@ -1,5 +1,10 @@
 import { useState, Fragment, Dispatch, SetStateAction } from "react";
-import { Transition, Dialog } from "@headlessui/react";
+import {
+  Transition,
+  TransitionChild,
+  Dialog,
+  DialogPanel
+} from "@headlessui/react";
 import Image from "next/image";
 import humanizeDuration from "humanize-duration";
 import { format } from "date-fns";
@@ -200,132 +205,133 @@ function BlacklistSlideover({
   }
 
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition as="div" show={open}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-hidden"
         onClose={setOpen}
       >
         <div className="absolute inset-0 overflow-hidden">
-          <Dialog.Overlay className="absolute inset-0" />
-
-          <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
-            <Transition.Child
-              as={Fragment}
-              enter="transform transition ease-in-out duration-500 sm:duration-700"
-              enterFrom="translate-x-full"
-              enterTo="translate-x-0"
-              leave="transform transition ease-in-out duration-500 sm:duration-700"
-              leaveFrom="translate-x-0"
-              leaveTo="translate-x-full"
-            >
-              <div className="pointer-events-auto w-screen max-w-md">
-                <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                  <div className="p-6">
-                    <div className="flex items-start justify-between">
-                      <Dialog.Title className="text-lg font-medium text-gray-900">
-                        Blacklisted
-                      </Dialog.Title>
-                      <div className="ml-3 flex h-7 items-center">
-                        <button
-                          type="button"
-                          className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-slate-500"
-                          onClick={() => setOpen(false)}
-                        >
-                          <span className="sr-only">Close panel</span>
-                          <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                        </button>
+          <div className="absolute inset-0" />
+          <DialogPanel>
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
+              <TransitionChild
+                as="div"
+                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                enterFrom="translate-x-full"
+                enterTo="translate-x-0"
+                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                leaveFrom="translate-x-0"
+                leaveTo="translate-x-full"
+              >
+                <div className="pointer-events-auto w-screen max-w-md">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                    <div className="p-6">
+                      <div className="flex items-start justify-between">
+                        <Dialog.Title className="text-lg font-medium text-gray-900">
+                          Blacklisted
+                        </Dialog.Title>
+                        <div className="ml-3 flex h-7 items-center">
+                          <button
+                            type="button"
+                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-slate-500"
+                            onClick={() => setOpen(false)}
+                          >
+                            <span className="sr-only">Close panel</span>
+                            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="border-b border-gray-200">
-                    <div className="px-6">
-                      <nav
-                        className="-mb-px flex space-x-6"
-                        x-descriptions="Tab component"
-                      >
-                        {[
-                          {
-                            name: "Users",
-                            value: "users" as "users" | "groups"
-                          },
-                          {
-                            name: "Groups",
-                            value: "groups" as "users" | "groups"
-                          }
-                        ].map((tab) => (
-                          <div
-                            key={tab.value}
-                            className={clsx(
-                              tab.value === type
-                                ? "border-slate-500 text-slate-600"
-                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                              "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium hover:cursor-pointer"
-                            )}
-                            onClick={() => setType(tab.value)}
-                          >
-                            {tab.name}
-                          </div>
-                        ))}
-                      </nav>
-                    </div>
-                  </div>
-                  <ul
-                    role="list"
-                    className="flex-1 divide-y divide-gray-200 overflow-y-auto"
-                  >
-                    {(type === "groups"
-                      ? apiResponse.groups
-                      : apiResponse.users
-                    )
-                      .sort((a, b) =>
-                        a.name && b.name
-                          ? a.name.toLowerCase() > b.name.toLowerCase()
-                            ? 1
-                            : b.name.toLowerCase() > a.name.toLowerCase()
-                              ? -1
-                              : 0
-                          : 0
-                      )
-                      .map((item) => (
-                        <li key={item.id}>
-                          <div className="group relative flex items-center px-5 py-6">
-                            <a
-                              href={
-                                type === "groups"
-                                  ? `https://roblox.com/groups/${item.id}`
-                                  : `https://roblox.com/users/${item.id}`
-                              }
-                              className="-m-1 block flex-1 p-1"
+                    <div className="border-b border-gray-200">
+                      <div className="px-6">
+                        <nav
+                          className="-mb-px flex space-x-6"
+                          x-descriptions="Tab component"
+                        >
+                          {[
+                            {
+                              name: "Users",
+                              value: "users" as "users" | "groups"
+                            },
+                            {
+                              name: "Groups",
+                              value: "groups" as "users" | "groups"
+                            }
+                          ].map((tab) => (
+                            <div
+                              key={tab.value}
+                              className={clsx(
+                                tab.value === type
+                                  ? "border-slate-500 text-slate-600"
+                                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium hover:cursor-pointer"
+                              )}
+                              onClick={() => setType(tab.value)}
                             >
-                              <div
-                                className="absolute inset-0 group-hover:bg-gray-50"
-                                aria-hidden="true"
-                              />
-                              <div className="relative flex min-w-0 flex-1 items-center">
-                                <div className="truncate">
-                                  <p className="truncate text-sm font-medium text-gray-900">
-                                    {type === "groups"
-                                      ? item.name
-                                      : `@${item.name}`}
-                                  </p>
-                                  <p className="w-72 whitespace-normal text-sm text-gray-500">
-                                    {item.reason}
-                                  </p>
+                              {tab.name}
+                            </div>
+                          ))}
+                        </nav>
+                      </div>
+                    </div>
+                    <ul
+                      role="list"
+                      className="flex-1 divide-y divide-gray-200 overflow-y-auto"
+                    >
+                      {(type === "groups"
+                        ? apiResponse.groups
+                        : apiResponse.users
+                      )
+                        .sort((a, b) =>
+                          a.name && b.name
+                            ? a.name.toLowerCase() > b.name.toLowerCase()
+                              ? 1
+                              : b.name.toLowerCase() > a.name.toLowerCase()
+                                ? -1
+                                : 0
+                            : 0
+                        )
+                        .map((item) => (
+                          <li key={item.id}>
+                            <div className="group relative flex items-center px-5 py-6">
+                              <a
+                                href={
+                                  type === "groups"
+                                    ? `https://roblox.com/groups/${item.id}`
+                                    : `https://roblox.com/users/${item.id}`
+                                }
+                                className="-m-1 block flex-1 p-1"
+                              >
+                                <div
+                                  className="absolute inset-0 group-hover:bg-gray-50"
+                                  aria-hidden="true"
+                                />
+                                <div className="relative flex min-w-0 flex-1 items-center">
+                                  <div className="truncate">
+                                    <p className="truncate text-sm font-medium text-gray-900">
+                                      {type === "groups"
+                                        ? item.name
+                                        : `@${item.name}`}
+                                    </p>
+                                    <p className="w-72 whitespace-normal text-sm text-gray-500">
+                                      {item.reason}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            </a>
-                          </div>
-                        </li>
-                      ))}
-                  </ul>
+                              </a>
+                            </div>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </Transition.Child>
-          </div>
+              </TransitionChild>
+            </div>
+          </DialogPanel>
         </div>
       </Dialog>
-    </Transition.Root>
+    </Transition>
   );
 }
 

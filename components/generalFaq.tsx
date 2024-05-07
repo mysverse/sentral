@@ -1,7 +1,12 @@
 "use client";
 
 /* This example requires Tailwind CSS v2.0+ */
-import { Disclosure, Transition } from "@headlessui/react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Transition
+} from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { clsx } from "clsx";
 
@@ -77,7 +82,7 @@ export default function GeneralFAQ() {
             {({ open }) => (
               <>
                 <dt className="text-base">
-                  <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-400">
+                  <DisclosureButton className="flex w-full items-start justify-between text-left text-gray-400">
                     <span className="font-medium text-gray-900">
                       {faq.question}
                     </span>
@@ -90,9 +95,10 @@ export default function GeneralFAQ() {
                         aria-hidden="true"
                       />
                     </span>
-                  </Disclosure.Button>
+                  </DisclosureButton>
                 </dt>
                 <Transition
+                  as="div"
                   enter="transition duration-100 ease-out"
                   enterFrom="transform scale-95 opacity-0"
                   enterTo="transform scale-100 opacity-100"
@@ -100,9 +106,9 @@ export default function GeneralFAQ() {
                   leaveFrom="transform scale-100 opacity-100"
                   leaveTo="transform scale-95 opacity-0"
                 >
-                  <Disclosure.Panel as="dd" className="mt-2 pr-12">
+                  <DisclosurePanel as="dd" className="mt-2 pr-12">
                     <p className="text-base text-gray-500">{faq.answer}</p>
-                  </Disclosure.Panel>
+                  </DisclosurePanel>
                 </Transition>
               </>
             )}

@@ -14,7 +14,7 @@ export default function DefaultTransitionLayout({
 }) {
   return (
     <Transition
-      //   as={Fragment}
+      as="div"
       show={show}
       appear={appear}
       enter="transform transition duration-[400ms]"

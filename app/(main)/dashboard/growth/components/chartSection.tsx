@@ -7,8 +7,8 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
+  Radio,
   RadioGroup,
-  RadioGroupOption,
   Transition
 } from "@headlessui/react";
 import { clsx } from "clsx";
@@ -108,15 +108,15 @@ export default function GrowthChartSection({
           <Label className="sr-only">Choose a chart display option</Label>
           <div className="grid grid-cols-2 gap-2">
             {chartAxisOptions.map((option) => (
-              <RadioGroupOption
+              <Radio
                 key={option.name}
                 value={option.value}
-                className={({ active, checked }) =>
+                className={({ focus, checked }) =>
                   clsx(
                     !option.disabled
                       ? "cursor-pointer focus:outline-none"
                       : "cursor-not-allowed opacity-25",
-                    active ? "ring-2 ring-blue-500 ring-offset-2" : "",
+                    focus ? "ring-2 ring-blue-500 ring-offset-2" : "",
                     checked
                       ? "border-transparent bg-blue-600 text-white hover:bg-blue-700"
                       : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50",
@@ -126,7 +126,7 @@ export default function GrowthChartSection({
                 disabled={option.disabled}
               >
                 <Label as="p">{option.name}</Label>
-              </RadioGroupOption>
+              </Radio>
             ))}
           </div>
         </RadioGroup>
@@ -171,7 +171,7 @@ export default function GrowthChartSection({
 
                 <Transition
                   show={open}
-                  as={Fragment}
+                  as="div"
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
