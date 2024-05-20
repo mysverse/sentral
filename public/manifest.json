@@ -109,6 +109,6 @@
   "scope": "/",
   "start_url": "/auth/login?source=pwa",
   "display": "standalone",
-  "theme_color": "#1e293b",
-  "background_color": "#e2e8f0"
+  "theme_color": "#3b82f6",
+  "background_color": "#3b82f6"
 }
