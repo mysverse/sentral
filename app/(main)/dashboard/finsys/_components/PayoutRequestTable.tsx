@@ -7,6 +7,7 @@ import { ClockIcon } from "@heroicons/react/20/solid";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Button } from "components/catalyst/button";
+import { BadgeButton } from "components/catalyst/badge";
 import { updatePayoutRequest } from "actions/updatePayout";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -67,7 +68,16 @@ function PayoutRequestsTable({
               <span className="text-2xl font-bold">
                 <span className="mr-1 text-base font-medium">R$</span>
                 {request.amount}
+                <BadgeButton
+                  href={`https://roblox.com/users/${request.user_id}/profile`}
+                  target="_blank"
+                  color="violet"
+                  className="ml-3 align-middle"
+                >
+                  {request.user_id}
+                </BadgeButton>
               </span>
+
               <div
                 className={clsx("flex items-center", statuses[request.status])}
               >
