@@ -33,7 +33,7 @@ export function Avatar({
         className,
 
         // Basic layout
-        "inline-grid size-8 align-middle *:col-start-1 *:row-start-1 ",
+        "inline-grid size-8 align-middle *:col-start-1 *:row-start-1",
 
         // Add the correct border radius
         square ? "rounded-[20%] *:rounded-[20%]" : "rounded-full *:rounded-full"
