@@ -10,7 +10,7 @@
     "format": "prettier --config .prettierrc \"{pages,components}/**/*.{ts,tsx}\" --write"
   },
   "dependencies": {
-    "@headlessui/react": "^2.1.0",
+    "@headlessui/react": "^2.1.1",
     "@heroicons/react": "^2.1.4",
     "@next/bundle-analyzer": "^14.2.4",
     "@serwist/next": "^9.0.3",
@@ -24,7 +24,7 @@
     "next": "^14.2.4",
     "next-auth": "5.0.0-beta.19",
     "next-plausible": "^3.12.0",
-    "postcss": "^8.4.38",
+    "postcss": "^8.4.39",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-countup": "^6.5.3",
@@ -40,11 +40,11 @@
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.13",
     "@types/humanize-duration": "^3.27.4",
-    "@types/node": "^20.14.8",
+    "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.14.1",
-    "@typescript-eslint/parser": "^7.14.1",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.4",
     "eslint-config-prettier": "^9.1.0",
@@ -52,6 +52,7 @@
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "serwist": "^9.0.3",
-    "typescript": "^5.5.2"
-  }
+    "typescript": "^5.5.3"
+  },
+  "packageManager": "pnpm@8.15.7+sha256.50783dd0fa303852de2dd1557cd4b9f07cb5b018154a6e76d0f40635d6cee019"
 }
