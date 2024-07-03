@@ -71,7 +71,7 @@ function PayoutRequestsTable({
                 <BadgeButton
                   href={`https://roblox.com/users/${request.user_id}/profile`}
                   target="_blank"
-                  color="violet"
+                  color="blue"
                   className="ml-3 align-middle"
                 >
                   {request.user_id}

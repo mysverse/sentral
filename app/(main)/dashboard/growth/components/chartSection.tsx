@@ -148,7 +148,7 @@ export default function GrowthChartSection({
           {({ open }) => (
             <>
               <div className="relative my-auto flex flex-grow">
-                <ListboxButton className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pl-3 pr-10 text-left shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 sm:text-sm">
+                <ListboxButton className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm">
                   <div className="flex items-center">
                     <span
                       aria-label={selectedMonth.valid ? "Online" : "Offline"}
@@ -180,10 +180,10 @@ export default function GrowthChartSection({
                     {months.map((month, index) => (
                       <ListboxOption
                         key={index}
-                        className={({ active }) =>
+                        className={({ focus }) =>
                           clsx(
-                            active
-                              ? "bg-slate-700 text-white"
+                            focus
+                              ? "bg-gradient-to-l from-blue-500 via-blue-700 to-blue-800 text-white"
                               : "text-gray-900",
                             "relative cursor-default select-none py-2 pl-3 pr-9"
                           )
@@ -191,7 +191,7 @@ export default function GrowthChartSection({
                         value={month.value}
                         disabled={!month.valid}
                       >
-                        {({ selected, active }) => (
+                        {({ selected, focus }) => (
                           <>
                             <div className="flex items-center">
                               <span
@@ -218,7 +218,7 @@ export default function GrowthChartSection({
                             {selected ? (
                               <span
                                 className={clsx(
-                                  active ? "text-white" : "text-slate-600",
+                                  focus ? "text-white" : "text-slate-600",
                                   "absolute inset-y-0 right-0 flex items-center pr-4"
                                 )}
                               >

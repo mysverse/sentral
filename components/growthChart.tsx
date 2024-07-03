@@ -89,10 +89,10 @@ export default function GrowthChart({
         datasets: [
           {
             label: "Member count",
-            borderColor: "rgb(3, 105, 161)",
+            borderColor: "#2563eb",
             segment: {
               borderColor: (ctx) =>
-                skipped(ctx, "rgb(0,0,0,0.2)") || down(ctx, "rgb(192,75,75)"),
+                skipped(ctx, "rgb(0,0,0,0.2)") || down(ctx, "#2563eb"),
               borderDash: (ctx) => skipped(ctx, [6, 6])
             },
             spanGaps: true,
