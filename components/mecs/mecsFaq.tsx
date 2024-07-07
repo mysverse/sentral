@@ -1,5 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Disclosure } from "@headlessui/react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel
+} from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { clsx } from "clsx";
 
@@ -54,7 +58,7 @@ export default function MECSFAQ() {
             {({ open }) => (
               <>
                 <dt className="text-base">
-                  <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-400">
+                  <DisclosureButton className="flex w-full items-start justify-between text-left text-gray-400">
                     <span className="font-medium text-gray-900">
                       {faq.question}
                     </span>
@@ -67,11 +71,11 @@ export default function MECSFAQ() {
                         aria-hidden="true"
                       />
                     </span>
-                  </Disclosure.Button>
+                  </DisclosureButton>
                 </dt>
-                <Disclosure.Panel as="dd" className="mt-2 pr-12">
+                <DisclosurePanel as="dd" className="mt-2 pr-12">
                   <p className="text-base text-gray-500">{faq.answer}</p>
-                </Disclosure.Panel>
+                </DisclosurePanel>
               </>
             )}
           </Disclosure>
