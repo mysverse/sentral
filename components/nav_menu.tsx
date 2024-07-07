@@ -1,6 +1,10 @@
 "use client";
 
-import { Disclosure } from "@headlessui/react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel
+} from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/20/solid";
 import FinsysLogo from "public/img/finsys/finsys.svg";
 import MECSLogo from "public/img/mecs/mecs_logo.svg";
@@ -182,7 +186,7 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
                   ) : null}
                   <div className="flex lg:hidden">
                     {/* Mobile menu button */}
-                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 via-blue-700 to-blue-800 p-2 text-blue-200 hover:bg-blue-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
+                    <DisclosureButton className="inline-flex items-center justify-center rounded-md p-2 text-blue-200 hover:bg-blue-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon
@@ -195,18 +199,18 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
                           aria-hidden="true"
                         />
                       )}
-                    </Disclosure.Button>
+                    </DisclosureButton>
                   </div>
                 </div>
               </div>
 
-              <Disclosure.Panel className="lg:hidden">
+              <DisclosurePanel className="lg:hidden">
                 <div className="flex flex-col divide-y divide-blue-300/25">
                   <div className="space-y-1 px-2 pb-3 pt-2">
                     {navigation
                       .filter((item) => !item.hidden)
                       .map((item) => (
-                        <Disclosure.Button
+                        <DisclosureButton
                           key={item.name}
                           as="a"
                           href={item.href}
@@ -219,14 +223,14 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
                           aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
-                        </Disclosure.Button>
+                        </DisclosureButton>
                       ))}
                   </div>
                   {avatar ? (
                     <div className="block px-3 py-6 lg:hidden">{avatar}</div>
                   ) : null}
                 </div>
-              </Disclosure.Panel>
+              </DisclosurePanel>
             </>
           )}
         </Disclosure>
