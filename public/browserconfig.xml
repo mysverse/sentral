@@ -6,7 +6,7 @@
 			<square150x150logo src="/img/favicons/favicon-150x150.png" />
 			<square310x310logo src="/img/favicons/favicon-310x310.png" />
 			<TileColor>
-				#ffffff
+				#4976d8
 			</TileColor>
 		</tile>
 	</msapplication>
