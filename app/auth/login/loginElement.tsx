@@ -98,6 +98,8 @@ export default function LoginElement() {
             >
               terms of service
             </Link>
+            . Your age as per your Roblox account may have to be 13+ to access
+            this service.
           </p>
         </div>
       </Transition>
