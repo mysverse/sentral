@@ -66,6 +66,30 @@ function PayoutRequestComponent({
     <div className="container mx-auto p-2">
       <h2 className="text-lg font-medium">Submit a Payout Request</h2>
       <FinsysInfo />
+      <div className="my-4 rounded-md bg-yellow-50 p-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <ExclamationTriangleIcon
+              aria-hidden="true"
+              className="h-5 w-5 text-yellow-400"
+            />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-yellow-800">
+              No payouts for non-quartermaster catalog items
+            </h3>
+            <div className="mt-2 text-sm text-yellow-700">
+              <p>
+                We will only process payouts for uniform items that are owned
+                either by a MYSverse quartermaster Roblox group, or the
+                quartermaster&apos;s personal Roblox account. This is to ensure
+                adequate funding and support for MYSverse Sim. Please contact
+                your Sim agency leadership if you have any questions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       <form action={formAction} className="mb-6">
         <div className="mb-4">
           <label
