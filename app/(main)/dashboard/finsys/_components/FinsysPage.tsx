@@ -49,6 +49,92 @@ function FinsysInfo() {
   );
 }
 
+function Checklist() {
+  return (
+    <fieldset>
+      <legend className="sr-only">Pre-submission checklist</legend>
+      <div className="space-y-5">
+        <div className="relative flex items-start">
+          <div className="flex h-6 items-center">
+            <input
+              id="confirmation_amount"
+              name="confirmation_amount"
+              type="checkbox"
+              aria-describedby="confirmation_amount_description"
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+              required
+            />
+          </div>
+          <div className="ml-3 text-sm leading-6">
+            <label
+              htmlFor="confirmation_amount"
+              className="font-medium text-gray-900"
+            >
+              Amount
+            </label>
+            <p id="confirmation_amount_description" className="text-gray-500">
+              I have requested the correct amount of R$ based on the list of
+              items I intend to purchase and not more. If I am requesting less
+              than total value of the items, I do not intend to be reimbursed in
+              the future.
+            </p>
+          </div>
+        </div>
+        <div className="relative flex items-start">
+          <div className="flex h-6 items-center">
+            <input
+              id="confirmation_reason"
+              name="confirmation_reason"
+              type="checkbox"
+              aria-describedby="confirmation_reason-description"
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+              required
+            />
+          </div>
+          <div className="ml-3 text-sm leading-6">
+            <label
+              htmlFor="confirmation_reason"
+              className="font-medium text-gray-900"
+            >
+              Reason
+            </label>
+            <p id="confirmation_reason-description" className="text-gray-500">
+              I have provided a valid reason for making a payout request. I am
+              making this request as a necessity to participate in MYSverse Sim
+              activities and not for personal reasons.
+            </p>
+          </div>
+        </div>
+        <div className="relative flex items-start">
+          <div className="flex h-6 items-center">
+            <input
+              id="confirmation_itemlist"
+              name="confirmation_itemlist"
+              type="checkbox"
+              aria-describedby="confirmation_itemlist-description"
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+              required
+            />
+          </div>
+          <div className="ml-3 text-sm leading-6">
+            <label
+              htmlFor="confirmation_itemlist"
+              className="font-medium text-gray-900"
+            >
+              Item list
+            </label>
+            <p id="confirmation_itemlist-description" className="text-gray-500">
+              I have provided the complete list of items I intend to purchase
+              with the provided funds. These items are owned by a MYSverse
+              quartermaster store or an approved quartermaster.
+            </p>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  );
+}
+
 function PayoutRequestComponent({
   payoutRequests
 }: {
@@ -127,7 +213,13 @@ function PayoutRequestComponent({
             required
           ></textarea>
         </div>
-        <div className="flex flex-row">
+        <Checklist />
+        <div className="mt-4 text-sm leading-6 text-gray-500">
+          By submitting a request, I have verified the above factors are
+          correct, and understand it may be <b>REJECTED</b> if I do not follow
+          the clearly listed instructions.
+        </div>
+        <div className="mt-4 flex flex-row">
           <button
             type="submit"
             className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
