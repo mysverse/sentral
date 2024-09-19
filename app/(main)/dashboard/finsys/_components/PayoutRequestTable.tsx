@@ -1,6 +1,5 @@
 "use client";
 
-import { PayoutRequestData } from "components/apiTypes";
 import { createElement, useState } from "react";
 
 import { ClockIcon } from "@heroicons/react/20/solid";
@@ -11,6 +10,9 @@ import { BadgeButton } from "components/catalyst/badge";
 import { updatePayoutRequest } from "actions/updatePayout";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { injectOwnershipAndThumbnailsIntoPayoutRequests } from "utils/finsys";
+import { Avatar } from "components/catalyst/avatar";
+import Markdown from "react-markdown";
 
 const statuses: { [key: string]: string } = {
   pending: "text-yellow-700",
@@ -18,7 +20,7 @@ const statuses: { [key: string]: string } = {
   rejected: "text-red-700"
 };
 
-const regex = /https:\/\/www\.roblox\.com\/catalog\/\d+\/[\w-]+/g;
+const regex = /https:\/\/(?:www\.)?roblox\.com\/catalog\/(\d+)\/[\w-]+/g;
 
 function extractRobloxLinks(text: string): string[] {
   const found = text.match(regex);
@@ -26,14 +28,19 @@ function extractRobloxLinks(text: string): string[] {
 }
 
 function removeRobloxLinks(text: string): string {
-  return text.replace(regex, "").trim();
+  return text
+    .replace(regex, "")
+    .replace(/^\d+\.\s*/gm, "")
+    .trim();
 }
 
 function PayoutRequestsTable({
   payoutRequests,
   adminMode
 }: {
-  payoutRequests: PayoutRequestData[];
+  payoutRequests: Awaited<
+    ReturnType<typeof injectOwnershipAndThumbnailsIntoPayoutRequests>
+  >;
   adminMode?: boolean;
 }) {
   // Icon selection based on status
@@ -54,6 +61,7 @@ function PayoutRequestsTable({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {payoutRequests.map((request) => {
         const itemList = extractRobloxLinks(request.reason);
+        const ownershipList = request.ownership;
         return (
           <div
             key={request.id}
@@ -95,7 +103,10 @@ function PayoutRequestsTable({
               </div>
             </div>
             <div className="mt-1">
-              <p className="mt-1 text-sm text-gray-600">
+              <p
+                className="mt-1 text-sm text-gray-600"
+                suppressHydrationWarning
+              >
                 Submitted {new Date(request.created_at).toLocaleString()},
                 updated {new Date(request.updated_at).toLocaleString()}
               </p>
@@ -103,40 +114,89 @@ function PayoutRequestsTable({
             {request.status === "rejected" && request.rejection_reason && (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">Rejection reason</h3>
-                <p className="mt-1 break-words text-sm text-gray-600">
-                  {request.rejection_reason}
+                <p className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
+                  <Markdown>{request.rejection_reason}</Markdown>
                 </p>
               </div>
             )}
             <div className="mt-2">
               <h3 className="text-sm font-semibold">Reason</h3>
-              <p className="mt-1 break-words text-sm text-gray-600">
-                {removeRobloxLinks(request.reason)}
+              <p className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
+                <Markdown>{removeRobloxLinks(request.reason)}</Markdown>
               </p>
             </div>
-            {itemList.length > 0 && (
+
+            {(itemList.length > 0 || ownershipList.length > 0) && (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">List of items</h3>
-                <ol className="ml-5 mt-1 list-decimal break-words text-sm text-gray-600">
-                  {itemList.map((val) => {
-                    return (
-                      <li key={val}>
-                        <Link href={val}>{val}</Link>
-                      </li>
-                    );
-                  })}
-                </ol>
+                <ul className="mt-1 break-words text-sm text-gray-600">
+                  {ownershipList
+                    ? ownershipList.map((val, index) => {
+                        return (
+                          <li key={val.id}>
+                            <div className="flex flex-row items-center space-x-1">
+                              <div>{index + 1}.</div>
+                              {val.thumbnail && (
+                                <Avatar
+                                  className="size-12 scale-125 sm:size-16"
+                                  src={val.thumbnail}
+                                  square
+                                />
+                              )}
+                              <Link
+                                href={`https://roblox.com/catalog/${val.id}`}
+                                className="flex flex-col font-medium"
+                              >
+                                <div>{val.assetData?.name}</div>
+                                {/* {val.owned ? "owned" : "not owned"} */}
+                                {/* {val.assetData?.price &&
+                                    `R$ ${val.assetData.price.toLocaleString()}`} */}
+                                <span className="text-[0.7rem] font-normal uppercase tracking-wide">
+                                  {val.assetData?.creatorName}
+                                </span>
+                              </Link>
+                            </div>
+                          </li>
+                        );
+                      })
+                    : itemList.map((val) => {
+                        return (
+                          <li key={val}>
+                            <Link href={val}>{val}</Link>
+                          </li>
+                        );
+                      })}
+                  {}
+                </ul>
               </div>
             )}
-            {itemList.length > 0 && (
+
+            {ownershipList && ownershipList.length > 0 ? (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">
-                  Expected amount (based on item list)
+                  Automatically calculated amount
                 </h3>
                 <p className="mt-1 break-words text-sm text-gray-600">
-                  5 R$ x {itemList.length} = <b>{itemList.length * 5} R$</b>
+                  <b>
+                    {ownershipList.reduce(
+                      (acc, val) => acc + (val.assetData?.price || 0),
+                      0
+                    )}{" "}
+                    R$
+                  </b>
                 </p>
               </div>
+            ) : (
+              itemList.length > 0 && (
+                <div className="mt-2">
+                  <h3 className="text-sm font-semibold">
+                    Expected amount (based on item list)
+                  </h3>
+                  <p className="mt-1 break-words text-sm text-gray-600">
+                    5 R$ x {itemList.length} = <b>{itemList.length * 5} R$</b>
+                  </p>
+                </div>
+              )
             )}
 
             {adminMode && request.status === "pending" && (

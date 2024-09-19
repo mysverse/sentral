@@ -1,13 +1,11 @@
 "use client";
 
-import { PayoutRequestData } from "components/apiTypes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { submitPayoutRequest } from "actions/submitPayout";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
-import PayoutRequestsTable from "./PayoutRequestTable";
 import Link from "next/link";
 
 const initialState = {
@@ -135,12 +133,10 @@ function Checklist() {
   );
 }
 
-function PayoutRequestComponent({
-  payoutRequests
-}: {
-  payoutRequests: PayoutRequestData[];
-}) {
+function PayoutRequestComponent() {
   const [state, formAction] = useFormState(submitPayoutRequest, initialState);
+  const { pending } = useFormStatus();
+  const [category, setCategory] = useState<string>();
   useEffect(() => {
     // const message = state.message;
     const error = state.error;
@@ -177,24 +173,163 @@ function PayoutRequestComponent({
         </div>
       </div>
       <form action={formAction} className="mb-6">
+        <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label
+              htmlFor="amount"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Amount
+            </label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              min={"1"}
+              max={"100"}
+              placeholder="Maximum 100 R$ per request"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="sim_agency"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Agency
+            </label>
+            <select
+              id="sim_agency"
+              name="sim_agency"
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            >
+              <option disabled selected value="">
+                Select a Sim agency
+              </option>
+              <option>Tentera MYSverse - Army</option>
+              <option>Tentera MYSverse - Air Force</option>
+              <option>Tentera MYSverse - Navy</option>
+              <option>Polis MYSverse</option>
+              <option>Bomba MYSverse</option>
+              <option>Parlimen MYSverse</option>
+              <option>Other MYSverse Sim agency</option>
+            </select>
+          </div>
+        </div>
         <div className="mb-4">
           <label
-            htmlFor="amount"
+            htmlFor="sim_reason"
             className="block text-sm font-medium text-gray-700"
           >
-            Amount
+            Category
           </label>
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            min={"1"}
-            max={"100"}
-            placeholder="Maximum 100 R$ per request"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          <select
+            id="sim_reason"
+            name="sim_reason"
             required
-          />
+            onChange={(e) => setCategory(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          >
+            <option disabled selected value="">
+              Select a request category
+            </option>
+            <option value="Recruited">New recruit</option>
+            <option value="Promotion">
+              Promotion (please state old and new rank)
+            </option>
+            <option value="Demotion">
+              Demotion (please state old and new rank)
+            </option>
+            <option value="Transfer/External">
+              Transferred from other Sim agency (please state old agency)
+            </option>
+            <option value="Transfer/Internal">
+              Change of internal division/department (please state new
+              division/department)
+            </option>
+            <option value="Update">New or updated uniform requirements</option>
+            <option value="Other">Other (please state)</option>
+          </select>
         </div>
+        {(category === "Promotion" || category === "Demotion") && (
+          <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="sim_rank_previous"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Previous rank
+              </label>
+              <input
+                type="text"
+                id="sim_rank_previous"
+                name="sim_rank_previous"
+                placeholder="Private"
+                maxLength={64}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="sim_rank_after"
+                className="block text-sm font-medium text-gray-700"
+              >
+                New rank
+              </label>
+              <input
+                type="text"
+                id="sim_rank_after"
+                name="sim_rank_after"
+                placeholder="Corporal"
+                maxLength={64}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                required
+              />
+            </div>
+          </div>
+        )}
+        {(category === "Transfer/Internal" ||
+          category === "Transfer/External") && (
+          <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="sim_transfer_previous"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Previous agency/division
+              </label>
+              <input
+                type="text"
+                id="sim_transfer_previous"
+                name="sim_transfer_previous"
+                placeholder="Agency/Division Alpha"
+                maxLength={64}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="sim_transfer_after"
+                className="block text-sm font-medium text-gray-700"
+              >
+                New agency/division
+              </label>
+              <input
+                type="text"
+                id="sim_transfer_after"
+                name="sim_transfer_after"
+                placeholder="Agency/Division Bravo"
+                maxLength={64}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                required
+              />
+            </div>
+          </div>
+        )}
         <div className="mb-4">
           <label
             htmlFor="reason"
@@ -209,6 +344,7 @@ function PayoutRequestComponent({
             }
             name="reason"
             rows={5}
+            maxLength={4096}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             required
           ></textarea>
@@ -216,20 +352,22 @@ function PayoutRequestComponent({
         <Checklist />
         <div className="mt-4 text-sm leading-6 text-gray-500">
           By submitting a request, I have verified the above factors are
-          correct, and understand it may be <b>REJECTED</b> if I do not follow
-          the clearly listed instructions.
+          correct, and understand it may be <b>rejected</b> if I do not follow
+          the clearly listed instructions. I recognise that payouts are a
+          privilege, and I may be <b>blacklisted</b> if I abuse them subject to
+          the terms and conditions of Sentral, MYSverse and MYSverse Sim.
         </div>
         <div className="mt-4 flex flex-row">
           <button
             type="submit"
-            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            disabled={pending}
+            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
           >
             Submit Request
           </button>
         </div>
       </form>
       <h2 className="mb-4 text-lg font-medium">Payout Requests</h2>
-      <PayoutRequestsTable payoutRequests={payoutRequests} />
     </div>
   );
 }
