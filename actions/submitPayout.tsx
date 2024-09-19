@@ -18,22 +18,22 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
     reason: formData.get("reason")
   };
 
-  let metadata = ``;
+  const metadata: string[] = [];
 
   const agency = formData.get("sim_agency")?.toString().slice(0, 64);
   if (agency) {
-    metadata = metadata.concat(`**Agency**: ${agency.toString()}\n`);
+    metadata.push(`**Agency**: ${agency.toString()}`);
   }
 
   const category = formData.get("sim_reason")?.toString().slice(0, 64);
   if (category) {
-    metadata = metadata.concat(`**Category**: ${category.toString()}\n`);
+    metadata.push(`**Category**: ${category.toString()}`);
   }
 
   const rankBefore = formData.get("sim_rank_previous")?.toString().slice(0, 64);
   const rankAfter = formData.get("sim_rank_after")?.toString().slice(0, 64);
   if (rankBefore && rankAfter) {
-    metadata = metadata.concat(`**From/To**: ${rankBefore} > ${rankAfter}\n`);
+    metadata.push(`**From/To**: ${rankBefore} > ${rankAfter}`);
   }
 
   const transferBefore = formData
@@ -45,13 +45,11 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
     ?.toString()
     .slice(0, 64);
   if (transferBefore && transferAfter) {
-    metadata = metadata.concat(
-      `**From/To**: ${transferBefore} > ${transferAfter}\n`
-    );
+    metadata.push(`**From/To**: ${transferBefore} > ${transferAfter}`);
   }
 
-  if (metadata) {
-    payload.reason = `${metadata}\n${payload.reason?.toString().slice(0, 4096)}`;
+  if (metadata.length > 0) {
+    payload.reason = `${metadata.join("\n")}\n${payload.reason?.toString().slice(0, 4096)}`;
   }
 
   // Call the FinSys API to submit the payout request
