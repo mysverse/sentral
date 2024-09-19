@@ -281,21 +281,23 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
 
   const [ownershipResults, thumbnails, assetData] = await Promise.all([
     Promise.all(ownershipPromises),
-    fetchThumbnails(assetIds),
-    fetchAssetDetails(assetIds)
+    fetchThumbnails(assetIds).catch(() => undefined),
+    fetchAssetDetails(assetIds).catch(() => undefined)
   ]);
 
   ownershipResults.forEach(({ userId, userOwnershipMap }) => {
     ownershipMap.set(userId, userOwnershipMap);
   });
 
-  thumbnails.data.forEach((item) => {
-    thumbnailMap.set(item.targetId, item.imageUrl);
-  });
+  if (thumbnails)
+    thumbnails.data.forEach((item) => {
+      thumbnailMap.set(item.targetId, item.imageUrl);
+    });
 
-  assetData.forEach((item) => {
-    assetDataMap.set(item.id, item);
-  });
+  if (assetData)
+    assetData.forEach((item) => {
+      assetDataMap.set(item.id, item);
+    });
 
   // Iterate over the payout requests and inject the ownership, thumbnail, and asset data information using the maps
   return requests.map((request) => {
@@ -305,7 +307,7 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     const ownedAssets = assets.map((id) => ({
       id,
       owned: userOwnershipMap.get(id) || false,
-      thumbnail: thumbnailMap.get(id) || "",
+      thumbnail: thumbnailMap.get(id) || undefined,
       assetData: assetDataMap.get(id) || undefined
     }));
     return {
