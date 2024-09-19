@@ -136,32 +136,32 @@ async function fetchThumbnails(assetIds: number[]) {
   if (csrf) {
     const url = `https://thumbnails.roblox.com/v1/assets`;
 
-    const response = await fetch(
-      `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`,
-      {
-        method: "GET",
-        headers: {
-          "x-csrf-token": csrf
+    let retries = 0;
+    const maxRetries = 10;
+
+    while (retries < maxRetries) {
+      const response = await fetch(
+        `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`,
+        {
+          method: "GET",
+          headers: {
+            "x-csrf-token": csrf
+          }
         }
-      }
-    );
+      );
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error(errorData);
-      if (errorData?.code === "PERMISSION_DENIED") {
-        // need to grant perms
-        throw new Error("PERMISSION_DENIED");
+      if (response.ok) {
+        const data: RobloxThumbnailAssetApiResponse = await response.json();
+        return data;
+      } else {
+        const errorData = await response.json();
+        console.error(errorData);
       }
-      throw new Error(`Failed to fetch user inventory: ${response.statusText}`);
+      retries++;
     }
-
-    const data: RobloxThumbnailAssetApiResponse = await response.json();
-
-    return data;
   }
 
-  throw new Error(`Failed to fetch asset thumbnails: CSRF`);
+  throw new Error(`Failed to fetch asset thumbnails`);
 }
 
 const ownershipDisabled = true;
