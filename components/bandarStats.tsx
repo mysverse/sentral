@@ -79,6 +79,9 @@ function PosStats({
 }: {
   posStats: MYSverseData["bandarData"]["MYS_POS_2"];
 }) {
+  if (!posStats) {
+    return null;
+  }
   const stats = [
     {
       name: "Level",

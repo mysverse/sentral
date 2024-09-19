@@ -288,7 +288,7 @@ export interface Arrest {
 export interface BandarData {
   GE12_Votes_ByElection2: boolean;
   GE10_Registered: boolean;
-  MYS_POS_2: MysPos2;
+  MYS_POS_2?: MysPos2;
   ringgit: number;
   DailyReward: DailyReward[];
   MYS_Devices_1: MYSDevices1;
