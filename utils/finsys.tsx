@@ -141,7 +141,9 @@ async function fetchThumbnails(assetIds: number[]) {
 
     while (retries < maxRetries) {
       const response = await fetch(
-        `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`,
+        `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
+          `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`
+        )}`,
         {
           method: "GET",
           headers: {
