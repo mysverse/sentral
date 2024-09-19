@@ -86,41 +86,35 @@ async function getCsrfToken() {
 
 // Function to fetch asset details from the catalog
 async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
-  await getCsrfToken();
-  if (csrf) {
-    const url = "https://catalog.roblox.com/v1/catalog/items/details";
-    const body: AssetDetailsRequest = {
-      items: assetIds.map((id) => ({ itemType: 1, id }))
-    };
+  const url = "https://maps2.yan3321.workers.dev";
+  const body: AssetDetailsRequest = {
+    items: assetIds.map((id) => ({ itemType: 1, id }))
+  };
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        accept: "application/json",
-        "x-csrf-token": csrf
-      },
-      body: JSON.stringify(body)
-    });
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      accept: "application/json"
+    },
+    body: JSON.stringify(body)
+  });
 
-    if (!response.ok) {
-      console.error(await response.json());
-      throw new Error(`Failed to fetch asset details: ${response.statusText}`);
-    }
-
-    const data: AssetDetailResponse = await response.json();
-
-    return data.data.map((item) => ({
-      id: item.id,
-      itemType: item.itemType,
-      name: item.name,
-      price: item.price,
-      creatorTargetId: item.creatorTargetId,
-      creatorName: item.creatorName
-    }));
+  if (!response.ok) {
+    console.error(await response.json());
+    throw new Error(`Failed to fetch asset details: ${response.statusText}`);
   }
 
-  throw new Error(`CSRF failure`);
+  const data: AssetDetailResponse = await response.json();
+
+  return data.data.map((item) => ({
+    id: item.id,
+    itemType: item.itemType,
+    name: item.name,
+    price: item.price,
+    creatorTargetId: item.creatorTargetId,
+    creatorName: item.creatorName
+  }));
 }
 
 interface OwnershipResponse {
