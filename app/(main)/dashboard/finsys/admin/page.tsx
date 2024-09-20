@@ -21,8 +21,12 @@ export default async function Main() {
   if (permissions.canEdit) {
     const data = (await getPendingRequests()).slice(0, 20);
 
-    const ownershipData =
-      await injectOwnershipAndThumbnailsIntoPayoutRequests(data);
+    const ownershipData = await injectOwnershipAndThumbnailsIntoPayoutRequests(
+      data,
+      true
+    );
+
+    // console.dir(ownershipData, { depth: null });
 
     return (
       <div className="mx-auto max-w-7xl px-2 pb-12 sm:px-6 lg:px-8">

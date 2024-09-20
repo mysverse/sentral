@@ -150,6 +150,31 @@ interface RobloxThumbnailAssetApiResponse {
   }[];
 }
 
+async function fetchUserData(userIds: number[]) {
+  interface RobloxUserResponse {
+    data: {
+      hasVerifiedBadge: boolean;
+      id: number;
+      name: string;
+      displayName: string;
+    }[];
+  }
+  const response = await fetch(`https://users.roblox.com/v1/users`, {
+    method: "POST",
+    // cache: "force-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({ userIds, excludeBannedUsers: true }),
+    next: { revalidate: 5 * 60 }
+  });
+
+  const data: RobloxUserResponse = await response.json();
+
+  return data;
+}
+
 async function fetchThumbnails(assetIds: number[]) {
   let retries = 0;
   const maxRetries = 3;
@@ -276,24 +301,25 @@ export async function getAssetDetailsAndCheckOwnership(
 }
 
 export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
-  requests: PayoutRequestData[]
+  requests: PayoutRequestData[],
+  adminMode = false
 ) {
   // Extract all unique asset IDs and user IDs from the payout requests
   const assetIds = Array.from(
     new Set(requests.flatMap((request) => extractRobloxIDs(request.reason)))
   ).sort((a, b) => a - b);
   const userIds = Array.from(
-    new Set(requests.map((request) => request.user_id.toString()))
-  ).sort((a, b) => parseInt(a) - parseInt(b));
+    new Set(requests.map((request) => request.user_id))
+  ).sort((a, b) => a - b);
 
   // Create maps to store the ownership, thumbnail, and asset data results
-  const ownershipMap = new Map<string, Map<number, boolean>>();
+  const ownershipMap = new Map<number, Map<number, boolean>>();
   const thumbnailMap = new Map<number, string>();
   const assetDataMap = new Map<number, ItemDetail>();
 
   // Check ownership for each user ID with the unique asset IDs concurrently
   const ownershipPromises = userIds.map(async (userId) => {
-    const ownership = await checkUserOwnership(userId, assetIds);
+    const ownership = await checkUserOwnership(userId.toString(), assetIds);
     const userOwnershipMap = new Map<number, boolean>();
     ownership.forEach((item) => {
       userOwnershipMap.set(item.id, item.owned);
@@ -301,11 +327,14 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     return { userId, userOwnershipMap };
   });
 
-  const [ownershipResults, thumbnails, assetData] = await Promise.all([
-    Promise.all(ownershipPromises),
-    fetchThumbnails(assetIds).catch(() => undefined),
-    fetchAssetDetails(assetIds).catch(() => undefined)
-  ]);
+  const [ownershipResults, thumbnails, assetData, userData] = await Promise.all(
+    [
+      Promise.all(ownershipPromises),
+      fetchThumbnails(assetIds).catch(() => undefined),
+      fetchAssetDetails(assetIds).catch(() => undefined),
+      adminMode ? fetchUserData(userIds).catch(() => undefined) : undefined
+    ]
+  );
 
   ownershipResults.forEach(({ userId, userOwnershipMap }) => {
     ownershipMap.set(userId, userOwnershipMap);
@@ -321,11 +350,12 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
       assetDataMap.set(item.id, item);
     });
 
+  console.dir({ userIds, userData }, { depth: null });
+
   // Iterate over the payout requests and inject the ownership, thumbnail, and asset data information using the maps
   return requests.map((request) => {
     const assets = extractRobloxIDs(request.reason);
-    const userOwnershipMap =
-      ownershipMap.get(request.user_id.toString()) || new Map();
+    const userOwnershipMap = ownershipMap.get(request.user_id) || new Map();
     const ownedAssets = assets.map((id) => ({
       id,
       owned: userOwnershipMap.get(id) || false,
@@ -334,7 +364,11 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     }));
     return {
       ...request,
-      ownership: ownedAssets
+      ownership: ownedAssets,
+      user: userData?.data.find((user) => {
+        console.log(`User ID: ${user.id}, Request ID: ${request.user_id}`);
+        return user.id === request.user_id;
+      })
     };
   });
 }

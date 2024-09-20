@@ -76,14 +76,18 @@ function PayoutRequestsTable({
               <span className="text-2xl font-bold">
                 <span className="mr-1 text-base font-medium">R$</span>
                 {request.amount}
-                <BadgeButton
-                  href={`https://roblox.com/users/${request.user_id}/profile`}
-                  target="_blank"
-                  color="blue"
-                  className="ml-3 align-middle"
-                >
-                  {request.user_id}
-                </BadgeButton>
+                {adminMode && (
+                  <BadgeButton
+                    href={`https://roblox.com/users/${request.user_id}/profile`}
+                    target="_blank"
+                    color="blue"
+                    className="ml-3 align-middle"
+                  >
+                    {request.user
+                      ? `@${request.user.name} (${request.user_id})`
+                      : request.user_id}
+                  </BadgeButton>
+                )}
               </span>
 
               <div
