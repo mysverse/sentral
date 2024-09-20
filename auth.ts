@@ -29,7 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientId: process.env.ROBLOX_CLIENT_ID,
       clientSecret: process.env.ROBLOX_CLIENT_SECRET,
       authorization: {
-        params: { scope: "openid profile group:read" }
+        params: { scope: "openid profile group:read user.inventory-item:read" }
       },
       client: {
         authorization_signed_response_alg: "ES256",
