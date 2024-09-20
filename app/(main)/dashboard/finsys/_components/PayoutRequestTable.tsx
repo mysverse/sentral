@@ -147,7 +147,9 @@ function PayoutRequestsTable({
                                 href={`https://roblox.com/catalog/${val.id}`}
                                 className="flex flex-col font-medium"
                               >
-                                <div>{val.assetData?.name}</div>
+                                <div>
+                                  {val.assetData ? val.assetData.name : val.id}
+                                </div>
                                 {/* {val.owned ? "owned" : "not owned"} */}
                                 {/* {val.assetData?.price &&
                                     `R$ ${val.assetData.price.toLocaleString()}`} */}
@@ -171,7 +173,12 @@ function PayoutRequestsTable({
               </div>
             )}
 
-            {ownershipList && ownershipList.length > 0 ? (
+            {ownershipList &&
+            ownershipList.length > 0 &&
+            ownershipList.reduce(
+              (acc, val) => acc + (val.assetData?.price || 0),
+              0
+            ) !== 0 ? (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">
                   Automatically calculated amount

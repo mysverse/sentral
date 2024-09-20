@@ -84,37 +84,54 @@ async function getCsrfToken() {
   }
 }
 
+function timeout(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // Function to fetch asset details from the catalog
 async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
-  const url = "https://maps2.yan3321.workers.dev";
-  const body: AssetDetailsRequest = {
-    items: assetIds.map((id) => ({ itemType: 1, id }))
-  };
+  let retries = 0;
+  const maxRetries = 10;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      accept: "application/json"
-    },
-    body: JSON.stringify(body)
-  });
+  while (retries < maxRetries) {
+    await getCsrfToken();
+    if (csrf) {
+      const url = "https://catalog.roblox.com/v1/catalog/items/details";
+      const body: AssetDetailsRequest = {
+        items: assetIds.map((id) => ({ itemType: 1, id }))
+      };
 
-  if (!response.ok) {
-    console.error(await response.json());
-    throw new Error(`Failed to fetch asset details: ${response.statusText}`);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          "x-csrf-token": csrf
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        console.error(await response.json());
+        retries++;
+        await timeout(500);
+        continue;
+      }
+
+      const data: AssetDetailResponse = await response.json();
+
+      return data.data.map((item) => ({
+        id: item.id,
+        itemType: item.itemType,
+        name: item.name,
+        price: item.price,
+        creatorTargetId: item.creatorTargetId,
+        creatorName: item.creatorName
+      }));
+    }
   }
 
-  const data: AssetDetailResponse = await response.json();
-
-  return data.data.map((item) => ({
-    id: item.id,
-    itemType: item.itemType,
-    name: item.name,
-    price: item.price,
-    creatorTargetId: item.creatorTargetId,
-    creatorName: item.creatorName
-  }));
+  throw new Error("Unable to get CSRF token while fetching asset details");
 }
 
 interface OwnershipResponse {
@@ -159,6 +176,7 @@ async function fetchThumbnails(assetIds: number[]) {
         const errorData = await response.json();
         console.error(errorData);
       }
+      await timeout(500);
       retries++;
     }
   }
