@@ -109,7 +109,7 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
           "x-csrf-token": csrf
         },
         body: JSON.stringify(body),
-        cache: "force-cache",
+        // cache: "force-cache",
         next: { revalidate: 5 * 60 }
       });
 
@@ -168,7 +168,7 @@ async function fetchThumbnails(assetIds: number[]) {
           headers: {
             "x-csrf-token": csrf
           },
-          cache: "force-cache",
+          // cache: "force-cache",
           next: { revalidate: 5 * 60 }
         }
       );
