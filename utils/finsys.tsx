@@ -91,7 +91,7 @@ function timeout(ms: number): Promise<void> {
 // Function to fetch asset details from the catalog
 async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
   let retries = 0;
-  const maxRetries = 10;
+  const maxRetries = 3;
 
   while (retries < maxRetries) {
     await getCsrfToken();
@@ -108,13 +108,15 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
           accept: "application/json",
           "x-csrf-token": csrf
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        cache: "force-cache",
+        next: { revalidate: 5 * 60 }
       });
 
       if (!response.ok) {
         console.error(await response.json());
         retries++;
-        await timeout(500);
+        await timeout(1000);
         continue;
       }
 
@@ -149,14 +151,14 @@ interface RobloxThumbnailAssetApiResponse {
 }
 
 async function fetchThumbnails(assetIds: number[]) {
-  await getCsrfToken();
-  if (csrf) {
-    const url = `https://thumbnails.roblox.com/v1/assets`;
+  let retries = 0;
+  const maxRetries = 3;
 
-    let retries = 0;
-    const maxRetries = 10;
+  while (retries < maxRetries) {
+    await getCsrfToken();
+    if (csrf) {
+      const url = `https://thumbnails.roblox.com/v1/assets`;
 
-    while (retries < maxRetries) {
       const response = await fetch(
         `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
           `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`
@@ -165,7 +167,9 @@ async function fetchThumbnails(assetIds: number[]) {
           method: "GET",
           headers: {
             "x-csrf-token": csrf
-          }
+          },
+          cache: "force-cache",
+          next: { revalidate: 5 * 60 }
         }
       );
 
@@ -176,7 +180,7 @@ async function fetchThumbnails(assetIds: number[]) {
         const errorData = await response.json();
         console.error(errorData);
       }
-      await timeout(500);
+      await timeout(1000);
       retries++;
     }
   }
@@ -277,10 +281,10 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
   // Extract all unique asset IDs and user IDs from the payout requests
   const assetIds = Array.from(
     new Set(requests.flatMap((request) => extractRobloxIDs(request.reason)))
-  );
+  ).sort((a, b) => a - b);
   const userIds = Array.from(
     new Set(requests.map((request) => request.user_id.toString()))
-  );
+  ).sort((a, b) => parseInt(a) - parseInt(b));
 
   // Create maps to store the ownership, thumbnail, and asset data results
   const ownershipMap = new Map<string, Map<number, boolean>>();
