@@ -10,7 +10,7 @@
     "format": "prettier --config .prettierrc \"{pages,components}/**/*.{ts,tsx}\" --write"
   },
   "dependencies": {
-    "@headlessui/react": "^2.1.8",
+    "@headlessui/react": "^2.1.9",
     "@heroicons/react": "^2.1.5",
     "@next/bundle-analyzer": "^14.2.14",
     "@serwist/next": "^9.0.9",
@@ -41,7 +41,7 @@
     "@tailwindcss/typography": "^0.5.15",
     "@types/humanize-duration": "^3.27.4",
     "@types/node": "^20.16.10",
-    "@types/react": "^18.3.10",
+    "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
