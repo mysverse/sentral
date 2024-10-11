@@ -1,6 +1,7 @@
 import React from "react";
+import SimetryTable from "./Table";
 
-interface User {
+export interface User {
   name: {
     name: string;
     userId: number;
@@ -14,7 +15,6 @@ interface User {
 }
 
 export default async function Main() {
-  // Sample data (replace this with your actual data)
   const response = await fetch(
     "https://mysverse-webhook-data.yan3321.workers.dev/614134433204797466"
   );
@@ -104,6 +104,7 @@ export default async function Main() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <SimetryTable dataset={data} />
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-lg bg-white p-4 shadow-lg">
           <h2 className="text-lg font-semibold">
