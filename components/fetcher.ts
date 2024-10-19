@@ -26,7 +26,9 @@ async function fetchURL(
 }
 
 export async function getGrowthData() {
-  const data: GrowthEntry[] = await fetchURL(`${endpoints.growth}`);
+  const data: GrowthEntry[] = await fetchURL(`${endpoints.growth}`, {
+    next: { revalidate: 60 }
+  });
   return data;
 }
 

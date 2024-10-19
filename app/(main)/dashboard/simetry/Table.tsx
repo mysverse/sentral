@@ -1,42 +1,88 @@
 "use client";
 
 import { useState } from "react";
+import humanizeDuration from "humanize-duration";
 import { User } from "./page";
+
+function humanise(seconds: number) {
+  return humanizeDuration(seconds * 1000, {
+    units: ["mo", "d", "h", "m", "s"],
+    round: true,
+    unitMeasures: {
+      y: 31557600000,
+      mo: 30 * 86400000,
+      w: 604800000,
+      d: 86400000,
+      h: 3600000,
+      m: 60000,
+      s: 1000,
+      ms: 1
+    }
+  });
+}
+
+function removeDuplicates(arr: User[]): User[] {
+  const seen = new Set<number>(); // To keep track of encountered key values
+  return arr.filter((obj) => {
+    const keyValue = obj["name"]["userId"]; // Get the value for the specified key
+    if (seen.has(keyValue)) {
+      return false; // Skip if this value has been seen before
+    } else {
+      seen.add(keyValue); // Otherwise, add it to the set and keep it
+      return true;
+    }
+  });
+}
 
 export default function SimetryTable({ dataset }: { dataset: User[] }) {
   const [sortKey, setSortKey] = useState<
-    keyof User | "dutyDuration" | "cumulativeDutyDuration"
+    keyof User | "dutyDuration" | "cumulativeDutyDuration" | "totalSessions"
   >("dutyDuration");
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const filtered = [...dataset].filter((obj) => !obj.location.includes("Test"));
 
-  const averageDutyDuration = (userId: number, data: User[]): number => {
+  const averageDutyDuration = (userId: number, data: User[]) => {
     const userData = data.filter((obj) => obj.name.userId === userId);
+    const total = userData.length;
     const totalDuration = userData.reduce(
       (total, entry) => total + entry.dutyDuration,
       0
     );
-    return totalDuration / userData.length;
+    return {
+      avg: totalDuration / total,
+      total
+    };
   };
 
   const avg = new Map<number, number>();
+  const totalSessions = new Map<number, number>();
 
   filtered.forEach((obj) => {
-    avg.set(obj.name.userId, averageDutyDuration(obj.name.userId, filtered));
+    const { avg: average, total } = averageDutyDuration(
+      obj.name.userId,
+      filtered
+    );
+    avg.set(obj.name.userId, average);
+    totalSessions.set(obj.name.userId, total);
   });
 
-  const sortedData = [...filtered]
+  const sortedData = removeDuplicates([...filtered])
     .sort((a, b) => {
       const keyA =
         sortKey === "dutyDuration"
           ? avg.get(a.name.userId)!
-          : a.cumulativeDutyDuration;
+          : sortKey === "totalSessions"
+            ? totalSessions.get(a.name.userId)!
+            : a.cumulativeDutyDuration;
+
       const keyB =
         sortKey === "dutyDuration"
           ? avg.get(b.name.userId)!
-          : b.cumulativeDutyDuration;
+          : sortKey === "totalSessions"
+            ? totalSessions.get(b.name.userId)!
+            : b.cumulativeDutyDuration;
 
       if (sortOrder === "asc") {
         return keyA - keyB;
@@ -80,9 +126,11 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                 | keyof User
                 | "dutyDuration"
                 | "cumulativeDutyDuration"
+                | "totalSessions"
             )
           }
         >
+          <option value="totalSessions">Total Duty Sessions</option>
           <option value="dutyDuration">Duty Duration</option>
           <option value="cumulativeDutyDuration">
             Cumulative Duty Duration
@@ -117,20 +165,26 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Avg. Duty Duration (seconds)
+                    Total Duty Sessions
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Cumulative Duty Duration (seconds)
+                    Avg. Duty Duration
                   </th>
                   <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Cumulative Duty Duration
+                  </th>
+                  {/* <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
                     Location
-                  </th>
+                  </th> */}
                   {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-3">
                     <span className="sr-only">Edit</span>
                   </th> */}
@@ -140,20 +194,23 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                 {sortedData.map((user) => (
                   <tr key={user.name.userId} className="even:bg-gray-50">
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
-                      {user.name.name}
+                      @{user.name.name}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {user.rank}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {avg.get(user.name.userId)?.toLocaleString()}
+                      {totalSessions.get(user.name.userId)!}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {user.cumulativeDutyDuration.toLocaleString()}
+                      {humanise(avg.get(user.name.userId)!)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {humanise(user.cumulativeDutyDuration)}
+                    </td>
+                    {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {user.location}
-                    </td>
+                    </td> */}
                     {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
                       <a
                         href="#"

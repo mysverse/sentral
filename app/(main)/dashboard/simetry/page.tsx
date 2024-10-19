@@ -16,7 +16,8 @@ export interface User {
 
 export default async function Main() {
   const response = await fetch(
-    "https://mysverse-webhook-data.yan3321.workers.dev/614134433204797466"
+    "https://mysverse-webhook-data.yan3321.workers.dev/614134433204797466",
+    { next: { revalidate: 60 } }
   );
 
   const data: User[] = await response.json();
@@ -101,7 +102,6 @@ export default async function Main() {
     "2024-10-11T10:00:00Z"
   );
   const userSessions = sessionsPerUser(data);
-
   return (
     <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
       <SimetryTable dataset={data} />

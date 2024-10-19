@@ -110,7 +110,8 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
         },
         body: JSON.stringify(body),
         // cache: "force-cache",
-        next: { revalidate: 5 * 60 }
+        cache: "no-store"
+        // next: { revalidate: 5 * 60 }
       });
 
       if (!response.ok) {
