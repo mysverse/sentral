@@ -45,8 +45,8 @@ importers:
         specifier: ^14.2.16
         version: 14.2.16(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.4)
       next-auth:
-        specifier: 5.0.0-beta.23
-        version: 5.0.0-beta.23(next@14.2.16(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.4))(react@18.3.1)
+        specifier: 5.0.0-beta.25
+        version: 5.0.0-beta.25(next@14.2.16(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.4))(react@18.3.1)
       next-plausible:
         specifier: ^3.12.2
         version: 3.12.2(next@14.2.16(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.4))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -143,8 +143,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@auth/core@0.37.1':
-    resolution: {integrity: sha512-85PosPEZXHKZhEaAH5DVCig2N1Cu5PC8CbWX03Dw9g1JISLHyrRT0RZRcaWlgmz+0Ua4N52sFRX+g9WARQaUlA==}
+  '@auth/core@0.37.2':
+    resolution: {integrity: sha512-kUvzyvkcd6h1vpeMAojK2y7+PAV5H+0Cc9+ZlKYDFhDY31AlvsB+GW5vNO4qE3Y07KeQgvNO9U0QUx/fN62kBw==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -2564,8 +2564,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  next-auth@5.0.0-beta.23:
-    resolution: {integrity: sha512-LhGiXT1l67gnzqIKN181Tr2D0WbkiUREh7pFjWOFkxWuIwd90QCCMfv/858trvixlfYqRarnfbdLXwiw51sGaA==}
+  next-auth@5.0.0-beta.25:
+    resolution: {integrity: sha512-2dJJw1sHQl2qxCrRk+KTQbeH+izFbGFPuJj5eGgBZFYyiYYtvlrBeUw1E/OJJxTRjuxbSYGnCTkUIRsIIW0bog==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -3400,7 +3400,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@auth/core@0.37.1':
+  '@auth/core@0.37.2':
     dependencies:
       '@panva/hkdf': 1.2.1
       '@types/cookie': 0.6.0
@@ -6251,9 +6251,9 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next-auth@5.0.0-beta.23(next@14.2.16(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.4))(react@18.3.1):
+  next-auth@5.0.0-beta.25(next@14.2.16(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.4))(react@18.3.1):
     dependencies:
-      '@auth/core': 0.37.1
+      '@auth/core': 0.37.2
       next: 14.2.16(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.4)
       react: 18.3.1
 
