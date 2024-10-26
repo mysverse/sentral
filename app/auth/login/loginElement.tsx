@@ -5,13 +5,24 @@ import SignInButton from "components/signIn";
 import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginElement() {
   const [authenticating, setAuthenticating] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+
+  useEffect(() => {
+    if (error) {
+      toast.error("An error occurred while signing in. Please try again.");
+    }
+  }, [error]);
 
   return (
     <div className="relative flex h-full items-center justify-center">
+      <Toaster />
       <Transition
         as="div"
         show={authenticating}
