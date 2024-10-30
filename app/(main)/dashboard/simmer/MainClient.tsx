@@ -133,8 +133,8 @@ export default function MainClient({
               {!passwordConfirmed ? (
                 <>
                   <p className="mb-4 text-red-600">
-                    Please copy your password now. You won't be able to see it
-                    again.
+                    Please copy your password now. You won&apos;t be able to see
+                    it again.
                   </p>
                   <button
                     onClick={() => setPasswordConfirmed(true)}
