@@ -81,6 +81,20 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       current: false
     },
     {
+      name: "Simetry",
+      href: "/dashboard/simetry",
+      // logo: FinsysLogo,
+      current: false,
+      hidden: true
+    },
+    {
+      name: "Simmer",
+      href: "/dashboard/simmer",
+      // logo: FinsysLogo,
+      current: false,
+      hidden: true
+    },
+    {
       name: "FinSys",
       href: "/dashboard/finsys",
       logo: FinsysLogo,
