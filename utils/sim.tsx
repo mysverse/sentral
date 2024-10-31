@@ -1,5 +1,7 @@
 "use server";
 
+import { auth } from "auth";
+
 interface RbxGroupResponse {
   data: Datum[];
 }
@@ -57,6 +59,26 @@ const allowedGroups = [
   }
 ];
 
+async function getUserData() {
+  const session = await auth();
+
+  if (!session) {
+    throw new Error("No session found");
+  }
+
+  const username = session.user.name;
+  const userId = parseInt(session.user.id);
+
+  if (!username) {
+    throw new Error("No username provided");
+  }
+
+  return {
+    username,
+    userId
+  };
+}
+
 export async function getGroups(userId: number) {
   const response = await fetch(
     `https://groups.roblox.com/v2/users/${userId}/groups/roles`
@@ -89,8 +111,15 @@ interface EmailCheckResponse {
   email?: string;
 }
 
-export async function createEmail(userId: number, username: string) {
+interface EmailResetResponse {
+  success: boolean;
+  email?: string;
+  password?: string;
+}
+
+export async function createEmail() {
   if (!apiKey) throw new Error("No API key provided");
+  const { userId, username } = await getUserData();
   const url = new URL(
     "https://mysverse-email-issuer.yan3321.workers.dev/create"
   );
@@ -106,8 +135,27 @@ export async function createEmail(userId: number, username: string) {
   return data;
 }
 
-export async function checkEmail(userId: number, username: string) {
+export async function resetEmail() {
   if (!apiKey) throw new Error("No API key provided");
+  const { userId, username } = await getUserData();
+  const url = new URL(
+    "https://mysverse-email-issuer.yan3321.workers.dev/reset_password"
+  );
+  url.searchParams.append("userId", userId.toString());
+  url.searchParams.append("username", username);
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "x-api-key": apiKey
+    }
+  });
+  const data: EmailResetResponse = await response.json();
+  return data;
+}
+
+export async function checkEmail() {
+  if (!apiKey) throw new Error("No API key provided");
+  const { userId, username } = await getUserData();
   const url = new URL(
     "https://mysverse-email-issuer.yan3321.workers.dev/check"
   );
