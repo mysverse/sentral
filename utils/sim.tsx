@@ -50,6 +50,10 @@ const allowedGroups = [
   {
     id: 5760632,
     minRank: 1
+  },
+  {
+    id: 7919369,
+    minRank: 1
   }
 ];
 
