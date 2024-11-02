@@ -1,45 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { submitPayoutRequest } from "actions/submitPayout";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import clsx from "clsx";
 
 const initialState = {
   message: ""
 };
 
-function FinsysInfo() {
+function Notice({
+  title,
+  content,
+  type
+}: {
+  title: React.ReactNode;
+  content: React.ReactNode;
+  type?: string;
+}) {
   return (
-    <div className="my-4 rounded-md bg-yellow-50 p-4">
+    <div
+      className={clsx(
+        "rounded-md p-4",
+        type === "urgent" ? "bg-red-50" : "bg-yellow-50"
+      )}
+    >
       <div className="flex">
         <div className="flex-shrink-0">
-          <ExclamationTriangleIcon
-            aria-hidden="true"
-            className="h-5 w-5 text-yellow-400"
-          />
+          {type === "urgent" ? (
+            <ExclamationTriangleIcon
+              className="h-5 w-5 text-red-400"
+              aria-hidden="true"
+            />
+          ) : (
+            <ExclamationTriangleIcon
+              className="h-5 w-5 text-yellow-400"
+              aria-hidden="true"
+            />
+          )}
         </div>
         <div className="ml-3">
-          <h3 className="text-sm font-medium text-yellow-800">
-            Important information on 14-day minimum waiting period for payouts
+          <h3
+            className={clsx(
+              "text-sm font-medium",
+              type === "urgent" ? "text-red-800" : "text-yellow-800"
+            )}
+          >
+            {title}
           </h3>
-          <div className="mt-2 text-sm text-yellow-700">
-            <p>
-              Due to Roblox security policies, your account must be in the
-              FinSys Roblox group for at least 14 days before a payout can be
-              successfully processed. Please refer to the{" "}
-              <Link
-                href="https://dev.mysver.se/finsys-usage-guide/"
-                target="_blank"
-                className="font-bold underline hover:no-underline"
-              >
-                usage guide
-              </Link>{" "}
-              for more information.
-            </p>
+          <div
+            className={clsx(
+              "mt-2 text-sm",
+              type === "urgent" ? "text-red-700" : "text-yellow-700"
+            )}
+          >
+            <p>{content}</p>
           </div>
         </div>
       </div>
@@ -136,6 +155,7 @@ function Checklist() {
 function PayoutRequestComponent() {
   const [state, formAction] = useFormState(submitPayoutRequest, initialState);
   const { pending } = useFormStatus();
+  const [agency, setAgency] = useState<string>();
   const [category, setCategory] = useState<string>();
   useEffect(() => {
     // const message = state.message;
@@ -147,30 +167,51 @@ function PayoutRequestComponent() {
   return (
     <div className="container mx-auto p-2">
       <h2 className="text-lg font-medium">Submit a Payout Request</h2>
-      <FinsysInfo />
-      <div className="my-4 rounded-md bg-yellow-50 p-4">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <ExclamationTriangleIcon
-              aria-hidden="true"
-              className="h-5 w-5 text-yellow-400"
-            />
-          </div>
-          <div className="ml-3">
-            <h3 className="text-sm font-medium text-yellow-800">
-              No payouts for non-quartermaster catalog items
-            </h3>
-            <div className="mt-2 text-sm text-yellow-700">
-              <p>
-                We will only process payouts for uniform items that are owned
-                either by a MYSverse quartermaster Roblox group, or the
-                quartermaster&apos;s personal Roblox account. This is to ensure
-                adequate funding and support for MYSverse Sim. Please contact
-                your Sim agency leadership if you have any questions.
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="my-4 grid grid-cols-1 gap-4">
+        <Notice
+          title="Important information on 14-day minimum waiting period for payouts"
+          content={
+            <>
+              Due to Roblox security policies, your account must be in the
+              FinSys Roblox group for at least 14 days before a payout can be
+              successfully processed. Please refer to the{" "}
+              <Link
+                href="https://dev.mysver.se/finsys-usage-guide/"
+                target="_blank"
+                className="font-bold underline hover:no-underline"
+              >
+                usage guide
+              </Link>{" "}
+              for more information.
+            </>
+          }
+        />
+        <Notice
+          title="No payouts for non-quartermaster catalog items"
+          content={
+            <>
+              We will only process payouts for uniform items that are owned
+              either by a MYSverse quartermaster Roblox group, or the
+              quartermaster&apos;s personal Roblox account. This is to ensure
+              adequate funding and support for MYSverse Sim. Please contact your
+              Sim agency leadership if you have any questions.
+            </>
+          }
+        />
+        {agency === "Polis MYSverse" && (
+          <Notice
+            title="Do not request payouts for items available in equipment module"
+            type="urgent"
+            content={
+              <>
+                As uniform items are being added into the in-game equipment
+                module, Polis MYSverse members should only request funds for
+                uniforms that are NOT inside the module. Please contact Polis
+                MYSverse leadership if you have any questions.
+              </>
+            }
+          />
+        )}
       </div>
       <form action={formAction} className="mb-6">
         <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -202,6 +243,7 @@ function PayoutRequestComponent() {
             <select
               id="sim_agency"
               name="sim_agency"
+              onChange={(e) => setAgency(e.target.value)}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             >
