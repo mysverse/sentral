@@ -49,8 +49,6 @@ type InventoryItemResponse = {
   }>;
 };
 
-let csrf: string | null = null;
-
 const regex = /https:\/\/(?:www\.)?roblox\.com\/catalog\/(\d+)\/[\w-]+/g;
 
 export function extractRobloxIDs(text: string): number[] {
@@ -64,26 +62,6 @@ export function extractRobloxIDs(text: string): number[] {
   return Array.from(new Set(ids)).map((id) => parseInt(id)); // Remove duplicates
 }
 
-async function getCsrfToken() {
-  const url = "https://catalog.roblox.com/v1/catalog/items/details";
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      accept: "application/json"
-    }
-  });
-
-  const token = response.headers.get("x-csrf-token");
-
-  if (token) {
-    csrf = token;
-  } else {
-    throw new Error("Did not recieve CSRF token");
-  }
-}
-
 function timeout(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -93,45 +71,53 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
   let retries = 0;
   const maxRetries = 3;
 
+  let csrf: string | undefined;
+
   while (retries < maxRetries) {
-    await getCsrfToken();
+    const url = "https://catalog.roblox.com/v1/catalog/items/details";
+    const body: AssetDetailsRequest = {
+      items: assetIds.map((id) => ({ itemType: 1, id }))
+    };
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      accept: "application/json"
+    };
+
     if (csrf) {
-      const url = "https://catalog.roblox.com/v1/catalog/items/details";
-      const body: AssetDetailsRequest = {
-        items: assetIds.map((id) => ({ itemType: 1, id }))
-      };
+      headers["x-csrf-token"] = csrf;
+    }
 
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-          "x-csrf-token": csrf
-        },
-        body: JSON.stringify(body),
-        // cache: "force-cache",
-        cache: "no-store"
-        // next: { revalidate: 5 * 60 }
-      });
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+      cache: "force-cache"
+    });
 
-      if (!response.ok) {
-        console.error(await response.json());
+    if (!response.ok) {
+      console.error(await response.json());
+      const responseCsrf = response.headers.get("x-csrf-token");
+      if (!csrf && responseCsrf) {
+        csrf = responseCsrf;
+        continue;
+      } else {
         retries++;
         await timeout(1000);
         continue;
       }
-
-      const data: AssetDetailResponse = await response.json();
-
-      return data.data.map((item) => ({
-        id: item.id,
-        itemType: item.itemType,
-        name: item.name,
-        price: item.price,
-        creatorTargetId: item.creatorTargetId,
-        creatorName: item.creatorName
-      }));
     }
+
+    const data: AssetDetailResponse = await response.json();
+
+    return data.data.map((item) => ({
+      id: item.id,
+      itemType: item.itemType,
+      name: item.name,
+      price: item.price,
+      creatorTargetId: item.creatorTargetId,
+      creatorName: item.creatorName
+    }));
   }
 
   throw new Error("Unable to get CSRF token while fetching asset details");
@@ -181,34 +167,28 @@ async function fetchThumbnails(assetIds: number[]) {
   const maxRetries = 3;
 
   while (retries < maxRetries) {
-    await getCsrfToken();
-    if (csrf) {
-      const url = `https://thumbnails.roblox.com/v1/assets`;
+    const url = `https://thumbnails.roblox.com/v1/assets`;
 
-      const response = await fetch(
-        `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
-          `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            "x-csrf-token": csrf
-          },
-          // cache: "force-cache",
-          next: { revalidate: 5 * 60 }
-        }
-      );
-
-      if (response.ok) {
-        const data: RobloxThumbnailAssetApiResponse = await response.json();
-        return data;
-      } else {
-        const errorData = await response.json();
-        console.error(errorData);
+    const response = await fetch(
+      `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
+        `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`
+      )}`,
+      {
+        method: "GET",
+        // cache: "force-cache",
+        next: { revalidate: 5 * 60 }
       }
-      await timeout(1000);
-      retries++;
+    );
+
+    if (response.ok) {
+      const data: RobloxThumbnailAssetApiResponse = await response.json();
+      return data;
+    } else {
+      const errorData = await response.json();
+      console.error(errorData);
     }
+    await timeout(1000);
+    retries++;
   }
 
   throw new Error(`Failed to fetch asset thumbnails`);
@@ -230,44 +210,38 @@ async function checkUserOwnership(
   }
 
   try {
-    await getCsrfToken();
-    if (csrf) {
-      const url = `https://apis.roblox.com/cloud/v2/users/${userId}/inventory-items`;
+    const url = `https://apis.roblox.com/cloud/v2/users/${userId}/inventory-items`;
 
-      const response = await fetch(
-        `${url}?filter=assetIds=${assetIds.join(",")}`,
-        {
-          method: "GET",
-          headers: {
-            "x-csrf-token": csrf,
-            authorization: `Bearer ${token}` // Replace with your API key
-          }
+    const response = await fetch(
+      `${url}?filter=assetIds=${assetIds.join(",")}`,
+      {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${token}` // Replace with your API key
         }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error(errorData);
-        if (errorData?.code === "PERMISSION_DENIED") {
-          // need to grant perms
-          throw new Error("PERMISSION_DENIED");
-        }
-        throw new Error(
-          `Failed to fetch user inventory: ${response.statusText}`
-        );
       }
+    );
 
-      const data: InventoryItemResponse = await response.json();
-
-      return assetIds.map((id) => ({
-        id,
-        owned: data.inventoryItems.some(
-          (item) => parseInt(item.assetDetails.assetId) === id
-        )
-      }));
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error(errorData);
+      if (errorData?.code === "PERMISSION_DENIED") {
+        // need to grant perms
+        throw new Error("PERMISSION_DENIED");
+      }
+      throw new Error(`Failed to fetch user inventory: ${response.statusText}`);
     }
 
-    throw new Error(`Failed to fetch user inventory: CSRF`);
+    const data: InventoryItemResponse = await response.json();
+
+    return assetIds.map((id) => ({
+      id,
+      owned: data.inventoryItems.some(
+        (item) => parseInt(item.assetDetails.assetId) === id
+      )
+    }));
+
+    // throw new Error(`Failed to fetch user inventory: CSRF`);
   } catch {
     return assetIds.map((id) => ({
       id,
@@ -351,7 +325,7 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
       assetDataMap.set(item.id, item);
     });
 
-  console.dir({ userIds, userData }, { depth: null });
+  // console.dir({ userIds, userData }, { depth: null });
 
   // Iterate over the payout requests and inject the ownership, thumbnail, and asset data information using the maps
   return requests.map((request) => {
@@ -367,7 +341,7 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
       ...request,
       ownership: ownedAssets,
       user: userData?.data.find((user) => {
-        console.log(`User ID: ${user.id}, Request ID: ${request.user_id}`);
+        // console.log(`User ID: ${user.id}, Request ID: ${request.user_id}`);
         return user.id === request.user_id;
       })
     };

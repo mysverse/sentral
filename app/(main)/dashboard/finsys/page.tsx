@@ -26,9 +26,11 @@ export default async function Main() {
 
   try {
     const data = await getPendingRequests(session.user.id);
+    console.log(data);
 
     const ownershipData =
       await injectOwnershipAndThumbnailsIntoPayoutRequests(data);
+    console.log(ownershipData);
 
     // const [leaderboardData, mysverseData] = await Promise.all([
     //   getLeaderboardData(),
