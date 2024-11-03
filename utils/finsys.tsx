@@ -66,6 +66,8 @@ function timeout(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+const ROBLOSECURITY = process.env.ROBLOSECURITY;
+
 // Function to fetch asset details from the catalog
 async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
   let retries = 0;
@@ -87,6 +89,8 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
     if (csrf) {
       headers["x-csrf-token"] = csrf;
     }
+
+    if (ROBLOSECURITY) headers["cookie"] = `.ROBLOSECURITY=${ROBLOSECURITY}`;
 
     const response = await fetch(url, {
       method: "POST",
