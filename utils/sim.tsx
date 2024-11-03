@@ -55,7 +55,13 @@ const allowedGroups = [
     minRank: 1
   },
   {
+    // Public Services
     id: 7919369,
+    minRank: 1
+  },
+  {
+    // Istana MYSverse
+    id: 16602842,
     minRank: 1
   }
 ];
