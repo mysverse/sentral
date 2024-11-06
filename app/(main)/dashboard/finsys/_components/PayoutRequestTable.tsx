@@ -20,11 +20,15 @@ const statuses: { [key: string]: string } = {
   rejected: "text-red-700"
 };
 
-const regex = /https:\/\/(?:www\.)?roblox\.com\/catalog\/(\d+)\/[\w-]+/g;
+const regex = /https:\/\/(?:www\.)?roblox\.com\/catalog\/(\d+)(?:\/[\w-]+)?/g;
 
 function extractRobloxLinks(text: string): string[] {
-  const found = text.match(regex);
-  return found ? Array.from(new Set(found)) : [];
+  const matches = [];
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    matches.push(match[1]); // match[1] contains the captured asset ID
+  }
+  return matches;
 }
 
 function removeRobloxLinks(text: string): string {

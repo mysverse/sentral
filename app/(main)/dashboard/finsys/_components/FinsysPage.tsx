@@ -8,6 +8,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import clsx from "clsx";
+import { extractRobloxIDs } from "utils/roblox";
 
 const initialState = {
   message: ""
@@ -157,6 +158,13 @@ function PayoutRequestComponent() {
   const { pending } = useFormStatus();
   const [agency, setAgency] = useState<string>();
   const [category, setCategory] = useState<string>();
+  const [amount, setAmount] = useState<number>();
+  const [reason, setReason] = useState<string>("");
+
+  // New state variables
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [, setCanSubmit] = useState<boolean>(false);
+
   useEffect(() => {
     // const message = state.message;
     const error = state.error;
@@ -164,6 +172,34 @@ function PayoutRequestComponent() {
       toast.error(error);
     }
   }, [state]);
+
+  // Function to handle form submission
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Extract Roblox links from the reason
+    const ids = extractRobloxIDs(reason);
+    const expectedAmount = ids.length * 5;
+
+    if (expectedAmount !== amount) {
+      // Show confirmation modal
+      setShowModal(true);
+    } else {
+      // Allow form submission
+      setCanSubmit(true);
+      const formData = new FormData(e.currentTarget);
+      formAction(formData);
+    }
+  };
+
+  // Function to proceed after confirmation
+  const handleConfirm = () => {
+    setShowModal(false);
+    setCanSubmit(true);
+    // Submit the form
+    (document.getElementById("payout-form") as HTMLFormElement).submit();
+  };
+
   return (
     <div className="container mx-auto p-2">
       <h2 className="text-lg font-medium">Submit a Payout Request</h2>
@@ -173,8 +209,8 @@ function PayoutRequestComponent() {
           content={
             <>
               Due to Roblox security policies, your account must be in the
-              FinSys Roblox group for at least 14 days before a payout can be
-              successfully processed. Please refer to the{" "}
+              MYSverse Malaysian Community Roblox group for at least 14 days
+              before a payout can be successfully processed. Please refer to the{" "}
               <Link
                 href="https://dev.mysver.se/finsys-usage-guide/"
                 target="_blank"
@@ -213,7 +249,7 @@ function PayoutRequestComponent() {
           />
         )}
       </div>
-      <form action={formAction} className="mb-6">
+      <form id="payout-form" onSubmit={handleSubmit} className="mb-6">
         <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label
@@ -230,6 +266,7 @@ function PayoutRequestComponent() {
               max={"100"}
               placeholder="Maximum 100 R$ per request"
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              onChange={(e) => setAmount(parseInt(e.target.value))}
               required
             />
           </div>
@@ -389,6 +426,7 @@ function PayoutRequestComponent() {
             rows={5}
             maxLength={4096}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            onChange={(e) => setReason(e.target.value)}
             required
           ></textarea>
         </div>
@@ -410,6 +448,50 @@ function PayoutRequestComponent() {
           </button>
         </div>
       </form>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="max-w-sm rounded-lg bg-white p-6 shadow-lg">
+            <h2 className="mb-4 text-lg font-semibold text-gray-800">
+              Are you sure you want to submit?
+            </h2>
+            <p className="mb-4 text-gray-600">
+              The total estimated amount calculated from your Roblox item links
+              does not match the amount you entered.
+            </p>
+            <p className="mb-4 text-gray-600">
+              Expected amount: {extractRobloxIDs(reason).length} x {5} R$ ={" "}
+              <b>{extractRobloxIDs(reason).length * 5} R$</b>
+            </p>
+            <p className="mb-4 text-gray-600">
+              Entered amount: <b>{amount} R$</b>
+            </p>
+            <p className="mb-4 text-gray-600">
+              This is assuming each item costs 5 R$ each. Do you still want to
+              proceed?
+            </p>
+            <p className="mb-4 text-sm text-gray-600">
+              Your payout privileges may be <b>revoked</b> if you fail to double
+              check your request and waste the approval team&apos;s review time.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+              >
+                Yes, Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <h2 className="mb-4 text-lg font-medium">Payout Requests</h2>
     </div>
   );
