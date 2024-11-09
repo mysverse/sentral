@@ -66,7 +66,8 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       name: "GenTag",
       href: "/dashboard/gentag",
       logo: GentagLogo,
-      current: false
+      current: false,
+      hidden: true
     },
     {
       name: "Growth",
@@ -91,14 +92,14 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       name: "Simmer",
       href: "/dashboard/simmer",
       // logo: FinsysLogo,
-      current: false,
-      hidden: true
+      current: false
     },
     {
       name: "FinSys",
       href: "/dashboard/finsys",
       logo: FinsysLogo,
-      current: false
+      current: false,
+      hidden: true
     }
   ];
 

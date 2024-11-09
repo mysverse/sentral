@@ -8,7 +8,6 @@ import { ArrowPathIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useImageData, useNametagTemplates } from "components/swr";
 import { isStandalonePWA } from "components/utils";
 import { usePlausible } from "next-plausible";
-import DefaultTransitionLayout from "components/transition";
 
 const nametagLengthLimit = 12;
 
@@ -457,15 +456,5 @@ function NametagForm() {
 }
 
 export default function GentagPage() {
-  return (
-    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-      <DefaultTransitionLayout show={true} appear={true}>
-        <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-          <div className="rounded-lg">
-            <NametagForm />
-          </div>
-        </div>
-      </DefaultTransitionLayout>
-    </div>
-  );
+  return <NametagForm />;
 }

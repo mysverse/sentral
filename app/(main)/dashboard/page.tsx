@@ -6,13 +6,13 @@ import GeneralFAQ from "components/generalFaq";
 
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 import MECSLogo from "public/img/mecs/mecs_logo.svg";
-import GentagLogo from "public/img/gentag/gentag.svg";
+// import GentagLogo from "public/img/gentag/gentag.svg";
 import GrowthLogo from "public/img/growth/myx_growth_logo.svg";
 import InvoteLogo from "public/img/invote/myx_invote_logo.svg";
 import TracerLogo from "public/img/tracer/MYS_Tracer_Logo.svg";
 
 import MECSOGImage from "public/img/mecs/feature_image.webp";
-import GenTagOGImage from "public/img/gentag/feature_image.webp";
+// import GenTagOGImage from "public/img/gentag/feature_image.webp";
 import GrowthOGImage from "public/img/growth/feature_image.webp";
 import InvoteOGImage from "public/img/invote/feature_image.webp";
 import TracerOGImage from "public/img/tracer/feature_image.webp";
@@ -42,16 +42,6 @@ const links = [
     version: "v2.4.1",
     news: "Fixed blacklist button layout",
     image: MECSOGImage
-  },
-  {
-    name: "GenTag",
-    title: "Nametag Generator",
-    description: "Personalise virtual uniforms with nametags",
-    href: "/dashboard/gentag",
-    logo: GentagLogo,
-    version: "v1.0.2",
-    news: "Performance improvements",
-    image: GenTagOGImage
   },
   {
     name: "Growth",

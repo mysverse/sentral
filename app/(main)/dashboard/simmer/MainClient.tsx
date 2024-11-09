@@ -1,6 +1,7 @@
 "use client";
 
 import Spinner from "components/spinner";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { checkEmail, createEmail, resetEmail } from "utils/sim";
 
@@ -209,20 +210,24 @@ export default function MainClient({
         </div>
         {/* Coming Soon Placeholder 1 */}
         <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold text-gray-800">
-            Feature Coming Soon
-          </h2>
+          <h2 className="mb-4 text-xl font-semibold text-gray-800">GenTag</h2>
           <p className="text-gray-600">
-            This feature will be available soon. Stay tuned!
+            <Link href="/dashboard/simmer/gentag">
+              <button className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700">
+                Access
+              </button>
+            </Link>
           </p>
         </div>
         {/* Coming Soon Placeholder 2 */}
         <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold text-gray-800">
-            Feature Coming Soon
-          </h2>
+          <h2 className="mb-4 text-xl font-semibold text-gray-800">FinSys</h2>
           <p className="text-gray-600">
-            This feature will be available soon. Stay tuned!
+            <Link href="/dashboard/simmer/finsys">
+              <button className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700">
+                Access
+              </button>
+            </Link>
           </p>
         </div>
       </div>

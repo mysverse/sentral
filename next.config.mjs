@@ -13,6 +13,25 @@ const withSerwist = withSerwistInit({
 
 export default withBundleAnalyzer(
   withSerwist({
+    async redirects() {
+      return [
+        {
+          source: "/dashboard/finsys",
+          destination: "/dashboard/simmer/finsys",
+          permanent: true
+        },
+        {
+          source: "/dashboard/finsys/admin",
+          destination: "/dashboard/simmer/finsys/admin",
+          permanent: true
+        },
+        {
+          source: "/dashboard/gentag",
+          destination: "/dashboard/simmer/gentag",
+          permanent: true
+        }
+      ];
+    },
     images: {
       remotePatterns: [
         {

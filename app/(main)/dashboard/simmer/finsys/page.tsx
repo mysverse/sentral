@@ -38,16 +38,12 @@ export default async function Main() {
     // const testId = 31585182;
 
     return (
-      <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
-        <DefaultTransitionLayout show={true} appear={true}>
-          <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
-            <PayoutRequestComponent />
-            <Suspense fallback={<>Loading...</>}>
-              <PayoutRequestsTable payoutRequests={ownershipData} />
-            </Suspense>
-          </div>
-        </DefaultTransitionLayout>
-      </div>
+      <>
+        <PayoutRequestComponent />
+        <Suspense fallback={<>Loading...</>}>
+          <PayoutRequestsTable payoutRequests={ownershipData} />
+        </Suspense>
+      </>
     );
   } catch (error) {
     let errorMessage = "Unknown error occurred";
