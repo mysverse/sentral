@@ -179,7 +179,7 @@ function NametagForm() {
                     id="nametag_name"
                     autoComplete="nametag_name"
                     placeholder="12 characters max"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
                     maxLength={12}
                     onChange={(e) => {
                       setName(e.target.value);
@@ -202,7 +202,7 @@ function NametagForm() {
                     id="nametag_type"
                     name="nametag_type"
                     autoComplete="nametag_type"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
                     onChange={(e) => {
                       const index = parseInt(e.target.value);
                       setCurrentIndex(index);
@@ -264,7 +264,7 @@ function NametagForm() {
                                   id="preview-enable"
                                   name="preview"
                                   type="radio"
-                                  className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
+                                  className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
                                   checked={preview}
                                   value="enable"
                                   onChange={(e) =>
@@ -283,7 +283,7 @@ function NametagForm() {
                                   id="preview-disable"
                                   name="preview"
                                   type="radio"
-                                  className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
+                                  className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
                                   checked={!preview}
                                   value="disable"
                                   onChange={(e) =>
@@ -329,7 +329,7 @@ function NametagForm() {
                               id="addtshirt-enable"
                               name="addtshirt"
                               type="radio"
-                              className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
+                              className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
                               checked={addTShirt}
                               value="enable"
                               onChange={(e) =>
@@ -348,7 +348,7 @@ function NametagForm() {
                               id="addtshirt-disable"
                               name="addtshirt"
                               type="radio"
-                              className="h-4 w-4 border-gray-300 text-slate-600 focus:ring-slate-500"
+                              className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
                               checked={!addTShirt}
                               value="disable"
                               onChange={(e) =>
@@ -388,7 +388,7 @@ function NametagForm() {
                           type="number"
                           name="tshirt_id"
                           id="tshirt_id"
-                          className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
+                          className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
                           min={1}
                           step={1}
                           defaultValue={currentTShirtID}
@@ -409,7 +409,7 @@ function NametagForm() {
                                 : null
                               : null
                           }
-                          className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+                          className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
                           Add
                         </button> */}
