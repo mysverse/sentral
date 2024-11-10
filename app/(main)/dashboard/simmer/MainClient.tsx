@@ -102,9 +102,9 @@ export default function MainClient({
           ))}
         </div>
       </div>
-      <div className="space-y-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {/* Email Feature */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:col-span-2">
           <h2 className="mb-4 text-xl font-semibold text-gray-800">
             Email Access
           </h2>

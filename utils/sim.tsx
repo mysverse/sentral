@@ -63,6 +63,11 @@ const allowedGroups = [
     // Istana MYSverse
     id: 16602842,
     minRank: 1
+  },
+  {
+    // MYSverse Administration
+    id: 1143446,
+    minRank: 252
   }
 ];
 

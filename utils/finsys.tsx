@@ -63,6 +63,10 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
 
   let csrf: string | undefined;
 
+  if (assetIds.length === 0) {
+    return [];
+  }
+
   while (retries < maxRetries) {
     const url = "https://catalog.roblox.com/v1/catalog/items/details";
     const body: AssetDetailsRequest = {
@@ -157,6 +161,10 @@ async function fetchUserData(userIds: number[]) {
 async function fetchThumbnails(assetIds: number[]) {
   let retries = 0;
   const maxRetries = 3;
+
+  if (assetIds.length === 0) {
+    return { data: [] };
+  }
 
   while (retries < maxRetries) {
     const url = `https://thumbnails.roblox.com/v1/assets`;
