@@ -28,7 +28,13 @@ type NavigationItem = {
   logo?: any; // Replace `any` with a more specific type if needed
 };
 
-export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
+export default function NavMenu({
+  avatar,
+  sim
+}: {
+  avatar?: ReactNode;
+  sim?: boolean;
+}) {
   const pathname = usePathname();
 
   let navigation: NavigationItem[] = [
@@ -62,13 +68,7 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       logo: MECSLogo,
       current: false
     },
-    {
-      name: "GenTag",
-      href: "/dashboard/gentag",
-      logo: GentagLogo,
-      current: false,
-      hidden: true
-    },
+
     {
       name: "Growth",
       href: "/dashboard/growth",
@@ -92,11 +92,19 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       name: "Simmer",
       href: "/dashboard/simmer",
       // logo: FinsysLogo,
-      current: false
+      current: false,
+      hidden: !sim
+    },
+    {
+      name: "GenTag",
+      href: "/dashboard/simmer/gentag",
+      logo: GentagLogo,
+      current: false,
+      hidden: true
     },
     {
       name: "FinSys",
-      href: "/dashboard/finsys",
+      href: "/dashboard/simmer/finsys",
       logo: FinsysLogo,
       current: false,
       hidden: true
