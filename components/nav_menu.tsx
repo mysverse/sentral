@@ -13,6 +13,7 @@ import GrowthLogo from "public/img/growth/myx_growth_logo.svg";
 import SentralLogo from "public/img/MYSverse_Sentral_Logo.svg";
 import InvoteLogo from "public/img/invote/myx_invote_logo.svg";
 import TracerLogo from "public/img/tracer/MYS_Tracer_Logo.svg";
+import SimmerLogo from "public/img/simmer/simmer_logo.svg";
 import Link from "next/link";
 import { clsx } from "clsx";
 import PrivacyBanner from "./privacy/privacyBanner";
@@ -68,7 +69,6 @@ export default function NavMenu({
       logo: MECSLogo,
       current: false
     },
-
     {
       name: "Growth",
       href: "/dashboard/growth",
@@ -91,7 +91,7 @@ export default function NavMenu({
     {
       name: "Simmer",
       href: "/dashboard/simmer",
-      // logo: FinsysLogo,
+      logo: SimmerLogo,
       current: false,
       hidden: !sim
     },
