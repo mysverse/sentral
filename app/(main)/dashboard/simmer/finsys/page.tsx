@@ -14,7 +14,7 @@ import {
   injectOwnershipAndThumbnailsIntoPayoutRequests
 } from "utils/finsys";
 import Link from "next/link";
-import { Suspense } from "react";
+
 import PayoutRequestsTable from "./_components/PayoutRequestTable";
 
 export default async function Main() {
