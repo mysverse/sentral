@@ -61,6 +61,14 @@ function PayoutRequestsTable({
     }
   };
 
+  if (payoutRequests.length === 0) {
+    return (
+      <div className="px-4 pb-4 italic opacity-50">
+        No payout requests found
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {payoutRequests.map((request) => {

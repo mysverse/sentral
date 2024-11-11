@@ -40,9 +40,7 @@ export default async function Main() {
     return (
       <>
         <PayoutRequestComponent />
-        <Suspense fallback={<>Loading...</>}>
-          <PayoutRequestsTable payoutRequests={ownershipData} />
-        </Suspense>
+        <PayoutRequestsTable payoutRequests={ownershipData} />
       </>
     );
   } catch (error) {
