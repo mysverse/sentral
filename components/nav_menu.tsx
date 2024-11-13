@@ -180,7 +180,7 @@ export default function NavMenu({
                                 item.current
                                   ? "bg-blue-600 text-white"
                                   : "text-white hover:bg-blue-400 hover:bg-opacity-75",
-                                "rounded-md px-3 py-2 text-sm font-medium"
+                                "rounded-md px-3 py-2 text-sm font-medium transition"
                               )}
                               aria-current={item.current ? "page" : undefined}
                             >
@@ -194,7 +194,7 @@ export default function NavMenu({
                                 item.current
                                   ? "bg-blue-600 text-white"
                                   : "text-white hover:bg-blue-400 hover:bg-opacity-75",
-                                "rounded-md px-3 py-2 text-sm font-medium"
+                                "rounded-md px-3 py-2 text-sm font-medium transition"
                               )}
                               aria-current={item.current ? "page" : undefined}
                             >
