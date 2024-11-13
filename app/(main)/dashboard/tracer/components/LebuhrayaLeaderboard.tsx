@@ -48,7 +48,7 @@ export default function LebuhrayaLeaderboard({
               <h2 className="text-sm font-normal uppercase tracking-widest">
                 Masjid Kampung Merbang
               </h2>
-              <h1>Top {limit.toLocaleString()} Lebuhraya Buffet Eaters</h1>
+              <h1>Top {limit.toLocaleString()} Lebuhraya Buffet Score</h1>
             </div>
           ) : type === "weekly" ? (
             <div className="my-auto">
@@ -80,7 +80,8 @@ export default function LebuhrayaLeaderboard({
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
-                    Position
+                    <span className="hidden sm:block">Position</span>
+                    <span className="block sm:hidden">No.</span>
                   </th>
                   <th
                     scope="col"
@@ -114,7 +115,6 @@ export default function LebuhrayaLeaderboard({
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {data
-
                   .filter((person) => person.user)
                   .map((person, index) => (
                     <tr key={person.user.id}>
@@ -150,7 +150,7 @@ export default function LebuhrayaLeaderboard({
                         </Link>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {person.time ?? person.score}
+                        {(person.time ?? person.score)?.toLocaleString()}
                       </td>
                       {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <a
