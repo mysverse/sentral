@@ -82,7 +82,7 @@ export default function QRCodeScanner() {
               onChange={(e) => {
                 if (!e.target.disabled) setDeviceId(e.target.value);
               }}
-              defaultValue={deviceId}
+              value={deviceId}
             >
               <option value="" disabled>
                 Select a camera
@@ -124,7 +124,8 @@ export default function QRCodeScanner() {
             type="text"
             placeholder="Enter code manually"
             value={manualCode}
-            onChange={(e) => setManualCode(e.target.value)}
+            maxLength={7}
+            onChange={(e) => setManualCode(e.target.value.toUpperCase())}
             className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
           <button
