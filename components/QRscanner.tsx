@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -40,11 +40,15 @@ export default function QRCodeScanner() {
   };
 
   const handleManualSubmit = () => {
-    if (manualCode) {
-      setCode(manualCode);
-      setTimeout(() => {
-        router.push(`/verify?code=${manualCode}`);
-      }, 600);
+    if (inputRef.current && !inputRef.current.checkValidity()) {
+      inputRef.current.reportValidity(); // Show the browser's default validation message
+    } else {
+      if (manualCode) {
+        setCode(manualCode);
+        setTimeout(() => {
+          router.push(`/verify?code=${manualCode}`);
+        }, 600);
+      }
     }
   };
 
@@ -54,6 +58,8 @@ export default function QRCodeScanner() {
       setError(error.name);
     }
   };
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div>
@@ -100,6 +106,7 @@ export default function QRCodeScanner() {
                   aspectRatio: 1,
                   facingMode: { ideal: "environment" }
                 }}
+                paused={!!code}
                 onScan={handleResult}
                 onError={handleError}
                 allowMultiple={false}
@@ -124,9 +131,18 @@ export default function QRCodeScanner() {
             type="text"
             placeholder="Enter code manually"
             value={manualCode}
+            pattern=".{7,7}"
             maxLength={7}
-            onChange={(e) => setManualCode(e.target.value.toUpperCase())}
+            minLength={7}
+            onChange={(e) => {
+              setManualCode(e.target.value.toUpperCase());
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleManualSubmit();
+            }}
+            required
             className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            ref={inputRef}
           />
           <button
             onClick={handleManualSubmit}
