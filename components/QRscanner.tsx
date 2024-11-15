@@ -57,7 +57,7 @@ export default function QRCodeScanner() {
 
   return (
     <div>
-      {error === "NotAllowedError" || error === "OverconstrainedError" ? (
+      {error === "NotAllowedError" ? (
         <p>You need to grant camera permissions on your device.</p>
       ) : (
         <>
@@ -92,7 +92,11 @@ export default function QRCodeScanner() {
             </select>
             <div className="aspect-square w-full overflow-hidden rounded-xl sm:w-96">
               <Scanner
-                constraints={{ deviceId, facingMode: { exact: "environment" } }}
+                constraints={{
+                  deviceId,
+                  aspectRatio: 1,
+                  facingMode: { ideal: "environment" }
+                }}
                 onScan={handleResult}
                 onError={handleError}
                 allowMultiple={false}
