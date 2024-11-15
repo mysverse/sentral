@@ -58,7 +58,10 @@ export default function QRCodeScanner() {
   return (
     <div>
       {error === "NotAllowedError" ? (
-        <p>You need to grant camera permissions on your device.</p>
+        <p className="mb-4 italic opacity-50">
+          You need to grant camera permissions on your device to use the
+          scanner.
+        </p>
       ) : (
         <>
           <Transition
@@ -71,7 +74,7 @@ export default function QRCodeScanner() {
             leave="transition-opacity duration-200"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            className="flex flex-col items-center gap-4"
+            className="mb-4 flex flex-col items-center gap-4"
           >
             {/* Show a list of devices from the useDevices hook */}
             <select
@@ -102,35 +105,47 @@ export default function QRCodeScanner() {
                 allowMultiple={false}
               />
             </div>
-            <div className="w-full">
-              <input
-                type="text"
-                placeholder="Enter code manually"
-                value={manualCode}
-                onChange={(e) => setManualCode(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-              <button
-                onClick={handleManualSubmit}
-                className="mt-2 w-full transform rounded-lg bg-blue-600 px-4 py-2 text-white transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                Submit Code
-              </button>
-            </div>
-          </Transition>
-          <Transition
-            show={!!code}
-            enter="transition-opacity duration-200 delay-200"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transition-opacity duration-1000"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <p>Redirecting...</p>
           </Transition>
         </>
       )}
+      <Transition
+        as="div"
+        appear={true}
+        show={!code}
+        enter="transition-opacity duration-500"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-200"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="w-full">
+          <input
+            type="text"
+            placeholder="Enter code manually"
+            value={manualCode}
+            onChange={(e) => setManualCode(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          />
+          <button
+            onClick={handleManualSubmit}
+            className="mt-2 w-full transform rounded-lg bg-blue-600 px-4 py-2 text-white transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 sm:mt-4"
+          >
+            Submit Code
+          </button>
+        </div>
+      </Transition>
+      <Transition
+        show={!!code}
+        enter="transition-opacity duration-200 delay-200"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-1000"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <p>Validating...</p>
+      </Transition>
     </div>
   );
 }

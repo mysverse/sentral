@@ -2,19 +2,23 @@
 
 import QRCodeScanner from "components/QRscanner";
 import prisma from "lib/prisma";
+import Link from "next/link";
 
 export default async function VerifyPage({
   searchParams
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const code = searchParams.code;
+  const code =
+    typeof searchParams.code === "string"
+      ? searchParams.code.toUpperCase().trim()
+      : undefined;
 
   if (!code || typeof code !== "string") {
     return (
       <>
         <h1 className="text-xl font-bold text-blue-600 sm:text-2xl">
-          Verify MYSverse Certificate
+          MYSverse Certificate Verifier
         </h1>
         <QRCodeScanner />
       </>
@@ -40,22 +44,33 @@ export default async function VerifyPage({
 
   return (
     <>
-      <h1 className="text-xl font-bold text-green-600 sm:text-2xl">
-        Certificate Verified
+      <h1 className="mb-4 text-2xl font-bold text-green-600">
+        Verified Certificate
       </h1>
-      <p className="text-gray-700">
-        Recipient:{" "}
-        <span className="font-semibold">{certificate.recipientName}</span>
-      </p>
-      <p className="text-gray-700">
-        Course: <span className="font-semibold">{certificate.courseName}</span>
-      </p>
-      <p className="text-gray-700">
-        Issued on:{" "}
-        <span className="font-semibold">
-          {new Date(certificate.issueDate).toDateString()}
-        </span>
-      </p>
+      <div className="w-full text-center">
+        <div className="mb-4">
+          <p className="text-gray-700">Recipient</p>
+          <p className="text-lg font-semibold">{certificate.recipientName}</p>
+        </div>
+        <hr className="my-4" />
+        <div className="mb-4">
+          <p className="text-gray-700">Module</p>
+          <p className="text-lg font-semibold">{certificate.courseName}</p>
+        </div>
+        <hr className="my-4" />
+        <div className="mb-4">
+          <p className="text-gray-700">Issued on</p>
+          <p className="text-lg font-semibold" suppressHydrationWarning>
+            {new Date(certificate.issueDate).toLocaleDateString()}
+          </p>
+        </div>
+      </div>
+      <Link
+        href="/verify"
+        className="text-gray-400 underline transition hover:text-gray-300 hover:no-underline"
+      >
+        Verify another certificate
+      </Link>
     </>
   );
 }
