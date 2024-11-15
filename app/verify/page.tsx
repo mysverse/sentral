@@ -13,7 +13,7 @@ export default async function VerifyPage({
   if (!code || typeof code !== "string") {
     return (
       <>
-        <h1 className="mb-4 text-2xl font-bold text-blue-600">
+        <h1 className="text-xl font-bold text-blue-600 sm:text-2xl">
           Verify MYSverse Certificate
         </h1>
         <QRCodeScanner />
@@ -28,7 +28,7 @@ export default async function VerifyPage({
   if (!certificate) {
     return (
       <>
-        <h1 className="mb-4 text-2xl font-bold text-red-600">
+        <h1 className="text-xl font-bold text-red-600 sm:text-2xl">
           Invalid Certificate Code
         </h1>
         <p className="text-gray-700">
@@ -40,14 +40,14 @@ export default async function VerifyPage({
 
   return (
     <>
-      <h1 className="mb-4 text-2xl font-bold text-green-600">
+      <h1 className="text-xl font-bold text-green-600 sm:text-2xl">
         Certificate Verified
       </h1>
-      <p className="mb-2 text-gray-700">
+      <p className="text-gray-700">
         Recipient:{" "}
         <span className="font-semibold">{certificate.recipientName}</span>
       </p>
-      <p className="mb-2 text-gray-700">
+      <p className="text-gray-700">
         Course: <span className="font-semibold">{certificate.courseName}</span>
       </p>
       <p className="text-gray-700">

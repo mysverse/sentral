@@ -19,10 +19,21 @@ export default function QRCodeScanner() {
   const [error, setError] = useState<string>();
   const [code, setCode] = useState<string>();
   const [manualCode, setManualCode] = useState<string>("");
-  const [deviceId, setDeviceId] = useState<string>(devices[0]?.deviceId);
+  const [deviceId, setDeviceId] = useState<string>();
 
   useEffect(() => {
-    setDeviceId(devices[0]?.deviceId);
+    navigator.permissions
+      .query({ name: "camera" as PermissionName })
+      .then((permissionObj) => {
+        console.log(permissionObj.state);
+      })
+      .catch((error) => {
+        console.log("Got error :", error);
+      });
+  });
+
+  useEffect(() => {
+    if (devices.length > 1) setDeviceId(devices[0]?.deviceId);
   }, [devices]);
 
   const handleResult = (detectedCodes: IDetectedBarcode[]) => {
@@ -52,28 +63,24 @@ export default function QRCodeScanner() {
     }
   };
 
-  const isError = (err: unknown): err is Error => err instanceof Error;
-
-  const handleError = (error: unknown) => {
-    if (isError(error)) {
+  const handleError = (error: any) => {
+    const name = error.name;
+    if (name && typeof name === "string") {
       setError(error.name);
     }
   };
 
   return (
-    <div className="mx-4">
-      {devices.length === 0 || error === "NotAllowedError" ? (
-        <p>
-          No camera devices found. You may need to grant camera permissions on
-          your device.
-        </p>
+    <div>
+      {error === "NotAllowedError" || error === "OverconstrainedError" ? (
+        <p>You need to grant camera permissions on your device.</p>
       ) : (
         <>
           <Transition
             as="div"
             appear={true}
             show={!code}
-            enter="transition-opacity duration-1000"
+            enter="transition-opacity duration-500"
             enterFrom="opacity-0"
             enterTo="opacity-100"
             leave="transition-opacity duration-200"
@@ -94,9 +101,9 @@ export default function QRCodeScanner() {
                 </option>
               ))}
             </select>
-            <div className="size-64 overflow-hidden rounded-lg">
+            <div className="size-72 overflow-hidden rounded-lg">
               <Scanner
-                constraints={{ facingMode: "user", deviceId }}
+                constraints={{ deviceId, facingMode: { exact: "environment" } }}
                 onScan={handleResult}
                 onError={handleError}
                 allowMultiple={false}
