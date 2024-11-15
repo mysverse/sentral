@@ -12,7 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
-    "@next/bundle-analyzer": "^14.2.17",
+    "@next/bundle-analyzer": "^14.2.18",
     "@serwist/next": "^9.0.10",
     "@tailwindcss/forms": "^0.5.9",
     "autoprefixer": "^10.4.20",
@@ -21,7 +21,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "humanize-duration": "^3.32.1",
-    "next": "^14.2.17",
+    "next": "^14.2.18",
     "next-auth": "5.0.0-beta.25",
     "next-plausible": "^3.12.4",
     "postcss": "^8.4.49",
@@ -31,11 +31,11 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-markdown": "^9.0.1",
-    "sass": "^1.80.7",
+    "sass": "^1.81.0",
     "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "swr": "^2.2.5",
-    "tailwindcss": "^3.4.14"
+    "tailwindcss": "^3.4.15"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
@@ -47,7 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.17",
+    "eslint-config-next": "^14.2.18",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.5",
     "prettier": "^3.3.3",
