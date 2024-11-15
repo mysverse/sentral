@@ -213,7 +213,7 @@ export default function MainClient({
           <h2 className="mb-4 text-xl font-semibold text-gray-800">GenTag</h2>
           <p className="text-gray-600">
             <Link href="/dashboard/simmer/gentag">
-              <button className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700">
+              <button className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white outline outline-0 transition hover:bg-white hover:font-semibold hover:text-blue-600 hover:outline-2 hover:outline-blue-600">
                 Access
               </button>
             </Link>
@@ -224,7 +224,7 @@ export default function MainClient({
           <h2 className="mb-4 text-xl font-semibold text-gray-800">FinSys</h2>
           <p className="text-gray-600">
             <Link href="/dashboard/simmer/finsys">
-              <button className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700">
+              <button className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white outline outline-0 transition hover:bg-white hover:font-semibold hover:text-blue-600 hover:outline-2 hover:outline-blue-600">
                 Access
               </button>
             </Link>

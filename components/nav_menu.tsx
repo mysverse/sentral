@@ -157,7 +157,11 @@ export default function NavMenu({
                 <div className="relative flex h-16 items-center justify-between lg:border-b lg:border-blue-300 lg:border-opacity-25">
                   <div className="flex items-center px-2 lg:px-0">
                     <div className="flex-shrink-0 pt-1">
-                      <Link href={"/"} passHref={true}>
+                      <Link
+                        href={"/"}
+                        className="transition hover:opacity-80"
+                        passHref={true}
+                      >
                         <SentralLogo
                           height={43}
                           width={128}
@@ -209,7 +213,7 @@ export default function NavMenu({
                   ) : null}
                   <div className="flex lg:hidden">
                     {/* Mobile menu button */}
-                    <DisclosureButton className="inline-flex items-center justify-center rounded-md p-2 text-blue-200 hover:bg-blue-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
+                    <DisclosureButton className="inline-flex items-center justify-center rounded-md p-2 text-blue-200 transition hover:bg-blue-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon
@@ -241,7 +245,7 @@ export default function NavMenu({
                             item.current
                               ? "bg-blue-700 text-white"
                               : "text-white hover:bg-blue-500 hover:bg-opacity-75",
-                            "block rounded-md px-3 py-2 text-base font-medium"
+                            "block rounded-md px-3 py-2 text-base font-medium transition"
                           )}
                           aria-current={item.current ? "page" : undefined}
                         >
