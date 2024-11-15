@@ -52,6 +52,12 @@ export default function NavMenu({
       current: false,
       hidden: true
     },
+    {
+      name: "Certifier",
+      href: "/dashboard/certifier",
+      current: false,
+      hidden: true
+    },
     // {
     //   name: "Server Status",
     //   href: "https://myx.yan.gg/status",
