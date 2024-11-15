@@ -19,22 +19,7 @@ export default function QRCodeScanner() {
   const [error, setError] = useState<string>();
   const [code, setCode] = useState<string>();
   const [manualCode, setManualCode] = useState<string>("");
-  const [deviceId, setDeviceId] = useState<string>();
-
-  useEffect(() => {
-    navigator.permissions
-      .query({ name: "camera" as PermissionName })
-      .then((permissionObj) => {
-        console.log(permissionObj.state);
-      })
-      .catch((error) => {
-        console.log("Got error :", error);
-      });
-  });
-
-  useEffect(() => {
-    if (devices.length > 1) setDeviceId(devices[0]?.deviceId);
-  }, [devices]);
+  const [deviceId, setDeviceId] = useState<string>("");
 
   const handleResult = (detectedCodes: IDetectedBarcode[]) => {
     if (!code) {
@@ -92,16 +77,20 @@ export default function QRCodeScanner() {
             <select
               className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               onChange={(e) => {
-                setDeviceId(e.target.value);
+                if (!e.target.disabled) setDeviceId(e.target.value);
               }}
+              defaultValue={deviceId}
             >
+              <option value="" disabled>
+                Select a camera
+              </option>
               {devices.map((device) => (
                 <option key={device.deviceId} value={device.deviceId}>
                   {device.label}
                 </option>
               ))}
             </select>
-            <div className="size-72 overflow-hidden rounded-lg">
+            <div className="aspect-square w-full overflow-hidden rounded-xl sm:w-96">
               <Scanner
                 constraints={{ deviceId, facingMode: { exact: "environment" } }}
                 onScan={handleResult}
