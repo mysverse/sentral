@@ -18,8 +18,8 @@ import {
   Path
 } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
-import { redirect } from "next/navigation";
 import { auth } from "auth";
+import { revalidatePath } from "next/cache";
 
 // Create an instance of Tailwind CSS for React-PDF
 const tw = createTw({
@@ -35,13 +35,23 @@ const tw = createTw({
   }
 });
 
-export async function generateCertificate(formData: FormData) {
+async function checkPermissions() {
   const session = await auth();
+  if (session?.user.id === "1055048") {
+    return true;
+  }
+  return false;
+}
 
-  if (!(session?.user.id === "1055048")) {
+async function validatePermissions() {
+  const authorised = await checkPermissions();
+  if (!authorised) {
     throw new Error("Unauthorized");
   }
+}
 
+export async function generateCertificate(formData: FormData) {
+  await validatePermissions();
   // Register your custom font if needed
 
   const recipientName = formData.get("recipientName")?.toString();
@@ -57,7 +67,7 @@ export async function generateCertificate(formData: FormData) {
   // Create PDF certificate using React-PDF and Tailwind CSS
 
   // Save certificate data to the database
-  const data = await prisma.certificate.create({
+  await prisma.certificate.create({
     data: {
       recipientName,
       courseName,
@@ -66,7 +76,23 @@ export async function generateCertificate(formData: FormData) {
   });
 
   // Return the PDF buffer
-  redirect(`/api/certifier/${data.id}`);
+  revalidatePath("/dashboard/certifier");
+  // redirect(`/api/certifier/${data.id}`);
+}
+
+export async function deleteCertificate(id: string) {
+  await validatePermissions();
+  await prisma.certificate.delete({
+    where: {
+      id
+    }
+  });
+  revalidatePath("/dashboard/certifier");
+}
+
+export async function getCertificates() {
+  await validatePermissions();
+  return prisma.certificate.findMany();
 }
 
 // Helper functions
