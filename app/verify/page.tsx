@@ -1,6 +1,10 @@
-import QRCodeScanner from "components/QRscanner";
 import prisma from "lib/prisma";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+
+const QRCodeScanner = dynamic(() => import("components/QRscanner"), {
+  ssr: false
+});
 
 export default async function VerifyPage({
   searchParams

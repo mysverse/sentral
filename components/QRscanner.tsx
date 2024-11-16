@@ -1,20 +1,19 @@
-// components/QRCodeScanner.jsx
-
 "use client";
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import {
   IDetectedBarcode,
   Scanner,
   useDevices
 } from "@yudiel/react-qr-scanner";
 import { Transition } from "@headlessui/react";
+import useTabVisibility from "hooks/useTabVisibility";
 
 export default function QRCodeScanner() {
   const router = useRouter();
   const devices = useDevices();
+  const isTabVisible = useTabVisibility();
 
   const [error, setError] = useState<string>();
   const [code, setCode] = useState<string>();
@@ -100,17 +99,19 @@ export default function QRCodeScanner() {
               ))}
             </select>
             <div className="aspect-square w-full overflow-hidden rounded-xl sm:w-96">
-              <Scanner
-                constraints={{
-                  deviceId,
-                  aspectRatio: 1,
-                  facingMode: { ideal: "environment" }
-                }}
-                paused={!!code}
-                onScan={handleResult}
-                onError={handleError}
-                allowMultiple={false}
-              />
+              {isTabVisible && devices.length > 0 && (
+                <Scanner
+                  constraints={{
+                    deviceId,
+                    aspectRatio: 1,
+                    facingMode: { ideal: "environment" }
+                  }}
+                  paused={!!code}
+                  onScan={handleResult}
+                  onError={handleError}
+                  allowMultiple={false}
+                />
+              )}
             </div>
           </Transition>
         </>
