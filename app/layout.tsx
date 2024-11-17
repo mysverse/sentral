@@ -21,31 +21,14 @@ export const metadata: Metadata = {
   },
   description: APP_DESCRIPTION,
   manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: APP_DEFAULT_TITLE
-    // startUpImage: [],
-  },
   formatDetection: {
     telephone: false
   },
   openGraph: {
-    type: "website",
-    siteName: APP_NAME,
-    title: {
-      default: APP_DEFAULT_TITLE,
-      template: APP_TITLE_TEMPLATE
-    },
-    description: APP_DESCRIPTION
+    type: "website"
   },
   twitter: {
-    card: "summary_large_image",
-    title: {
-      default: APP_DEFAULT_TITLE,
-      template: APP_TITLE_TEMPLATE
-    },
-    description: APP_DESCRIPTION
+    card: "summary_large_image"
   }
 };
 
