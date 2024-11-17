@@ -15,6 +15,7 @@ import SentralLogo from "public/img/MYSverse_Sentral_Logo.svg";
 import InvoteLogo from "public/img/invote/myx_invote_logo.svg";
 import TracerLogo from "public/img/tracer/MYS_Tracer_Logo.svg";
 import SimmerLogo from "public/img/simmer/simmer_logo.svg";
+import SimetricsLogo from "public/img/simetrics/MYS_Simetrics_Logo.svg";
 import Link from "next/link";
 import { clsx } from "clsx";
 import PrivacyBanner from "./privacy/privacyBanner";
@@ -25,7 +26,7 @@ import { ReactNode } from "react";
 type NavigationItem = {
   name: string;
   href: string;
-  current: boolean;
+  current?: boolean;
   hidden?: boolean;
   logo?: any; // Replace `any` with a more specific type if needed
 };
@@ -44,70 +45,61 @@ export default function NavMenu({
     {
       name: "Privacy Policy",
       href: "/privacy-policy",
-      current: false,
       hidden: true
     },
     {
       name: "Terms of Service",
       href: "/terms-of-service",
-      current: false,
       hidden: true
     },
     {
       name: "Certifier",
       href: "/dashboard/certifier",
       logo: CertifierLogo,
-      current: false,
       hidden: true
     },
-    // {
-    //   name: "Server Status",
-    //   href: "https://myx.yan.gg/status",
-    //   current: false,
-    // },
     {
       name: "Tracer",
       href: "/dashboard/tracer",
-      logo: TracerLogo,
-      current: false
+      logo: TracerLogo
     },
     {
       name: "MECS",
       href: "/dashboard/mecs",
-      logo: MECSLogo,
-      current: false
+      logo: MECSLogo
     },
     {
       name: "Growth",
       href: "/dashboard/growth",
-      logo: GrowthLogo,
-      current: false
+      logo: GrowthLogo
     },
     {
       name: "inVote",
       href: "/dashboard/invote",
-      logo: InvoteLogo,
-      current: false
+      logo: InvoteLogo
     },
     {
       name: "Simmer",
       href: "/dashboard/simmer",
       logo: SimmerLogo,
-      current: false,
       hidden: !sim
     },
     {
       name: "GenTag",
       href: "/dashboard/simmer/gentag",
       logo: GentagLogo,
-      current: false,
       hidden: true
     },
     {
       name: "FinSys",
       href: "/dashboard/simmer/finsys",
       logo: FinsysLogo,
-      current: false,
+      hidden: true
+    },
+    {
+      name: "Simetrics",
+      href: "/dashboard/simmer/simetrics",
+      logo: SimetricsLogo,
       hidden: true
     }
   ];
@@ -120,7 +112,7 @@ export default function NavMenu({
     return currentPath.startsWith(navItem.href);
   };
 
-  // Find the navigation item that has the longest href matching the current path
+  // Find the navigation item that has the longest href matching the current path (including hidden items)
   const currentNavItem = navigation.reduce<NavigationItem | null>(
     (currentLongest, navItem) => {
       if (
@@ -134,15 +126,28 @@ export default function NavMenu({
     null
   );
 
-  // Map over the original navigation items to set the current property
+  // Find the first non-hidden nav item that matches the current path
+  const currentNavLink = navigation
+    .filter((item) => !item.hidden)
+    .reduce<NavigationItem | null>((currentLongest, navItem) => {
+      if (
+        isCurrentPath(navItem, pathname) &&
+        (!currentLongest || navItem.href.length > currentLongest.href.length)
+      ) {
+        return navItem;
+      }
+      return currentLongest;
+    }, null);
+
+  // Map over the original navigation items to set the current property based on currentNavLink
   navigation = navigation.map(
     (obj): NavigationItem => ({
       ...obj,
-      current: obj === currentNavItem
+      current: obj === currentNavLink
     })
   );
 
-  const currentNav = navigation.find((value) => value.current);
+  const currentNav = currentNavItem;
 
   return (
     <>

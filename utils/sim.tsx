@@ -93,7 +93,8 @@ async function getUserData() {
 
 export async function getGroups(userId: number) {
   const response = await fetch(
-    `https://groups.roblox.com/v2/users/${userId}/groups/roles`
+    `https://groups.roblox.com/v2/users/${userId}/groups/roles`,
+    { next: { revalidate: 60 } }
   );
   return response.json() as Promise<RbxGroupResponse>;
 }

@@ -2,7 +2,7 @@ import React from "react";
 import MainClient from "./MainClient";
 
 export const metadata = {
-  title: "Simetry"
+  title: "Simetrics"
 };
 
 export interface User {

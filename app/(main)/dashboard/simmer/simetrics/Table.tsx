@@ -115,37 +115,39 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
           </p>
         </div>
       </div>
-      <div className="mt-4">
-        <label className="block text-sm font-medium text-gray-900">
-          Sort By
-        </label>
-        <select
-          className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-          value={sortKey}
-          onChange={(e) =>
-            setSortKey(
-              e.target.value as
-                | keyof User
-                | "dutyDuration"
-                | "cumulativeDutyDuration"
-                | "totalSessions"
-            )
-          }
-        >
-          <option value="totalSessions">Total Duty Sessions</option>
-          <option value="dutyDuration">Avg. Duty Duration</option>
-          <option value="cumulativeDutyDuration">
-            Cumulative Duty Duration
-          </option>
-        </select>
+      <div className="mt-4 flex flex-col gap-4 sm:flex-row">
+        <div className="grow">
+          <label className="block text-sm font-medium text-gray-900">
+            Sort By
+          </label>
+          <select
+            className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            value={sortKey}
+            onChange={(e) =>
+              setSortKey(
+                e.target.value as
+                  | keyof User
+                  | "dutyDuration"
+                  | "cumulativeDutyDuration"
+                  | "totalSessions"
+              )
+            }
+          >
+            <option value="totalSessions">Total Duty Sessions</option>
+            <option value="dutyDuration">Avg. Duty Duration</option>
+            <option value="cumulativeDutyDuration">
+              Cumulative Duty Duration
+            </option>
+          </select>
+        </div>
         <button
-          className="mt-2 rounded-md bg-gray-200 px-3 py-1 text-sm"
+          className="rounded-md bg-blue-600 px-8 py-3 text-sm text-white transition hover:bg-white hover:text-blue-600 sm:mt-6 sm:py-1"
           onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
         >
           {sortOrder === "asc" ? "Sort Descending" : "Sort Ascending"}
         </button>
       </div>
-      <div className="mt-8">
+      <div className="mt-2">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-300">
             <thead>
@@ -210,10 +212,10 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
-              className={`rounded-md px-3 py-1 ${
+              className={`rounded-md px-3 py-1 transition ${
                 currentPage === 1
                   ? "cursor-not-allowed bg-gray-200 text-gray-500"
-                  : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                  : "border border-gray-300 bg-white text-gray-700 hover:bg-blue-600 hover:text-white"
               }`}
             >
               Previous
@@ -223,10 +225,10 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`rounded-md px-3 py-1 ${
+                  className={`rounded-md px-3 py-1 transition ${
                     currentPage === page
                       ? "bg-blue-600 text-white"
-                      : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                      : "border border-gray-300 bg-white text-gray-700 hover:bg-blue-600 hover:text-white"
                   }`}
                 >
                   {page}
@@ -236,10 +238,10 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-              className={`rounded-md px-3 py-1 ${
+              className={`rounded-md px-3 py-1 transition ${
                 currentPage === totalPages
                   ? "cursor-not-allowed bg-gray-200 text-gray-500"
-                  : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                  : "border border-gray-300 bg-white text-gray-700 hover:bg-blue-600 hover:text-white"
               }`}
             >
               Next

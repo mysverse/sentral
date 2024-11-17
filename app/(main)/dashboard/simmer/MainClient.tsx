@@ -4,6 +4,7 @@ import EmailAccess from "./EmailAccess";
 import FeatureCard from "./FeatureCard";
 import FinsysLogo from "public/img/finsys/finsys.svg";
 import GentagLogo from "public/img/gentag/gentag.svg";
+import SimetricsLogo from "public/img/simetrics/MYS_Simetrics_Logo.svg";
 
 interface Group {
   group: {
@@ -75,9 +76,10 @@ export default function MainClient({
           logo={FinsysLogo}
         />
         <FeatureCard
-          title="Simetry"
+          title="Simetrics"
           description="Detailed duty metrics"
-          href="/dashboard/simmer/simetry"
+          href="/dashboard/simmer/simetrics"
+          logo={SimetricsLogo}
         />
         <EmailAccess userId={userId} username={username} />
       </div>

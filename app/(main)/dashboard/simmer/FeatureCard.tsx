@@ -23,7 +23,7 @@ export default function FeatureCard({
           <>
             {React.createElement(logo, {
               alt: `${title} logo`,
-              className: "h-7 pb-1 fill-gray-800"
+              className: "h-7 pb-1 sm:h-10 sm:pb-2 fill-blue-600"
             })}
           </>
         ) : (
