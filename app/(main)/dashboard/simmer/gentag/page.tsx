@@ -7,10 +7,6 @@ import { isStandalonePWA } from "components/utils";
 import { usePlausible } from "next-plausible";
 import Image from "next/image";
 
-export const metadata = {
-  title: "GenTag"
-};
-
 const nametagLengthLimit = 12;
 
 function NametagImage(
