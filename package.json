@@ -7,14 +7,16 @@
     "build": "next build",
     "start": "next start -p 4300",
     "lint": "next lint",
-    "format": "prettier --config .prettierrc \"{pages,components}/**/*.{ts,tsx}\" --write"
+    "generate": "prisma generate",
+    "format": "prettier --config .prettierrc \"{pages,components}/**/*.{ts,tsx}\" --write",
+    "knip": "knip"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
     "@next/bundle-analyzer": "^14.2.18",
     "@prisma/client": "^5.22.0",
-    "@react-pdf/renderer": "^4.0.2",
+    "@react-pdf/renderer": "^4.1.2",
     "@serwist/next": "^9.0.10",
     "@tailwindcss/forms": "^0.5.9",
     "@yudiel/react-qr-scanner": "^2.0.8",
@@ -58,6 +60,7 @@
     "eslint-config-next": "^14.2.18",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.5",
+    "knip": "^5.37.1",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "serwist": "^9.0.10",
