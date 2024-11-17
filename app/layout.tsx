@@ -1,13 +1,12 @@
 import "../styles/globals.css";
+
+import type { Metadata, Viewport } from "next";
+import { SessionProvider } from "components/SessionProvider";
 import PlausibleProvider from "next-plausible";
 
-import { SessionProvider } from "components/SessionProvider";
-
-import { Metadata, Viewport } from "next";
-
-const APP_NAME = "Sentral";
-const APP_DEFAULT_TITLE = "MYSverse Sentral";
-const APP_TITLE_TEMPLATE = "%s - MYSverse Sentral";
+const APP_NAME = "MYSverse Sentral";
+const APP_DEFAULT_TITLE = "Sentral";
+const APP_TITLE_TEMPLATE = "%s - Sentral";
 const APP_DESCRIPTION =
   "Sentral is the official hub and companion app for MYSverse, serving game statistics, analytics tools, and a lot more to come!";
 

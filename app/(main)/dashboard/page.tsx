@@ -65,6 +65,10 @@ const links = [
   }
 ];
 
+export const metadata = {
+  title: "Dashboard"
+};
+
 function AppList() {
   return (
     <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-3">

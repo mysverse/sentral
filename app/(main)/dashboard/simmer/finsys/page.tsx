@@ -17,6 +17,10 @@ import Link from "next/link";
 
 import PayoutRequestsTable from "./_components/PayoutRequestTable";
 
+export const metadata = {
+  title: "FinSys"
+};
+
 export default async function Main() {
   const session = await auth();
 

@@ -2,6 +2,10 @@ import { auth } from "auth";
 import DefaultTransitionLayout from "components/transition";
 import { getGroupRoles } from "utils/sim";
 
+export const metadata = {
+  title: "Certifier"
+};
+
 function NoAccess() {
   return (
     <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">

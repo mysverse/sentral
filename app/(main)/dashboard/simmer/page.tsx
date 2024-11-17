@@ -3,6 +3,10 @@ import { auth } from "auth";
 import { getGroupRoles } from "utils/sim";
 import MainClient from "./MainClient";
 
+export const metadata = {
+  title: "Simmer"
+};
+
 export default async function Page() {
   const session = await auth();
 

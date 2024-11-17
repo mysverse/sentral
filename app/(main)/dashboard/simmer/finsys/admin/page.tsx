@@ -6,6 +6,10 @@ import {
 import PayoutRequestsTable from "../_components/PayoutRequestTable";
 import { auth } from "auth";
 
+export const metadata = {
+  title: "FinSys Admin"
+};
+
 export default async function Main() {
   const session = await auth();
 

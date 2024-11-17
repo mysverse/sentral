@@ -1,13 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-
 import { ArrowPathIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-
 import { useImageData, useNametagTemplates } from "components/swr";
 import { isStandalonePWA } from "components/utils";
 import { usePlausible } from "next-plausible";
+import Image from "next/image";
+
+export const metadata = {
+  title: "GenTag"
+};
 
 const nametagLengthLimit = 12;
 

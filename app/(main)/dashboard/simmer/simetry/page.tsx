@@ -1,6 +1,10 @@
 import React from "react";
 import SimetryTable from "./Table";
 
+export const metadata = {
+  title: "Simetry"
+};
+
 export interface User {
   name: {
     name: string;

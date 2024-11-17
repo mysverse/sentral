@@ -3,6 +3,10 @@ import LebuhrayaLeaderboard from "./components/LebuhrayaLeaderboard";
 import { getLeaderboardData, getMysverseData } from "components/fetcher";
 import { auth } from "auth";
 
+export const metadata = {
+  title: "Tracer"
+};
+
 export default async function Main() {
   const session = await auth();
 
