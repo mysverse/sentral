@@ -22,13 +22,13 @@ function humanise(seconds: number) {
 }
 
 function removeDuplicates(arr: User[]): User[] {
-  const seen = new Set<number>(); // To keep track of encountered key values
+  const seen = new Set<number>();
   return arr.filter((obj) => {
-    const keyValue = obj["name"]["userId"]; // Get the value for the specified key
+    const keyValue = obj.name.userId;
     if (seen.has(keyValue)) {
-      return false; // Skip if this value has been seen before
+      return false;
     } else {
-      seen.add(keyValue); // Otherwise, add it to the set and keep it
+      seen.add(keyValue);
       return true;
     }
   });
@@ -38,10 +38,11 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
   const [sortKey, setSortKey] = useState<
     keyof User | "dutyDuration" | "cumulativeDutyDuration" | "totalSessions"
   >("dutyDuration");
-
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  const filtered = [...dataset].filter((obj) => !obj.location.includes("Test"));
+  const filtered = dataset.filter((obj) => !obj.location.includes("Test"));
 
   const averageDutyDuration = (userId: number, data: User[]) => {
     const userData = data.filter((obj) => obj.name.userId === userId);
@@ -68,32 +69,39 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
     totalSessions.set(obj.name.userId, total);
   });
 
-  const sortedData = removeDuplicates([...filtered])
-    .sort((a, b) => {
-      const keyA =
-        sortKey === "dutyDuration"
-          ? avg.get(a.name.userId)!
-          : sortKey === "totalSessions"
-            ? totalSessions.get(a.name.userId)!
-            : a.cumulativeDutyDuration;
+  const sortedData = removeDuplicates(filtered).sort((a, b) => {
+    const keyA =
+      sortKey === "dutyDuration"
+        ? avg.get(a.name.userId)!
+        : sortKey === "totalSessions"
+          ? totalSessions.get(a.name.userId)!
+          : a.cumulativeDutyDuration;
 
-      const keyB =
-        sortKey === "dutyDuration"
-          ? avg.get(b.name.userId)!
-          : sortKey === "totalSessions"
-            ? totalSessions.get(b.name.userId)!
-            : b.cumulativeDutyDuration;
+    const keyB =
+      sortKey === "dutyDuration"
+        ? avg.get(b.name.userId)!
+        : sortKey === "totalSessions"
+          ? totalSessions.get(b.name.userId)!
+          : b.cumulativeDutyDuration;
 
-      if (sortOrder === "asc") {
-        return keyA - keyB;
-      } else {
-        return keyB - keyA;
-      }
-    })
-    .filter(
-      (obj1, i, arr) =>
-        arr.findIndex((obj2) => obj2.name.userId === obj1.name.userId) === i
-    );
+    return sortOrder === "asc" ? keyA - keyB : keyB - keyA;
+  });
+
+  const totalItems = sortedData.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const paginatedData = sortedData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
 
   return (
     <>
@@ -106,21 +114,13 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             A list of all Polis MYSverse users and their duty duration metrics.
           </p>
         </div>
-        {/* <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add user
-          </button>
-        </div> */}
       </div>
       <div className="mt-4">
         <label className="block text-sm font-medium text-gray-900">
           Sort By
         </label>
         <select
-          className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
           value={sortKey}
           onChange={(e) =>
             setSortKey(
@@ -133,7 +133,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
           }
         >
           <option value="totalSessions">Total Duty Sessions</option>
-          <option value="dutyDuration">Duty Duration</option>
+          <option value="dutyDuration">Avg. Duty Duration</option>
           <option value="cumulativeDutyDuration">
             Cumulative Duty Duration
           </option>
@@ -145,86 +145,105 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
           {sortOrder === "asc" ? "Sort Descending" : "Sort Ascending"}
         </button>
       </div>
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Rank
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Total Duty Sessions
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Avg. Duty Duration
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Cumulative Duty Duration
-                  </th>
-                  {/* <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Location
-                  </th> */}
-                  {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-3">
-                    <span className="sr-only">Edit</span>
-                  </th> */}
+      <div className="mt-8">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-300">
+            <thead>
+              <tr>
+                <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
+                  Name
+                </th>
+                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Rank
+                </th>
+                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Total Duty Sessions
+                </th>
+                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Avg. Duty Duration
+                </th>
+                <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Cumulative Duty Duration
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white">
+              {paginatedData.map((user) => (
+                <tr key={user.name.userId} className="even:bg-gray-50">
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
+                    @{user.name.name}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {user.rank}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {totalSessions.get(user.name.userId)}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {humanise(avg.get(user.name.userId)!)}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {humanise(user.cumulativeDutyDuration)}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="bg-white">
-                {sortedData.map((user) => (
-                  <tr key={user.name.userId} className="even:bg-gray-50">
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
-                      @{user.name.name}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {user.rank}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {totalSessions.get(user.name.userId)!}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {humanise(avg.get(user.name.userId)!)}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {humanise(user.cumulativeDutyDuration)}
-                    </td>
-                    {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {user.location}
-                    </td> */}
-                    {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
-                      <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
-                        Edit<span className="sr-only">, {user.name.name}</span>
-                      </a>
-                    </td> */}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="mt-4 flex flex-col items-center justify-between gap-4 sm:flex-row">
+          <div>
+            <p className="text-sm text-gray-700">
+              Showing{" "}
+              <span className="font-medium">
+                {(currentPage - 1) * itemsPerPage + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-medium">
+                {Math.min(currentPage * itemsPerPage, totalItems)}
+              </span>{" "}
+              of <span className="font-medium">{totalItems}</span> results
+            </p>
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className={`rounded-md px-3 py-1 ${
+                currentPage === 1
+                  ? "cursor-not-allowed bg-gray-200 text-gray-500"
+                  : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`rounded-md px-3 py-1 ${
+                    currentPage === page
+                      ? "bg-blue-600 text-white"
+                      : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className={`rounded-md px-3 py-1 ${
+                currentPage === totalPages
+                  ? "cursor-not-allowed bg-gray-200 text-gray-500"
+                  : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
