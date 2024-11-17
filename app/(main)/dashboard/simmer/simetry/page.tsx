@@ -103,7 +103,7 @@ export default async function Main() {
   );
   const userSessions = sessionsPerUser(data);
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+    <>
       <SimetryTable dataset={data} />
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-lg bg-white p-4 shadow-lg">
@@ -155,6 +155,6 @@ export default async function Main() {
           </pre>
         </div>
       </div>
-    </div>
+    </>
   );
 }

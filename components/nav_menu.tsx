@@ -9,6 +9,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/20/solid";
 import FinsysLogo from "public/img/finsys/finsys.svg";
 import MECSLogo from "public/img/mecs/mecs_logo.svg";
 import GentagLogo from "public/img/gentag/gentag.svg";
+import CertifierLogo from "public/img/certifier/MYS_Certifier_Logo.svg";
 import GrowthLogo from "public/img/growth/myx_growth_logo.svg";
 import SentralLogo from "public/img/MYSverse_Sentral_Logo.svg";
 import InvoteLogo from "public/img/invote/myx_invote_logo.svg";
@@ -55,6 +56,7 @@ export default function NavMenu({
     {
       name: "Certifier",
       href: "/dashboard/certifier",
+      logo: CertifierLogo,
       current: false,
       hidden: true
     },
@@ -86,13 +88,6 @@ export default function NavMenu({
       href: "/dashboard/invote",
       logo: InvoteLogo,
       current: false
-    },
-    {
-      name: "Simetry",
-      href: "/dashboard/simetry",
-      // logo: FinsysLogo,
-      current: false,
-      hidden: true
     },
     {
       name: "Simmer",

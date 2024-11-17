@@ -15,7 +15,8 @@ import {
   View,
   Svg,
   G,
-  Path
+  Path,
+  Link
 } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
 import { auth } from "auth";
@@ -206,6 +207,10 @@ export async function exportCertificateById(id: string) {
   return undefined;
 }
 
+function getLinkFromCode(code: string) {
+  return `https://sentral.mysver.se/verify?code=${code}`;
+}
+
 export async function renderCertificateById(id: string) {
   const certificate = await prisma.certificate.findUnique({
     where: {
@@ -214,7 +219,7 @@ export async function renderCertificateById(id: string) {
   });
   if (certificate) {
     const code = certificate.code;
-    const qrData = `https://sentral.mysver.se/verify?code=${code}`;
+    const qrData = getLinkFromCode(code);
     const qrCodeImage = await QRCode.toDataURL(qrData);
     return (
       <CertificateDocument
@@ -237,6 +242,7 @@ function CertificateDocument({
   qrCodeImage,
   code
 }: PDFProps) {
+  const link = getLinkFromCode(code);
   return (
     <Document title="Certificate" author="MYSverse">
       <Page
@@ -314,10 +320,12 @@ function CertificateDocument({
             Issued on{" "}
             <Text style={tw("font-semibold")}>{issueDate.toDateString()}</Text>
           </Text>
-          <Text style={tw("text-sm mb-2")}>
-            Scan the QR code to verify on MYSverse Sentral
+          <Text style={tw("text-xs mb-2")}>
+            Scan the QR code or visit MYSverse Sentral to validate
           </Text>
-          <Image style={tw("h-48 w-48 mb-2 mx-auto")} src={qrCodeImage} />
+          <Link href={link}>
+            <Image style={tw("h-48 w-48 mb-2 mx-auto")} src={qrCodeImage} />
+          </Link>
           <Text style={tw("text-sm tracking-widest")}>{code}</Text>
           <Text style={tw("text-sm mt-8")}>
             This certificate is presented to {recipientName} for outstanding
