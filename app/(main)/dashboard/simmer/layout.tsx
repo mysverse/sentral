@@ -48,9 +48,7 @@ export default async function DefaultLayout({
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-      <DefaultTransitionLayout show={true} appear={true}>
-        {children}
-      </DefaultTransitionLayout>
+      {children}
     </div>
   );
 }
