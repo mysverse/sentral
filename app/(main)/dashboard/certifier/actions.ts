@@ -4,6 +4,7 @@ import "server-only";
 import prisma from "lib/prisma";
 import { revalidatePath } from "next/cache";
 import { checkPermissions } from "./utils";
+import { CertificateType } from "@prisma/client";
 
 // Helper functions
 function generateUniqueCode() {
@@ -19,26 +20,29 @@ async function validatePermissions() {
 
 export async function generateCertificate(formData: FormData) {
   await validatePermissions();
-  // Register your custom font if needed
 
   const recipientName = formData.get("recipientName")?.toString();
   const courseName = formData.get("courseName")?.toString();
+  const type = formData.get("type")?.toString() as CertificateType;
+  const robloxUserID = formData.get("robloxUserID")?.toString();
+  const recipientUserID = formData.get("recipientUserID")?.toString();
+  const externalOrg = formData.get("externalOrg")?.toString();
 
-  if (!recipientName || !courseName) {
-    throw new Error("Recipient Name and Course Name are required");
+  if (!recipientName || !courseName || !type) {
+    throw new Error("Recipient Name, Course Name, and Type are required");
   }
 
-  // Generate a unique code
   const code = generateUniqueCode();
 
-  // Create PDF certificate using React-PDF and Tailwind CSS
-
-  // Save certificate data to the database
   await prisma.certificate.create({
     data: {
       recipientName,
       courseName,
-      code
+      type,
+      code,
+      robloxUserID: robloxUserID || null,
+      recipientUserID: recipientUserID || null,
+      externalOrg: externalOrg || null
     }
   });
   revalidatePath("/dashboard/certifier");

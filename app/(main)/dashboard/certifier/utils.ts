@@ -8,7 +8,20 @@ const allowed = [
 ];
 
 export async function getCertificates() {
-  const data = await prisma.certificate.findMany();
+  const data = await prisma.certificate.findMany({
+    // Include new fields in the query
+    select: {
+      id: true,
+      recipientName: true,
+      courseName: true,
+      issueDate: true,
+      code: true,
+      type: true,
+      robloxUserID: true,
+      recipientUserID: true,
+      externalOrg: true
+    }
+  });
   return data;
 }
 

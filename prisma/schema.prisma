@@ -14,9 +14,20 @@ datasource db {
 }
 
 model Certificate {
-  id            String   @id @default(uuid())
-  recipientName String
-  courseName    String
-  issueDate     DateTime @default(now())
-  code          String   @unique
+  id              String          @id @default(uuid())
+  recipientName   String
+  courseName      String
+  issueDate       DateTime        @default(now())
+  code            String          @unique
+  type            CertificateType // New field
+  robloxUserID    String? // Optional, for roleplay certifications
+  recipientUserID String? // Optional, for team member recognition
+  externalOrg     String? // Optional, for external collaborations
+}
+
+// New enum to represent certificate types
+enum CertificateType {
+  ROLEPLAY
+  TEAM_RECOGNITION
+  EXTERNAL
 }

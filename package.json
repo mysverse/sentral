@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 4300",
     "lint": "next lint",
-    "generate": "prisma generate",
+    "migrate": "dotenv -e .env.local prisma migrate dev",
     "format": "prettier --config .prettierrc \"{pages,components}/**/*.{ts,tsx}\" --write",
     "knip": "knip"
   },
@@ -56,6 +56,7 @@
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.18",
     "eslint-config-prettier": "^9.1.0",

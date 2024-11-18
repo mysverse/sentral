@@ -67,6 +67,18 @@ export default function CertificatesTable({
             >
               Certificate Code
             </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+            >
+              Type
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+            >
+              Details
+            </th>
             <th scope="col" className="relative px-6 py-3">
               <span className="sr-only">Actions</span>
             </th>
@@ -89,6 +101,17 @@ export default function CertificatesTable({
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                 {certificate.code}
+              </td>
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                {certificate.type}
+              </td>
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                {certificate.type === "ROLEPLAY" &&
+                  `Roblox ID: ${certificate.robloxUserID}`}
+                {certificate.type === "TEAM_RECOGNITION" &&
+                  `User ID: ${certificate.recipientUserID}`}
+                {certificate.type === "EXTERNAL" &&
+                  `Organization: ${certificate.externalOrg}`}
               </td>
               <td className="space-x-3 whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                 <Link
@@ -114,7 +137,6 @@ export default function CertificatesTable({
           ))}
         </tbody>
       </table>
-
       <ConfirmationDialog
         isOpen={showModal}
         onClose={closeModal}

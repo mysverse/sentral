@@ -5,11 +5,16 @@ import { toast } from "react-hot-toast";
 import { generateCertificate } from "./actions";
 import Link from "next/link";
 import clsx from "clsx";
+import { CertificateType } from "@prisma/client";
 
 export default function IssuanceForm() {
   const [recipientName, setRecipientName] = useState("");
   const [courseName, setCourseName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState<CertificateType>("ROLEPLAY");
+  const [robloxUserID, setRobloxUserID] = useState("");
+  const [recipientUserID, setRecipientUserID] = useState("");
+  const [externalOrg, setExternalOrg] = useState("");
 
   // Client-side handler
   interface FormElements extends HTMLFormControlsCollection {
@@ -50,6 +55,53 @@ export default function IssuanceForm() {
         required
         className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
       />
+      <select
+        name="type"
+        value={type}
+        onChange={(e) => setType(e.target.value as CertificateType)}
+        required
+        className="w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+      >
+        <option value="ROLEPLAY">Roleplay Certification</option>
+        <option value="TEAM_RECOGNITION">Team Member Recognition</option>
+        <option value="EXTERNAL">External Collaboration</option>
+      </select>
+
+      {type === "ROLEPLAY" && (
+        <input
+          type="text"
+          name="robloxUserID"
+          placeholder="Roblox User ID"
+          value={robloxUserID}
+          onChange={(e) => setRobloxUserID(e.target.value)}
+          required
+          className="w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
+      )}
+
+      {type === "TEAM_RECOGNITION" && (
+        <input
+          type="text"
+          name="recipientUserID"
+          placeholder="Recipient User ID"
+          value={recipientUserID}
+          onChange={(e) => setRecipientUserID(e.target.value)}
+          required
+          className="w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
+      )}
+
+      {type === "EXTERNAL" && (
+        <input
+          type="text"
+          name="externalOrg"
+          placeholder="External Organization"
+          value={externalOrg}
+          onChange={(e) => setExternalOrg(e.target.value)}
+          required
+          className="w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
+      )}
       <div className="flex flex-col items-center gap-y-4">
         <button
           type="submit"

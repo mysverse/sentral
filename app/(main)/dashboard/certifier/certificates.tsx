@@ -18,6 +18,7 @@ import {
   Link
 } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
+import { CertificateType } from "@prisma/client";
 
 // Create an instance of Tailwind CSS for React-PDF
 const tw = createTw({
@@ -39,6 +40,10 @@ interface PDFProps {
   issueDate: Date;
   qrCodeImage: string;
   code: string;
+  type: CertificateType;
+  robloxUserID?: string;
+  recipientUserID?: string;
+  externalOrg?: string;
 }
 
 Font.register({
@@ -160,6 +165,10 @@ export async function renderCertificateById(id: string) {
         issueDate={certificate.issueDate}
         qrCodeImage={qrCodeImage}
         code={code}
+        type={certificate.type}
+        robloxUserID={certificate.robloxUserID || undefined}
+        recipientUserID={certificate.recipientUserID || undefined}
+        externalOrg={certificate.externalOrg || undefined}
       />
     );
   }
@@ -172,9 +181,24 @@ function CertificateDocument({
   courseName,
   issueDate,
   qrCodeImage,
-  code
+  code,
+  type,
+  robloxUserID,
+  recipientUserID,
+  externalOrg
 }: PDFProps) {
   const link = getLinkFromCode(code);
+
+  // Modify the certificate content based on the type
+  let description = "";
+  if (type === "ROLEPLAY") {
+    description = `This certifies that Roblox user ${recipientName} (ID: ${robloxUserID}) has achieved ${courseName} certification within the MYSverse Sim roleplay community.`;
+  } else if (type === "TEAM_RECOGNITION") {
+    description = `This certificate recognizes ${recipientName} (User ID: ${recipientUserID}) for their outstanding contribution as a ${courseName} in MYSverse.`;
+  } else if (type === "EXTERNAL") {
+    description = `This certifies that ${recipientName} has successfully completed tasks in collaboration with ${externalOrg} for the ${courseName} project.`;
+  }
+
   return (
     <Document title="Certificate" author="MYSverse">
       <Page
@@ -259,10 +283,11 @@ function CertificateDocument({
             <Image style={tw("h-48 w-48 mb-2 mx-auto")} src={qrCodeImage} />
           </Link>
           <Text style={tw("text-sm tracking-widest")}>{code}</Text>
-          <Text style={tw("text-sm mt-8")}>
+          <Text style={tw("text-sm mt-8 text-center mx-8")}>{description}</Text>
+          {/* <Text style={tw("text-sm mt-8")}>
             This certificate is presented to {recipientName} for outstanding
             performance and dedication in completing the {courseName} module.
-          </Text>
+          </Text> */}
           <Text style={tw("text-sm mt-4")}>
             For more information, visit{" "}
             <Text style={tw("text-blue-600 underline")}>https://mysver.se</Text>
