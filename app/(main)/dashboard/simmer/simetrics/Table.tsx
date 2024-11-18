@@ -37,7 +37,7 @@ function removeDuplicates(arr: User[]): User[] {
 export default function SimetryTable({ dataset }: { dataset: User[] }) {
   const [sortKey, setSortKey] = useState<
     keyof User | "dutyDuration" | "cumulativeDutyDuration" | "totalSessions"
-  >("dutyDuration");
+  >("cumulativeDutyDuration");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -141,7 +141,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
           </select>
         </div>
         <button
-          className="rounded-md bg-blue-600 px-8 py-3 text-sm text-white transition hover:bg-white hover:text-blue-600 sm:mt-6 sm:py-1"
+          className="rounded-md bg-blue-600 px-8 py-3 text-sm text-white outline outline-1 outline-blue-600 transition hover:bg-white hover:text-blue-600 sm:mt-6 sm:py-1"
           onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
         >
           {sortOrder === "asc" ? "Sort Descending" : "Sort Ascending"}

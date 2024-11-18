@@ -6,7 +6,7 @@ import humanizeDuration from "humanize-duration";
 import SimetryTable from "./Table";
 
 function humanise(seconds: number) {
-  return humanizeDuration(seconds, {
+  return humanizeDuration(seconds * 1000, {
     units: ["mo", "d", "h", "m", "s"],
     round: true,
     unitMeasures: {
@@ -107,6 +107,7 @@ export default function MainClient({ data }: { data: User[] }) {
   );
 
   const totalDuration = totalDutyDurationOnDate(data, selectedDate);
+  console.log(totalDuration);
   const avgDuration = averageDutyDuration(filteredDataByDate);
   const { longest, shortest } =
     longestAndShortestDutySessions(filteredDataByDate);
@@ -129,7 +130,7 @@ export default function MainClient({ data }: { data: User[] }) {
     <div className="grid grid-cols-1 gap-6">
       <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-6">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:items-center">
             <label className="block text-sm font-medium text-gray-700">
               Select date
             </label>
@@ -141,7 +142,7 @@ export default function MainClient({ data }: { data: User[] }) {
               className="rounded border border-gray-400 p-2"
             />
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:items-center">
             <label className="block text-sm font-medium text-gray-700">
               Start time
             </label>
@@ -152,7 +153,7 @@ export default function MainClient({ data }: { data: User[] }) {
               className="rounded border border-gray-400 p-2"
             />
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:items-center">
             <label className="block text-sm font-medium text-gray-700">
               End time
             </label>
@@ -172,18 +173,18 @@ export default function MainClient({ data }: { data: User[] }) {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-lg bg-white p-4 shadow-lg">
-          <h2 className="text-lg font-semibold">
+          <h2 className="font-semibold">
             Total Duty Duration on {selectedDate}
           </h2>
           <p className="mt-2 text-gray-700">{humanise(totalDuration)}</p>
         </div>
         <div className="rounded-lg bg-white p-4 shadow-lg">
-          <h2 className="text-lg font-semibold">Average Duty Duration</h2>
+          <h2 className="font-semibold">Average Duty Duration</h2>
           <p className="mt-2 text-gray-700">{humanise(avgDuration)}</p>
         </div>
         {longest && (
           <div className="rounded-lg bg-white p-4 shadow-lg">
-            <h2 className="text-lg font-semibold">Longest Duty Session</h2>
+            <h2 className="font-semibold">Longest Duty Session</h2>
             <p className="mt-2 text-gray-700">
               {longest.name.name} - {humanise(longest.dutyDuration)}
             </p>
@@ -191,7 +192,7 @@ export default function MainClient({ data }: { data: User[] }) {
         )}
         {shortest && (
           <div className="rounded-lg bg-white p-4 shadow-lg">
-            <h2 className="text-lg font-semibold">Shortest Duty Session</h2>
+            <h2 className="font-semibold">Shortest Duty Session</h2>
             <p className="mt-2 text-gray-700">
               {shortest.name.name} - {humanise(shortest.dutyDuration)}
             </p>
@@ -199,22 +200,20 @@ export default function MainClient({ data }: { data: User[] }) {
         )}
         {topUser && (
           <div className="rounded-lg bg-white p-4 shadow-lg">
-            <h2 className="text-lg font-semibold">
-              Top User by Cumulative Duration
-            </h2>
+            <h2 className="font-semibold">Top User by Cumulative Duration</h2>
             <p className="mt-2 text-gray-700">
               {topUser.name.name} - {humanise(topUser.cumulativeDutyDuration)}
             </p>
           </div>
         )}
         <div className="rounded-lg bg-white p-4 shadow-lg">
-          <h2 className="text-lg font-semibold">
+          <h2 className="font-semibold">
             Active Users Between {startTime} - {endTime}
           </h2>
           <p className="mt-2 text-gray-700">{activeCount} users</p>
         </div>
         <div className="overflow-x-auto rounded-lg bg-white p-4 shadow-lg">
-          <h2 className="text-lg font-semibold">Sessions per User</h2>
+          <h2 className="font-semibold">Sessions per User</h2>
           <ul className="mt-2 text-gray-700">
             {Object.values(userSessions)
               .sort((a, b) => b - a)
@@ -229,7 +228,7 @@ export default function MainClient({ data }: { data: User[] }) {
           </ul>
         </div>
         <div className="overflow-x-auto rounded-lg bg-white p-4 shadow-lg">
-          <h2 className="text-lg font-semibold">Duty Duration by Rank</h2>
+          <h2 className="font-semibold">Duty Duration by Rank</h2>
           <ul className="mt-2 text-gray-700">
             {Object.values(durationByRank)
               .sort((a, b) => b - a)
