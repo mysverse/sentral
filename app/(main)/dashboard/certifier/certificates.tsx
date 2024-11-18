@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/alt-text */
-"use server";
 import "server-only";
 
 import prisma from "lib/prisma";
@@ -19,8 +18,6 @@ import {
   Link
 } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
-import { auth } from "auth";
-import { revalidatePath } from "next/cache";
 
 // Create an instance of Tailwind CSS for React-PDF
 const tw = createTw({
@@ -35,71 +32,6 @@ const tw = createTw({
     }
   }
 });
-
-async function checkPermissions() {
-  const session = await auth();
-  if (session?.user.id === "1055048") {
-    return true;
-  }
-  return false;
-}
-
-async function validatePermissions() {
-  const authorised = await checkPermissions();
-  if (!authorised) {
-    throw new Error("Unauthorized");
-  }
-}
-
-export async function generateCertificate(formData: FormData) {
-  await validatePermissions();
-  // Register your custom font if needed
-
-  const recipientName = formData.get("recipientName")?.toString();
-  const courseName = formData.get("courseName")?.toString();
-
-  if (!recipientName || !courseName) {
-    throw new Error("Recipient Name and Course Name are required");
-  }
-
-  // Generate a unique code
-  const code = generateUniqueCode();
-
-  // Create PDF certificate using React-PDF and Tailwind CSS
-
-  // Save certificate data to the database
-  await prisma.certificate.create({
-    data: {
-      recipientName,
-      courseName,
-      code
-    }
-  });
-
-  // Return the PDF buffer
-  revalidatePath("/dashboard/certifier");
-  // redirect(`/api/certifier/${data.id}`);
-}
-
-export async function deleteCertificate(id: string) {
-  await validatePermissions();
-  await prisma.certificate.delete({
-    where: {
-      id
-    }
-  });
-  revalidatePath("/dashboard/certifier");
-}
-
-export async function getCertificates() {
-  await validatePermissions();
-  return prisma.certificate.findMany();
-}
-
-// Helper functions
-function generateUniqueCode() {
-  return Math.random().toString(36).substring(2, 9).toUpperCase();
-}
 
 interface PDFProps {
   recipientName: string;

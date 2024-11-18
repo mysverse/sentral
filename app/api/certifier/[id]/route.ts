@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { exportCertificateById } from "app/(main)/dashboard/certifier/actions";
+import { exportCertificateById } from "app/(main)/dashboard/certifier/certificates";
 
 export async function GET(
   req: NextRequest,
