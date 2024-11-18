@@ -2,9 +2,7 @@
 import "server-only";
 
 import prisma from "lib/prisma";
-import { pdf } from "@react-pdf/renderer";
 import { revalidatePath } from "next/cache";
-import { renderCertificateById } from "./certificates";
 import { checkPermissions } from "./utils";
 
 // Helper functions
