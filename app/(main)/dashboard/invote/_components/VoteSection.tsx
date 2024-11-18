@@ -33,12 +33,18 @@ export default function VoteSection({
             return (
               <li key={key} className="text-center">
                 <h2 className="font-bold">{date.toDateString()}</h2>
-                <h3 className="italic">{`${date.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                  timeZone: "Asia/Kuala_Lumpur"
-                })} Session - ${total} vote${total > 1 ? "s" : ""}`}</h3>
+                <h3 className="flex flex-col italic">
+                  <span>{`${date.toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                    timeZone: "Asia/Kuala_Lumpur"
+                  })} session`}</span>{" "}
+                  <span>
+                    <b>{total.toLocaleString()}</b>
+                    {` vote${total > 1 ? "s" : ""}`}
+                  </span>
+                </h3>
                 <div className="flex justify-center">
                   <VoteChart
                     hidden={item.results.hidden}

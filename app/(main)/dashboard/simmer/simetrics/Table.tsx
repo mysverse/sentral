@@ -220,8 +220,34 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             >
               Previous
             </button>
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-              (page) => (
+            {(() => {
+              const maxPageNumbersToShow = 3;
+              const half = Math.floor(maxPageNumbersToShow / 2);
+              let startPage = Math.max(1, currentPage - half);
+              let endPage = Math.min(totalPages, currentPage + half);
+
+              if (totalPages > maxPageNumbersToShow) {
+                if (currentPage <= half) {
+                  startPage = 1;
+                  endPage = maxPageNumbersToShow;
+                } else if (currentPage + half >= totalPages) {
+                  startPage = totalPages - maxPageNumbersToShow + 1;
+                  endPage = totalPages;
+                } else {
+                  startPage = currentPage - half;
+                  endPage = currentPage + half;
+                }
+              } else {
+                startPage = 1;
+                endPage = totalPages;
+              }
+
+              const pageNumbers = [];
+              for (let i = startPage; i <= endPage; i++) {
+                pageNumbers.push(i);
+              }
+
+              return pageNumbers.map((page) => (
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
@@ -233,8 +259,8 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                 >
                   {page}
                 </button>
-              )
-            )}
+              ));
+            })()}
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}

@@ -42,10 +42,13 @@ export default async function Main() {
     // const testId = 31585182;
 
     return (
-      <>
-        <PayoutRequestComponent />
+      <div>
+        <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+          <PayoutRequestComponent />
+        </div>
+        <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
         <PayoutRequestsTable payoutRequests={ownershipData} />
-      </>
+      </div>
     );
   } catch (error) {
     let errorMessage = "Unknown error occurred";

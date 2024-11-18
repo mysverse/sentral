@@ -126,45 +126,51 @@ export default function MainClient({ data }: { data: User[] }) {
     "Unknown";
 
   return (
-    <>
-      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="block text-sm font-medium text-gray-700">
-            Select date
-          </label>
-          <input
-            type="date"
-            value={selectedDate}
-            max={defaultDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="rounded border border-gray-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="block text-sm font-medium text-gray-700">
-            Start time
-          </label>
-          <input
-            type="time"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            className="rounded border border-gray-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="block text-sm font-medium text-gray-700">
-            End time
-          </label>
-          <input
-            type="time"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            className="rounded border border-gray-400 p-2"
-          />
+    <div className="grid grid-cols-1 gap-6">
+      <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label className="block text-sm font-medium text-gray-700">
+              Select date
+            </label>
+            <input
+              type="date"
+              value={selectedDate}
+              max={defaultDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="rounded border border-gray-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label className="block text-sm font-medium text-gray-700">
+              Start time
+            </label>
+            <input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className="rounded border border-gray-400 p-2"
+            />
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label className="block text-sm font-medium text-gray-700">
+              End time
+            </label>
+            <input
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              className="rounded border border-gray-400 p-2"
+            />
+          </div>
         </div>
       </div>
-      <SimetryTable dataset={filteredDataByDate} />
-      <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2 lg:grid-cols-3">
+
+      <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+        <SimetryTable dataset={filteredDataByDate} />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-lg bg-white p-4 shadow-lg">
           <h2 className="text-lg font-semibold">
             Total Duty Duration on {selectedDate}
@@ -237,6 +243,6 @@ export default function MainClient({ data }: { data: User[] }) {
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 }

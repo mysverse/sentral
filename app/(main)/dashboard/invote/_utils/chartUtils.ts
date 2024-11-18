@@ -12,6 +12,8 @@ export function getColourByName(name: string | null) {
       return "#FF1414";
     case "PPR":
       return "#d4d42b";
+    case "OC/PP":
+      return "#8f00ff";
     default:
       return "gray";
   }
@@ -48,11 +50,20 @@ export function frequencySort(arr: string[]) {
   return arr;
 }
 
-export function getSeatHolders(seatData?: InvoteSeats[]) {
+export function getSeatHolders(seatData?: InvoteSeats[], ignoreEmpty = false) {
+  const seatsArray = new Array<string | null>(30).fill(null);
   if (seatData) {
-    return seatData.map((seat) => seat.party);
+    // Assuming 30 seats, make sure to insert parties into the array at the correct index, and fill null if empty
+    seatData.forEach((seat) => {
+      if (seat.index > 0 && seat.index <= 30) {
+        seatsArray[seat.index - 1] = seat.party;
+      }
+    });
   }
-  return [];
+  if (ignoreEmpty) {
+    return seatsArray.filter((item) => item !== null);
+  }
+  return seatsArray;
 }
 
 interface StatNumber {
@@ -111,19 +122,16 @@ export function getStatsObject(stats: InvoteStatsTimestamp[]) {
 
 export function getSeatColours(
   stats: InvoteStatsTimestamp[],
-  seatStats: InvoteSeats[]
+  seatStats: InvoteSeats[],
+  ignoreEmpty = false
 ) {
   if (!stats && !seatStats) return null;
 
-  const statsObject = getStatsObject(stats);
-
-  const seatHolders = getSeatHolders(seatStats);
-
-  const seatColours = seatHolders.map((item) => getColourByName(item));
-
-  // if hidden
+  // Hidden calculations start
 
   const hidden = stats.some((item) => item.results.hidden);
+
+  const statsObject = getStatsObject(stats);
 
   const projectedSeats = calculateSeats(statsObject);
 
@@ -155,5 +163,45 @@ export function getSeatColours(
     return hiddenSeatColours;
   }
 
+  // Hidden calculations end
+
+  const seatHolders = getSeatHolders(seatStats, ignoreEmpty);
+
+  const seatColours = seatHolders.map((item) => getColourByName(item));
+
   return seatColours;
+}
+
+export function getSeatParties(
+  stats: InvoteStatsTimestamp[],
+  seatStats: InvoteSeats[]
+) {
+  if (!stats && !seatStats) return null;
+
+  const statsObject = getStatsObject(stats);
+
+  const seatHolders = getSeatHolders(seatStats);
+
+  // if hidden
+
+  const hidden = stats.some((item) => item.results.hidden);
+
+  const projectedSeats = calculateSeats(statsObject);
+
+  const projectedSeatHolders = [];
+
+  for (const key in projectedSeats) {
+    const value = projectedSeats[key];
+    for (let i = 0; i < value; i++) {
+      projectedSeatHolders.push(key);
+    }
+  }
+
+  const hiddenSeatParties = projectedSeatHolders;
+
+  if (hidden) {
+    return hiddenSeatParties;
+  }
+
+  return seatHolders;
 }

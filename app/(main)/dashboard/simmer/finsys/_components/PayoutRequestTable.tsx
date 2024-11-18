@@ -1,17 +1,15 @@
 "use client";
 
 import { createElement, useState } from "react";
-
 import { ClockIcon } from "@heroicons/react/20/solid";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import { Button } from "components/catalyst/button";
-import { BadgeButton } from "components/catalyst/badge";
+import { Avatar } from "components/catalyst/avatar";
+import { injectOwnershipAndThumbnailsIntoPayoutRequests } from "utils/finsys";
 import { updatePayoutRequest } from "actions/updatePayout";
+import clsx from "clsx";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { injectOwnershipAndThumbnailsIntoPayoutRequests } from "utils/finsys";
-import { Avatar } from "components/catalyst/avatar";
 import Markdown from "react-markdown";
 
 const statuses: { [key: string]: string } = {
@@ -77,7 +75,7 @@ function PayoutRequestsTable({
         return (
           <div
             key={request.id}
-            className="flex h-full flex-col rounded-lg border p-4"
+            className="flex h-full flex-col rounded-lg bg-white px-4 py-4 shadow sm:px-6"
           >
             <div
               className={clsx(
@@ -85,23 +83,10 @@ function PayoutRequestsTable({
                 statuses[request.status]
               )}
             >
-              <span className="text-2xl font-bold">
+              <div className="text-2xl font-bold">
                 <span className="mr-1 text-base font-medium">R$</span>
                 {request.amount}
-                {adminMode && (
-                  <BadgeButton
-                    href={`https://roblox.com/users/${request.user_id}/profile`}
-                    target="_blank"
-                    color="blue"
-                    className="ml-3 align-middle"
-                  >
-                    {request.user
-                      ? `@${request.user.name} (${request.user_id})`
-                      : request.user_id}
-                  </BadgeButton>
-                )}
-              </span>
-
+              </div>
               <div
                 className={clsx("flex items-center", statuses[request.status])}
               >
@@ -119,6 +104,17 @@ function PayoutRequestsTable({
               </div>
             </div>
             <div className="mt-1">
+              {adminMode && (
+                <Link
+                  href={`https://roblox.com/users/${request.user_id}/profile`}
+                  target="_blank"
+                  className="text-sm font-medium text-blue-600 transition hover:underline hover:opacity-50"
+                >
+                  {request.user
+                    ? `@${request.user.name} (${request.user_id})`
+                    : request.user_id}
+                </Link>
+              )}
               <p
                 className="mt-1 text-sm text-gray-600"
                 suppressHydrationWarning
@@ -130,16 +126,16 @@ function PayoutRequestsTable({
             {request.status === "rejected" && request.rejection_reason && (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">Rejection reason</h3>
-                <p className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
+                <div className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
                   <Markdown>{request.rejection_reason}</Markdown>
-                </p>
+                </div>
               </div>
             )}
             <div className="mt-2">
               <h3 className="text-sm font-semibold">Reason</h3>
-              <p className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
+              <div className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
                 <Markdown>{removeRobloxLinks(request.reason)}</Markdown>
-              </p>
+              </div>
             </div>
 
             {(itemList.length > 0 || ownershipList.length > 0) && (

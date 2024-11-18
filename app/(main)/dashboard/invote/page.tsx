@@ -29,6 +29,7 @@ import {
   calculateSeats,
   frequencySort,
   getSeatColours,
+  getSeatParties,
   getStatsObject
 } from "./_utils/chartUtils";
 
@@ -90,7 +91,7 @@ function Stats3({ stats }: { stats: InvoteStatsTimestamp[] }) {
     .sort((a, b) => b.stat - a.stat);
 
   return (
-    <dl className="mt-5 grid grid-cols-2 gap-6 sm:grid-cols-2">
+    <dl className="mt-5 grid grid-cols-2 gap-6 sm:grid-cols-3">
       {newStats2.map((item) => (
         <div
           key={item.name}
@@ -116,10 +117,11 @@ function SeatsGeoMap({
   seatStats: InvoteSeats[];
 }) {
   const colours = getSeatColours(stats, seatStats);
+  const parties = getSeatParties(stats, seatStats);
 
-  if (!colours) return null;
+  if (!(colours && parties)) return null;
 
-  return <ElectionMap colours={colours} />;
+  return <ElectionMap colours={colours} parties={parties} />;
 }
 
 function SeatsParliamentMap({
@@ -129,7 +131,7 @@ function SeatsParliamentMap({
   stats: InvoteStatsTimestamp[];
   seatStats: InvoteSeats[];
 }) {
-  const colours = getSeatColours(stats, seatStats);
+  const colours = getSeatColours(stats, seatStats, true);
 
   if (!colours) return null;
 
@@ -248,7 +250,7 @@ export default function InvotePage() {
             <Stats3 stats={stats} />
           </div>
           <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow">
-            <div className="flex justify-center">
+            <div className="relative flex flex-col justify-center gap-6">
               <SeatsGeoMap stats={stats} seatStats={seatStats} />
             </div>
           </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import React from "react";
 
@@ -32,8 +33,9 @@ export default function FeatureCard({
       </h2>
       <p className="mb-4 text-gray-600">{description}</p>
       <Link href={href}>
-        <button className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white outline outline-0 transition hover:bg-white hover:font-semibold hover:text-blue-600 hover:outline-2 hover:outline-blue-600">
-          Access
+        <button className="flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white outline outline-0 transition hover:bg-white hover:font-semibold hover:text-blue-600 hover:outline-2 hover:outline-blue-600">
+          <ArrowTopRightOnSquareIcon className="h-5 w-5" aria-hidden="true" />{" "}
+          Access application
         </button>
       </Link>
     </div>

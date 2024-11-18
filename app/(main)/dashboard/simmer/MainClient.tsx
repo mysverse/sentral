@@ -25,7 +25,7 @@ interface MainClientProps {
 
 export default function MainClient({
   authorised,
-  groups,
+  // groups,
   userId,
   username
 }: MainClientProps) {
@@ -40,19 +40,20 @@ export default function MainClient({
   }
 
   return (
-    <div className="mx-auto p-2 md:p-4">
-      <div className="mb-8">
-        <h1 className="mb-4 text-xl font-bold text-gray-800 md:text-3xl">
+    <div className="">
+      {/* <div className="mb-8">
+        <h1 className="mb-2 text-center text-2xl font-bold text-white">
           Welcome, @{username}
         </h1>
-        <h2 className="mb-6 text-lg font-semibold text-gray-700 md:text-xl">
+        <h2 className="text-center text-xl font-medium text-white">
           Your MYSverse Sim memberships
         </h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+        <div className="mt-4 grid grid-cols-1 items-center justify-center gap-6 md:grid-cols-2">
           {groups.map((group) => (
             <div
               key={group.group.id}
-              className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+              className="col-span-1 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
             >
               <h3 className="text-lg font-semibold text-gray-800 md:text-xl">
                 {group.group.name}
@@ -61,7 +62,7 @@ export default function MainClient({
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
         <FeatureCard
           title="GenTag"

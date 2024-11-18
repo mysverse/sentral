@@ -201,7 +201,7 @@ function PayoutRequestComponent() {
   };
 
   return (
-    <div className="container mx-auto p-2">
+    <div className="p-1">
       <h2 className="text-lg font-medium">Submit a Payout Request</h2>
       <div className="my-4 grid grid-cols-1 gap-4">
         <Notice
@@ -249,7 +249,7 @@ function PayoutRequestComponent() {
           />
         )}
       </div>
-      <form id="payout-form" onSubmit={handleSubmit} className="mb-6">
+      <form id="payout-form" onSubmit={handleSubmit}>
         <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label
@@ -282,9 +282,10 @@ function PayoutRequestComponent() {
               name="sim_agency"
               onChange={(e) => setAgency(e.target.value)}
               required
+              defaultValue=""
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             >
-              <option disabled selected value="">
+              <option disabled value="">
                 Select a Sim agency
               </option>
               <option>Tentera MYSverse - Army</option>
@@ -310,26 +311,24 @@ function PayoutRequestComponent() {
             name="sim_reason"
             required
             onChange={(e) => setCategory(e.target.value)}
+            defaultValue=""
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           >
-            <option disabled selected value="">
+            <option disabled value="">
               Select a request category
             </option>
-            <option value="Recruited">New recruit</option>
-            <option value="Promotion">
-              Promotion (please state old and new rank)
-            </option>
-            <option value="Demotion">
-              Demotion (please state old and new rank)
-            </option>
+            <option value="Recruited">New member/recruit</option>
+            <option value="Promotion">Promotion</option>
+            <option value="Demotion">Demotion</option>
             <option value="Transfer/External">
-              Transferred from other Sim agency (please state old agency)
+              Transferred from other Sim agency
             </option>
             <option value="Transfer/Internal">
-              Change of internal division/department (please state new
-              division/department)
+              Change of internal division/department/regiment
             </option>
-            <option value="Update">New or updated uniform requirements</option>
+            <option value="Update">
+              New or updated uniform requirements (please state)
+            </option>
             <option value="Other">Other (please state)</option>
           </select>
         </div>
@@ -492,7 +491,6 @@ function PayoutRequestComponent() {
           </div>
         </div>
       )}
-      <h2 className="mb-4 text-lg font-medium">Payout Requests</h2>
     </div>
   );
 }
