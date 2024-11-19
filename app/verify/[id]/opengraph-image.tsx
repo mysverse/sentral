@@ -1,3 +1,7 @@
+import type {
+  FontStyle,
+  FontWeight
+} from "next/dist/compiled/@vercel/og/satori";
 import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
 import { readFile } from "fs/promises";
 import { ImageResponse } from "next/og";
@@ -19,71 +23,104 @@ function getCodeFromProps(props: Props) {
   return props.params.id.toUpperCase().trim();
 }
 
+enum CertificateTypeName {
+  ROLEPLAY = "MYSverse Sim",
+  TEAM_RECOGNITION = "MYSverse",
+  EXTERNAL = "Collaboration"
+}
+
+async function getFonts() {
+  const [fontRegular, fontBold, fontMedium, fontSemibold, fontLight] =
+    await Promise.all([
+      readFile("public/fonts/public_sans/PublicSans-Regular.ttf"),
+      readFile("public/fonts/public_sans/PublicSans-Bold.ttf"),
+      readFile("public/fonts/public_sans/PublicSans-Medium.ttf"),
+      readFile("public/fonts/public_sans/PublicSans-SemiBold.ttf"),
+      readFile("public/fonts/public_sans/PublicSans-Light.ttf")
+    ]);
+
+  interface Font {
+    name: string;
+    data: Buffer;
+    style: FontStyle;
+    weight: FontWeight;
+  }
+  return [
+    {
+      name: "Public Sans",
+      data: fontLight,
+      style: "normal",
+      weight: 300
+    },
+    {
+      name: "Public Sans",
+      data: fontRegular,
+      style: "normal",
+      weight: 400
+    },
+    {
+      name: "Public Sans",
+      data: fontMedium,
+      style: "normal",
+      weight: 500
+    },
+    {
+      name: "Public Sans",
+      data: fontSemibold,
+      style: "normal",
+      weight: 600
+    },
+    {
+      name: "Public Sans",
+      data: fontBold,
+      style: "normal",
+      weight: 700
+    }
+  ] satisfies Font[];
+}
+
 // Image generation
 export default async function Image(props: Props) {
   const code = getCodeFromProps(props);
-
-  if (typeof code !== "string") {
-    return undefined;
-  }
-
-  const certificate = await getCertificateByCode(code);
-
-  if (!certificate) {
-    return undefined;
-  }
-
-  const [fontRegular, fontBold] = await Promise.all([
-    readFile("public/fonts/public_sans/PublicSans-Regular.ttf"),
-    readFile("public/fonts/public_sans/PublicSans-Bold.ttf")
+  const [certificate, fonts] = await Promise.all([
+    getCertificateByCode(code),
+    getFonts()
   ]);
 
-  console.log("image generating...");
+  if (!certificate) {
+    return new ImageResponse(
+      (
+        <div tw="bg-red-600 text-white w-full h-full flex flex-col items-center justify-center">
+          <SentralLogo height={96} alt="MYSverse Sentral Logo" fill="white" />
+          <h1 tw="text-7xl font-bold mt-6">Invalid Certificate</h1>
+          <p tw="text-4xl mt-6">The given certificate is invalid.</p>
+        </div>
+      ),
+      {
+        ...size,
+        fonts
+      }
+    );
+  }
 
   return new ImageResponse(
     (
-      // ImageResponse JSX element
       <div tw="bg-blue-600 text-white w-full h-full flex flex-col items-center justify-center">
-        <SentralLogo height={96} alt="MYSverse Sentral Logo" fill="white" />
-        {/* Recipient Name */}
-        <h1 tw="text-7xl font-bold mt-4">{certificate.recipientName}</h1>
-        {/* Course Name */}
-        <p tw="text-5xl mt-2">{certificate.courseName}</p>
-        {/* Certificate Type */}
-        <p tw="text-3xl mt-1">
-          {certificate.type === "ROLEPLAY" ? "MYSverse Sim" : certificate.type}
+        <SentralLogo height={128} alt="MYSverse Sentral Logo" fill="white" />
+        <h1 tw="text-7xl font-bold tracking-tight mt-12">
+          {certificate.recipientName}
+        </h1>
+        <p tw="text-5xl font-semibold tracking-tight mt-6">
+          {certificate.courseName}
         </p>
-        {/* Conditional Content Based on Type */}
-        {certificate.type === "ROLEPLAY" && (
-          <p tw="text-2xl mt-1">Roleplay Achievement</p>
-        )}
-        {certificate.type === "TEAM_RECOGNITION" && (
-          <p tw="text-2xl mt-1">Team Member</p>
-        )}
-        {certificate.type === "EXTERNAL" && (
-          <p tw="text-2xl mt-1">External Collaboration</p>
-        )}
+        <p tw="text-5xl font-medium mt-6">
+          {CertificateTypeName[certificate.type]}
+        </p>
       </div>
     ),
-    // ImageResponse options
     {
-      // For convenience, we can re-use the exported opengraph-image
-      // size config to also set the ImageResponse's width and height.
       ...size,
-      fonts: [
-        {
-          name: "Public Sans",
-          data: fontRegular,
-          style: "normal",
-          weight: 400
-        },
-        {
-          name: "Public Sans",
-          data: fontBold,
-          style: "normal",
-          weight: 600
-        }
-      ]
+      fonts
     }
   );
 }

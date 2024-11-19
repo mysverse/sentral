@@ -32,7 +32,10 @@ export async function getCertificate(id: string) {
   return data;
 }
 
-export async function getCertificateByCode(code: string) {
+export async function getCertificateByCode(code?: string) {
+  if (!code) {
+    return null;
+  }
   const data = await prisma.certificate.findUnique({
     where: { code }
   });
