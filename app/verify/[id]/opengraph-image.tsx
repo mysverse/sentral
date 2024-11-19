@@ -50,21 +50,19 @@ export default async function Image(props: Props) {
         {/* Course Name */}
         <p tw="text-5xl mt-2">{certificate.courseName}</p>
         {/* Certificate Type */}
-        <p tw="text-xl mt-1">
+        <p tw="text-3xl mt-1">
           {certificate.type === "ROLEPLAY" ? "MYSverse Sim" : certificate.type}
         </p>
         {/* Conditional Content Based on Type */}
         {certificate.type === "ROLEPLAY" && (
-          <p tw="text-lg mt-1">Roleplay Achievement</p>
+          <p tw="text-2xl mt-1">Roleplay Achievement</p>
         )}
         {certificate.type === "TEAM_RECOGNITION" && (
-          <p tw="text-lg mt-1">Team Member</p>
+          <p tw="text-2xl mt-1">Team Member</p>
         )}
         {certificate.type === "EXTERNAL" && (
-          <p tw="text-lg mt-1">External Collaboration</p>
+          <p tw="text-2xl mt-1">External Collaboration</p>
         )}
-        {/* Certificate Code */}
-        <p tw="text-lg mt-4">Code: {certificate.code}</p>
       </div>
     ),
     // ImageResponse options
