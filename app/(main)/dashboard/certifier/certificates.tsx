@@ -192,7 +192,7 @@ function CertificateDocument({
   // Modify the certificate content based on the type
   let description = "";
   if (type === "ROLEPLAY") {
-    description = `This certifies that Roblox user ${recipientName} (ID: ${robloxUserID}) has achieved ${courseName} certification within the MYSverse Sim roleplay community.`;
+    description = `This certifies that Roblox user ${recipientName} (ID: ${robloxUserID}) has achieved ${courseName} certification within the MYSverse Sim virtual roleplay community. This certificate should not imply any real-world qualifications or achievements outside of its intended context.`;
   } else if (type === "TEAM_RECOGNITION") {
     description = `This certificate recognizes ${recipientName} (User ID: ${recipientUserID}) for their outstanding contribution as a ${courseName} in MYSverse.`;
   } else if (type === "EXTERNAL") {
