@@ -3,24 +3,23 @@ import { ImageResponse } from "next/og";
 
 // Image metadata
 export const alt = "Certificate Information";
+
 export const size = {
   width: 1200,
   height: 630
 };
 
 export const contentType = "image/png";
-export const dynamic = "force-dynamic";
+
+type Props = { params: { id: string } };
+
+function getCodeFromProps(props: Props) {
+  return props.params.id.toUpperCase().trim();
+}
 
 // Image generation
-export default async function Image({
-  searchParams
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const code =
-    typeof searchParams.code === "string"
-      ? searchParams.code.toUpperCase().trim()
-      : undefined;
+export default async function Image(props: Props) {
+  const code = getCodeFromProps(props);
 
   if (typeof code !== "string") {
     return undefined;
@@ -38,6 +37,8 @@ export default async function Image({
   const interSemiBold = fetch("/fonts/public_sans/PublicSans-Regular.ttf").then(
     (res) => res.arrayBuffer()
   );
+
+  console.log("image generating...");
 
   return new ImageResponse(
     (

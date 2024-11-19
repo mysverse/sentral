@@ -1,24 +1,24 @@
 "use client";
 
 import { motion } from "motion/react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+// import { usePathname } from "next/navigation";
+// import { useEffect, useState } from "react";
 import Link from "next/link";
 import SentralLogo from "public/img/MYSverse_Sentral_Logo.svg";
 
 export default function Template({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const code = searchParams.get("code");
-  const [key, setKey] = useState(0);
+  // const pathname = usePathname();
+  // const searchParams = useSearchParams();
+  // const code = searchParams.get("code");
+  // const [key, setKey] = useState(0);
 
-  useEffect(() => {
-    setKey((prevKey) => prevKey + 1);
-  }, [pathname, code]);
+  // useEffect(() => {
+  //   setKey((prevKey) => prevKey + 1);
+  // }, [pathname]);
 
   return (
     <motion.div
-      key={key}
+      // key={key}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ ease: "easeOut", duration: 1 }}

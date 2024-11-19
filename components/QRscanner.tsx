@@ -25,7 +25,13 @@ export default function QRCodeScanner() {
       for (const detectedCode of detectedCodes) {
         const text = detectedCode.rawValue;
         const url = new URL(text);
-        const urlCode = url.searchParams.get("code");
+        let urlCode = url.searchParams.get("code");
+
+        if (!urlCode) {
+          const pathSegments = url.pathname.split("/");
+          urlCode = pathSegments[pathSegments.length - 1];
+        }
+
         if (urlCode) {
           setCode(urlCode);
           // wait 1 second
