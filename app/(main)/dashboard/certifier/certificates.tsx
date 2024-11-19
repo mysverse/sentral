@@ -145,7 +145,7 @@ export async function exportCertificateById(id: string) {
 }
 
 function getLinkFromCode(code: string) {
-  return `https://sentral.mysver.se/verify/${code}`;
+  return `https://mys.gg/v/${code}`;
 }
 
 export async function renderCertificateById(id: string) {

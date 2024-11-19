@@ -25,6 +25,20 @@ export async function getCertificates() {
   return data;
 }
 
+export async function getCertificate(id: string) {
+  const data = await prisma.certificate.findUnique({
+    where: { id }
+  });
+  return data;
+}
+
+export async function getCertificateByCode(code: string) {
+  const data = await prisma.certificate.findUnique({
+    where: { code }
+  });
+  return data;
+}
+
 export async function checkPermissions() {
   const session = await auth();
   const userId = session?.user.id;

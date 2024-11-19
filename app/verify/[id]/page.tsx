@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import prisma from "lib/prisma";
+import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
 import Link from "next/link";
 
 type Props = { params: { id: string } };
@@ -15,9 +15,7 @@ export async function generateMetadata(
   const metadata = await parent;
   const code = getCodeFromProps(props);
   if (code) {
-    const certificate = await prisma.certificate.findUnique({
-      where: { code }
-    });
+    const certificate = await getCertificateByCode(code);
     if (certificate) {
       return {
         title: `Verified Certificate - ${certificate.courseName}`,
@@ -34,9 +32,7 @@ export async function generateMetadata(
 export default async function VerifyPage(props: Props) {
   const code = getCodeFromProps(props);
 
-  const certificate = await prisma.certificate.findUnique({
-    where: { code }
-  });
+  const certificate = await getCertificateByCode(code);
 
   return (
     <>

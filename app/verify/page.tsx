@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { permanentRedirect } from "next/navigation";
-import prisma from "lib/prisma";
+import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
 import dynamic from "next/dynamic";
 
 const QRCodeScanner = dynamic(() => import("components/QRscanner"), {
@@ -24,9 +24,7 @@ export async function generateMetadata(
   const metadata = await parent;
   const code = getCodeFromProps(props);
   if (code) {
-    const certificate = await prisma.certificate.findUnique({
-      where: { code }
-    });
+    const certificate = await getCertificateByCode(code);
     if (certificate) {
       return {
         title: `Verified Certificate - ${certificate.courseName}`,

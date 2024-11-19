@@ -1,5 +1,5 @@
+import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
 import { readFile } from "fs/promises";
-import prisma from "lib/prisma";
 import { ImageResponse } from "next/og";
 import SentralLogo from "public/img/MYSverse_Sentral_Logo.svg";
 
@@ -27,9 +27,7 @@ export default async function Image(props: Props) {
     return undefined;
   }
 
-  const certificate = await prisma.certificate.findUnique({
-    where: { code }
-  });
+  const certificate = await getCertificateByCode(code);
 
   if (!certificate) {
     return undefined;

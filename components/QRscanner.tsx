@@ -24,12 +24,26 @@ export default function QRCodeScanner() {
     if (!code) {
       for (const detectedCode of detectedCodes) {
         const text = detectedCode.rawValue;
-        const url = new URL(text);
-        let urlCode = url.searchParams.get("code");
+        let url: URL;
+        try {
+          url = new URL(text);
+        } catch {
+          continue;
+        }
 
+        const hostname = url.hostname;
+        if (!hostname.endsWith("mys.gg") && !hostname.endsWith("mysver.se")) {
+          continue;
+        }
+        let urlCode = url.searchParams.get("code");
         if (!urlCode) {
           const pathSegments = url.pathname.split("/");
-          urlCode = pathSegments[pathSegments.length - 1];
+          const lastSegment = pathSegments[pathSegments.length - 1];
+          if (pathSegments[pathSegments.length - 2] === "v") {
+            urlCode = lastSegment;
+          } else if (pathSegments[pathSegments.length - 2] === "verify") {
+            urlCode = lastSegment;
+          }
         }
 
         if (urlCode) {
