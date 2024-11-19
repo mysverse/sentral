@@ -9,6 +9,7 @@ export const size = {
 };
 
 export const contentType = "image/png";
+export const dynamic = "force-dynamic";
 
 // Image generation
 export default async function Image({
@@ -22,7 +23,7 @@ export default async function Image({
       : undefined;
 
   if (typeof code !== "string") {
-    return null;
+    return undefined;
   }
 
   const certificate = await prisma.certificate.findUnique({
@@ -30,7 +31,7 @@ export default async function Image({
   });
 
   if (!certificate) {
-    return null;
+    return undefined;
   }
 
   // Font
