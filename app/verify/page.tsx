@@ -1,3 +1,4 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import prisma from "lib/prisma";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -6,17 +7,43 @@ const QRCodeScanner = dynamic(() => import("components/QRscanner"), {
   ssr: false
 });
 
-export default async function VerifyPage({
-  searchParams
-}: {
+type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const code =
-    typeof searchParams.code === "string"
-      ? searchParams.code.toUpperCase().trim()
-      : undefined;
+};
 
-  if (typeof code !== "string") {
+function getCodeFromProps(props: Props) {
+  return typeof props.searchParams.code === "string"
+    ? props.searchParams.code.toUpperCase().trim()
+    : undefined;
+}
+
+export async function generateMetadata(
+  props: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const metadata = await parent;
+  const code = getCodeFromProps(props);
+  if (code) {
+    const certificate = await prisma.certificate.findUnique({
+      where: { code }
+    });
+    if (certificate) {
+      return {
+        title: `Verified Certificate - ${certificate.courseName}`,
+        description: `Recipient: ${certificate.recipientName}, Issued on: ${new Date(certificate.issueDate).toLocaleDateString()}`
+      };
+    }
+  }
+  return {
+    title: metadata.title,
+    description: metadata.description
+  };
+}
+
+export default async function VerifyPage(props: Props) {
+  const code = getCodeFromProps(props);
+
+  if (!code) {
     return (
       <>
         <h1 className="text-xl font-bold text-blue-600 sm:text-2xl">
