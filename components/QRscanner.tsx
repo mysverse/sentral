@@ -36,7 +36,7 @@ export default function QRCodeScanner() {
           setCode(urlCode);
           // wait 1 second
           setTimeout(() => {
-            router.push(`/verify?code=${urlCode}`);
+            router.push(`/verify/${urlCode}`);
           }, 600);
           break;
         }
@@ -51,7 +51,7 @@ export default function QRCodeScanner() {
       if (manualCode) {
         setCode(manualCode);
         setTimeout(() => {
-          router.push(`/verify?code=${manualCode}`);
+          router.push(`/verify/${manualCode}`);
         }, 600);
       }
     }
