@@ -79,7 +79,6 @@ async function getFonts() {
   ] satisfies Font[];
 }
 
-// Image generation
 export default async function Image(props: Props) {
   const code = getCodeFromProps(props);
   const [certificate, fonts] = await Promise.all([
@@ -91,9 +90,11 @@ export default async function Image(props: Props) {
     return new ImageResponse(
       (
         <div tw="bg-red-600 text-white w-full h-full flex flex-col items-center justify-center">
-          <SentralLogo height={96} alt="MYSverse Sentral Logo" fill="white" />
-          <h1 tw="text-7xl font-bold mt-6">Invalid Certificate</h1>
-          <p tw="text-4xl mt-6">The given certificate is invalid.</p>
+          <SentralLogo height={128} alt="MYSverse Sentral Logo" fill="white" />
+          <h1 tw="text-7xl font-bold tracking-tight mt-6">
+            Invalid certificate
+          </h1>
+          <p tw="text-5xl mt-6">The given certificate is invalid.</p>
         </div>
       ),
       {
