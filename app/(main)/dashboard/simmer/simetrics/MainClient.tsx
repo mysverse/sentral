@@ -23,7 +23,11 @@ function humanise(seconds: number) {
 }
 
 export default function MainClient({ data }: { data: User[] }) {
-  const defaultDate = new Date().toISOString().slice(0, 10);
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const defaultDate = `${year}-${month}-${day}`;
   const [selectedDate, setSelectedDate] = useState<string>(defaultDate);
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("10:00");
