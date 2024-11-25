@@ -4,13 +4,13 @@ import { createElement, useState } from "react";
 import { ClockIcon } from "@heroicons/react/20/solid";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Button } from "components/catalyst/button";
-import { Avatar } from "components/catalyst/avatar";
 import { injectOwnershipAndThumbnailsIntoPayoutRequests } from "utils/finsys";
 import { updatePayoutRequest } from "actions/updatePayout";
 import clsx from "clsx";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import Markdown from "react-markdown";
+import Image from "next/image";
 
 const statuses: { [key: string]: string } = {
   pending: "text-yellow-700",
@@ -141,24 +141,35 @@ function PayoutRequestsTable({
             {(itemList.length > 0 || ownershipList.length > 0) && (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">List of items</h3>
-                <ul className="mt-1 break-words text-sm text-gray-600">
+                <ul className="0 mt-1 break-words text-sm">
                   {ownershipList
                     ? ownershipList.map((val, index) => {
                         return (
-                          <li key={val.id}>
-                            <div className="flex flex-row items-center space-x-1">
-                              <div>{index + 1}.</div>
+                          <li
+                            key={val.id}
+                            className="rounded-xl px-0 text-gray-600 transition hover:bg-blue-600 hover:text-white sm:px-1"
+                          >
+                            <Link
+                              target="_blank"
+                              href={`https://roblox.com/catalog/${val.id}`}
+                              className="flex flex-col items-center space-x-1 sm:flex-row"
+                            >
+                              <div className="hidden sm:block">
+                                {index + 1}.
+                              </div>
                               {val.thumbnail && (
-                                <Avatar
-                                  className="size-12 scale-125 sm:size-16"
+                                <Image
+                                  alt={"thumbnail"}
+                                  width={512}
+                                  height={512}
+                                  className="size-24 scale-125 border-0 sm:size-16"
                                   src={val.thumbnail}
-                                  square
                                 />
                               )}
-                              <Link
-                                href={`https://roblox.com/catalog/${val.id}`}
-                                className="flex flex-col font-medium"
-                              >
+                              <div className="flex flex-col text-center font-medium sm:text-left">
+                                <div className="block font-bold sm:hidden">
+                                  {index + 1}
+                                </div>
                                 <div>
                                   {val.assetData ? val.assetData.name : val.id}
                                 </div>
@@ -168,14 +179,17 @@ function PayoutRequestsTable({
                                 <span className="text-[0.7rem] font-normal uppercase tracking-wide">
                                   {val.assetData?.creatorName}
                                 </span>
-                              </Link>
-                            </div>
+                              </div>
+                            </Link>
                           </li>
                         );
                       })
                     : itemList.map((val) => {
                         return (
-                          <li key={val}>
+                          <li
+                            key={val}
+                            className="group rounded-xl transition hover:bg-blue-600 hover:text-white"
+                          >
                             <Link href={val}>{val}</Link>
                           </li>
                         );
