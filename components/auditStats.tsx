@@ -1,6 +1,7 @@
 import Spinner from "./spinner";
 import humanizeDuration from "humanize-duration";
 import { useAuditStats } from "./swr";
+import CountUp from "react-countup";
 
 export default function AuditStats() {
   const {
@@ -37,7 +38,13 @@ export default function AuditStats() {
               accuracy rate (DAR)*
             </dt>
             <dd className="order-1 text-xl font-extrabold text-slate-700 sm:text-2xl">
-              {`${percentage.toFixed(2)}%`}
+              <CountUp
+                end={percentage}
+                enableScrollSpy={true}
+                scrollSpyOnce={true}
+                decimals={2}
+                suffix="%"
+              />
             </dd>
           </div>
           <div className="flex flex-col">
@@ -61,10 +68,13 @@ export default function AuditStats() {
               correct* decisions
             </dt>
             <dd className="order-1 text-xl font-extrabold text-slate-700 sm:text-2xl">
-              {(stats.dar.valid
-                ? stats.dar.valid.correct
-                : stats.dar.correct
-              ).toLocaleString()}
+              <CountUp
+                end={
+                  stats.dar.valid ? stats.dar.valid.correct : stats.dar.correct
+                }
+                enableScrollSpy={true}
+                scrollSpyOnce={true}
+              />
             </dd>
           </div>
           <div className="flex flex-col">
@@ -72,10 +82,15 @@ export default function AuditStats() {
               wrong* decisions
             </dt>
             <dd className="order-1 text-xl font-extrabold text-slate-700 sm:text-2xl">
-              {(stats.dar.valid
-                ? stats.dar.valid.total - stats.dar.valid.correct
-                : stats.dar.total - stats.dar.correct
-              ).toLocaleString()}
+              <CountUp
+                end={
+                  stats.dar.valid
+                    ? stats.dar.valid.total - stats.dar.valid.correct
+                    : stats.dar.total - stats.dar.correct
+                }
+                enableScrollSpy={true}
+                scrollSpyOnce={true}
+              />
             </dd>
           </div>
         </div>

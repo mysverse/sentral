@@ -32,6 +32,7 @@ import {
   getSeatParties,
   getStatsObject
 } from "./_utils/chartUtils";
+import CountUp from "react-countup";
 
 ChartJS.register(
   ArcElement,
@@ -69,7 +70,11 @@ function Stats1({ stats }: { stats: InvoteStatsTimestamp[] }) {
             {item.name === "ROSAK" ? "Invalid" : item.name}
           </dt>
           <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-            {item.stat}
+            <CountUp
+              end={item.stat}
+              enableScrollSpy={true}
+              scrollSpyOnce={true}
+            />
           </dd>
         </div>
       ))}
@@ -101,7 +106,11 @@ function Stats3({ stats }: { stats: InvoteStatsTimestamp[] }) {
             {item.name === "ROSAK" ? "Invalid" : item.name}
           </dt>
           <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-            {item.stat}
+            <CountUp
+              end={item.stat}
+              enableScrollSpy={true}
+              scrollSpyOnce={true}
+            />
           </dd>
         </div>
       ))}
