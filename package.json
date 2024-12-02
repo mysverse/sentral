@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start -p 4300",
     "lint": "next lint",
-    "migrate": "dotenv -e .env.local prisma migrate dev",
+    "migrate:dev": "dotenv -e .env.local prisma migrate dev",
+    "migrate:deploy": "dotenv -e .env.local prisma migrate deploy",
     "format": "prettier --config .prettierrc \"{pages,components}/**/*.{ts,tsx}\" --write",
-    "knip": "knip"
+    "knip": "knip",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
