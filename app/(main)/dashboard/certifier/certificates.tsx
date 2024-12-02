@@ -19,6 +19,7 @@ import {
 } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
 import { CertificateType } from "@prisma/client";
+import path from "path";
 
 // Create an instance of Tailwind CSS for React-PDF
 const tw = createTw({
@@ -130,7 +131,7 @@ Font.register({
       fontWeight: 900,
       fontStyle: "italic"
     }
-  ]
+  ].map((f) => ({ ...f, src: path.join(process.cwd(), f.src) }))
 });
 
 export async function exportCertificateById(id: string) {
