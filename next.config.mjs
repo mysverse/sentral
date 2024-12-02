@@ -73,6 +73,12 @@ export default withBundleAnalyzer(
       // Modify the file loader rule to ignore *.svg, since we have it handled now.
       fileLoaderRule.exclude = /\.svg$/i;
       return config;
+    },
+    experimental: {
+      outputFileTracingIncludes: {
+        "/api/certifier/[id]": ["./public/fonts/**/*"],
+        "/verify/[id]/opengraph-image": ["./public/fonts/**/*"]
+      }
     }
   })
 );
