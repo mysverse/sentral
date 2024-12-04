@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import { useEffect, useState } from "react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
 export default function LoginElement() {
@@ -22,7 +22,6 @@ export default function LoginElement() {
 
   return (
     <div className="relative flex h-full items-center justify-center">
-      <Toaster />
       <Transition
         as="div"
         show={authenticating}

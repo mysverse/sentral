@@ -15,7 +15,10 @@ export default function DefaultLayout({
       className={clsx("h-full bg-slate-200", publicSans.className)}
     >
       <body className="h-full">
-        <Toaster />
+        <Toaster
+          richColors
+          toastOptions={{ className: publicSans.className }}
+        />
         <Navigation />
         <main className="min-h-[55vh]">
           <div className="-mt-32">{children}</div>
