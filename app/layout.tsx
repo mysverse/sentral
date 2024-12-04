@@ -1,8 +1,9 @@
 import "../styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
-import { SessionProvider } from "components/SessionProvider";
+
 import PlausibleProvider from "next-plausible";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const APP_NAME = "MYSverse Sentral";
 const APP_DEFAULT_TITLE = "Sentral";
@@ -47,7 +48,7 @@ export default function RootLayout({
       customDomain="https://plausible.yan.gg"
       exclude="/auth/*"
     >
-      <SessionProvider>{children}</SessionProvider>
+      <ClerkProvider>{children}</ClerkProvider>
     </PlausibleProvider>
   );
 }

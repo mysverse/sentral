@@ -1,13 +1,48 @@
 "use client";
 
 import { Transition } from "@headlessui/react";
-import SignInButton from "components/signIn";
+// import SignInButton from "components/signIn";
 import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
+import { SignedOut, SignedIn, UserButton, SignInButton } from "@clerk/nextjs";
+
+import { useUser } from "@clerk/nextjs";
+
+const UserProfile = () => {
+  const { user } = useUser();
+
+  useEffect(() => {
+    console.log(user?.externalAccounts);
+  });
+
+  // Access social accounts
+  const robloxAccount = user?.externalAccounts?.find(
+    (account) => account.provider === "custom_roblox"
+  );
+
+  const discordAccount = user?.externalAccounts?.find(
+    (account) => account.provider === "discord"
+  );
+
+  return (
+    <div>
+      {discordAccount ? (
+        <p>Your Discord User ID: {discordAccount.providerUserId}</p>
+      ) : (
+        <p>Discord is not connected.</p>
+      )}
+      {robloxAccount ? (
+        <p>Your Roblox User ID: {robloxAccount.providerUserId}</p>
+      ) : (
+        <p>Roblox is not connected.</p>
+      )}
+    </div>
+  );
+};
 
 export default function LoginElement() {
   const [authenticating, setAuthenticating] = useState<boolean>(false);
@@ -83,7 +118,14 @@ export default function LoginElement() {
             </p>
           </div>
           <div className="mt-10">
-            <div
+            <UserProfile />
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            {/* <div
               onClick={() => {
                 // setShow(false);
                 setAuthenticating(true);
@@ -91,7 +133,7 @@ export default function LoginElement() {
               className="mt-6 grid grid-cols-1 gap-4"
             >
               <SignInButton />
-            </div>
+            </div> */}
           </div>
 
           <p className="mt-10 text-sm leading-6 text-gray-300">

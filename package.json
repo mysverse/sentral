@@ -12,6 +12,7 @@
     "knip": "knip"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.5.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@next/bundle-analyzer": "^14.2.18",
