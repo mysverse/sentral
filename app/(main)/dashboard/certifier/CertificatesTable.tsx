@@ -2,7 +2,7 @@
 
 import type { getCertificates } from "./utils";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { deleteCertificate } from "./actions";
 import Link from "next/link";
 import ConfirmationDialog from "components/ConfirmationDialog";

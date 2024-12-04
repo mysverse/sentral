@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { generateCertificate } from "./actions";
 import Link from "next/link";
 import clsx from "clsx";

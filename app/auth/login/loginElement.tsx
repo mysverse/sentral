@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
 export default function LoginElement() {

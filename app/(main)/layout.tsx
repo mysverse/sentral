@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import Footer from "components/footer";
 import Navigation from "components/nav";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { publicSans } from "styles/fonts";
 
 export default function DefaultLayout({
