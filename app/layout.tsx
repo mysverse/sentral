@@ -51,5 +51,3 @@ export default function RootLayout({
     </PlausibleProvider>
   );
 }
-
-export const runtime = process.env.CF_PAGES === "1" ? "edge" : "nodejs";

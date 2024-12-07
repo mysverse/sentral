@@ -22,17 +22,22 @@ export default function Template({ children }: { children: React.ReactNode }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ ease: "easeOut", duration: 1 }}
-      className="mx-4 flex grow flex-col items-center gap-2 rounded-lg bg-white px-5 py-6 text-center shadow-lg sm:min-w-96 sm:grow-0 sm:gap-4 sm:px-8"
     >
-      <Link href={"/"} className="transition hover:opacity-80" passHref={true}>
-        <SentralLogo
-          height={43}
-          width={128}
-          alt="MYSverse Sentral Logo"
-          className="fill-blue-600"
-        />
-      </Link>
-      {children}
+      <div className="mx-4 flex grow flex-col items-center gap-2 rounded-lg bg-white px-5 py-6 text-center shadow-lg sm:min-w-96 sm:grow-0 sm:gap-4 sm:px-8">
+        <Link
+          href={"/"}
+          className="transition hover:opacity-80"
+          passHref={true}
+        >
+          <SentralLogo
+            height={43}
+            width={128}
+            alt="MYSverse Sentral Logo"
+            className="fill-blue-600"
+          />
+        </Link>
+        {children}
+      </div>
     </motion.div>
   );
 }

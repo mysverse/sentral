@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-
+import React, { useActionState, useEffect, useState } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { submitPayoutRequest } from "actions/submitPayout";
-import { useFormState, useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import Link from "next/link";
 import clsx from "clsx";
@@ -154,8 +152,10 @@ function Checklist() {
 }
 
 function PayoutRequestComponent() {
-  const [state, formAction] = useFormState(submitPayoutRequest, initialState);
-  const { pending } = useFormStatus();
+  const [state, formAction, pending] = useActionState(
+    submitPayoutRequest,
+    initialState
+  );
   const [agency, setAgency] = useState<string>();
   const [category, setCategory] = useState<string>();
   const [amount, setAmount] = useState<number>();

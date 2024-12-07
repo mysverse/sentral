@@ -1,6 +1,6 @@
 "use client";
 
-import { SVGProps } from "react";
+import { JSX, SVGProps } from "react";
 import { isStandalonePWA } from "./utils";
 import Link from "next/link";
 

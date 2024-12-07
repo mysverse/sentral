@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { useOpenCollectiveMemberStats } from "./swr";
 

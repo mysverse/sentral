@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 
 const useTabVisibility = (): boolean => {
   const [isTabVisible, setIsTabVisible] = useState<boolean>(
-    document.visibilityState === "visible"
+    typeof document !== "undefined"
+      ? document.visibilityState === "visible"
+      : false
   );
 
   useEffect(() => {
