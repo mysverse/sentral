@@ -4,6 +4,7 @@ import {
 } from "components/apiTypes";
 import { endpoints } from "components/constants/endpoints";
 import { extractRobloxIDs } from "./roblox";
+import { redis } from "lib/redis";
 
 const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
@@ -58,14 +59,23 @@ const ROBLOSECURITY = process.env.ROBLOSECURITY;
 
 // Function to fetch asset details from the catalog
 async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
-  let retries = 0;
-  const maxRetries = 3;
+  // Replace individual redis.get with mget
+  const assetKeys = assetIds.map((id) => `asset:${id}`);
+  const assetData = await redis.mget<(ItemDetail | "None")[]>(...assetKeys);
 
-  let csrf: string | undefined;
+  if (assetData.every((item) => item !== "None")) {
+    console.log("All assets found in cache");
+    return assetData;
+  }
 
   if (assetIds.length === 0) {
     return [];
   }
+
+  let retries = 0;
+  const maxRetries = 3;
+
+  let csrf = await redis.get<string>("x-csrf-token");
 
   while (retries < maxRetries) {
     const url = "https://catalog.roblox.com/v1/catalog/items/details";
@@ -106,7 +116,7 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
 
     const data: AssetDetailResponse = await response.json();
 
-    return data.data.map((item) => ({
+    const returnData = data.data.map((item) => ({
       id: item.id,
       itemType: item.itemType,
       name: item.name,
@@ -114,6 +124,15 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
       creatorTargetId: item.creatorTargetId,
       creatorName: item.creatorName
     }));
+
+    // Replace individual redis.set with mset
+    const assetDataToCache: Record<string, string> = {};
+    returnData.forEach((item) => {
+      assetDataToCache[`asset:${item.id}`] = JSON.stringify(item);
+    });
+    await redis.mset(assetDataToCache);
+
+    return returnData;
   }
 
   throw new Error("Unable to get CSRF token while fetching asset details");
@@ -134,14 +153,25 @@ interface RobloxThumbnailAssetApiResponse {
 }
 
 async function fetchUserData(userIds: number[]) {
-  interface RobloxUserResponse {
-    data: {
-      hasVerifiedBadge: boolean;
-      id: number;
-      name: string;
-      displayName: string;
-    }[];
+  interface RobloxUser {
+    hasVerifiedBadge: boolean;
+    id: number;
+    name: string;
+    displayName: string;
   }
+  interface RobloxUserResponse {
+    data: RobloxUser[];
+  }
+
+  // Replace individual redis.get with mget
+  const userKeys = userIds.map((id) => `user:${id}`);
+  const userData = await redis.mget<(RobloxUser | "None")[]>(...userKeys);
+  console.log(userData);
+  if (userData.every((item) => item !== "None")) {
+    console.log("All users found in cache");
+    return { data: userData };
+  }
+
   const response = await fetch(`https://users.roblox.com/v1/users`, {
     method: "POST",
     // cache: "force-cache",
@@ -155,12 +185,31 @@ async function fetchUserData(userIds: number[]) {
 
   const data: RobloxUserResponse = await response.json();
 
+  // Replace individual redis.set with mset
+  const userDataToCache: Record<string, string> = {};
+  data.data.forEach((item) => {
+    userDataToCache[`user:${item.id}`] = JSON.stringify(item);
+  });
+  await redis.mset(userDataToCache);
+
   return data;
 }
 
 async function fetchThumbnails(assetIds: number[]) {
   let retries = 0;
   const maxRetries = 3;
+
+  type ThumbnailData = RobloxThumbnailAssetApiResponse["data"][number];
+
+  // Replace individual redis.get with mget
+  const thumbnailKeys = assetIds.map((id) => `thumbnail:${id}`);
+  const thumbnailData = await redis.mget<(ThumbnailData | "None")[]>(
+    ...thumbnailKeys
+  );
+  if (thumbnailData.every((item) => item !== "None")) {
+    console.log("All thumbnails found in cache");
+    return { data: thumbnailData };
+  }
 
   if (assetIds.length === 0) {
     return { data: [] };
@@ -182,6 +231,13 @@ async function fetchThumbnails(assetIds: number[]) {
 
     if (response.ok) {
       const data: RobloxThumbnailAssetApiResponse = await response.json();
+      // Replace individual redis.set with mset
+      const thumbnailDataToCache: Record<string, string> = {};
+      data.data.forEach((item) => {
+        thumbnailDataToCache[`thumbnail:${item.targetId}`] =
+          JSON.stringify(item);
+      });
+      await redis.mset(thumbnailDataToCache);
       return data;
     } else {
       const errorData = await response.json();
