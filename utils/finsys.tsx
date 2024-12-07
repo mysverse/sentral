@@ -61,9 +61,9 @@ const ROBLOSECURITY = process.env.ROBLOSECURITY;
 async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
   // Replace individual redis.get with mget
   const assetKeys = assetIds.map((id) => `asset:${id}`);
-  const assetData = await redis.mget<(ItemDetail | "None")[]>(...assetKeys);
+  const assetData = await redis.mget<(ItemDetail | null)[]>(...assetKeys);
 
-  if (assetData.every((item) => item !== "None")) {
+  if (assetData.every((item) => item !== null)) {
     console.log("All assets found in cache");
     return assetData;
   }
@@ -165,9 +165,8 @@ async function fetchUserData(userIds: number[]) {
 
   // Replace individual redis.get with mget
   const userKeys = userIds.map((id) => `user:${id}`);
-  const userData = await redis.mget<(RobloxUser | "None")[]>(...userKeys);
-  console.log(userData);
-  if (userData.every((item) => item !== "None")) {
+  const userData = await redis.mget<(RobloxUser | null)[]>(...userKeys);
+  if (userData.every((item) => item !== null)) {
     console.log("All users found in cache");
     return { data: userData };
   }
@@ -203,10 +202,10 @@ async function fetchThumbnails(assetIds: number[]) {
 
   // Replace individual redis.get with mget
   const thumbnailKeys = assetIds.map((id) => `thumbnail:${id}`);
-  const thumbnailData = await redis.mget<(ThumbnailData | "None")[]>(
+  const thumbnailData = await redis.mget<(ThumbnailData | null)[]>(
     ...thumbnailKeys
   );
-  if (thumbnailData.every((item) => item !== "None")) {
+  if (thumbnailData.every((item) => item !== null)) {
     console.log("All thumbnails found in cache");
     return { data: thumbnailData };
   }
