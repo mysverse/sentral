@@ -4,11 +4,14 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
+      nickname: string;
     } & DefaultSession["user"];
     accessToken: string;
     error?: "RefreshTokenError";
   }
 }
+
+const SESSION_VERSION = 1;
 
 interface RobloxProfile {
   name: string;
@@ -31,19 +34,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       issuer: "https://apis.roblox.com/oauth/",
       checks: ["pkce", "state"],
       clientId: process.env.ROBLOX_CLIENT_ID,
-      clientSecret: process.env.ROBLOX_CLIENT_SECRET
+      clientSecret: process.env.ROBLOX_CLIENT_SECRET,
       // client: {
       //   authorization_signed_response_alg: "ES256",
       //   id_token_signed_response_alg: "ES256"
       // },
-      // profile(profile) {
-      //   return {
-      //     id: profile.sub,
-      //     name: profile.preferred_username,
-      //     nickname: profile.nickname,
-      //     picture: profile.picture
-      //   };
-      // }
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.preferred_username,
+          nickname: profile.nickname,
+          picture: profile.picture
+        };
+      }
     }
   ],
   callbacks: {
@@ -52,12 +55,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const derivedProfile = profile as DerivedProfile;
       if (account) {
         token.sub = account.providerAccountId;
+        token.nickname = derivedProfile?.nickname;
         token.picture = derivedProfile?.picture;
         return {
           ...token,
           access_token: account.access_token,
           expires_at: account.expires_at,
-          refresh_token: account.refresh_token
+          refresh_token: account.refresh_token,
+          session_version: SESSION_VERSION
         };
       } else if (token.exp && Date.now() < token.exp * 1000) {
         // Subsequent logins, but the `access_token` is still valid
@@ -105,10 +110,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
     },
     async session({ session, token }) {
+      if (token.session_version !== SESSION_VERSION) {
+        throw new Error("Session expired");
+      }
       if (session.user && token.sub) {
         session.user.id = token.sub;
-        if (token.access_token && typeof token.access_token === "string") {
-          session.accessToken = token.access_token;
+        const nickname = token.nickname;
+        if (nickname && typeof nickname === "string") {
+          session.user.nickname = nickname;
+        }
+        const accessToken = token.access_token;
+        if (accessToken && typeof accessToken === "string") {
+          session.accessToken = accessToken;
         }
       }
       return session;

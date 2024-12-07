@@ -6,6 +6,7 @@ import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
 import { readFile } from "fs/promises";
 import { ImageResponse } from "next/og";
 import SentralLogo from "public/img/MYSverse_Sentral_Logo.svg";
+import path from "path";
 
 // Image metadata
 export const alt = "Certificate Information";
@@ -29,14 +30,18 @@ enum CertificateTypeName {
   EXTERNAL = "Collaboration"
 }
 
+function dir(p: string) {
+  return path.join(process.cwd(), p);
+}
+
 async function getFonts() {
   const [fontRegular, fontBold, fontMedium, fontSemibold, fontLight] =
     await Promise.all([
-      readFile("public/fonts/public_sans/PublicSans-Regular.ttf"),
-      readFile("public/fonts/public_sans/PublicSans-Bold.ttf"),
-      readFile("public/fonts/public_sans/PublicSans-Medium.ttf"),
-      readFile("public/fonts/public_sans/PublicSans-SemiBold.ttf"),
-      readFile("public/fonts/public_sans/PublicSans-Light.ttf")
+      readFile(dir("public/fonts/public_sans/PublicSans-Regular.ttf")),
+      readFile(dir("public/fonts/public_sans/PublicSans-Bold.ttf")),
+      readFile(dir("public/fonts/public_sans/PublicSans-Medium.ttf")),
+      readFile(dir("public/fonts/public_sans/PublicSans-SemiBold.ttf")),
+      readFile(dir("public/fonts/public_sans/PublicSans-Light.ttf"))
     ]);
 
   interface Font {

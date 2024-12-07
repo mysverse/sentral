@@ -2,10 +2,11 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
 import Link from "next/link";
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-function getCodeFromProps(props: Props) {
-  return props.params.id.toUpperCase().trim();
+async function getCodeFromProps(props: Props) {
+  const params = await props.params;
+  return params.id.toUpperCase().trim();
 }
 
 export async function generateMetadata(
@@ -13,7 +14,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const metadata = await parent;
-  const code = getCodeFromProps(props);
+  const code = await getCodeFromProps(props);
   if (code) {
     const certificate = await getCertificateByCode(code);
     if (certificate) {
@@ -30,7 +31,7 @@ export async function generateMetadata(
 }
 
 export default async function VerifyPage(props: Props) {
-  const code = getCodeFromProps(props);
+  const code = await getCodeFromProps(props);
 
   const certificate = await getCertificateByCode(code);
 

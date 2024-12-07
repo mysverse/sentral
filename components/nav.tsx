@@ -18,7 +18,10 @@ export default async function Navigation() {
   }
 
   const avatar = session?.user.name ? (
-    <RobloxAvatarDisplay image={session?.user.image} name={session.user.name} />
+    <RobloxAvatarDisplay
+      image={session?.user.image}
+      name={session.user.nickname}
+    />
   ) : null;
 
   return <NavMenu avatar={avatar} sim={sim} />;

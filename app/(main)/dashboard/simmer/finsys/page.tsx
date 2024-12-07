@@ -1,13 +1,7 @@
 // import { getLeaderboardData, getMysverseData } from "components/fetcher";
 import { auth } from "auth";
-import dynamic from "next/dynamic";
 
-const PayoutRequestComponent = dynamic(
-  () => import("./_components/FinsysPage"),
-  {
-    ssr: false
-  }
-);
+import PayoutRequestComponent from "./_components/FinsysPage";
 import DefaultTransitionLayout from "components/transition";
 import {
   getPendingRequests,

@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { Toaster } from "sonner";
 import { publicSans } from "styles/fonts";
 
 export default function DefaultLayout({
@@ -14,7 +15,13 @@ export default function DefaultLayout({
         publicSans.className
       )}
     >
-      <body className="h-full">{children}</body>
+      <body className="h-full">
+        <Toaster
+          richColors
+          toastOptions={{ className: publicSans.className }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

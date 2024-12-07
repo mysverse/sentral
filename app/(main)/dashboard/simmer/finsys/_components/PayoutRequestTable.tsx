@@ -7,7 +7,7 @@ import { Button } from "components/catalyst/button";
 import { injectOwnershipAndThumbnailsIntoPayoutRequests } from "utils/finsys";
 import { updatePayoutRequest } from "actions/updatePayout";
 import clsx from "clsx";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import Image from "next/image";
@@ -133,9 +133,23 @@ function PayoutRequestsTable({
             )}
             <div className="mt-2">
               <h3 className="text-sm font-semibold">Reason</h3>
-              <div className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
-                <Markdown>{removeRobloxLinks(request.reason)}</Markdown>
-              </div>
+              <Markdown
+                className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600"
+                // disallowedElements={["code"]}
+                components={{
+                  code: ({ className, children }) => {
+                    return (
+                      <code
+                        className={clsx(className, "block overflow-x-auto")}
+                      >
+                        {children}
+                      </code>
+                    );
+                  }
+                }}
+              >
+                {removeRobloxLinks(request.reason)}
+              </Markdown>
             </div>
 
             {(itemList.length > 0 || ownershipList.length > 0) && (

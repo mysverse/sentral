@@ -1,19 +1,17 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { permanentRedirect } from "next/navigation";
 import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
-import dynamic from "next/dynamic";
 
-const QRCodeScanner = dynamic(() => import("components/QRscanner"), {
-  ssr: false
-});
+import QRCodeScanner from "components/QRscanner";
 
 type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-function getCodeFromProps(props: Props) {
-  return typeof props.searchParams.code === "string"
-    ? props.searchParams.code.toUpperCase().trim()
+async function getCodeFromProps(props: Props) {
+  const searchParams = await props.searchParams;
+  return typeof searchParams.code === "string"
+    ? searchParams.code.toUpperCase().trim()
     : undefined;
 }
 
@@ -22,7 +20,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const metadata = await parent;
-  const code = getCodeFromProps(props);
+  const code = await getCodeFromProps(props);
   if (code) {
     const certificate = await getCertificateByCode(code);
     if (certificate) {
@@ -39,7 +37,7 @@ export async function generateMetadata(
 }
 
 export default async function VerifyPage(props: Props) {
-  const code = getCodeFromProps(props);
+  const code = await getCodeFromProps(props);
   if (code) {
     permanentRedirect(`/verify/${code}`);
   }

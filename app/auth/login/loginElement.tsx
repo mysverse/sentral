@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 import { SignedOut, SignedIn, UserButton, SignInButton } from "@clerk/nextjs";
 
@@ -57,7 +57,6 @@ export default function LoginElement() {
 
   return (
     <div className="relative flex h-full items-center justify-center">
-      <Toaster />
       <Transition
         as="div"
         show={authenticating}

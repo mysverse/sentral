@@ -30,7 +30,7 @@ export default function RobloxAvatarDisplay({
         )}
         <div className="ml-3 mr-0 text-left lg:ml-0 lg:mr-3 lg:text-right">
           <p className="text-base font-medium text-white lg:text-sm">
-            {`@${name}`}
+            {`${name}`}
           </p>
           <p className="font-regular text-sm text-white lg:text-xs">Sign out</p>
         </div>
