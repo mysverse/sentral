@@ -9,10 +9,8 @@ export const metadata = {
 
 export default async function Main() {
   const session = await auth();
-
-  if (!session) {
-    return null;
-  }
+  const userIdString = session?.user.id;
+  const userId = userIdString ? parseInt(userIdString) : undefined;
 
   const [leaderboardData, weeklyData, schoolData, foodData, mysverseData] =
     await Promise.all([
@@ -20,10 +18,8 @@ export default async function Main() {
       getLeaderboardData("weekly"),
       getLeaderboardData("school"),
       getLeaderboardData("food"),
-      getMysverseData(parseInt(session.user.id))
+      userId ? getMysverseData(userId) : undefined
     ]);
-
-  // const testId = 31585182;
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
@@ -39,7 +35,22 @@ export default async function Main() {
         <LebuhrayaLeaderboard limit={10} data={foodData} type="food" />
       </div>
       <div className="mt-8">
-        <MysverseStats data={mysverseData} />
+        {mysverseData ? (
+          <MysverseStats data={mysverseData} />
+        ) : (
+          <>
+            <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+              <div className="text-center">
+                <h1 className="text-3xl font-extrabold text-gray-900">
+                  Roblox account not connected
+                </h1>
+                <p className="mt-4 text-lg text-gray-500">
+                  You must have a linked Roblox account to access this content.
+                </p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

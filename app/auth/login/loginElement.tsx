@@ -8,41 +8,7 @@ import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
-import { SignedOut, SignedIn, UserButton, SignInButton } from "@clerk/nextjs";
-
-import { useUser } from "@clerk/nextjs";
-
-const UserProfile = () => {
-  const { user } = useUser();
-
-  useEffect(() => {
-    console.log(user?.externalAccounts);
-  });
-
-  // Access social accounts
-  const robloxAccount = user?.externalAccounts?.find(
-    (account) => account.provider === "custom_roblox"
-  );
-
-  const discordAccount = user?.externalAccounts?.find(
-    (account) => account.provider === "discord"
-  );
-
-  return (
-    <div>
-      {discordAccount ? (
-        <p>Your Discord User ID: {discordAccount.providerUserId}</p>
-      ) : (
-        <p>Discord is not connected.</p>
-      )}
-      {robloxAccount ? (
-        <p>Your Roblox User ID: {robloxAccount.providerUserId}</p>
-      ) : (
-        <p>Roblox is not connected.</p>
-      )}
-    </div>
-  );
-};
+import { SignedOut, SignInButton } from "@clerk/nextjs";
 
 export default function LoginElement() {
   const [authenticating, setAuthenticating] = useState<boolean>(false);
@@ -66,7 +32,7 @@ export default function LoginElement() {
         className="absolute"
       >
         <p className="text-xl font-medium leading-6 text-white">
-          Redirecting to Roblox...
+          Redirecting to Clerk...
         </p>
       </Transition>
       <Transition
@@ -117,13 +83,16 @@ export default function LoginElement() {
             </p>
           </div>
           <div className="mt-10">
-            <UserProfile />
             <SignedOut>
-              <SignInButton />
+              <SignInButton forceRedirectUrl="/dashboard">
+                <button
+                  onClick={() => setAuthenticating(true)}
+                  className="group inline-flex w-full items-center justify-center gap-x-1.5 rounded-md bg-blue-700 px-2.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-gray-200/10 outline outline-1 outline-gray-200 transition hover:bg-white hover:text-blue-700 hover:outline-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                >
+                  Sign in with Clerk
+                </button>
+              </SignInButton>
             </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
             {/* <div
               onClick={() => {
                 // setShow(false);

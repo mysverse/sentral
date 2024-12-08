@@ -12,12 +12,13 @@ export const metadata = {
 
 export default async function Main() {
   const session = await auth();
+  const userId = session?.user.id;
 
-  if (!session) {
-    return null;
+  if (!userId) {
+    throw new Error("Not authenticated");
   }
 
-  const permissions = await getPermissions(session.user.id);
+  const permissions = await getPermissions(userId);
 
   if (permissions.canEdit) {
     const data = (await getPendingRequests()).slice(0, 20);

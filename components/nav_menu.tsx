@@ -215,7 +215,9 @@ export default function NavMenu({
                     </div>
                   </div>
                   {avatar ? (
-                    <div className="hidden lg:block">{avatar}</div>
+                    <div className="hidden w-28 flex-col items-end justify-end lg:flex">
+                      {avatar}
+                    </div>
                   ) : null}
                   <div className="flex lg:hidden">
                     {/* Mobile menu button */}
@@ -260,7 +262,9 @@ export default function NavMenu({
                       ))}
                   </div>
                   {avatar ? (
-                    <div className="block px-3 py-6 lg:hidden">{avatar}</div>
+                    <div className="flex flex-col items-center px-3 py-6 lg:hidden">
+                      {avatar}
+                    </div>
                   ) : null}
                 </div>
               </DisclosurePanel>

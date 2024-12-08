@@ -279,7 +279,7 @@ function PayoutRequestsTable({
                       if (response.error) {
                         toast.error(response.error);
                       } else if (response.message) {
-                        toast(response.message);
+                        toast.success(response.message);
                       }
 
                       setLoading(false);
@@ -310,7 +310,7 @@ function PayoutRequestsTable({
                       if (response.error) {
                         toast.error(response.error);
                       } else if (response.message) {
-                        toast(response.message);
+                        toast.success(response.message);
                       }
 
                       setLoading(false);

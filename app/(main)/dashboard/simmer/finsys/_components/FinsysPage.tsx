@@ -169,7 +169,7 @@ function PayoutRequestComponent() {
     // const message = state.message;
     const error = state.error;
     if (error) {
-      toast(error);
+      toast.error(error);
     }
   }, [state]);
 

@@ -10,6 +10,8 @@ export async function updatePayoutRequest(
   rejectionReason?: string
 ) {
   const session = await auth();
+  if (!session?.user.id) throw new Error("Unauthorized");
+
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
   if (!session || !apiKey) {
@@ -60,6 +62,6 @@ export async function updatePayoutRequest(
     // Handle successful submission
     // Optionally, mutate data or revalidate cache here
     revalidatePath("/dashboard/finsys/admin");
-    return { message: "ok" };
+    return { message: "Payout request successfully updated!" };
   }
 }
