@@ -8,9 +8,11 @@ export interface ConstituencyData {
 
 export async function getConstituencyData() {
   const response = await fetch(
-    `https://assets.mysver.se/participants_list_with_constituency.json`,
+    `https://mysverse-election.yan3321.workers.dev/`,
     {
-      cache: "force-cache"
+      next: {
+        revalidate: 60
+      }
     }
   );
   if (response.ok) {
