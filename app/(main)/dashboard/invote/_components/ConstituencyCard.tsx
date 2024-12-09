@@ -53,11 +53,11 @@ export default function ConstituencyCard({
             <p className="text-sm text-gray-500 group-hover:text-white">
               {contestant.party}
             </p>
-            {contestant.shadowCabinet && (
+            {/* {contestant.shadowCabinet && (
               <p className="mt-1 text-xs text-gray-500 group-hover:text-white">
                 {contestant.shadowCabinet}
               </p>
-            )}
+            )} */}
           </div>
         </div>
         <div className="absolute mb-2 flex h-full w-full flex-row items-end justify-end">
