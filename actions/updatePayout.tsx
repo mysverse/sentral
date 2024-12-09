@@ -10,7 +10,9 @@ export async function updatePayoutRequest(
   rejectionReason?: string
 ) {
   const session = await auth();
-  if (!session?.user.id) throw new Error("Unauthorized");
+  const userId = session?.user.id;
+  if (!userId) throw new Error("Unauthorized");
+  const approverId = parseInt(userId);
 
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
@@ -18,7 +20,7 @@ export async function updatePayoutRequest(
     throw new Error("Unauthorized or missing API key");
   }
 
-  const permissions = await getPermissions(session.user.id);
+  const permissions = await getPermissions(userId);
 
   if (!permissions.canEdit) {
     return { error: "Unauthorised user" };
@@ -29,7 +31,8 @@ export async function updatePayoutRequest(
     // userId: session.user.id,
     requestId,
     status: approved ? "approved" : "rejected",
-    rejectionReason
+    rejectionReason,
+    approverId
   };
 
   // Call the FinSys API to submit the payout request

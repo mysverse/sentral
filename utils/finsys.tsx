@@ -403,7 +403,11 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
   });
 }
 
-export async function getPendingRequests(userId?: string) {
+export async function getPendingRequests(
+  userId?: string,
+  limit?: number,
+  offset?: number
+) {
   if (!apiKey) {
     throw new Error("Missing API key for FinSys");
   }
@@ -412,6 +416,14 @@ export async function getPendingRequests(userId?: string) {
 
   if (userId) {
     url.searchParams.set("userId", userId);
+  }
+
+  if (limit) {
+    url.searchParams.set("limit", limit.toString());
+  }
+
+  if (offset) {
+    url.searchParams.set("offset", offset.toString());
   }
 
   const res = await fetch(url, {
