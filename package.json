@@ -69,5 +69,13 @@
     "prettier-plugin-tailwindcss": "^0.6.9",
     "serwist": "^9.0.11",
     "typescript": "^5.7.2"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
+      }
+    }
   }
 }
