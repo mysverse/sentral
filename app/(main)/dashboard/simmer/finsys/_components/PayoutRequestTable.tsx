@@ -38,12 +38,14 @@ function removeRobloxLinks(text: string): string {
 
 function PayoutRequestsTable({
   payoutRequests,
-  adminMode
+  adminMode,
+  altMode
 }: {
   payoutRequests: Awaited<
     ReturnType<typeof injectOwnershipAndThumbnailsIntoPayoutRequests>
   >;
   adminMode?: boolean;
+  altMode?: boolean;
 }) {
   // Icon selection based on status
   const [loading, setLoading] = useState<boolean>(false);
@@ -106,8 +108,12 @@ function PayoutRequestsTable({
             <div className="mt-1">
               {adminMode && (
                 <Link
-                  href={`https://roblox.com/users/${request.user_id}/profile`}
-                  target="_blank"
+                  href={
+                    altMode
+                      ? `https://roblox.com/users/${request.user_id}/profile`
+                      : `/dashboard/simmer/finsys/admin/${request.user_id}`
+                  }
+                  target={altMode ? "_blank" : "_self"}
                   className="text-sm font-medium text-blue-600 transition hover:underline hover:opacity-50"
                 >
                   {request.user
