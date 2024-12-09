@@ -133,13 +133,16 @@ interface AvatarResponse {
   data: AvatarData[];
 }
 
-export async function getAvatarThumbnails(userIds: number[]) {
+export async function getAvatarThumbnails(userIds: number[], size = 100) {
   const data: AvatarResponse = await fetchURL(
     `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
-      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds.join(
-        ","
-      )}&size=100x100&format=Png&isCircular=false`
-    )}`
+      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds
+        .sort()
+        .join(",")}&size=${size}x${size}&format=Png&isCircular=false`
+    )}`,
+    {
+      cache: "force-cache"
+    }
   );
 
   return data;

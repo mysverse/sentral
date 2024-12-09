@@ -14,6 +14,8 @@ export function getColourByName(name: string | null) {
       return "#d4d42b";
     case "OC/PP":
       return "#8f00ff";
+    case "GR":
+      return "#1A1F60";
     default:
       return "gray";
   }
