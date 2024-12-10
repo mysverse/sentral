@@ -5,7 +5,7 @@ import Spinner from "components/spinner";
 
 import { endpoints } from "components/constants/endpoints";
 
-async function useInvoteSeriesIdentifiers() {
+async function getInvoteSeriesIdentifiers() {
   const response = await fetch(`${endpoints.invote}/stats/series-identifiers`);
 
   if (response.ok) {
@@ -20,7 +20,7 @@ async function useInvoteSeriesIdentifiers() {
 }
 
 export default async function Page() {
-  const seriesIdentifiers = await useInvoteSeriesIdentifiers();
+  const seriesIdentifiers = await getInvoteSeriesIdentifiers();
   return (
     <>
       <InvotePage seriesIdentifiers={seriesIdentifiers} />

@@ -10,7 +10,7 @@ export function NotifyButton() {
     if (typeof window !== "undefined" && "Notification" in window) {
       setPermission(Notification.permission);
     }
-  });
+  }, []);
 
   function askNotificationPermission() {
     // Check if the browser supports notifications

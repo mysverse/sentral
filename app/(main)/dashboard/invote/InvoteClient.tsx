@@ -27,7 +27,6 @@ import dynamic from "next/dynamic";
 import {
   calculateSeats,
   frequencySort,
-  getColourByName,
   getSeatColours,
   getSeatParties,
   getStatsObject
@@ -36,7 +35,6 @@ import CountUp from "react-countup";
 
 import { toast } from "sonner";
 import useWebSocket from "react-use-websocket";
-import { url } from "inspector";
 import { mutate } from "swr";
 import useNotificationSound from "hooks/playNotificationSound";
 import { endpoints } from "components/constants/endpoints";
@@ -216,7 +214,7 @@ export default function InvotePage({
         playSound();
       }
     }
-  }, [lastMessage]);
+  }, [lastMessage, playSound, series, url]);
 
   useEffect(() => {
     if (!series && seriesIdentifiers) {

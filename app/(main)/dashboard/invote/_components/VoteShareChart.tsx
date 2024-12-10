@@ -12,10 +12,10 @@ export default function VoteShareChart({
 }: {
   stats: InvoteStatsTimestamp[];
 }) {
-  if (!stats) return null;
-
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  if (!stats) return null;
 
   const hidden = stats.some((item) => item.results.hidden);
 

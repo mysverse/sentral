@@ -129,7 +129,7 @@ export function useInvoteSeatStats(
   shouldFetch: boolean,
   seriesIdentifier?: string
 ) {
-  let url =
+  const url =
     seriesIdentifier &&
     `${endpoints.invote}/stats/seats/${encodeURIComponent(seriesIdentifier)}`;
   const { data, error } = useSWR(
