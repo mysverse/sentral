@@ -198,11 +198,11 @@ export default function InvotePage({
       const msg: Msg = JSON.parse(lastMessage.data);
 
       if (msg.s === series && msg.d && msg.d.type === "seat") {
-        const code = `P${String(msg.d.index + 1).padStart(2, "0")}`;
+        const code = `P${String(msg.d.index).padStart(2, "0")}`;
         const title = `${msg.d.party} wins ${code}`;
-        const description = `${regionNames[code]} - ${msg.d.party}`;
+        const description = `The constituency ${code} - ${regionNames[code]} has been assigned to the party ${msg.d.party}`;
         if (Notification.permission === "granted") {
-          new Notification(title, { body: description });
+          new Notification(title, { body: description, icon: "/icon.png" });
         } else {
           playSound();
           toast.info(title, {
