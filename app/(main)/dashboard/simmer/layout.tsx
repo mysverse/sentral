@@ -1,5 +1,6 @@
 import { auth } from "auth";
 import DefaultTransitionLayout from "components/transition";
+import RobloxAccountRequired from "components/robloxAccountRequired";
 import { getGroupRoles } from "utils/sim";
 
 function NoAccess() {
@@ -27,17 +28,13 @@ export default async function DefaultLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const userIdString = session?.user.id;
 
-  if (!session) {
-    return null; // Or redirect to login
+  if (!userIdString) {
+    return <RobloxAccountRequired />;
   }
 
-  const username = session.user.name;
-  const userId = parseInt(session.user.id);
-
-  if (!username) {
-    return <NoAccess />; // Or redirect to login
-  }
+  const userId = parseInt(userIdString);
 
   const groups = await getGroupRoles(userId);
   const authorised = groups.length > 0;

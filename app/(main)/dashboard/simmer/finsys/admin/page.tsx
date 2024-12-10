@@ -19,7 +19,7 @@ export default async function Main(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
 
   if (!userId) {
-    return null;
+    throw new Error("Not authenticated");
   }
 
   const permissions = await getPermissions(userId);

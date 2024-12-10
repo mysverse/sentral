@@ -2,6 +2,8 @@
 import "server-only";
 
 import { auth } from "auth";
+import { redis } from "lib/redis";
+import { cache } from "react";
 
 interface RbxGroupResponse {
   data: Datum[];
@@ -79,7 +81,9 @@ async function getUserData() {
   }
 
   const username = session.user.name;
-  const userId = parseInt(session.user.id);
+  const userId = parseInt(session.user.id!);
+
+  if (!session?.user.id) throw new Error("Unauthorized");
 
   if (!username) {
     throw new Error("No username provided");
@@ -91,14 +95,23 @@ async function getUserData() {
   };
 }
 
-export async function getGroups(userId: number) {
+export const getGroups = cache(async (userId: number) => {
+  const groups = await redis.get<RbxGroupResponse>(`groups:${userId}`);
+  if (groups) {
+    return groups;
+  }
   const response = await fetch(
-    `https://groups.roblox.com/v2/users/${userId}/groups/roles`,
-    { next: { revalidate: 60 } }
+    `https://groups.roblox.com/v2/users/${userId}/groups/roles`
   );
-  const data: RbxGroupResponse = await response.json();
-  return data;
-}
+  if (!response.ok) {
+    if (groups) return groups;
+  } else {
+    const data: RbxGroupResponse = await response.json();
+    await redis.set(`groups:${userId}`, data, { ex: 60 });
+    return data;
+  }
+  throw new Error("Failed to fetch groups");
+});
 
 export async function getGroupRoles(userId: number) {
   const groups = await getGroups(userId);

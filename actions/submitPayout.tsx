@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 
 export async function submitPayoutRequest(prevState: any, formData: FormData) {
   const session = await auth();
+  if (!session?.user.id) throw new Error("Unauthorized");
+
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
   if (!session || !apiKey) {
@@ -82,6 +84,6 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
     // Handle successful submission
     // Optionally, mutate data or revalidate cache here
     revalidatePath("/dashboard/finsys");
-    return { message: "ok" };
+    return { message: "Payout request successfully submitted!" };
   }
 }

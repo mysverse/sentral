@@ -10,14 +10,10 @@ export const metadata = {
 export default async function Page() {
   const session = await auth();
 
-  if (!session) {
-    return null; // Or redirect to login
-  }
+  const username = session?.user.name;
+  const userId = session?.user.id ? parseInt(session.user.id) : undefined;
 
-  const username = session.user.name;
-  const userId = parseInt(session.user.id);
-
-  if (!username) {
+  if (!(userId && username)) {
     return null; // Or redirect to login
   }
 

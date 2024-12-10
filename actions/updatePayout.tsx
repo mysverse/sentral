@@ -65,6 +65,6 @@ export async function updatePayoutRequest(
     // Handle successful submission
     // Optionally, mutate data or revalidate cache here
     revalidatePath("/dashboard/finsys/admin");
-    return { message: "ok" };
+    return { message: "Payout request successfully updated!" };
   }
 }
