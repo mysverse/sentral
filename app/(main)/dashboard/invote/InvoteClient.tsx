@@ -41,6 +41,7 @@ import { endpoints } from "components/constants/endpoints";
 import { addPathToUrl, replaceHttpWithWs } from "utils/ws";
 import { regionNames } from "data/invote";
 import { NotifyButton } from "components/NotifyButton";
+import { notify } from "utils/notification";
 
 ChartJS.register(
   ArcElement,
@@ -202,19 +203,7 @@ export default function InvotePage({
         const title = `${msg.d.party} wins ${code}`;
         const description = `The constituency ${code} - ${regionNames[code]} has been assigned to the party ${msg.d.party}`;
         if (Notification.permission === "granted") {
-          try {
-            new Notification(title, { body: description, icon: "/icon.png" });
-          } catch (error: unknown) {
-            if (error instanceof TypeError) {
-              console.warn("Error showing notification", error);
-            }
-            void navigator.serviceWorker.ready.then(function (registration) {
-              registration.showNotification(title, {
-                body: description,
-                icon: "/icon.png"
-              });
-            });
-          }
+          notify(title, { body: description, icon: "/icon.png" });
         } else {
           playSound();
           toast.info(title, {

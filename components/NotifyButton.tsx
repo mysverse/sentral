@@ -3,6 +3,7 @@
 import { BellAlertIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { notify } from "utils/notification";
 
 export function NotifyButton() {
   const [permission, setPermission] = useState<NotificationPermission>();
@@ -22,22 +23,10 @@ export function NotifyButton() {
     Notification.requestPermission().then((permission) => {
       setPermission(permission);
       if (permission === "granted") {
-        try {
-          new Notification("Notifications enabled for Sentral", {
-            body: "Keep the tab open to receive notifications on inVote!",
-            icon: "/icon.png"
-          });
-        } catch (error: unknown) {
-          if (error instanceof TypeError) {
-            console.warn("Error showing notification", error);
-          }
-          void navigator.serviceWorker.ready.then(function (registration) {
-            registration.showNotification("Notifications enabled for Sentral", {
-              body: "Keep the tab open to receive notifications on inVote!",
-              icon: "/icon.png"
-            });
-          });
-        }
+        notify("Notifications enabled for Sentral", {
+          body: "Keep the tab open to receive notifications on inVote!",
+          icon: "/icon.png"
+        });
       }
     });
   }
