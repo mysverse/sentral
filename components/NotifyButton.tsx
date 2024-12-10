@@ -1,5 +1,6 @@
 "use client";
 
+import { BellAlertIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 
@@ -32,12 +33,12 @@ export function NotifyButton() {
     permission !== "granted" && (
       <button
         className={clsx(
-          "rounded-md px-3 py-1 text-white transition hover:bg-white hover:text-blue-500",
+          "group rounded-md p-2.5 text-white outline-0 outline-blue-500 transition hover:bg-white hover:text-blue-500 hover:outline hover:outline-2",
           "bg-blue-500"
         )}
         onClick={askNotificationPermission}
       >
-        {"Enable notifications"}
+        <BellAlertIcon className="size-5 fill-white group-hover:fill-blue-500" />
       </button>
     )
   );

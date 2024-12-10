@@ -17,7 +17,15 @@ const useNotificationSound = (): (() => void) => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch((error: any) => {
-        console.error("Error playing sound:", error);
+        if (error instanceof Error) {
+          if (error.name === "NotAllowedError") {
+            console.warn("Browser blocked sound autoplay");
+          } else {
+            console.error("Error playing sound:", error);
+          }
+        } else {
+          console.error("Error playing sound:", error);
+        }
       });
     }
   };

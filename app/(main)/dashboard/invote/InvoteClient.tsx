@@ -10,7 +10,7 @@ import {
   BarElement
 } from "chart.js";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   InvoteSeats,
@@ -181,8 +181,10 @@ export default function InvotePage({
 
   const playSound = useNotificationSound();
 
-  useEffect(() => {
-    if (lastMessage) {
+  const lastProcessedMessage = useRef<MessageEvent | null>(null);
+
+  const handleUpdate = useCallback(
+    (lastMessage: MessageEvent) => {
       interface Msg {
         t: string;
         s: string;
@@ -196,25 +198,31 @@ export default function InvotePage({
       const msg: Msg = JSON.parse(lastMessage.data);
 
       if (msg.s === series && msg.d && msg.d.type === "seat") {
-        // construct the code in a format such as P01, P30 etc
         const code = `P${String(msg.d.index + 1).padStart(2, "0")}`;
         const title = `${msg.d.party} wins ${code}`;
         const description = `${regionNames[code]} - ${msg.d.party}`;
-        toast.info(title, {
-          // unstyled: true,
-          closeButton: true,
-          duration: Infinity,
-          description: <>{description}</>,
-          style: {
-            // backgroundColor: getColourByName(msg.d.party)
-          }
-        });
+        if (Notification.permission === "granted") {
+          new Notification(title, { body: description });
+        } else {
+          playSound();
+          toast.info(title, {
+            closeButton: true,
+            duration: Infinity,
+            description
+          });
+        }
         mutate(url);
-        new Notification(title, { body: description });
-        playSound();
       }
+    },
+    [series, url, playSound]
+  );
+
+  useEffect(() => {
+    if (lastMessage && lastMessage !== lastProcessedMessage.current) {
+      handleUpdate(lastMessage);
+      lastProcessedMessage.current = lastMessage;
     }
-  }, [lastMessage, playSound, series, url]);
+  }, [lastMessage, handleUpdate]);
 
   useEffect(() => {
     if (!series && seriesIdentifiers) {
@@ -239,7 +247,7 @@ export default function InvotePage({
                   Select a series to view the results
                 </p>
               </div>
-              <div className="py-2">
+              <div>
                 <NotifyButton />
               </div>
             </div>
