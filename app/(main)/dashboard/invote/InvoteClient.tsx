@@ -16,7 +16,6 @@ import {
   InvoteSeats,
   InvoteStatsTimestamp,
   useInvoteSeatStats,
-  useInvoteSeriesIdentifiers,
   useInvoteStats
 } from "components/swr";
 
@@ -28,11 +27,22 @@ import dynamic from "next/dynamic";
 import {
   calculateSeats,
   frequencySort,
+  getColourByName,
   getSeatColours,
   getSeatParties,
   getStatsObject
 } from "./_utils/chartUtils";
 import CountUp from "react-countup";
+
+import { toast } from "sonner";
+import useWebSocket from "react-use-websocket";
+import { url } from "inspector";
+import { mutate } from "swr";
+import useNotificationSound from "hooks/playNotificationSound";
+import { endpoints } from "components/constants/endpoints";
+import { addPathToUrl, replaceHttpWithWs } from "utils/ws";
+import { regionNames } from "data/invote";
+import { NotifyButton } from "components/NotifyButton";
 
 ChartJS.register(
   ArcElement,
@@ -147,22 +157,66 @@ function SeatsParliamentMap({
   return <ElectionSeatMap colours={frequencySort(colours)} />;
 }
 
-export default function InvotePage() {
-  const { stats: seriesIdentifiers } = useInvoteSeriesIdentifiers(true);
-
+export default function InvotePage({
+  seriesIdentifiers
+}: {
+  seriesIdentifiers: string[];
+}) {
   const [series, setSeries] = useState<string>();
 
-  const {
-    stats: stats
-    // isLoading: loading,
-    // isError: error
-  } = useInvoteStats(typeof series !== "undefined", series);
+  const { stats: stats } = useInvoteStats(
+    typeof series !== "undefined",
+    series
+  );
 
-  const {
-    stats: seatStats
-    // isLoading: seatLoading,
-    // isError: seatError
-  } = useInvoteSeatStats(typeof series !== "undefined", series);
+  const { stats: seatStats, url } = useInvoteSeatStats(
+    typeof series !== "undefined",
+    series
+  );
+
+  const { lastMessage } = useWebSocket(
+    addPathToUrl(replaceHttpWithWs(endpoints.invote!), "ws"),
+    {
+      shouldReconnect: () => true
+    }
+  );
+
+  const playSound = useNotificationSound();
+
+  useEffect(() => {
+    if (lastMessage) {
+      interface Msg {
+        t: string;
+        s: string;
+        d?: {
+          type: "seat";
+          index: number;
+          party: string;
+        };
+      }
+
+      const msg: Msg = JSON.parse(lastMessage.data);
+
+      if (msg.s === series && msg.d && msg.d.type === "seat") {
+        // construct the code in a format such as P01, P30 etc
+        const code = `P${String(msg.d.index + 1).padStart(2, "0")}`;
+        const title = `${msg.d.party} wins ${code}`;
+        const description = `${regionNames[code]} - ${msg.d.party}`;
+        toast.info(title, {
+          // unstyled: true,
+          closeButton: true,
+          duration: Infinity,
+          description: <>{description}</>,
+          style: {
+            // backgroundColor: getColourByName(msg.d.party)
+          }
+        });
+        mutate(url);
+        new Notification(title, { body: description });
+        playSound();
+      }
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     if (!series && seriesIdentifiers) {
@@ -178,13 +232,18 @@ export default function InvotePage() {
       <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
-            <div>
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
-                Election series selection
-              </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                Select a series to view the results
-              </p>
+            <div className="flex flex-row items-center justify-between">
+              <div>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  Election series selection
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Select a series to view the results
+                </p>
+              </div>
+              <div className="py-2">
+                <NotifyButton />
+              </div>
             </div>
             <div className="sm:flex sm:w-full sm:max-w-full">
               <div className="flex min-w-0 flex-1 rounded-md shadow-sm">
@@ -223,57 +282,66 @@ export default function InvotePage() {
       </div>
 
       {stats && seatStats ? (
-        <DefaultTransitionLayout show={true} appear={true}>
-          <h3 className="mb-4 mt-6 text-center text-lg font-medium text-gray-900">
-            Votes by Party
-          </h3>
+        <>
+          {" "}
+          <DefaultTransitionLayout show={stats.length > 0} appear={true}>
+            <h3 className="mb-4 mt-6 text-center text-lg font-medium text-gray-900">
+              Votes by Party
+            </h3>
 
-          {stats ? (
-            stats.some((item) => item.results.hidden) ? (
-              <h3 className="mb-4 mt-6 text-center italic text-gray-900">
-                {
-                  "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
-                }
-              </h3>
-            ) : null
-          ) : null}
+            {stats ? (
+              stats.some((item) => item.results.hidden) ? (
+                <h3 className="mb-4 mt-6 text-center italic text-gray-900">
+                  {
+                    "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
+                  }
+                </h3>
+              ) : stats.length === 0 ? (
+                <h3 className="mb-4 mt-6 text-center italic text-gray-900">
+                  {"No data available for this series."}
+                </h3>
+              ) : null
+            ) : null}
 
-          <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
-            <VoteShareChart stats={stats} />
-          </div>
-
-          <div className="sm:px-6- mb-8 mt-6">
-            <Stats1 stats={stats} />
-          </div>
-
-          <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
-            Votes by Polling Session
-          </h3>
-          <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
-            <VoteSection stats={stats} />
-          </div>
-          <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
-            Parliament Seats Distribution
-          </h3>
-          <div className="mb-8">
-            <Stats3 stats={stats} />
-          </div>
-          <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow">
-            <div className="relative flex flex-col justify-center gap-6">
-              <SeatsGeoMap stats={stats} seatStats={seatStats} />
+            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
+              <VoteShareChart stats={stats} />
             </div>
-          </div>
-          <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="rounded-lg bg-white px-5 py-8 shadow">
-              <div className="flex h-48 w-full justify-center">
-                <SeatsParliamentMap stats={stats} seatStats={seatStats} />
+
+            <div className="sm:px-6- mb-8 mt-6">
+              <Stats1 stats={stats} />
+            </div>
+
+            <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
+              Votes by Polling Session
+            </h3>
+            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
+              <VoteSection stats={stats} />
+            </div>
+          </DefaultTransitionLayout>
+          <DefaultTransitionLayout show={seatStats.length > 0} appear={true}>
+            <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
+              Parliament Seats Distribution
+            </h3>
+            <div className="mb-8">
+              <Stats3 stats={stats} />
+            </div>
+            <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow">
+              <div className="relative flex flex-col justify-center gap-6">
+                <SeatsGeoMap stats={stats} seatStats={seatStats} />
               </div>
             </div>
-            <div className="rounded-lg bg-white px-5 py-8 shadow">
-              <SeatsPieChart stats={stats} />
-            </div>
-          </dl>
-        </DefaultTransitionLayout>
+            <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div className="rounded-lg bg-white px-5 py-8 shadow">
+                <div className="flex h-48 w-full justify-center">
+                  <SeatsParliamentMap stats={stats} seatStats={seatStats} />
+                </div>
+              </div>
+              <div className="rounded-lg bg-white px-5 py-8 shadow">
+                <SeatsPieChart stats={stats} />
+              </div>
+            </dl>
+          </DefaultTransitionLayout>
+        </>
       ) : (
         <div className="sm:px-6- h-screen px-5 py-32">
           <Spinner />

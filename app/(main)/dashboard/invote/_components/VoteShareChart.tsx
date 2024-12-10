@@ -5,13 +5,17 @@ import {
   getProgressiveGrayColour,
   getColourByName
 } from "../_utils/chartUtils";
-
+import { useInView } from "motion/react";
+import { useRef } from "react";
 export default function VoteShareChart({
   stats
 }: {
   stats: InvoteStatsTimestamp[];
 }) {
   if (!stats) return null;
+
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
   const hidden = stats.some((item) => item.results.hidden);
 
@@ -26,14 +30,14 @@ export default function VoteShareChart({
 
   return (
     // {/* chart won't scale properly without width class: https://stackoverflow.com/a/70191511 */}
-    <div className="relative h-[8rem] w-[99%]">
+    <div className="relative h-[8rem] w-[99%]" ref={ref}>
       <Bar
         data={{
           labels: ["Votes"],
           datasets: newStats2.map((data, index) => ({
             barPercentage: 0.6,
             label: data.name !== "ROSAK" ? data.name : "Invalid",
-            data: [data.stat],
+            data: isInView ? [data.stat] : [],
             backgroundColor: hidden
               ? getProgressiveGrayColour(index, newStats2.length)
               : getColourByName(data.name),

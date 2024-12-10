@@ -1,16 +1,18 @@
 import { getAvatarThumbnails } from "components/fetcher";
-import { ConstituencyData } from "utils/invote";
+import { ConstituencyData, getConstituencyData } from "utils/invote";
 import { regionNames } from "data/invote";
 
 import ConstituencyCard from "./ConstituencyCard";
 
-export default async function ConstituencyList({
-  data
-}: {
-  data: ConstituencyData[];
-}) {
+import { Motion } from "components/motion";
+
+export default async function ConstituencyList() {
+  const data = await getConstituencyData();
+  if (!data) {
+    return null;
+  }
   const userIds = data.map((d) => parseInt(d.userId));
-  const thumbnails = await getAvatarThumbnails(userIds, 420);
+  const thumbnails = await getAvatarThumbnails(userIds, 352, "headshot");
 
   // Define constituency codes from P01 to P30
   const constituencies = Array.from(
@@ -26,36 +28,72 @@ export default async function ConstituencyList({
       .sort((a, b) => a.party.localeCompare(b.party));
   });
 
-  let index = 0;
-
   return (
-    <div className="mb-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-      <h1 className="mb-2 text-xl font-bold">GE22 Candidates</h1>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {constituencies.map((code) => (
-          <div key={code} className="mb-6">
-            <h2 className="mb-4 text-lg font-semibold">
-              {code} - {regionNames[code]}
-            </h2>
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {constituencies
+        .filter((code) => groupedData[code].length > 0)
+        .map((code) => (
+          <Motion
+            key={code}
+            className="mb-6"
+            initial={"hidden"}
+            whileInView={"visible"}
+            viewport={{ once: true }}
+            variants={{
+              visible: {
+                transition: {
+                  when: "beforeChildren",
+                  staggerChildren: 0.3
+                }
+              }
+            }}
+          >
+            <div className="mb-4 flex flex-row space-x-2 text-lg font-semibold">
+              <div className="flex flex-row items-center">
+                <span className="rounded bg-gray-200 px-2 py-1 text-sm">
+                  {code}
+                </span>
+              </div>
+              <div>{regionNames[code]}</div>
+            </div>
             <div className="grid grid-cols-1 gap-4">
               {groupedData[code].map((contestant) => {
-                const thumbnail =
-                  thumbnails.data.find(
-                    (t) => t.targetId === parseInt(contestant.userId)
-                  )?.imageUrl || "";
+                let thumbnail = thumbnails.find(
+                  (t) => t.targetId === parseInt(contestant.userId)
+                )?.imageUrl;
+
+                if (thumbnail?.trim() === "") {
+                  thumbnail = undefined;
+                }
+
                 return (
-                  <ConstituencyCard
+                  <Motion
                     key={contestant.userId}
-                    contestant={contestant}
-                    thumbnail={thumbnail}
-                    index={index++}
-                  />
+                    variants={{
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        transition: {
+                          ease: "easeOut",
+                          duration: 0.3
+                        }
+                      },
+                      hidden: {
+                        opacity: 0,
+                        x: -16
+                      }
+                    }}
+                  >
+                    <ConstituencyCard
+                      contestant={contestant}
+                      thumbnail={thumbnail}
+                    />
+                  </Motion>
                 );
               })}
             </div>
-          </div>
+          </Motion>
         ))}
-      </div>
     </div>
   );
 }

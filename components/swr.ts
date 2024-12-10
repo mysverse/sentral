@@ -129,6 +129,9 @@ export function useInvoteSeatStats(
   shouldFetch: boolean,
   seriesIdentifier?: string
 ) {
+  let url =
+    seriesIdentifier &&
+    `${endpoints.invote}/stats/seats/${encodeURIComponent(seriesIdentifier)}`;
   const { data, error } = useSWR(
     shouldFetch && seriesIdentifier
       ? `${endpoints.invote}/stats/seats/${encodeURIComponent(
@@ -141,7 +144,8 @@ export function useInvoteSeatStats(
   return {
     stats: data as InvoteSeats[],
     isLoading: !error && !data,
-    isError: error as Error
+    isError: error as Error,
+    url
   };
 }
 

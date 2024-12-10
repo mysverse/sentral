@@ -1,3 +1,4 @@
+import { redis } from "lib/redis";
 import {
   ApiSessionStats,
   BlacklistItem,
@@ -125,7 +126,7 @@ export async function getInvoteSeatStats(seriesIdentifier: string) {
 
 interface AvatarData {
   targetId: number;
-  state: string;
+  state: "Pending" | "Completed";
   imageUrl: string;
 }
 
@@ -133,19 +134,55 @@ interface AvatarResponse {
   data: AvatarData[];
 }
 
-export async function getAvatarThumbnails(userIds: number[], size = 100) {
-  const data: AvatarResponse = await fetchURL(
-    `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
-      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds
-        .sort()
-        .join(",")}&size=${size}x${size}&format=Png&isCircular=false`
-    )}`,
-    {
-      cache: "force-cache"
+async function fetchAvatarThumbnails(
+  userIds: number[],
+  size = 100,
+  type: "headshot" | "bust" = "headshot"
+) {
+  const url = new URL(`https://thumbnails.roblox.com/v1/users/avatar-${type}`);
+  url.searchParams.set("userIds", userIds.sort().join(","));
+  url.searchParams.set("size", `${size}x${size}`);
+  url.searchParams.set("format", "Webp");
+
+  const proxyUrl = new URL(`https://myx-proxy.yan3321.workers.dev/myxProxy/`);
+  proxyUrl.searchParams.set("apiurl", url.toString());
+
+  const response = await fetch(proxyUrl);
+
+  if (response.ok) {
+    const data: AvatarResponse = await response.json();
+    const filteredData = data.data.filter((item) => item.state === "Completed");
+    const cacheRecords: Record<string, AvatarData> = {};
+    for (const item of filteredData) {
+      cacheRecords[`avatar:${type}:${size}:${item!.targetId}`] = item;
     }
+    await redis.mset<AvatarData>(cacheRecords);
+    return data.data;
+  }
+
+  throw new Error("Failed to fetch avatar thumbnails");
+}
+
+export async function getAvatarThumbnails(
+  userIds: number[],
+  size = 100,
+  type: "headshot" | "bust" = "headshot"
+) {
+  userIds = userIds.sort();
+
+  const cachedThumbnails = await redis.mget<(AvatarData | null)[]>(
+    userIds.map((id) => `avatar:${type}:${size}:${id}`)
   );
 
-  return data;
+  const available = cachedThumbnails.filter((item) => item !== null);
+  const missingIds = userIds.filter((_, i) => !cachedThumbnails[i]);
+
+  if (missingIds.length > 0) {
+    const missingData = await fetchAvatarThumbnails(missingIds, size, type);
+    return available.concat(missingData);
+  } else {
+    return available;
+  }
 }
 
 export async function getStaffStats() {
