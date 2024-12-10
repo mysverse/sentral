@@ -7,8 +7,8 @@ export function notify(title: string, options?: NotificationOptions) {
     if (error instanceof TypeError) {
       console.warn("Error showing notification", error);
     }
-    void navigator.serviceWorker.ready.then(({ showNotification }) =>
-      showNotification(title, options)
-    );
+    void navigator.serviceWorker.ready.then(({ showNotification }) => {
+      showNotification(title, options);
+    });
   }
 }
