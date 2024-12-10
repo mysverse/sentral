@@ -156,12 +156,22 @@ function SeatsParliamentMap({
   return <ElectionSeatMap colours={frequencySort(colours)} />;
 }
 
+interface InvoteWSMessage {
+  t: string;
+  s: string;
+  d?: {
+    type: "seat";
+    index: number;
+    party: string;
+  };
+}
+
 export default function InvotePage({
   seriesIdentifiers
 }: {
   seriesIdentifiers: string[];
 }) {
-  const [series, setSeries] = useState<string>();
+  const [series, setSeries] = useState<string>(seriesIdentifiers[0]);
 
   const { stats: stats } = useInvoteStats(
     typeof series !== "undefined",
@@ -173,12 +183,11 @@ export default function InvotePage({
     series
   );
 
-  const { lastMessage } = useWebSocket(
-    addPathToUrl(replaceHttpWithWs(endpoints.invote!), "ws"),
-    {
-      shouldReconnect: () => true
-    }
-  );
+  const wsEndpoint = addPathToUrl(replaceHttpWithWs(endpoints.invote!), "ws");
+
+  const { lastMessage } = useWebSocket(wsEndpoint, {
+    shouldReconnect: () => true
+  });
 
   const playSound = useNotificationSound();
 
@@ -186,18 +195,7 @@ export default function InvotePage({
 
   const handleUpdate = useCallback(
     (lastMessage: MessageEvent) => {
-      interface Msg {
-        t: string;
-        s: string;
-        d?: {
-          type: "seat";
-          index: number;
-          party: string;
-        };
-      }
-
-      const msg: Msg = JSON.parse(lastMessage.data);
-
+      const msg: InvoteWSMessage = JSON.parse(lastMessage.data);
       if (msg.s === series && msg.d && msg.d.type === "seat") {
         const code = `P${String(msg.d.index).padStart(2, "0")}`;
         const title = `${msg.d.party} wins ${code}`;
@@ -224,15 +222,6 @@ export default function InvotePage({
       lastProcessedMessage.current = lastMessage;
     }
   }, [lastMessage, handleUpdate]);
-
-  useEffect(() => {
-    if (!series && seriesIdentifiers) {
-      const defaultSeries = seriesIdentifiers[0];
-      if (defaultSeries) {
-        setSeries(defaultSeries);
-      }
-    }
-  }, [series, seriesIdentifiers]);
 
   return (
     <>
@@ -290,12 +279,10 @@ export default function InvotePage({
 
       {stats && seatStats ? (
         <>
-          {" "}
           <DefaultTransitionLayout show={stats.length > 0} appear={true}>
             <h3 className="mb-4 mt-6 text-center text-lg font-medium text-gray-900">
               Votes by Party
             </h3>
-
             {stats ? (
               stats.some((item) => item.results.hidden) ? (
                 <h3 className="mb-4 mt-6 text-center italic text-gray-900">

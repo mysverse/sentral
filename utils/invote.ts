@@ -1,3 +1,5 @@
+import "server-only";
+
 export interface ConstituencyData {
   constituencyCode: string;
   username: string;
