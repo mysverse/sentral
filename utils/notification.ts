@@ -9,14 +9,9 @@ export async function notify(title: string, options?: NotificationOptions) {
     }
     try {
       const registration = await navigator.serviceWorker.ready;
-      const { showNotification, pushManager } = registration;
-      let subscription = await pushManager.getSubscription();
-      if (!subscription) {
-        subscription = await pushManager.subscribe();
-      }
-      showNotification(title, options);
-    } catch (e) {
-      console.error("Error showing notification via service worker", e);
+      registration.showNotification(title, options);
+    } catch (error: unknown) {
+      console.error("Error showing notification via service worker", error);
     }
   }
 }
