@@ -202,7 +202,19 @@ export default function InvotePage({
         const title = `${msg.d.party} wins ${code}`;
         const description = `The constituency ${code} - ${regionNames[code]} has been assigned to the party ${msg.d.party}`;
         if (Notification.permission === "granted") {
-          new Notification(title, { body: description, icon: "/icon.png" });
+          try {
+            new Notification(title, { body: description, icon: "/icon.png" });
+          } catch (error: unknown) {
+            if (error instanceof TypeError) {
+              console.warn("Error showing notification", error);
+            }
+            void navigator.serviceWorker.ready.then(function (registration) {
+              registration.showNotification(title, {
+                body: description,
+                icon: "/icon.png"
+              });
+            });
+          }
         } else {
           playSound();
           toast.info(title, {
