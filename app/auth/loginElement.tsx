@@ -1,5 +1,4 @@
 import { Transition } from "@headlessui/react";
-import { SignIn } from "@clerk/nextjs";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 
@@ -21,16 +20,6 @@ export default function LoginElement() {
           <div>
             <Logo className="md:h-18 h-16 w-auto fill-white" />
           </div>
-          <SignIn
-            appearance={{
-              layout: {
-                logoPlacement: "none",
-                termsPageUrl: "/terms-of-service",
-                privacyPageUrl: "/privacy-policy"
-              },
-              variables: { colorPrimary: "rgb(59, 130, 246)" }
-            }}
-          />
         </div>
       </Transition>
     </div>

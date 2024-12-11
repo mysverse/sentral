@@ -1,4 +1,4 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 import { Transition } from "@headlessui/react";
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 
@@ -17,7 +17,7 @@ export default function LoginContent() {
     >
       <div className="md:mb-18 mb-16 flex flex-col items-center gap-y-6">
         <Logo className="md:h-18 h-16 w-auto fill-white" />
-        <SignIn
+        <SignUp
           appearance={{
             layout: {
               logoPlacement: "none",
