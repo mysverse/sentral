@@ -13,12 +13,12 @@ export default function DefaultLayout({
     <html
       lang="en"
       className={clsx(
-        "h-full bg-gradient-to-l from-blue-500 via-blue-700 to-blue-800",
+        "bg-gradient-to-l from-blue-500 via-blue-700 to-blue-800",
         publicSans.className
       )}
     >
-      <body className="h-full">
-        <div className="flex h-screen flex-1">
+      <body>
+        <div className="flex h-dvh flex-1">
           <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
             <div className="mx-auto my-auto flex h-full w-full max-w-sm flex-col items-center justify-center lg:w-96">
               <div className="relative flex h-full items-center justify-center">
