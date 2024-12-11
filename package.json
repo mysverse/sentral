@@ -55,7 +55,7 @@
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/humanize-duration": "^3.27.4",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
