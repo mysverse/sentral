@@ -1,8 +1,6 @@
 "use client";
 
 import { Transition } from "@headlessui/react";
-// import SignInButton from "components/signIn";
-import Link from "next/link";
 
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import { useEffect, useState } from "react";
