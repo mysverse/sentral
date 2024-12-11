@@ -46,7 +46,7 @@ export default function LoginElement() {
         leaveFrom="opacity-100 translate-y-0 scale-100"
         leaveTo="opacity-0 -translate-y-36 scale-80"
       >
-        <div className="flex flex-col items-center gap-y-6 lg:items-start">
+        <div className="flex flex-col items-center gap-y-6">
           <div>
             <Logo className="md:h-18 h-16 w-auto fill-white" />
             {/* <header className="mt-2 flex items-center gap-x-2">
@@ -82,7 +82,16 @@ export default function LoginElement() {
               </Link>
             </p> */}
           </div>
-          <SignIn />
+          <SignIn
+            appearance={{
+              layout: {
+                logoPlacement: "none",
+                termsPageUrl: "/terms-of-service",
+                privacyPageUrl: "/privacy-policy"
+              },
+              variables: { colorPrimary: "rgb(59, 130, 246)" }
+            }}
+          />
           {/* <div className="mt-10"> */}
           {/* <div
               onClick={() => {
@@ -95,7 +104,7 @@ export default function LoginElement() {
             </div> */}
           {/* </div> */}
 
-          <p className="mt-4 text-sm leading-6 text-gray-300">
+          {/* <p className="mt-4 text-sm leading-6 text-gray-300">
             {"Read our "}
             <Link
               href="/privacy-policy"
@@ -110,7 +119,7 @@ export default function LoginElement() {
             >
               terms of service
             </Link>
-          </p>
+          </p> */}
         </div>
       </Transition>
     </div>
