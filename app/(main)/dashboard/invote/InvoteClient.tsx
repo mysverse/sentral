@@ -10,7 +10,7 @@ import {
   BarElement
 } from "chart.js";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import {
   InvoteSeats,
@@ -42,6 +42,7 @@ import { addPathToUrl, replaceHttpWithWs } from "utils/ws";
 import { regionNames } from "data/invote";
 import { NotifyButton } from "components/NotifyButton";
 import { notify } from "utils/notification";
+import { useQueryState } from "nuqs";
 
 ChartJS.register(
   ArcElement,
@@ -171,7 +172,11 @@ export default function InvotePage({
 }: {
   seriesIdentifiers: string[];
 }) {
-  const [series, setSeries] = useState<string>(seriesIdentifiers[0]);
+  const [series, setSeries] = useQueryState<string>("series", {
+    defaultValue: seriesIdentifiers[0],
+    parse: (value) => value,
+    shallow: false
+  });
 
   const { stats: stats } = useInvoteStats(
     typeof series !== "undefined",
@@ -248,28 +253,15 @@ export default function InvotePage({
                   name="series_identifier"
                   className="mt-3 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-slate-500 focus:outline-none focus:ring-slate-500 sm:text-sm"
                   onChange={(e) => {
-                    const index = parseInt(e.target.value);
-                    if (seriesIdentifiers) {
-                      const selectedSeries = seriesIdentifiers[index];
-                      if (selectedSeries) {
-                        setSeries(selectedSeries);
-                      }
-                    }
+                    setSeries(e.target.value);
                   }}
-                  defaultValue={!seriesIdentifiers ? "hidden" : 0}
-                  disabled={!seriesIdentifiers}
+                  value={series}
                 >
-                  {seriesIdentifiers ? (
-                    seriesIdentifiers.map((name, index) => (
-                      <option key={index} value={index}>
-                        {name}
-                      </option>
-                    ))
-                  ) : (
-                    <option hidden disabled value="hidden">
-                      Loading...
+                  {seriesIdentifiers.map((name, index) => (
+                    <option key={index} value={name}>
+                      {name}
                     </option>
-                  )}
+                  ))}
                 </select>
               </div>
             </div>

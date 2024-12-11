@@ -3,20 +3,22 @@ import "server-only";
 export interface ConstituencyData {
   constituencyCode: string;
   username: string;
-  userId: string;
-  shadowCabinet?: string;
   party: string;
+  userId?: string;
+  displayName?: string;
+  shadowCabinet?: string;
 }
 
-export async function getConstituencyData() {
-  const response = await fetch(
-    `https://mysverse-election.yan3321.workers.dev/`,
-    {
-      next: {
-        revalidate: 60
-      }
+export async function getConstituencyData(series?: string) {
+  const url = new URL(`https://mysverse-election.yan3321.workers.dev/`);
+  if (series) {
+    url.pathname += encodeURIComponent(series);
+  }
+  const response = await fetch(url, {
+    next: {
+      revalidate: 60
     }
-  );
+  });
   if (response.ok) {
     const data: ConstituencyData[] = await response.json();
     return data;

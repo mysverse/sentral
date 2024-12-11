@@ -151,13 +151,20 @@ async function fetchAvatarThumbnails(
 
   if (response.ok) {
     const data: AvatarResponse = await response.json();
+    console.log(data);
     const filteredData = data.data.filter((item) => item.state === "Completed");
-    const cacheRecords: Record<string, AvatarData> = {};
-    for (const item of filteredData) {
-      cacheRecords[`avatar:${type}:${size}:${item!.targetId}`] = item;
+    if (filteredData.length > 0) {
+      const cacheRecords: Record<string, AvatarData> = {};
+      for (const item of filteredData) {
+        if (item.targetId) {
+          cacheRecords[`avatar:${type}:${size}:${item!.targetId}`] = item;
+        }
+      }
+      await redis.mset<AvatarData>(cacheRecords);
     }
-    await redis.mset<AvatarData>(cacheRecords);
     return data.data;
+  } else {
+    console.error(await response.json());
   }
 
   throw new Error("Failed to fetch avatar thumbnails");
@@ -169,6 +176,10 @@ export async function getAvatarThumbnails(
   type: "headshot" | "bust" = "headshot"
 ) {
   userIds = userIds.sort();
+
+  if (userIds.length === 0) {
+    return [];
+  }
 
   const cachedThumbnails = await redis.mget<(AvatarData | null)[]>(
     userIds.map((id) => `avatar:${type}:${size}:${id}`)

@@ -3,7 +3,10 @@ import InvotePage from "./InvoteClient";
 import { Suspense } from "react";
 import Spinner from "components/spinner";
 
+import { type SearchParams } from "nuqs/server";
+
 import { endpoints } from "components/constants/endpoints";
+import { searchParamsCache } from "utils/searchParams";
 
 async function getInvoteSeriesIdentifiers() {
   const response = await fetch(`${endpoints.invote}/stats/series-identifiers`);
@@ -19,13 +22,18 @@ async function getInvoteSeriesIdentifiers() {
   return [];
 }
 
-export default async function Page() {
+type PageProps = {
+  searchParams: Promise<SearchParams>; // Next.js 15+: async searchParams prop
+};
+
+export default async function Page(props: PageProps) {
+  const { series } = await searchParamsCache.parse(props.searchParams);
   const seriesIdentifiers = await getInvoteSeriesIdentifiers();
   return (
     <>
       <InvotePage seriesIdentifiers={seriesIdentifiers} />
       <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
-        <h1 className="mb-2 text-xl font-bold">Candidates</h1>
+        <h1 className="mb-4 text-lg font-semibold">Candidates</h1>
         <Suspense
           fallback={
             <div className="h-screen">
@@ -33,7 +41,7 @@ export default async function Page() {
             </div>
           }
         >
-          {<ConstituencyList />}
+          {<ConstituencyList series={series ?? undefined} />}
         </Suspense>
       </div>
     </>

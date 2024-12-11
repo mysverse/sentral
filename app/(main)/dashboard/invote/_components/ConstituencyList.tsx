@@ -6,12 +6,21 @@ import ConstituencyCard from "./ConstituencyCard";
 
 import { Motion } from "components/motion";
 
-export default async function ConstituencyList() {
-  const data = await getConstituencyData();
+export default async function ConstituencyList({
+  series
+}: {
+  series?: string;
+}) {
+  const data = await getConstituencyData(series);
+
   if (!data) {
-    return null;
+    return <>No data</>;
   }
-  const userIds = data.map((d) => parseInt(d.userId));
+
+  const userIds = data
+    .map((d) => (d.userId ? parseInt(d.userId) : undefined))
+    .filter((d) => typeof d !== "undefined");
+
   const thumbnails = await getAvatarThumbnails(userIds, 352, "headshot");
 
   // Define constituency codes from P01 to P30
@@ -34,7 +43,7 @@ export default async function ConstituencyList() {
         .filter((code) => groupedData[code].length > 0)
         .map((code) => (
           <Motion
-            key={code}
+            key={`${series}:${code}`}
             className="mb-6"
             initial={"hidden"}
             whileInView={"visible"}
@@ -58,8 +67,10 @@ export default async function ConstituencyList() {
             </div>
             <div className="grid grid-cols-1 gap-4">
               {groupedData[code].map((contestant) => {
-                let thumbnail = thumbnails.find(
-                  (t) => t.targetId === parseInt(contestant.userId)
+                let thumbnail = thumbnails.find((t) =>
+                  contestant.userId
+                    ? t.targetId === parseInt(contestant.userId)
+                    : false
                 )?.imageUrl;
 
                 if (thumbnail?.trim() === "") {
@@ -68,7 +79,7 @@ export default async function ConstituencyList() {
 
                 return (
                   <Motion
-                    key={contestant.userId}
+                    key={`${series}:${code}:${contestant.username}`}
                     variants={{
                       visible: {
                         opacity: 1,

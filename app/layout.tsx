@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
-
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import PlausibleProvider from "next-plausible";
 import { ClerkProvider } from "@clerk/nextjs";
 
@@ -48,7 +48,9 @@ export default function RootLayout({
       customDomain="https://plausible.yan.gg"
       exclude="/auth/*"
     >
-      <ClerkProvider>{children}</ClerkProvider>
+      <ClerkProvider>
+        <NuqsAdapter>{children}</NuqsAdapter>
+      </ClerkProvider>
     </PlausibleProvider>
   );
 }

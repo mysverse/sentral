@@ -39,8 +39,11 @@ export default function ConstituencyCard({
 
   return (
     <Link
-      key={contestant.userId}
-      href={`https://www.roblox.com/users/${contestant.userId}/profile`}
+      href={
+        contestant.userId
+          ? `https://www.roblox.com/users/${contestant.userId}/profile`
+          : `https://www.roblox.com/search/users?keyword=${contestant.username}`
+      }
       target="_blank"
       style={{
         backgroundColor: isHovered ? partyColour : undefined
