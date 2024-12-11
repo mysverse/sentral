@@ -13,7 +13,7 @@ export default async function ConstituencyList({
 }) {
   const data = await getConstituencyData(series);
 
-  if (!data) {
+  if (!data || data.length === 0) {
     return <>No data</>;
   }
 
