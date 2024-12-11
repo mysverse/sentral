@@ -53,7 +53,13 @@ export default function RobloxAccountRequired() {
               </div>
             </div>
             <div className="mt-5 flex flex-col items-center sm:mt-6">
-              <UserButton />
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "size-12" // Custom width and height
+                  }
+                }}
+              />
             </div>
           </DialogPanel>
         </div>
