@@ -48,7 +48,9 @@ export default function RootLayout({
       customDomain="https://plausible.yan.gg"
       exclude="/auth/*"
     >
-      <ClerkProvider afterSignOutUrl={"/auth/login"}>{children}</ClerkProvider>
+      <ClerkProvider signInUrl={"/auth/login"} signUpUrl="/auth/login">
+        {children}
+      </ClerkProvider>
     </PlausibleProvider>
   );
 }

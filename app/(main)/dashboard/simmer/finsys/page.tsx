@@ -57,7 +57,7 @@ export default async function Main() {
               <div className="text-medium text-center text-xl">
                 <p>{`MYSverse FinSys is only available to selected members of
                 MYSverse Sim.`}</p>
-                <p>{`If you are already a member of a qualifying Sim Roblox group, please also ensure you have joined the FinSys Roblox group.`}</p>
+                <p>{`If you are already a member of a qualifying Sim Roblox group, please also ensure you have joined the MYSverse Malaysian Community Roblox group.`}</p>
                 <p>{`Please read the following guide and ensure you fulfill all the criteria
                 for more information: `}</p>
                 <Link

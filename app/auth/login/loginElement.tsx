@@ -8,10 +8,10 @@ import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
-import { SignedOut, SignInButton } from "@clerk/nextjs";
+import { SignIn } from "@clerk/nextjs";
 
 export default function LoginElement() {
-  const [authenticating, setAuthenticating] = useState<boolean>(false);
+  const [authenticating] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
@@ -46,19 +46,19 @@ export default function LoginElement() {
         leaveFrom="opacity-100 translate-y-0 scale-100"
         leaveTo="opacity-0 -translate-y-36 scale-80"
       >
-        <div>
+        <div className="flex flex-col items-center gap-y-6 lg:items-start">
           <div>
-            <Logo className="h-20 w-auto fill-white" />
-            <header className="mt-8 flex items-center gap-x-2">
+            <Logo className="md:h-18 h-16 w-auto fill-white" />
+            {/* <header className="mt-2 flex items-center gap-x-2">
               <h2 className="text-2xl font-bold leading-9 tracking-tight text-gray-100">
                 Welcome to Sentral
               </h2>
-              {/* <span className="mt-0.5 inline-flex items-center rounded-lg px-2 py-1 text-xs font-semibold uppercase tracking-wide text-gray-100 ring-1 ring-inset ring-white">
-              Beta
-            </span> */}
-            </header>
+              <span className="mt-0.5 inline-flex items-center rounded-lg px-2 py-1 text-xs font-semibold uppercase tracking-wide text-gray-100 ring-1 ring-inset ring-white">
+                Beta
+              </span>
+            </header> */}
 
-            <p className="mt-3 text-sm leading-6 text-gray-200">
+            {/* <p className="mt-3 text-sm leading-6 text-gray-200">
               The official companion web app for{" "}
               <Link
                 href="https://mysver.se/"
@@ -69,8 +69,8 @@ export default function LoginElement() {
               and MYSverse Sim.
             </p>
             <p className="mt-3 text-sm leading-6 text-gray-200">
-              Sign in conveniently and securely with Roblox to get access to
-              your game data - no separate account required.
+              Sign in conveniently and securely with Clerk, and link your Roblox
+              account to get access to your game data.
             </p>
             <p className="mt-3 text-sm leading-6 text-gray-200">
               {"Don't have a Roblox account? "}
@@ -80,20 +80,11 @@ export default function LoginElement() {
               >
                 Sign up here!
               </Link>
-            </p>
+            </p> */}
           </div>
-          <div className="mt-10">
-            <SignedOut>
-              <SignInButton forceRedirectUrl="/dashboard">
-                <button
-                  onClick={() => setAuthenticating(true)}
-                  className="group inline-flex w-full items-center justify-center gap-x-1.5 rounded-md bg-blue-700 px-2.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-gray-200/10 outline outline-1 outline-gray-200 transition hover:bg-white hover:text-blue-700 hover:outline-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                >
-                  Sign in with Clerk
-                </button>
-              </SignInButton>
-            </SignedOut>
-            {/* <div
+          <SignIn />
+          {/* <div className="mt-10"> */}
+          {/* <div
               onClick={() => {
                 // setShow(false);
                 setAuthenticating(true);
@@ -102,9 +93,9 @@ export default function LoginElement() {
             >
               <SignInButton />
             </div> */}
-          </div>
+          {/* </div> */}
 
-          <p className="mt-10 text-sm leading-6 text-gray-300">
+          <p className="mt-4 text-sm leading-6 text-gray-300">
             {"Read our "}
             <Link
               href="/privacy-policy"
@@ -119,8 +110,6 @@ export default function LoginElement() {
             >
               terms of service
             </Link>
-            . Your age as per your Roblox account may have to be 13+ to access
-            this service.
           </p>
         </div>
       </Transition>
