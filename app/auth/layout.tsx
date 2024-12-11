@@ -18,7 +18,7 @@ export default function DefaultLayout({
       )}
     >
       <body className="h-full">
-        <div className="flex min-h-full flex-1">
+        <div className="flex h-screen flex-1">
           <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
             <div className="mx-auto my-auto flex h-full w-full max-w-sm flex-col items-center justify-center lg:w-96">
               <div className="relative flex h-full items-center justify-center">
