@@ -151,7 +151,6 @@ async function fetchAvatarThumbnails(
 
   if (response.ok) {
     const data: AvatarResponse = await response.json();
-    console.log(data);
     const filteredData = data.data.filter((item) => item.state === "Completed");
     if (filteredData.length > 0) {
       const cacheRecords: Record<string, AvatarData> = {};
