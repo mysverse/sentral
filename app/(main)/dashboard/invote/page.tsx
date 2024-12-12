@@ -27,8 +27,10 @@ type PageProps = {
 };
 
 export default async function Page(props: PageProps) {
-  const { series } = await searchParamsCache.parse(props.searchParams);
   const seriesIdentifiers = await getInvoteSeriesIdentifiers();
+  const { series } = await searchParamsCache.parse(props.searchParams);
+  const latestSeries = seriesIdentifiers[0];
+
   return (
     <>
       <InvotePage seriesIdentifiers={seriesIdentifiers} />
@@ -41,7 +43,7 @@ export default async function Page(props: PageProps) {
             </div>
           }
         >
-          {<ConstituencyList series={series ?? undefined} />}
+          {<ConstituencyList series={series ?? latestSeries} />}
         </Suspense>
       </div>
     </>

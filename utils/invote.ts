@@ -1,5 +1,5 @@
-import "server-only";
-
+import { endpoints } from "components/constants/endpoints";
+import { InvoteSeats } from "components/fetcher";
 export interface ConstituencyData {
   constituencyCode: string;
   username: string;
@@ -7,6 +7,16 @@ export interface ConstituencyData {
   userId?: string;
   displayName?: string;
   shadowCabinet?: string;
+}
+
+export async function getInvoteSeats(series: string) {
+  const url = `${endpoints.invote}/stats/seats/${encodeURIComponent(series)}`;
+  const response = await fetch(url);
+  if (response.ok) {
+    const data: InvoteSeats[] = await response.json();
+    return data;
+  }
+  return undefined;
 }
 
 export async function getConstituencyData(series?: string) {
@@ -24,4 +34,8 @@ export async function getConstituencyData(series?: string) {
     return data;
   }
   return undefined;
+}
+
+export function getCodeFromIndex(index: number) {
+  return `P${String(index).padStart(2, "0")}`;
 }

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getColourByName } from "app/(main)/dashboard/invote/_utils/chartUtils";
 import { useState } from "react";
+import clsx from "clsx";
 
 /**
  * Processes the input string by removing the word "Shadow" and replacing "and" with "&".
@@ -29,10 +30,12 @@ function processString(input: string): string {
 
 export default function ConstituencyCard({
   contestant,
-  thumbnail
+  thumbnail,
+  won
 }: {
   contestant: ConstituencyData;
   thumbnail?: string;
+  won?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const partyColour = getColourByName(contestant.party);
@@ -61,9 +64,17 @@ export default function ConstituencyCard({
         }}
       ></div>
       <div className="relative z-10 ml-3 flex flex-col items-center justify-center drop-shadow-[0_0px_2px_rgba(255,255,255,1)] group-hover:drop-shadow-none sm:ml-4">
-        <div className="flex flex-col">
+        <div
+          className={clsx(
+            "flex flex-col",
+            typeof won !== "undefined" &&
+              !won &&
+              "opacity-50 transition group-hover:opacity-100"
+          )}
+        >
           <p className="font-medium group-hover:text-white">
             @{contestant.username}
+            {won && " 🏆"}
           </p>
           <p className="text-sm text-gray-500 group-hover:text-white">
             {contestant.party}

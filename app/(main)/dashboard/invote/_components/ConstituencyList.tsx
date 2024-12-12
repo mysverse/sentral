@@ -1,17 +1,21 @@
 import { getAvatarThumbnails } from "components/fetcher";
-import { ConstituencyData, getConstituencyData } from "utils/invote";
+import {
+  ConstituencyData,
+  getCodeFromIndex,
+  getConstituencyData,
+  getInvoteSeats
+} from "utils/invote";
 import { regionNames } from "data/invote";
 
 import ConstituencyCard from "./ConstituencyCard";
 
 import { Motion } from "components/motion";
 
-export default async function ConstituencyList({
-  series
-}: {
-  series?: string;
-}) {
-  const data = await getConstituencyData(series);
+export default async function ConstituencyList({ series }: { series: string }) {
+  const [data, seats] = await Promise.all([
+    getConstituencyData(series),
+    getInvoteSeats(series)
+  ]);
 
   if (!data || data.length === 0) {
     return <>No data</>;
@@ -24,9 +28,8 @@ export default async function ConstituencyList({
   const thumbnails = await getAvatarThumbnails(userIds, 352, "headshot");
 
   // Define constituency codes from P01 to P30
-  const constituencies = Array.from(
-    { length: 30 },
-    (_, i) => `P${String(i + 1).padStart(2, "0")}`
+  const constituencies = Array.from({ length: 30 }, (_, i) =>
+    getCodeFromIndex(i + 1)
   );
 
   // Group contestants by constituencyCode
@@ -77,6 +80,15 @@ export default async function ConstituencyList({
                   thumbnail = undefined;
                 }
 
+                const result = seats?.find((s) => {
+                  const code = getCodeFromIndex(s.index);
+                  return code === contestant.constituencyCode;
+                });
+
+                const won = result
+                  ? result.party === contestant.party
+                  : undefined;
+
                 return (
                   <Motion
                     key={`${series}:${code}:${contestant.username}`}
@@ -98,6 +110,7 @@ export default async function ConstituencyList({
                     <ConstituencyCard
                       contestant={contestant}
                       thumbnail={thumbnail}
+                      won={won}
                     />
                   </Motion>
                 );

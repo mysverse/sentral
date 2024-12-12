@@ -9,8 +9,13 @@ import {
   LinearScale,
   BarElement
 } from "chart.js";
-
 import { useCallback, useEffect, useRef } from "react";
+import { toast } from "sonner";
+import { mutate } from "swr";
+import { useQueryState } from "nuqs";
+import useWebSocket from "react-use-websocket";
+import dynamic from "next/dynamic";
+import CountUp from "react-countup";
 
 import {
   InvoteSeats,
@@ -18,12 +23,6 @@ import {
   useInvoteSeatStats,
   useInvoteStats
 } from "components/swr";
-
-import ElectionMap from "components/electionMap";
-import ElectionSeatMap from "components/electionSeatMap";
-import Spinner from "components/spinner";
-import DefaultTransitionLayout from "components/transition";
-import dynamic from "next/dynamic";
 import {
   calculateSeats,
   frequencySort,
@@ -31,18 +30,17 @@ import {
   getSeatParties,
   getStatsObject
 } from "./_utils/chartUtils";
-import CountUp from "react-countup";
-
-import { toast } from "sonner";
-import useWebSocket from "react-use-websocket";
-import { mutate } from "swr";
-import useNotificationSound from "hooks/playNotificationSound";
 import { endpoints } from "components/constants/endpoints";
 import { addPathToUrl, replaceHttpWithWs } from "utils/ws";
 import { regionNames } from "data/invote";
 import { NotifyButton } from "components/NotifyButton";
 import { notify } from "utils/notification";
-import { useQueryState } from "nuqs";
+import { getCodeFromIndex } from "utils/invote";
+import ElectionMap from "components/electionMap";
+import ElectionSeatMap from "components/electionSeatMap";
+import Spinner from "components/spinner";
+import DefaultTransitionLayout from "components/transition";
+import useNotificationSound from "hooks/playNotificationSound";
 
 ChartJS.register(
   ArcElement,
@@ -202,7 +200,7 @@ export default function InvotePage({
     (lastMessage: MessageEvent) => {
       const msg: InvoteWSMessage = JSON.parse(lastMessage.data);
       if (msg.s === series && msg.d && msg.d.type === "seat") {
-        const code = `P${String(msg.d.index).padStart(2, "0")}`;
+        const code = getCodeFromIndex(msg.d.index);
         const title = `${msg.d.party} wins ${code}`;
         const description = `The constituency ${code} - ${regionNames[code]} has been assigned to the party ${msg.d.party}`;
         if (Notification.permission === "granted") {
