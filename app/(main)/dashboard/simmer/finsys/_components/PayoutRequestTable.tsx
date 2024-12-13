@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import Image from "next/image";
+import { formatDistanceToNow } from "date-fns";
 
 const statuses: { [key: string]: string } = {
   pending: "text-yellow-700",
@@ -125,8 +126,10 @@ function PayoutRequestsTable({
                 className="mt-1 text-sm text-gray-600"
                 suppressHydrationWarning
               >
-                Submitted {new Date(request.created_at).toLocaleString()},
-                updated {new Date(request.updated_at).toLocaleString()}
+                {new Date(request.created_at).getTime() ===
+                new Date(request.updated_at).getTime()
+                  ? `Created ${formatDistanceToNow(new Date(request.created_at), { addSuffix: true })}`
+                  : `Updated ${formatDistanceToNow(new Date(request.updated_at), { addSuffix: true })}`}
               </p>
             </div>
             {request.status === "rejected" && request.rejection_reason && (

@@ -15,6 +15,7 @@ import { usePlausible } from "next-plausible";
 import { useSearchParams } from "next/navigation";
 import DefaultTransitionLayout from "components/transition";
 import dynamic from "next/dynamic";
+import BlacklistSlideover from "components/mecs/BlacklistSlideover";
 
 const regex = /^(?=^[^_]+_?[^_]+$)\w{3,20}$/;
 
@@ -217,6 +218,84 @@ function MECSForm() {
     </>
   );
 }
+import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
+function BlacklistSection() {
+  const [open, setOpen] = useState(false);
+  const [type, setType] = useState<"users" | "groups">("users");
+  return (
+    <>
+      <BlacklistSlideover
+        open={open}
+        setOpen={setOpen}
+        type={type}
+        setType={setType}
+      />
+      <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+        <div>
+          <div>
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              Check blacklists
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Browse by individual users or communities
+            </p>
+          </div>
+
+          <div className="my-4 border-l-4 border-yellow-400 bg-yellow-50 p-4">
+            <div className="flex">
+              <div className="shrink-0">
+                <ExclamationTriangleIcon
+                  aria-hidden="true"
+                  className="size-5 text-yellow-400"
+                />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-yellow-700">
+                  If you have any enquiries regarding blacklists, submit a
+                  complaint ticket in the{" "}
+                  <Link
+                    href="https://discord.gg/n22p4CMHf4"
+                    target="_blank"
+                    className="font-medium text-yellow-700 underline hover:text-yellow-600"
+                  >
+                    MYSverse Moderation Discord
+                  </Link>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="relative z-0 inline-flex rounded-md shadow-sm">
+              <button
+                type="button"
+                onClick={() => {
+                  setType("users");
+                  setOpen(true);
+                }}
+                className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+              >
+                List of blacklisted individuals
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setType("groups");
+                  setOpen(true);
+                }}
+                className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+              >
+                List of blacklisted communities
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default function MecsPage() {
   return (
@@ -224,6 +303,9 @@ export default function MecsPage() {
       <DefaultTransitionLayout show={true} appear={true}>
         <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
           <MECSForm />
+        </div>
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+          <BlacklistSection />
         </div>
         <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
           <AuditStats />

@@ -1,10 +1,5 @@
-import { useState, Fragment, Dispatch, SetStateAction, JSX } from "react";
-import {
-  Transition,
-  TransitionChild,
-  Dialog,
-  DialogPanel
-} from "@headlessui/react";
+import { JSX } from "react";
+
 import Image from "next/image";
 import humanizeDuration from "humanize-duration";
 import { format } from "date-fns";
@@ -13,7 +8,7 @@ import Spinner from "../spinner";
 import { DefaultAPIResponse, StaffDecision } from "../apiTypes";
 import { isStandalonePWA } from "../utils";
 import { clsx } from "clsx";
-import { useAvatarThumbnails, useCombinedBlacklistData } from "../swr";
+import { useAvatarThumbnails } from "../swr";
 
 import {
   CheckCircleIcon,
@@ -187,154 +182,6 @@ function calculateTrustFactor(data: DefaultAPIResponse) {
   return [false, calculatedScore] as [boolean, number];
 }
 
-function BlacklistSlideover({
-  open,
-  setOpen,
-  type,
-  setType
-}: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  type: "users" | "groups";
-  setType: Dispatch<SetStateAction<"users" | "groups">>;
-}) {
-  const { apiResponse, isLoading, isError } = useCombinedBlacklistData(true);
-
-  if (isLoading || isError) {
-    return null;
-  }
-
-  return (
-    <Transition as="div" show={open}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 overflow-hidden"
-        onClose={setOpen}
-      >
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0" />
-          <DialogPanel>
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
-              <TransitionChild
-                as="div"
-                enter="transform transition ease-in-out duration-500 sm:duration-700"
-                enterFrom="translate-x-full"
-                enterTo="translate-x-0"
-                leave="transform transition ease-in-out duration-500 sm:duration-700"
-                leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
-              >
-                <div className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                    <div className="p-6">
-                      <div className="flex items-start justify-between">
-                        <Dialog.Title className="text-lg font-medium text-gray-900">
-                          Blacklisted
-                        </Dialog.Title>
-                        <div className="ml-3 flex h-7 items-center">
-                          <button
-                            type="button"
-                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-slate-500"
-                            onClick={() => setOpen(false)}
-                          >
-                            <span className="sr-only">Close panel</span>
-                            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="border-b border-gray-200">
-                      <div className="px-6">
-                        <nav
-                          className="-mb-px flex space-x-6"
-                          x-descriptions="Tab component"
-                        >
-                          {[
-                            {
-                              name: "Users",
-                              value: "users" as "users" | "groups"
-                            },
-                            {
-                              name: "Groups",
-                              value: "groups" as "users" | "groups"
-                            }
-                          ].map((tab) => (
-                            <div
-                              key={tab.value}
-                              className={clsx(
-                                tab.value === type
-                                  ? "border-slate-500 text-slate-600"
-                                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium hover:cursor-pointer"
-                              )}
-                              onClick={() => setType(tab.value)}
-                            >
-                              {tab.name}
-                            </div>
-                          ))}
-                        </nav>
-                      </div>
-                    </div>
-                    <ul
-                      role="list"
-                      className="flex-1 divide-y divide-gray-200 overflow-y-auto"
-                    >
-                      {(type === "groups"
-                        ? apiResponse.groups
-                        : apiResponse.users
-                      )
-                        .sort((a, b) =>
-                          a.name && b.name
-                            ? a.name.toLowerCase() > b.name.toLowerCase()
-                              ? 1
-                              : b.name.toLowerCase() > a.name.toLowerCase()
-                                ? -1
-                                : 0
-                            : 0
-                        )
-                        .map((item) => (
-                          <li key={item.id}>
-                            <div className="group relative flex items-center px-5 py-6">
-                              <a
-                                href={
-                                  type === "groups"
-                                    ? `https://roblox.com/groups/${item.id}`
-                                    : `https://roblox.com/users/${item.id}`
-                                }
-                                className="-m-1 block flex-1 p-1"
-                              >
-                                <div
-                                  className="absolute inset-0 group-hover:bg-gray-50"
-                                  aria-hidden="true"
-                                />
-                                <div className="relative flex min-w-0 flex-1 items-center">
-                                  <div className="truncate">
-                                    <p className="truncate text-sm font-medium text-gray-900">
-                                      {type === "groups"
-                                        ? item.name
-                                        : `@${item.name}`}
-                                    </p>
-                                    <p className="w-72 whitespace-normal text-sm text-gray-500">
-                                      {item.reason}
-                                    </p>
-                                  </div>
-                                </div>
-                              </a>
-                            </div>
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                </div>
-              </TransitionChild>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog>
-    </Transition>
-  );
-}
-
 function getRoleText(text: string) {
   if (text !== null && typeof text !== "undefined") {
     if (text.includes("Immigration Detention Centre")) {
@@ -362,8 +209,7 @@ export default function QueryModalContent({
   error: boolean;
 }) {
   const resultCards: resultCard[] = [];
-  const [open, setOpen] = useState(false);
-  const [type, setType] = useState<"users" | "groups">("users");
+
   const [pass, failReasons] = (() => {
     const failReasons = [] as JSX.Element[];
     if (!loading && !error) {
@@ -552,12 +398,6 @@ export default function QueryModalContent({
 
   return (
     <>
-      <BlacklistSlideover
-        open={open}
-        setOpen={setOpen}
-        type={type}
-        setType={setType}
-      />
       {!loading && !error ? (
         <>
           <div className="mb-6 flex flex-col items-center sm:flex-row sm:space-x-5">
@@ -825,35 +665,6 @@ export default function QueryModalContent({
               history={apiResponse.history ? apiResponse.history : []}
             />
           </div>
-          {apiResponse.tests.blacklist.metadata?.src?.docs &&
-          !isStandalonePWA() ? (
-            <>
-              <div className="my-3 mt-6 flex justify-center">
-                <div className="relative z-0 inline-flex rounded-md shadow-sm">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setType("users");
-                      setOpen(true);
-                    }}
-                    className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
-                  >
-                    List of blacklisted individuals
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setType("groups");
-                      setOpen(true);
-                    }}
-                    className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
-                  >
-                    List of blacklisted groups
-                  </button>
-                </div>
-              </div>
-            </>
-          ) : null}
         </>
       ) : error ? (
         <>
