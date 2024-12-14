@@ -14,7 +14,7 @@
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.9.1",
+    "@clerk/nextjs": "^6.9.2",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@next/bundle-analyzer": "^15.1.0",
@@ -23,7 +23,7 @@
     "@serwist/next": "^9.0.11",
     "@tailwindcss/forms": "^0.5.9",
     "@upstash/redis": "^1.34.3",
-    "@yudiel/react-qr-scanner": "^2.0.8",
+    "@yudiel/react-qr-scanner": "^2.1.0",
     "autoprefixer": "^10.4.20",
     "chart.js": "^4.4.7",
     "chartjs-adapter-date-fns": "^3.0.0",
@@ -62,7 +62,7 @@
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "dotenv-cli": "^7.4.4",
-    "eslint": "^9.16.0",
+    "eslint": "^9.17.0",
     "eslint-config-next": "^15.1.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.5",
