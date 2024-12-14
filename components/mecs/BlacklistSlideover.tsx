@@ -107,7 +107,7 @@ export default function BlacklistSlideover({
                               {type === "groups" ? item.name : `@${item.name}`}
                             </p>
                             <p className="w-72 whitespace-normal text-sm text-gray-500">
-                              Banned from {item.type}
+                              from {item.types.sort().join(", ")}
                             </p>
                             <p className="w-72 whitespace-normal text-sm text-gray-500">
                               {formatDistanceToNow(item.updated, {

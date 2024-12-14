@@ -310,24 +310,16 @@ export function useBlacklistData(
 }
 
 interface NewBlacklistData {
-  username?: string;
-  userId?: string;
-  groupName?: string;
-  groupId?: string;
-  updated: string;
-  type: string;
-}
-
-interface NewBlacklistSingleType {
   name: string;
   id?: string;
+  type: "user" | "group";
   updated: string;
-  type: string;
+  types: string[];
 }
 
 export function useCombinedBlacklistData(shouldFetch: boolean) {
   const { data, isLoading, error } = useSWR(
-    shouldFetch ? `https://mysverse-blacklist.yan3321.workers.dev/` : null,
+    shouldFetch ? `https://mysverse-blacklist.yan3321.workers.dev/new` : null,
     fetcher
   );
 
@@ -335,28 +327,8 @@ export function useCombinedBlacklistData(shouldFetch: boolean) {
 
   return {
     apiResponse: response && {
-      users: response
-        .filter((item) => item.username || item.userId)
-        .map(
-          (item) =>
-            ({
-              name: item.username || item.userId || "",
-              id: item.userId,
-              updated: item.updated,
-              type: item.type
-            }) as NewBlacklistSingleType
-        ),
-      groups: response
-        .filter((item) => item.groupId)
-        .map(
-          (item) =>
-            ({
-              name: item.groupName,
-              id: item.groupId,
-              updated: item.updated,
-              type: item.type
-            }) as NewBlacklistSingleType
-        )
+      users: response.filter((item) => item.type === "user"),
+      groups: response.filter((item) => item.type === "group")
     },
     isLoading: isLoading,
     isError: error
