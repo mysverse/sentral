@@ -91,7 +91,7 @@ export default async function ConstituencyList({ series }: { series: string }) {
 
                 return (
                   <Motion
-                    key={`${series}:${code}:${contestant.username}`}
+                    key={`${series}:${code}:${contestant.userId ?? contestant.username}`}
                     variants={{
                       visible: {
                         opacity: 1,
