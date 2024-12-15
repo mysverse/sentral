@@ -124,8 +124,6 @@ function Stats3({
       })
       .sort((a, b) => b.stat - a.stat);
 
-  console.log(parties);
-
   const newStats2 =
     partyData ??
     Object.keys(seats)
