@@ -133,7 +133,7 @@ function SeatsGeoMap({
   stats: InvoteStatsTimestamp[];
   seatStats: InvoteSeats[];
 }) {
-  const colours = getSeatColours(stats, seatStats);
+  const colours = getSeatColours([], seatStats);
   const parties = getSeatParties(stats, seatStats);
 
   if (!(colours && parties)) return null;
