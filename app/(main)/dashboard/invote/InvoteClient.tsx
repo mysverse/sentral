@@ -90,18 +90,50 @@ function Stats1({ stats }: { stats: InvoteStatsTimestamp[] }) {
   );
 }
 
-function Stats3({ stats }: { stats: InvoteStatsTimestamp[] }) {
-  if (!stats) return null;
+function Stats3({
+  stats,
+  seatStats
+}: {
+  stats: InvoteStatsTimestamp[];
+  seatStats: InvoteSeats[];
+}) {
+  if (!stats && !seatStats) return null;
 
   const statsObject = getStatsObject(stats);
   const seats = calculateSeats(statsObject);
 
-  const newStats2 = Object.keys(seats)
-    .map((key) => ({
-      name: key,
-      stat: seats[key]
-    }))
-    .sort((a, b) => b.stat - a.stat);
+  const parties: string[] = [];
+  const sp = getSeatParties(stats, seatStats);
+
+  if (sp) {
+    for (const party of sp) {
+      if (party && !parties.includes(party)) {
+        parties.push(party);
+      }
+    }
+  }
+
+  const partyData =
+    seatStats &&
+    parties
+      .map((party) => {
+        return {
+          name: party,
+          stat: seatStats.filter((item) => item.party === party).length
+        };
+      })
+      .sort((a, b) => b.stat - a.stat);
+
+  console.log(parties);
+
+  const newStats2 =
+    partyData ??
+    Object.keys(seats)
+      .map((key) => ({
+        name: key,
+        stat: seats[key]
+      }))
+      .sort((a, b) => b.stat - a.stat);
 
   return (
     <dl className="mt-5 grid grid-cols-2 gap-6 sm:grid-cols-3">
@@ -148,7 +180,11 @@ function SeatsParliamentMap({
   stats: InvoteStatsTimestamp[];
   seatStats: InvoteSeats[];
 }) {
-  const colours = getSeatColours(stats, seatStats, true);
+  const colours = getSeatColours(
+    seatStats.length > 0 ? [] : stats,
+    seatStats,
+    true
+  );
 
   if (!colours) return null;
 
@@ -307,7 +343,7 @@ export default function InvotePage({
               Parliament Seats Distribution
             </h3>
             <div className="mb-8">
-              <Stats3 stats={stats} />
+              <Stats3 stats={stats} seatStats={seatStats} />
             </div>
             <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow">
               <div className="relative flex flex-col justify-center gap-6">
