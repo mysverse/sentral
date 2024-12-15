@@ -55,7 +55,7 @@ const VoteShareChart = dynamic(() => import("./_components/VoteShareChart"));
 const VoteSection = dynamic(() => import("./_components/VoteSection"));
 const SeatsPieChart = dynamic(() => import("./_components/SeatsPieChart"));
 
-function Stats1({ stats }: { stats: InvoteStatsTimestamp[] }) {
+function VotesByParty({ stats }: { stats: InvoteStatsTimestamp[] }) {
   if (!stats) return null;
 
   const statsObject = getStatsObject(stats);
@@ -90,7 +90,7 @@ function Stats1({ stats }: { stats: InvoteStatsTimestamp[] }) {
   );
 }
 
-function Stats3({
+function ParliamentSeatDistributionByParty({
   stats,
   seatStats
 }: {
@@ -326,7 +326,7 @@ export default function InvotePage({
             </div>
 
             <div className="sm:px-6- mb-8 mt-6">
-              <Stats1 stats={stats} />
+              <VotesByParty stats={stats} />
             </div>
 
             <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
@@ -341,7 +341,10 @@ export default function InvotePage({
               Parliament Seats Distribution
             </h3>
             <div className="mb-8">
-              <Stats3 stats={stats} seatStats={seatStats} />
+              <ParliamentSeatDistributionByParty
+                stats={stats}
+                seatStats={seatStats}
+              />
             </div>
             <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow">
               <div className="relative flex flex-col justify-center gap-6">
@@ -355,7 +358,7 @@ export default function InvotePage({
                 </div>
               </div>
               <div className="rounded-lg bg-white px-5 py-8 shadow">
-                <SeatsPieChart stats={stats} />
+                <SeatsPieChart stats={stats} seatStats={seatStats} />
               </div>
             </dl>
           </DefaultTransitionLayout>
