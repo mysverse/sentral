@@ -64,7 +64,7 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
   const assetData = await redis.mget<(ItemDetail | null)[]>(...assetKeys);
 
   if (assetData.every((item) => item !== null)) {
-    console.log("All assets found in cache");
+    // console.log("All assets found in cache");
     return assetData;
   }
 
@@ -167,7 +167,7 @@ async function fetchUserData(userIds: number[]) {
   const userKeys = userIds.map((id) => `user:${id}`);
   const userData = await redis.mget<(RobloxUser | null)[]>(...userKeys);
   if (userData.every((item) => item !== null)) {
-    console.log("All users found in cache");
+    // console.log("All users found in cache");
     return { data: userData };
   }
 
@@ -206,7 +206,7 @@ async function fetchThumbnails(assetIds: number[]) {
     ...thumbnailKeys
   );
   if (thumbnailData.every((item) => item !== null)) {
-    console.log("All thumbnails found in cache");
+    // console.log("All thumbnails found in cache");
     return { data: thumbnailData };
   }
 
