@@ -10,19 +10,14 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={clsx("h-full bg-slate-200", publicSans.className)}
-    >
-      <body className="h-full">
+    <html lang="en" className={clsx("bg-slate-200", publicSans.className)}>
+      <body className="flex min-h-dvh flex-col">
         <Toaster
           richColors
           toastOptions={{ className: publicSans.className }}
         />
         <Navigation />
-        <main className="min-h-[55vh]">
-          <div className="-mt-32">{children}</div>
-        </main>
+        <main className="-mt-32 flex-grow">{children}</main>
         <Footer />
       </body>
     </html>
