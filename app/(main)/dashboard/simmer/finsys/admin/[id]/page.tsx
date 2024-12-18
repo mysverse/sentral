@@ -32,9 +32,7 @@ export default async function Main(props: { params: Params }) {
     );
 
     return (
-      <div className="container mx-auto p-2">
-        <PayoutRequestsTable payoutRequests={ownershipData} adminMode altMode />
-      </div>
+      <PayoutRequestsTable payoutRequests={ownershipData} adminMode altMode />
     );
   }
 
