@@ -287,8 +287,7 @@ async function checkUserOwnership(
 ): Promise<OwnershipResponse[]> {
   if (ownershipDisabled || !token) {
     return assetIds.map((id) => ({
-      id,
-      owned: false
+      id
     }));
   }
 
@@ -301,6 +300,9 @@ async function checkUserOwnership(
         method: "GET",
         headers: {
           authorization: `Bearer ${token}` // Replace with your API key
+        },
+        next: {
+          revalidate: 60
         }
       }
     );
@@ -317,6 +319,8 @@ async function checkUserOwnership(
 
     const data: InventoryItemResponse = await response.json();
 
+    console.log(data);
+
     return assetIds.map((id) => ({
       id,
       owned: data.inventoryItems.some(
@@ -327,8 +331,7 @@ async function checkUserOwnership(
     // throw new Error(`Failed to fetch user inventory: CSRF`);
   } catch {
     return assetIds.map((id) => ({
-      id,
-      owned: false
+      id
     }));
   }
 }
@@ -363,12 +366,18 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
   adminMode = false
 ) {
   // Extract all unique asset IDs and user IDs from the payout requests
-  const assetIds = Array.from(
-    new Set(requests.flatMap((request) => extractRobloxIDs(request.reason)))
-  ).sort((a, b) => a - b);
-  const userIds = Array.from(
-    new Set(requests.map((request) => request.user_id))
-  ).sort((a, b) => a - b);
+  function dedupe(array: number[]) {
+    return Array.from(new Set(array)).sort((a, b) => a - b);
+  }
+
+  function getAssetIds(requests: PayoutRequestData[]) {
+    const ids = requests.flatMap((request) => extractRobloxIDs(request.reason));
+    return dedupe(ids);
+  }
+
+  const assetIds = getAssetIds(requests);
+
+  const userIds = dedupe(requests.map((request) => request.user_id));
 
   const ownerships = await getOauthTokenFromRobloxUserIds(userIds);
 
@@ -379,9 +388,13 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
 
   // Check ownership for each user ID with the unique asset IDs concurrently
   const ownershipPromises = userIds.map(async (userId, index) => {
+    const userAssetIds = getAssetIds(
+      requests.filter((request) => request.user_id === userId)
+    );
+
     const ownership = await checkUserOwnership(
       userId.toString(),
-      assetIds,
+      userAssetIds,
       ownerships[index] ?? undefined
     );
     const userOwnershipMap = new Map<number, boolean>();
