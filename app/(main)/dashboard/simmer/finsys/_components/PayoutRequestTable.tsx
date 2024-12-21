@@ -196,7 +196,17 @@ function PayoutRequestsTable({
                                 <div>
                                   {val.assetData ? val.assetData.name : val.id}
                                   {typeof val.owned !== "undefined" && (
-                                    <span className="ml-1 rounded bg-green-500 px-1.5 py-0.5 text-[0.7rem] font-normal uppercase tracking-wide text-white">
+                                    <span
+                                      className={clsx(
+                                        "ml-1 rounded px-1.5 py-0.5 text-[0.7rem] font-normal uppercase tracking-wide text-white",
+                                        (request.status === "approved" &&
+                                          val.owned) ||
+                                          (request.status === "pending" &&
+                                            !val.owned)
+                                          ? "bg-green-600"
+                                          : "bg-red-600"
+                                      )}
+                                    >
                                       {val.owned ? "owned" : "not owned"}
                                     </span>
                                   )}
