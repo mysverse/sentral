@@ -291,11 +291,13 @@ async function checkUserOwnership(
     }));
   }
 
+  const maxPageSize = Math.max(assetIds.length, 100);
+
   try {
     const url = `https://apis.roblox.com/cloud/v2/users/${userId}/inventory-items`;
 
     const response = await fetch(
-      `${url}?filter=assetIds=${assetIds.join(",")}`,
+      `${url}?maxPageSize=${maxPageSize}&filter=assetIds=${assetIds.join(",")}`,
       {
         method: "GET",
         headers: {
@@ -319,7 +321,7 @@ async function checkUserOwnership(
 
     const data: InventoryItemResponse = await response.json();
 
-    console.log(data);
+    // console.log(data);
 
     return assetIds.map((id) => ({
       id,
