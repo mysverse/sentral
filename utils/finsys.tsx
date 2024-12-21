@@ -141,7 +141,7 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
 
 interface OwnershipResponse {
   id: number;
-  owned: boolean;
+  owned?: boolean;
 }
 
 interface RobloxThumbnailAssetApiResponse {
@@ -386,7 +386,9 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     );
     const userOwnershipMap = new Map<number, boolean>();
     ownership.forEach((item) => {
-      userOwnershipMap.set(item.id, item.owned);
+      if (item.owned) {
+        userOwnershipMap.set(item.id, item.owned);
+      }
     });
     return { userId, userOwnershipMap };
   });

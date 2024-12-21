@@ -195,10 +195,11 @@ function PayoutRequestsTable({
                                 </div>
                                 <div>
                                   {val.assetData ? val.assetData.name : val.id}
-                                  <span className="ml-1 rounded bg-green-500 px-1.5 py-0.5 text-[0.7rem] font-normal uppercase tracking-wide text-white">
-                                    {typeof val.owned !== "undefined" &&
-                                      (val.owned ? "owned" : "not owned")}
-                                  </span>
+                                  {typeof val.owned !== "undefined" && (
+                                    <span className="ml-1 rounded bg-green-500 px-1.5 py-0.5 text-[0.7rem] font-normal uppercase tracking-wide text-white">
+                                      {val.owned ? "owned" : "not owned"}
+                                    </span>
+                                  )}
                                 </div>
                                 {/* {val.assetData?.price &&
                                     `R$ ${val.assetData.price.toLocaleString()}`} */}
