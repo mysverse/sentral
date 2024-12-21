@@ -386,7 +386,7 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     );
     const userOwnershipMap = new Map<number, boolean>();
     ownership.forEach((item) => {
-      if (item.owned) {
+      if (typeof item.owned !== "undefined") {
         userOwnershipMap.set(item.id, item.owned);
       }
     });
