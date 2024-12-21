@@ -5,6 +5,7 @@ import {
 import { endpoints } from "components/constants/endpoints";
 import { extractRobloxIDs } from "./roblox";
 import { redis } from "lib/redis";
+import { clerkClient } from "@clerk/nextjs/server";
 
 const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
@@ -249,7 +250,34 @@ async function fetchThumbnails(assetIds: number[]) {
   throw new Error(`Failed to fetch asset thumbnails`);
 }
 
-const ownershipDisabled = true;
+const ownershipDisabled = false;
+
+// THIS SOLUTION WILL NOT SCALE WELL
+async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
+  const client = await clerkClient();
+  const users = await client.users.getUserList({ limit: 500 });
+  const provider = "oauth_custom_roblox";
+
+  return await Promise.all(
+    userIds.map(async (userId) => {
+      const clerkUserId = users.data.find((user) =>
+        user.externalAccounts.find(
+          (account) =>
+            account.provider === provider &&
+            account.externalId === userId.toString()
+        )
+      )?.id;
+      if (clerkUserId) {
+        const oauthToken = await client.users.getUserOauthAccessToken(
+          clerkUserId,
+          provider
+        );
+        return oauthToken.data[0]?.token ?? null;
+      }
+      return null;
+    })
+  );
+}
 
 // Function to check if a user owns a specific asset
 async function checkUserOwnership(
@@ -257,7 +285,7 @@ async function checkUserOwnership(
   assetIds: number[],
   token?: string
 ): Promise<OwnershipResponse[]> {
-  if (ownershipDisabled) {
+  if (ownershipDisabled || !token) {
     return assetIds.map((id) => ({
       id,
       owned: false
@@ -342,14 +370,20 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     new Set(requests.map((request) => request.user_id))
   ).sort((a, b) => a - b);
 
+  const ownerships = await getOauthTokenFromRobloxUserIds(userIds);
+
   // Create maps to store the ownership, thumbnail, and asset data results
   const ownershipMap = new Map<number, Map<number, boolean>>();
   const thumbnailMap = new Map<number, string>();
   const assetDataMap = new Map<number, ItemDetail>();
 
   // Check ownership for each user ID with the unique asset IDs concurrently
-  const ownershipPromises = userIds.map(async (userId) => {
-    const ownership = await checkUserOwnership(userId.toString(), assetIds);
+  const ownershipPromises = userIds.map(async (userId, index) => {
+    const ownership = await checkUserOwnership(
+      userId.toString(),
+      assetIds,
+      ownerships[index] ?? undefined
+    );
     const userOwnershipMap = new Map<number, boolean>();
     ownership.forEach((item) => {
       userOwnershipMap.set(item.id, item.owned);
@@ -385,10 +419,11 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
   // Iterate over the payout requests and inject the ownership, thumbnail, and asset data information using the maps
   return requests.map((request) => {
     const assets = extractRobloxIDs(request.reason);
-    const userOwnershipMap = ownershipMap.get(request.user_id) || new Map();
+    const userOwnershipMap =
+      ownershipMap.get(request.user_id) || new Map<number, boolean>();
     const ownedAssets = assets.map((id) => ({
       id,
-      owned: userOwnershipMap.get(id) || false,
+      owned: userOwnershipMap.get(id),
       thumbnail: thumbnailMap.get(id) || undefined,
       assetData: assetDataMap.get(id) || undefined
     }));
