@@ -254,9 +254,9 @@ const ownershipDisabled = false;
 
 // THIS SOLUTION WILL NOT SCALE WELL
 async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
-  const clerkUserIds = await redis.mget<(string | null)[]>(
-    userIds.map((id) => `roblox_user_id_to_clerk:${id}`)
-  );
+  const key = (robloxId: number) => `roblox_user_id_to_clerk:${robloxId}`;
+
+  const clerkUserIds = await redis.mget<(string | null)[]>(userIds.map(key));
 
   const client = await clerkClient();
   const provider = "oauth_custom_roblox";
@@ -277,7 +277,7 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
       }
     }
     if (result === null && robloxId) {
-      await redis.set(`clerk_user_id_to_roblox_oauth:${robloxId}`, undefined);
+      await redis.set(key(robloxId), undefined);
     }
     return result;
   }
@@ -303,7 +303,7 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
       )
     )?.id;
     if (clerkUserId) {
-      idCache[`roblox_user_id_to_clerk:${userId}`] = clerkUserId;
+      idCache[key(userId)] = clerkUserId;
     }
   }
 
@@ -311,10 +311,7 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
 
   return await Promise.all(
     userIds.map((userId) =>
-      getRobloxOauthTokenFromClerkUserId(
-        idCache[`roblox_user_id_to_clerk:${userId}`],
-        userId
-      )
+      getRobloxOauthTokenFromClerkUserId(idCache[key(userId)], userId)
     )
   );
 }
