@@ -252,10 +252,16 @@ async function fetchThumbnails(assetIds: number[]) {
 
 const ownershipDisabled = false;
 
+export const generateCacheKey = (robloxId: number) =>
+  `roblox_user_id_to_clerk:${robloxId}`;
+
+export async function cacheRobloxId(robloxId: number, clerkUserId: string) {
+  await redis.set(generateCacheKey(robloxId), clerkUserId);
+}
+
 // THIS SOLUTION WILL NOT SCALE WELL
 async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
-  const key = (robloxId: number) => `roblox_user_id_to_clerk:${robloxId}`;
-
+  const key = generateCacheKey;
   const clerkUserIds = await redis.mget<(string | null)[]>(userIds.map(key));
 
   const client = await clerkClient();

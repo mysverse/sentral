@@ -3,10 +3,13 @@
 import { auth } from "auth";
 import { endpoints } from "components/constants/endpoints";
 import { revalidatePath } from "next/cache";
+import { cacheRobloxId } from "utils/finsys";
 
 export async function submitPayoutRequest(prevState: any, formData: FormData) {
   const session = await auth();
   if (!session?.user.id) throw new Error("Unauthorized");
+
+  await cacheRobloxId(parseInt(session.user.id), session.user.clerkId);
 
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 

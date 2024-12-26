@@ -10,6 +10,7 @@ export async function auth() {
   );
   return {
     user: {
+      clerkId: user.id,
       id: robloxAccount?.externalId,
       image: robloxAccount?.imageUrl ?? user.imageUrl,
       name:
