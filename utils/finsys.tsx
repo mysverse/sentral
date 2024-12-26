@@ -254,28 +254,68 @@ const ownershipDisabled = false;
 
 // THIS SOLUTION WILL NOT SCALE WELL
 async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
+  const clerkUserIds = await redis.mget<(string | null)[]>(
+    userIds.map((id) => `roblox_user_id_to_clerk:${id}`)
+  );
+
   const client = await clerkClient();
-  const users = await client.users.getUserList({ limit: 500 });
   const provider = "oauth_custom_roblox";
 
-  return await Promise.all(
-    userIds.map(async (userId) => {
-      const clerkUserId = users.data.find((user) =>
-        user.externalAccounts.find(
-          (account) =>
-            account.provider === provider &&
-            account.externalId === userId.toString()
-        )
-      )?.id;
-      if (clerkUserId) {
-        const oauthToken = await client.users.getUserOauthAccessToken(
-          clerkUserId,
-          provider
-        );
-        return oauthToken.data[0]?.token ?? null;
+  async function getRobloxOauthTokenFromClerkUserId(
+    clerkUserId?: string,
+    robloxId?: number
+  ) {
+    let result: string | null = null;
+    if (clerkUserId) {
+      const oauthToken = await client.users.getUserOauthAccessToken(
+        clerkUserId,
+        provider
+      );
+      const token = oauthToken.data[0]?.token;
+      if (token) {
+        result = token;
       }
-      return null;
-    })
+    }
+    if (result === null && robloxId) {
+      await redis.set(`clerk_user_id_to_roblox_oauth:${robloxId}`, undefined);
+    }
+    return result;
+  }
+
+  if (clerkUserIds.every((id) => id !== null)) {
+    return await Promise.all(
+      clerkUserIds.map((clerkUserId, index) =>
+        getRobloxOauthTokenFromClerkUserId(clerkUserId, userIds[index])
+      )
+    );
+  }
+
+  const users = await client.users.getUserList({ limit: 500 });
+
+  const idCache: Record<string, string> = {};
+
+  for (const userId of userIds) {
+    const clerkUserId = users.data.find((user) =>
+      user.externalAccounts.find(
+        (account) =>
+          account.provider === provider &&
+          account.externalId === userId.toString()
+      )
+    )?.id;
+    if (clerkUserId) {
+      idCache[`roblox_user_id_to_clerk:${userId}`] = clerkUserId;
+    }
+  }
+
+  await redis.mset(idCache);
+
+  return await Promise.all(
+    userIds.map((userId) =>
+      getRobloxOauthTokenFromClerkUserId(
+        idCache[`roblox_user_id_to_clerk:${userId}`],
+        userId
+      )
+    )
   );
 }
 
