@@ -259,67 +259,93 @@ export async function cacheRobloxId(robloxId: number, clerkUserId: string) {
   await redis.set(generateCacheKey(robloxId), clerkUserId);
 }
 
+async function getRobloxOauthTokenFromClerkUserId(
+  client: Awaited<ReturnType<typeof clerkClient>>,
+  provider: `oauth_custom_${string}`,
+  clerkUserId?: string,
+  robloxId?: number
+) {
+  let result: string | null = null;
+  if (clerkUserId) {
+    const oauthToken = await client.users.getUserOauthAccessToken(
+      clerkUserId,
+      provider
+    );
+    const token = oauthToken.data[0]?.token;
+    if (token) {
+      result = token;
+    }
+  }
+  if (result === null && robloxId) {
+    await redis.set(generateCacheKey(robloxId), undefined);
+  }
+  return result;
+}
+
 // THIS SOLUTION WILL NOT SCALE WELL
 async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
-  const key = generateCacheKey;
-  const clerkUserIds = await redis.mget<(string | null)[]>(userIds.map(key));
+  if (userIds.length === 0) {
+    return [];
+  }
 
-  const client = await clerkClient();
-  const provider = "oauth_custom_roblox";
+  try {
+    const key = generateCacheKey;
+    const clerkUserIds = await redis.mget<(string | null)[]>(userIds.map(key));
 
-  async function getRobloxOauthTokenFromClerkUserId(
-    clerkUserId?: string,
-    robloxId?: number
-  ) {
-    let result: string | null = null;
-    if (clerkUserId) {
-      const oauthToken = await client.users.getUserOauthAccessToken(
-        clerkUserId,
-        provider
+    const client = await clerkClient();
+    const provider = "oauth_custom_roblox";
+
+    if (clerkUserIds.every((id) => id !== null)) {
+      return await Promise.all(
+        clerkUserIds.map((clerkUserId, index) =>
+          getRobloxOauthTokenFromClerkUserId(
+            client,
+            provider,
+            clerkUserId,
+            userIds[index]
+          )
+        )
       );
-      const token = oauthToken.data[0]?.token;
-      if (token) {
-        result = token;
+    }
+
+    const users = await client.users.getUserList({ limit: 500 });
+
+    const idCache: Record<string, string> = {};
+
+    for (const userId of userIds) {
+      const clerkUserId = users.data.find((user) =>
+        user.externalAccounts.find(
+          (account) =>
+            account.provider === provider &&
+            account.externalId === userId.toString()
+        )
+      )?.id;
+      if (clerkUserId) {
+        idCache[key(userId)] = clerkUserId;
       }
     }
-    if (result === null && robloxId) {
-      await redis.set(key(robloxId), undefined);
-    }
-    return result;
-  }
 
-  if (clerkUserIds.every((id) => id !== null)) {
+    await redis.mset(idCache);
+
     return await Promise.all(
-      clerkUserIds.map((clerkUserId, index) =>
-        getRobloxOauthTokenFromClerkUserId(clerkUserId, userIds[index])
+      userIds.map((userId) =>
+        getRobloxOauthTokenFromClerkUserId(
+          client,
+          provider,
+          idCache[key(userId)],
+          userId
+        )
       )
     );
-  }
-
-  const users = await client.users.getUserList({ limit: 500 });
-
-  const idCache: Record<string, string> = {};
-
-  for (const userId of userIds) {
-    const clerkUserId = users.data.find((user) =>
-      user.externalAccounts.find(
-        (account) =>
-          account.provider === provider &&
-          account.externalId === userId.toString()
-      )
-    )?.id;
-    if (clerkUserId) {
-      idCache[key(userId)] = clerkUserId;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(
+        "Error fetching oauth token, returning empty array:",
+        error.message
+      );
     }
+    return [];
   }
-
-  await redis.mset(idCache);
-
-  return await Promise.all(
-    userIds.map((userId) =>
-      getRobloxOauthTokenFromClerkUserId(idCache[key(userId)], userId)
-    )
-  );
 }
 
 // Function to check if a user owns a specific asset
