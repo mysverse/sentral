@@ -285,7 +285,7 @@ async function getRobloxOauthTokenFromClerkUserId(
 // THIS SOLUTION WILL NOT SCALE WELL
 async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
   if (userIds.length === 0) {
-    return [];
+    return userIds.map(() => null);
   }
 
   try {
@@ -295,48 +295,52 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
     const client = await clerkClient();
     const provider = "oauth_custom_roblox";
 
-    if (clerkUserIds.every((id) => id !== null)) {
-      return await Promise.all(
-        clerkUserIds.map((clerkUserId, index) =>
-          getRobloxOauthTokenFromClerkUserId(
-            client,
-            provider,
-            clerkUserId,
-            userIds[index]
-          )
-        )
-      );
-    }
-
-    const users = await client.users.getUserList({ limit: 500 });
-
-    const idCache: Record<string, string> = {};
-
-    for (const userId of userIds) {
-      const clerkUserId = users.data.find((user) =>
-        user.externalAccounts.find(
-          (account) =>
-            account.provider === provider &&
-            account.externalId === userId.toString()
-        )
-      )?.id;
-      if (clerkUserId) {
-        idCache[key(userId)] = clerkUserId;
-      }
-    }
-
-    await redis.mset(idCache);
-
     return await Promise.all(
-      userIds.map((userId) =>
-        getRobloxOauthTokenFromClerkUserId(
-          client,
-          provider,
-          idCache[key(userId)],
-          userId
-        )
+      clerkUserIds.map((clerkUserId, index) =>
+        clerkUserId
+          ? getRobloxOauthTokenFromClerkUserId(
+              client,
+              provider,
+              clerkUserId,
+              userIds[index]
+            )
+          : null
       )
     );
+
+    // if (clerkUserIds.every((id) => id !== null)) {
+
+    // }
+
+    // const users = await client.users.getUserList({ limit: 500 });
+
+    // const idCache: Record<string, string> = {};
+
+    // for (const userId of userIds) {
+    //   const clerkUserId = users.data.find((user) =>
+    //     user.externalAccounts.find(
+    //       (account) =>
+    //         account.provider === provider &&
+    //         account.externalId === userId.toString()
+    //     )
+    //   )?.id;
+    //   if (clerkUserId) {
+    //     idCache[key(userId)] = clerkUserId;
+    //   }
+    // }
+
+    // await redis.mset(idCache);
+
+    // return await Promise.all(
+    //   userIds.map((userId) =>
+    //     getRobloxOauthTokenFromClerkUserId(
+    //       client,
+    //       provider,
+    //       idCache[key(userId)],
+    //       userId
+    //     )
+    //   )
+    // );
   } catch (error) {
     if (error instanceof Error) {
       console.error(
@@ -344,7 +348,7 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
         error.message
       );
     }
-    return [];
+    return userIds.map(() => null);
   }
 }
 
