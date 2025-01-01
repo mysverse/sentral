@@ -266,14 +266,23 @@ async function getRobloxOauthTokenFromClerkUserId(
   robloxId?: number
 ) {
   let result: string | null = null;
-  if (clerkUserId) {
-    const oauthToken = await client.users.getUserOauthAccessToken(
-      clerkUserId,
-      provider
-    );
-    const token = oauthToken.data[0]?.token;
-    if (token) {
-      result = token;
+  try {
+    if (clerkUserId) {
+      const oauthToken = await client.users.getUserOauthAccessToken(
+        clerkUserId,
+        provider
+      );
+      const token = oauthToken.data[0]?.token;
+      if (token) {
+        result = token;
+      }
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(
+        `Error fetching oauth token for user ${clerkUserId} for provider ${provider}:`,
+        error.message
+      );
     }
   }
   if (result === null && robloxId) {
