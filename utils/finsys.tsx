@@ -286,7 +286,10 @@ async function getRobloxOauthTokenFromClerkUserId(
     }
   }
   if (result === null && robloxId) {
-    await redis.set(generateCacheKey(robloxId), undefined);
+    console.log(
+      `Failed to get oauth token for user ${robloxId}, deleting cache key`
+    );
+    await redis.del(generateCacheKey(robloxId));
   }
   return result;
 }
