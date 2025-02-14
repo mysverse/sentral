@@ -155,7 +155,7 @@ export default function NavMenu({
       <div className="bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 pb-32">
         <Disclosure
           as="nav"
-          className="border-opacity-25 border-b border-blue-300 bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 lg:border-none"
+          className="border-b border-blue-300/25 bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 lg:border-none"
         >
           {({ open }) => (
             <>
