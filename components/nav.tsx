@@ -26,18 +26,10 @@ export default async function Navigation() {
     <NavMenu
       avatar={
         session ? (
-          <UserButton
-            showName={true}
-            appearance={{
-              elements: {
-                userButtonOuterIdentifier: "text-white text-sm",
-                userButtonAvatarBox: "size-12 sm:size-10"
-              }
-            }}
-          />
+          <UserButton />
         ) : (
           <SignInButton>
-            <button className="rounded px-2 py-1 text-white outline outline-1 outline-white transition hover:bg-white hover:text-blue-500">
+            <button className="rounded-sm px-2 py-1 text-white outline outline-white transition hover:bg-white hover:text-blue-500">
               Sign in
             </button>
           </SignInButton>

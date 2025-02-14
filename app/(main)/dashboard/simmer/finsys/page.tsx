@@ -37,7 +37,7 @@ export default async function Main() {
 
     return (
       <div>
-        <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+        <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
           <PayoutRequestComponent />
         </div>
         <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
@@ -53,7 +53,7 @@ export default async function Main() {
       return (
         <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
           <DefaultTransitionLayout show={true} appear={true}>
-            <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+            <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
               <div className="text-medium text-center text-xl">
                 <p>{`MYSverse FinSys is only available to selected members of
                 MYSverse Sim.`}</p>

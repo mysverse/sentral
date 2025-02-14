@@ -72,7 +72,7 @@ function VotesByParty({ stats }: { stats: InvoteStatsTimestamp[] }) {
       {newStats2.map((item) => (
         <div
           key={item.name}
-          className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+          className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6"
         >
           <dt className="truncate text-sm font-medium text-gray-500">
             {item.name === "ROSAK" ? "Invalid" : item.name}
@@ -138,7 +138,7 @@ function ParliamentSeatDistributionByParty({
       {newStats2.map((item) => (
         <div
           key={item.name}
-          className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+          className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6"
         >
           <dt className="truncate text-sm font-medium text-gray-500">
             {item.name === "ROSAK" ? "Invalid" : item.name}
@@ -262,7 +262,7 @@ export default function InvotePage({
 
   return (
     <>
-      <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+      <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
             <div className="flex flex-row items-center justify-between">
@@ -279,11 +279,11 @@ export default function InvotePage({
               </div>
             </div>
             <div className="sm:flex sm:w-full sm:max-w-full">
-              <div className="flex min-w-0 flex-1 rounded-md shadow-sm">
+              <div className="flex min-w-0 flex-1 rounded-md shadow-xs">
                 <select
                   id="series_identifier"
                   name="series_identifier"
-                  className="mt-3 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-slate-500 focus:outline-none focus:ring-slate-500 sm:text-sm"
+                  className="mt-3 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-slate-500 focus:outline-hidden focus:ring-slate-500 sm:text-sm"
                   onChange={(e) => {
                     setSeries(e.target.value);
                   }}
@@ -321,7 +321,7 @@ export default function InvotePage({
               ) : null
             ) : null}
 
-            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
+            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow-sm">
               <VoteShareChart stats={stats} />
             </div>
 
@@ -332,7 +332,7 @@ export default function InvotePage({
             <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
               Votes by Polling Session
             </h3>
-            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow">
+            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow-sm">
               <VoteSection stats={stats} />
             </div>
           </DefaultTransitionLayout>
@@ -346,18 +346,18 @@ export default function InvotePage({
                 seatStats={seatStats}
               />
             </div>
-            <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow">
+            <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow-sm">
               <div className="relative flex flex-col justify-center gap-6">
                 <SeatsGeoMap stats={stats} seatStats={seatStats} />
               </div>
             </div>
             <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div className="rounded-lg bg-white px-5 py-8 shadow">
+              <div className="rounded-lg bg-white px-5 py-8 shadow-sm">
                 <div className="flex h-48 w-full justify-center">
                   <SeatsParliamentMap stats={stats} seatStats={seatStats} />
                 </div>
               </div>
-              <div className="rounded-lg bg-white px-5 py-8 shadow">
+              <div className="rounded-lg bg-white px-5 py-8 shadow-sm">
                 <SeatsPieChart stats={stats} seatStats={seatStats} />
               </div>
             </dl>

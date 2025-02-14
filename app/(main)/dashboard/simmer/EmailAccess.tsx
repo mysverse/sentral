@@ -52,7 +52,7 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:col-span-3">
+    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-xs sm:col-span-3">
       <h2 className="mb-4 text-xl font-semibold text-gray-800">Email Access</h2>
       {loading ? (
         <Spinner />

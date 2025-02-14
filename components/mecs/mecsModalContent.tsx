@@ -401,7 +401,7 @@ export default function QueryModalContent({
       {!loading && !error ? (
         <>
           <div className="mb-6 flex flex-col items-center sm:flex-row sm:space-x-5">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="relative">
                 <Image
                   className="rounded-full"
@@ -453,7 +453,7 @@ export default function QueryModalContent({
           {apiResponse.user.exempt ? (
             <div className="my-4 rounded-md bg-blue-50 p-4">
               <div className="flex">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <InformationCircleIcon
                     className="h-5 w-5 text-blue-400"
                     aria-hidden="true"
@@ -470,7 +470,7 @@ export default function QueryModalContent({
           ) : pass ? (
             <div className="my-4 rounded-md bg-green-50 p-4">
               <div className="flex">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <CheckCircleIcon
                     className="h-5 w-5 text-green-400"
                     aria-hidden="true"
@@ -487,7 +487,7 @@ export default function QueryModalContent({
           ) : (
             <div className="my-4 rounded-md bg-red-50 p-4">
               <div className="flex">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <XCircleIcon
                     className="h-5 w-5 text-red-400"
                     aria-hidden="true"
@@ -582,7 +582,7 @@ export default function QueryModalContent({
                 return (
                   <li
                     key={card.name}
-                    className="col-span-1 flex rounded-md shadow-sm"
+                    className="col-span-1 flex rounded-md shadow-xs"
                   >
                     <div
                       className={clsx(
@@ -591,7 +591,7 @@ export default function QueryModalContent({
                           : card.pass
                             ? "bg-green-500"
                             : "bg-red-500",
-                        "flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
+                        "flex w-16 shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
                       )}
                     >
                       {card.displayText === "PASS" ? (
@@ -627,7 +627,7 @@ export default function QueryModalContent({
                 return (
                   <li
                     key={card.name}
-                    className="col-span-1 flex rounded-md shadow-sm"
+                    className="col-span-1 flex rounded-md shadow-xs"
                   >
                     <div
                       className={clsx(
@@ -636,7 +636,7 @@ export default function QueryModalContent({
                           : card.pass
                             ? "bg-green-500"
                             : "bg-red-500",
-                        "flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
+                        "flex w-16 shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
                       )}
                     >
                       {card.displayText === "PASS" ? (
@@ -669,7 +669,7 @@ export default function QueryModalContent({
       ) : error ? (
         <>
           <div className="sm:flex sm:items-start">
-            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+            <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
               <ExclamationCircleIcon
                 className="h-6 w-6 text-red-600"
                 aria-hidden="true"

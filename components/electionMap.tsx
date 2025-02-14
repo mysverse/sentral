@@ -358,7 +358,7 @@ export default function ElectionMap({
         leaveTo="opacity-0"
       >
         <div
-          className="pointer-events-none rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition"
+          className="pointer-events-none rounded-lg border border-gray-200 bg-white p-6 shadow-xs transition"
           // style={{
           //   position: "absolute",
           //   top: tooltipPosition.y - 40,

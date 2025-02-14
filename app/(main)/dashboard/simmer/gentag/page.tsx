@@ -177,7 +177,7 @@ function NametagForm() {
                     id="nametag_name"
                     autoComplete="nametag_name"
                     placeholder="12 characters max"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
+                    className="block w-full rounded-md border-gray-300 shadow-xs focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
                     maxLength={12}
                     onChange={(e) => {
                       setName(e.target.value);
@@ -200,7 +200,7 @@ function NametagForm() {
                     id="nametag_type"
                     name="nametag_type"
                     autoComplete="nametag_type"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
+                    className="block w-full rounded-md border-gray-300 shadow-xs focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
                     onChange={(e) => {
                       const index = parseInt(e.target.value);
                       setCurrentIndex(index);
@@ -378,7 +378,7 @@ function NametagForm() {
                       T-Shirt ID
                     </label>
                     <div className="mt-1 sm:col-span-2 sm:mt-0">
-                      <div className="flex max-w-lg rounded-md shadow-sm">
+                      <div className="flex max-w-lg rounded-md shadow-xs">
                         <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
                           roblox.com/catalog/
                         </span>
@@ -407,7 +407,7 @@ function NametagForm() {
                                 : null
                               : null
                           }
-                          className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-xs text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
                           Add
                         </button> */}
@@ -442,7 +442,7 @@ function NametagForm() {
                 });
               }}
               disabled={!templates}
-              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
+              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
             >
               Generate
             </button>

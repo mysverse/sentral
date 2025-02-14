@@ -39,8 +39,8 @@ If you have any further questions about this privacy policy, please send an emai
 export default function PrivacyPolicyPage() {
   return (
     <DefaultTransitionLayout show={true} appear={true}>
-      <div className="mx-auto my-auto max-w-5xl flex-grow px-4 sm:px-6 lg:px-8">
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+      <div className="mx-auto my-auto max-w-5xl grow px-4 sm:px-6 lg:px-8">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <div className="prose max-w-fit text-justify">
             <Markdown>{content}</Markdown>
           </div>

@@ -73,7 +73,7 @@ function MECSForm() {
                   </p>
                 </div>
                 <div className="mt-4 sm:flex sm:w-full sm:max-w-full">
-                  <div className="flex rounded-md shadow-sm">
+                  <div className="flex rounded-md shadow-xs">
                     <select
                       id="input_type"
                       name="input_type"
@@ -92,7 +92,7 @@ function MECSForm() {
                       <option>User ID</option>
                     </select>
                   </div>
-                  <div className="mt-4 flex min-w-0 flex-1 rounded-md shadow-sm sm:ml-3 sm:mt-0">
+                  <div className="mt-4 flex min-w-0 flex-1 rounded-md shadow-xs sm:ml-3 sm:mt-0">
                     <label htmlFor="roblox_username" className="sr-only">
                       {isStandalonePWA() ? "Username" : "Roblox username"}
                     </label>
@@ -185,7 +185,7 @@ function MECSForm() {
                           }
                         }
                       }}
-                      className="block w-full rounded-md border border-transparent bg-blue-700 px-5 py-2 text-base font-medium text-white shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:bg-slate-400 sm:px-24"
+                      className="block w-full rounded-md border border-transparent bg-blue-700 px-5 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-800 focus:outline-hidden focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:bg-slate-400 sm:px-24"
                     >
                       Check
                     </button>
@@ -205,7 +205,7 @@ function MECSForm() {
                     type="button"
                     id="btn_dismiss"
                     onClick={() => setModalOpen(false)}
-                    className="mt-4 block rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 sm:px-24 sm:text-sm"
+                    className="mt-4 block rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 sm:px-24 sm:text-sm"
                   >
                     Dismiss
                   </button>
@@ -268,14 +268,14 @@ function BlacklistSection() {
           </div>
 
           <div>
-            <div className="relative z-0 inline-flex rounded-md shadow-sm">
+            <div className="relative z-0 inline-flex rounded-md shadow-xs">
               <button
                 type="button"
                 onClick={() => {
                   setType("users");
                   setOpen(true);
                 }}
-                className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+                className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-hidden focus:ring-1 focus:ring-slate-500"
               >
                 List of blacklisted individuals
               </button>
@@ -285,7 +285,7 @@ function BlacklistSection() {
                   setType("groups");
                   setOpen(true);
                 }}
-                className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+                className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-hidden focus:ring-1 focus:ring-slate-500"
               >
                 List of blacklisted communities
               </button>
@@ -299,21 +299,21 @@ function BlacklistSection() {
 
 export default function MecsPage() {
   return (
-    <div className="mx-auto my-auto max-w-7xl flex-grow px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto my-auto max-w-7xl grow px-4 sm:px-6 lg:px-8">
       <DefaultTransitionLayout show={true} appear={true}>
-        <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <MECSForm />
         </div>
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <BlacklistSection />
         </div>
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <AuditStats />
         </div>
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <StaffStats limit={4} />
         </div>
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             Memberships granted and rejected
           </h3>
@@ -326,7 +326,7 @@ export default function MecsPage() {
             </div>
           </div>
         </div>
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             Membership approval rate
           </h3>
@@ -339,7 +339,7 @@ export default function MecsPage() {
             </div>
           </div>
         </div>
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <MECSFAQ />
         </div>
       </DefaultTransitionLayout>

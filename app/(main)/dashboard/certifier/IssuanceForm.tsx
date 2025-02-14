@@ -44,7 +44,7 @@ export default function IssuanceForm() {
         value={recipientName}
         onChange={(e) => setRecipientName(e.target.value)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-2 focus:ring-blue-600"
       />
       <input
         type="text"
@@ -53,14 +53,14 @@ export default function IssuanceForm() {
         value={courseName}
         onChange={(e) => setCourseName(e.target.value)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-2 focus:ring-blue-600"
       />
       <select
         name="type"
         value={type}
         onChange={(e) => setType(e.target.value as CertificateType)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-2 focus:ring-blue-600"
       >
         <option value="ROLEPLAY">MYSverse Sim Roleplay Certification</option>
         <option value="TEAM_RECOGNITION">Team Member Recognition</option>
@@ -75,7 +75,7 @@ export default function IssuanceForm() {
           value={robloxUserID}
           onChange={(e) => setRobloxUserID(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-2 focus:ring-blue-600"
         />
       )}
 
@@ -87,7 +87,7 @@ export default function IssuanceForm() {
           value={recipientUserID}
           onChange={(e) => setRecipientUserID(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-2 focus:ring-blue-600"
         />
       )}
 
@@ -99,7 +99,7 @@ export default function IssuanceForm() {
           value={externalOrg}
           onChange={(e) => setExternalOrg(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-2 focus:ring-blue-600"
         />
       )}
       <div className="flex flex-col items-center gap-y-4">
@@ -107,7 +107,7 @@ export default function IssuanceForm() {
           type="submit"
           disabled={loading}
           className={clsx(
-            `w-full rounded-lg px-4 py-2 text-white transition focus:outline-none focus:ring-2 focus:ring-blue-600`,
+            `w-full rounded-lg px-4 py-2 text-white transition focus:outline-hidden focus:ring-2 focus:ring-blue-600`,
             loading
               ? "cursor-not-allowed bg-gray-400"
               : "bg-blue-600 outline hover:bg-white hover:text-blue-600 hover:outline-blue-600"

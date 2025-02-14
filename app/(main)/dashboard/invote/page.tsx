@@ -34,7 +34,7 @@ export default async function Page(props: PageProps) {
   return (
     <>
       <InvotePage seriesIdentifiers={seriesIdentifiers} />
-      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
         <h1 className="mb-4 text-lg font-semibold">Candidates</h1>
         <Suspense
           fallback={

@@ -132,7 +132,7 @@ export default function MainClient({ data }: { data: User[] }) {
 
   return (
     <div className="grid grid-cols-1 gap-6">
-      <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+      <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-6">
           <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:items-center">
             <label className="block text-sm font-medium text-gray-700">
@@ -143,7 +143,7 @@ export default function MainClient({ data }: { data: User[] }) {
               value={selectedDate}
               max={defaultDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="rounded border border-gray-400 p-2"
+              className="rounded-sm border border-gray-400 p-2"
             />
           </div>
           <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:items-center">
@@ -154,7 +154,7 @@ export default function MainClient({ data }: { data: User[] }) {
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="rounded border border-gray-400 p-2"
+              className="rounded-sm border border-gray-400 p-2"
             />
           </div>
           <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:items-center">
@@ -165,13 +165,13 @@ export default function MainClient({ data }: { data: User[] }) {
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="rounded border border-gray-400 p-2"
+              className="rounded-sm border border-gray-400 p-2"
             />
           </div>
         </div>
       </div>
 
-      <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+      <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
         <SimetryTable dataset={filteredDataByDate} />
       </div>
 

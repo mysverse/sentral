@@ -18,7 +18,7 @@ export default function FeatureCard({
   href
 }: FeatureCardProps) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-xs">
       <h2 className="mb-2 text-xl font-semibold text-gray-800">
         {logo ? (
           <>

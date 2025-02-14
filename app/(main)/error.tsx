@@ -29,7 +29,7 @@ export default function Error({
       leaveTo="opacity-0 -translate-y-36 scale-80"
     >
       <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <div className="flex h-96 flex-col items-center">
             <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-red-100">
               <ExclamationCircleIcon
@@ -65,7 +65,7 @@ export default function Error({
               <div className="mt-8 flex justify-center">
                 <button
                   type="button"
-                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto"
+                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:w-auto"
                   onClick={reset}
                 >
                   Retry

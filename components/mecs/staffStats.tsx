@@ -34,7 +34,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
             key={item.officer.id}
             className="flex flex-col items-center md:flex-row md:space-x-5"
           >
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="relative">
                 <a
                   href={`https://roblox.com/users/${item.officer.id}`}

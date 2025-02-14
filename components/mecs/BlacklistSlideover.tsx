@@ -32,7 +32,7 @@ export default function BlacklistSlideover({
     <Dialog
       open={open}
       onClose={setOpen}
-      className="relative z-50 transition duration-300 ease-out data-[closed]:opacity-0"
+      className="relative z-50 transition duration-300 ease-out data-closed:opacity-0"
       transition
     >
       <DialogBackdrop className="fixed inset-0 bg-black/30" />

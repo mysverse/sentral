@@ -74,17 +74,17 @@ function AppList() {
     <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-3">
       {links.map((link) => (
         <DefaultTransitionLayout show={true} key={link.href} appear={true}>
-          <li className="col-span-1 flex flex-col divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-center shadow">
+          <li className="col-span-1 flex flex-col divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-center shadow-sm">
             <Image src={link.image} alt={"Marketing image for " + link.title} />
             <div className="flex flex-1 flex-col p-8">
-              {/* <link.logo className="w-36 my-3 flex-shrink-0 mx-auto fill-slate-700" /> */}
+              {/* <link.logo className="w-36 my-3 shrink-0 mx-auto fill-slate-700" /> */}
               <h2 className="text-xl font-semibold text-gray-900">
                 {link.name}
               </h2>
               <h3 className="text-sm font-medium text-gray-700">
                 {link.title}
               </h3>
-              <dl className="mt-3 flex flex-grow flex-col justify-between">
+              <dl className="mt-3 flex grow flex-col justify-between">
                 <dt className="sr-only">Description</dt>
                 <dd className="text-sm text-gray-500">{link.description}</dd>
                 <dt className="sr-only">Status</dt>
@@ -125,9 +125,9 @@ function AppList() {
 
 export default function MainPage() {
   return (
-    <div className="mx-auto my-auto max-w-7xl flex-grow px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto my-auto max-w-7xl grow px-4 sm:px-6 lg:px-8">
       <AppList />
-      <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+      <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
         <GeneralFAQ />
       </div>
     </div>

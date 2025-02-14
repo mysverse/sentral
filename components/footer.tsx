@@ -50,7 +50,7 @@ export default function Footer() {
     return null;
   }
   return (
-    <footer className="mt-24 bg-gradient-to-r from-blue-500 via-blue-700 to-blue-800 sm:mt-12">
+    <footer className="mt-24 bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 sm:mt-12">
       <div className="mx-auto max-w-md overflow-hidden px-4 pb-12 sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
         {/* <div className="mx-4 my-10 gap-8 flex flex-wrap justify-center align-center">
             <a

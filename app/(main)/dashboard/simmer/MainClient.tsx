@@ -53,7 +53,7 @@ export default function MainClient({
           {groups.map((group) => (
             <div
               key={group.group.id}
-              className="col-span-1 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+              className="col-span-1 rounded-lg border border-gray-200 bg-white p-6 shadow-xs"
             >
               <h3 className="text-lg font-semibold text-gray-800 md:text-xl">
                 {group.group.name}

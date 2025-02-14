@@ -37,7 +37,7 @@ export default function GrowthPageContent({
     growthUtils.getHighestRelativeGrowthMonth();
 
   return (
-    <div className="mx-auto my-auto max-w-7xl flex-grow px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto my-auto max-w-7xl grow px-4 sm:px-6 lg:px-8">
       <DefaultTransitionLayout show={true} appear={true}>
         <GrowthChartSection
           chartData={growthUtils.getLineChartDataPure(displayOption)}

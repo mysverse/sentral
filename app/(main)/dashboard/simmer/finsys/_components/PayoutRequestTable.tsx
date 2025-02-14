@@ -78,7 +78,7 @@ function PayoutRequestsTable({
         return (
           <div
             key={request.id}
-            className="flex h-full flex-col rounded-lg bg-white px-4 py-4 shadow sm:px-6"
+            className="flex h-full flex-col rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6"
           >
             <div
               className={clsx(
@@ -198,7 +198,7 @@ function PayoutRequestsTable({
                                   {typeof val.owned !== "undefined" && (
                                     <span
                                       className={clsx(
-                                        "ml-1 rounded px-1.5 py-0.5 text-[0.7rem] font-normal uppercase tracking-wide text-white",
+                                        "ml-1 rounded-sm px-1.5 py-0.5 text-[0.7rem] font-normal uppercase tracking-wide text-white",
                                         (request.status === "approved" &&
                                           val.owned) ||
                                           (request.status === "pending" &&
@@ -284,7 +284,7 @@ function PayoutRequestsTable({
                       name="comment"
                       onChange={(e) => setRejectionReason(e.target.value)}
                       id="comment"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       defaultValue={""}
                     />
                   </div>

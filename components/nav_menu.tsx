@@ -152,17 +152,17 @@ export default function NavMenu({
   return (
     <>
       <PrivacyBanner />
-      <div className="bg-gradient-to-r from-blue-500 via-blue-700 to-blue-800 pb-32">
+      <div className="bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 pb-32">
         <Disclosure
           as="nav"
-          className="border-b border-blue-300 border-opacity-25 bg-gradient-to-r from-blue-500 via-blue-700 to-blue-800 lg:border-none"
+          className="border-opacity-25 border-b border-blue-300 bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 lg:border-none"
         >
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
-                <div className="relative flex h-16 items-center justify-between lg:border-b lg:border-blue-300 lg:border-opacity-25">
+                <div className="relative flex h-16 items-center justify-between lg:border-b lg:border-blue-300/25">
                   <div className="flex items-center px-2 lg:px-0">
-                    <div className="flex-shrink-0 pt-1">
+                    <div className="shrink-0 pt-1">
                       <Link
                         href={"/"}
                         className="transition hover:opacity-80"
@@ -189,7 +189,7 @@ export default function NavMenu({
                               className={clsx(
                                 item.current
                                   ? "bg-blue-600 text-white"
-                                  : "text-white hover:bg-blue-400 hover:bg-opacity-75",
+                                  : "hover:bg-opacity-75 text-white hover:bg-blue-400",
                                 "rounded-md px-3 py-2 text-sm font-medium transition"
                               )}
                               aria-current={item.current ? "page" : undefined}
@@ -203,7 +203,7 @@ export default function NavMenu({
                               className={clsx(
                                 item.current
                                   ? "bg-blue-600 text-white"
-                                  : "text-white hover:bg-blue-400 hover:bg-opacity-75",
+                                  : "hover:bg-opacity-75 text-white hover:bg-blue-400",
                                 "rounded-md px-3 py-2 text-sm font-medium transition"
                               )}
                               aria-current={item.current ? "page" : undefined}
@@ -221,7 +221,7 @@ export default function NavMenu({
                   ) : null}
                   <div className="flex lg:hidden">
                     {/* Mobile menu button */}
-                    <DisclosureButton className="inline-flex items-center justify-center rounded-md p-2 text-blue-200 transition hover:bg-blue-500 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
+                    <DisclosureButton className="hover:bg-opacity-75 inline-flex items-center justify-center rounded-md p-2 text-blue-200 transition hover:bg-blue-500 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 focus:outline-hidden">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon
@@ -241,7 +241,7 @@ export default function NavMenu({
 
               <DisclosurePanel className="lg:hidden">
                 <div className="flex flex-col divide-y divide-blue-300/25">
-                  <div className="space-y-1 px-2 pb-3 pt-2">
+                  <div className="space-y-1 px-2 pt-2 pb-3">
                     {navigation
                       .filter((item) => !item.hidden)
                       .map((item) => (
@@ -252,7 +252,7 @@ export default function NavMenu({
                           className={clsx(
                             item.current
                               ? "bg-blue-700 text-white"
-                              : "text-white hover:bg-blue-500 hover:bg-opacity-75",
+                              : "hover:bg-opacity-75 text-white hover:bg-blue-500",
                             "block rounded-md px-3 py-2 text-base font-medium transition"
                           )}
                           aria-current={item.current ? "page" : undefined}

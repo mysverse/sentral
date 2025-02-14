@@ -33,7 +33,7 @@ function StatDisplay(stats: statistics[]) {
         {stats.map((item) => (
           <div
             key={item.id}
-            className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6"
+            className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow-sm sm:px-6 sm:pt-6"
           >
             <dt>
               <div
@@ -67,12 +67,12 @@ function StatDisplay(stats: statistics[]) {
                 >
                   {item.changeType === "increase" ? (
                     <ArrowUpIcon
-                      className="mr-1 h-4 w-4 flex-shrink-0 self-center text-green-500"
+                      className="mr-1 h-4 w-4 shrink-0 self-center text-green-500"
                       aria-hidden="true"
                     />
                   ) : (
                     <ArrowDownIcon
-                      className="mr-1 h-4 w-4 flex-shrink-0 self-center text-red-500"
+                      className="mr-1 h-4 w-4 shrink-0 self-center text-red-500"
                       aria-hidden="true"
                     />
                   )}

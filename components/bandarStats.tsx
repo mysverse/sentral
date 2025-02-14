@@ -293,7 +293,7 @@ function BandarStats({
 }) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <div className="rounded-lg bg-white px-6 py-6 shadow">
+      <div className="rounded-lg bg-white px-6 py-6 shadow-sm">
         <header>
           <h3 className="mb-2 text-xl font-bold">General stats</h3>
         </header>
@@ -301,7 +301,7 @@ function BandarStats({
       </div>
 
       {bandarData.MYS_POS_2 ? (
-        <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <header>
             <h3 className="mb-2 text-xl font-bold">POS stats</h3>
           </header>
@@ -309,7 +309,7 @@ function BandarStats({
         </div>
       ) : null}
       {bandarData.MYS_Taxi_2 ? (
-        <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
           <header>
             <h3 className="mb-2 text-xl font-bold">Taxi stats</h3>
           </header>
@@ -317,7 +317,7 @@ function BandarStats({
         </div>
       ) : null}
       {bandarData.TimeOnMAF || bandarData.TimeOnMYT || bandarData.TimeOnPDRM ? (
-        <div className="rounded-lg bg-white px-6 py-6 shadow">
+        <div className="rounded-lg bg-white px-6 py-6 shadow-sm">
           <header>
             <h3 className="mb-2 text-xl font-bold">Occupational stats</h3>
           </header>
@@ -325,7 +325,7 @@ function BandarStats({
         </div>
       ) : null}
       {bandarData.MYS_PermanentVehicles_2.length > 0 ? (
-        <div className="rounded-lg bg-white px-5 py-6 shadow sm:col-span-2 sm:px-6">
+        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:col-span-2 sm:px-6">
           <header>
             <h3 className="mb-2 text-xl font-bold">Owned vehicles</h3>
           </header>
@@ -506,7 +506,7 @@ export default function MysverseStats({ data }: { data: MYSverseData }) {
       <DefaultTransitionLayout show={!!data} appear={true}>
         <BandarStats bandarData={data.bandarData} />
       </DefaultTransitionLayout>
-      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
         <header className="mb-6">
           <h3 className="mb-2 text-xl font-bold">Arrests</h3>
           <ul className="ml-4 flex list-disc flex-col gap-y-1">
@@ -517,7 +517,7 @@ export default function MysverseStats({ data }: { data: MYSverseData }) {
         <Arrests arrests={data.arrests} />
       </div>
 
-      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
         <header className="mb-6">
           <h3 className="mb-2 text-xl font-bold">Summonses</h3>
           <ul className="ml-4 flex list-disc flex-col gap-y-1">

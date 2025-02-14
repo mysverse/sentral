@@ -39,7 +39,7 @@ export default async function Main() {
           <MysverseStats data={mysverseData} />
         ) : (
           <>
-            <div className="rounded-lg bg-white px-4 py-4 shadow sm:px-6">
+            <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
               <div className="text-center">
                 <h1 className="text-3xl font-extrabold text-gray-900">
                   Roblox account not connected

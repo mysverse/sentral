@@ -17,7 +17,7 @@ export default function DefaultLayout({
           toastOptions={{ className: publicSans.className }}
         />
         <Navigation />
-        <main className="-mt-32 flex-grow">{children}</main>
+        <main className="-mt-32 grow">{children}</main>
         <Footer />
       </body>
     </html>

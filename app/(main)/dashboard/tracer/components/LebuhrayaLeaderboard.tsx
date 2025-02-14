@@ -38,21 +38,21 @@ export default function LebuhrayaLeaderboard({
         >
           {type === "school" ? (
             <div className="my-auto">
-              <h2 className="text-sm font-normal uppercase tracking-widest">
+              <h2 className="text-sm font-normal tracking-widest uppercase">
                 SMK MYS II
               </h2>
               <h1>Top {limit.toLocaleString()} Lebuhraya Quiz Students</h1>
             </div>
           ) : type === "food" ? (
             <div className="my-auto">
-              <h2 className="text-sm font-normal uppercase tracking-widest">
+              <h2 className="text-sm font-normal tracking-widest uppercase">
                 Masjid Kampung Merbang
               </h2>
               <h1>Top {limit.toLocaleString()} Lebuhraya Buffet Score</h1>
             </div>
           ) : type === "weekly" ? (
             <div className="my-auto">
-              <h2 className="text-sm font-normal uppercase tracking-widest">
+              <h2 className="text-sm font-normal tracking-widest uppercase">
                 {currentWeekInfo.startDate.toDateString()}
                 {" > "}
                 {currentWeekInfo.endDate.toDateString()}
@@ -64,7 +64,7 @@ export default function LebuhrayaLeaderboard({
             </div>
           ) : (
             <div className="my-auto">
-              <h2 className="text-sm font-normal uppercase tracking-widest">
+              <h2 className="text-sm font-normal tracking-widest uppercase">
                 All-Time
               </h2>
               <h1>Top {limit.toLocaleString()} Lebuhraya Lap Times</h1>
@@ -72,13 +72,13 @@ export default function LebuhrayaLeaderboard({
           )}
         </div>
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+          <div className="overflow-hidden ring-1 shadow-sm ring-black/5 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-50">
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
                     <span className="hidden sm:block">Position</span>
                     <span className="block sm:hidden">No.</span>
@@ -118,7 +118,7 @@ export default function LebuhrayaLeaderboard({
                   .filter((person) => person.user)
                   .map((person, index) => (
                     <tr key={person.user.id}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                      <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
                         {`${(index + 1).toString().padStart(3, "0")}`}
                       </td>
                       {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -127,7 +127,7 @@ export default function LebuhrayaLeaderboard({
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {person.email}
                     </td> */}
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                         <Link
                           href={`https://roblox.com/users/${person.user.id}/profile`}
                           target="=_blank"
@@ -149,7 +149,7 @@ export default function LebuhrayaLeaderboard({
                           </div>
                         </Link>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                         {(person.time ?? person.score)?.toLocaleString()}
                       </td>
                       {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">

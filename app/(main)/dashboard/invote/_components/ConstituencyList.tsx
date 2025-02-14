@@ -62,7 +62,7 @@ export default async function ConstituencyList({ series }: { series: string }) {
           >
             <div className="mb-4 flex flex-row space-x-2 text-lg font-semibold">
               <div className="flex flex-row items-center">
-                <span className="rounded bg-gray-200 px-2 py-1 text-sm">
+                <span className="rounded-sm bg-gray-200 px-2 py-1 text-sm">
                   {code}
                 </span>
               </div>

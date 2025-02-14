@@ -29,7 +29,7 @@ function Notice({
       )}
     >
       <div className="flex">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {type === "urgent" ? (
             <ExclamationTriangleIcon
               className="h-5 w-5 text-red-400"
@@ -77,7 +77,7 @@ function Checklist() {
               name="confirmation_amount"
               type="checkbox"
               aria-describedby="confirmation_amount_description"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+              className="h-4 w-4 rounded-sm border-gray-300 text-blue-600 focus:ring-blue-600"
               required
             />
           </div>
@@ -103,7 +103,7 @@ function Checklist() {
               name="confirmation_reason"
               type="checkbox"
               aria-describedby="confirmation_reason-description"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+              className="h-4 w-4 rounded-sm border-gray-300 text-blue-600 focus:ring-blue-600"
               required
             />
           </div>
@@ -128,7 +128,7 @@ function Checklist() {
               name="confirmation_itemlist"
               type="checkbox"
               aria-describedby="confirmation_itemlist-description"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+              className="h-4 w-4 rounded-sm border-gray-300 text-blue-600 focus:ring-blue-600"
               required
             />
           </div>
@@ -265,7 +265,7 @@ function PayoutRequestComponent() {
               min={"1"}
               max={"100"}
               placeholder="Maximum 100 R$ per request"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               onChange={(e) => setAmount(parseInt(e.target.value))}
               required
             />
@@ -283,7 +283,7 @@ function PayoutRequestComponent() {
               onChange={(e) => setAgency(e.target.value)}
               required
               defaultValue=""
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             >
               <option disabled value="">
                 Select a Sim agency
@@ -312,7 +312,7 @@ function PayoutRequestComponent() {
             required
             onChange={(e) => setCategory(e.target.value)}
             defaultValue=""
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           >
             <option disabled value="">
               Select a request category
@@ -347,7 +347,7 @@ function PayoutRequestComponent() {
                 name="sim_rank_previous"
                 placeholder="Private"
                 maxLength={64}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
               />
             </div>
@@ -364,7 +364,7 @@ function PayoutRequestComponent() {
                 name="sim_rank_after"
                 placeholder="Corporal"
                 maxLength={64}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
               />
             </div>
@@ -386,7 +386,7 @@ function PayoutRequestComponent() {
                 name="sim_transfer_previous"
                 placeholder="Agency/Division Alpha"
                 maxLength={64}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
               />
             </div>
@@ -403,7 +403,7 @@ function PayoutRequestComponent() {
                 name="sim_transfer_after"
                 placeholder="Agency/Division Bravo"
                 maxLength={64}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
               />
             </div>
@@ -424,7 +424,7 @@ function PayoutRequestComponent() {
             name="reason"
             rows={5}
             maxLength={4096}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => setReason(e.target.value)}
             required
           ></textarea>
@@ -441,7 +441,7 @@ function PayoutRequestComponent() {
           <button
             type="submit"
             disabled={pending}
-            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
           >
             Submit Request
           </button>

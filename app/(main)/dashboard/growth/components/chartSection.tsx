@@ -85,7 +85,7 @@ export default function GrowthChartSection({
 
   return (
     <>
-      <div className="rounded-lg bg-white px-1 py-6 shadow sm:px-5">
+      <div className="rounded-lg bg-white px-1 py-6 shadow-sm sm:px-5">
         <div className="relative h-[28rem] w-[99%]">
           <GrowthChart
             chartData={chartData}
@@ -94,7 +94,7 @@ export default function GrowthChartSection({
           />
         </div>
       </div>
-      <div className="mt-8 grid grid-cols-1 justify-center gap-6 rounded-lg bg-white px-5 py-6 shadow sm:grid-cols-2 sm:px-6">
+      <div className="mt-8 grid grid-cols-1 justify-center gap-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:grid-cols-2 sm:px-6">
         <RadioGroup
           value={logarithmic ? "logarithmic" : "linear"}
           onChange={(e) => {
@@ -111,7 +111,7 @@ export default function GrowthChartSection({
                   clsx(
                     "flex items-center justify-center rounded-md border px-2 py-3 text-sm font-medium sm:flex-1 sm:px-6",
                     !option.disabled
-                      ? "cursor-pointer focus:outline-none"
+                      ? "cursor-pointer focus:outline-hidden"
                       : "cursor-not-allowed opacity-25",
                     checked
                       ? "border-transparent bg-blue-600 text-white hover:bg-blue-700"
@@ -143,13 +143,13 @@ export default function GrowthChartSection({
         >
           {({ open }) => (
             <div className="relative">
-              <ListboxButton className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pl-3 pr-10 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm">
+              <ListboxButton className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pl-3 pr-10 text-left shadow-xs focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500 sm:text-sm">
                 <div className="flex items-center">
                   <span
                     aria-label={selectedMonth.valid ? "Online" : "Offline"}
                     className={clsx(
                       selectedMonth.valid ? "bg-green-400" : "bg-gray-200",
-                      "inline-block h-2 w-2 flex-shrink-0 rounded-full"
+                      "inline-block h-2 w-2 shrink-0 rounded-full"
                     )}
                   />
                   <span className="ml-3 block truncate">
@@ -171,7 +171,7 @@ export default function GrowthChartSection({
                 leaveTo="opacity-0"
               >
                 {open && (
-                  <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden sm:text-sm">
                     {months.map((month, index) => (
                       <ListboxOption
                         key={index}
@@ -181,7 +181,7 @@ export default function GrowthChartSection({
                           clsx(
                             "relative cursor-default select-none py-2 pl-3 pr-9",
                             selected
-                              ? "bg-gradient-to-l from-blue-500 via-blue-700 to-blue-800 text-white"
+                              ? "bg-linear-to-l from-blue-500 via-blue-700 to-blue-800 text-white"
                               : "text-gray-900",
                             disabled && "opacity-50"
                           )
@@ -193,7 +193,7 @@ export default function GrowthChartSection({
                               <span
                                 className={clsx(
                                   month.valid ? "bg-green-400" : "bg-gray-200",
-                                  "inline-block h-2 w-2 flex-shrink-0 rounded-full"
+                                  "inline-block h-2 w-2 shrink-0 rounded-full"
                                 )}
                                 aria-hidden="true"
                               />

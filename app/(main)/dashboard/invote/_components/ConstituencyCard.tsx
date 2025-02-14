@@ -55,7 +55,7 @@ export default function ConstituencyCard({
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
-      className="group relative flex h-24 overflow-hidden rounded border border-gray-200 transition hover:border-none"
+      className="group relative flex h-24 overflow-hidden rounded-sm border border-gray-200 transition hover:border-none"
     >
       <div
         className="w-2 transition"
@@ -94,7 +94,7 @@ export default function ConstituencyCard({
               height={352}
               width={352}
               alt={`${contestant.username}'s avatar`}
-              className="scale-125 opacity-60 transition group-hover:scale-150 group-hover:opacity-70 group-hover:blur-sm group-hover:contrast-200 group-hover:grayscale"
+              className="scale-125 opacity-60 transition group-hover:scale-150 group-hover:opacity-70 group-hover:blur-xs group-hover:contrast-200 group-hover:grayscale"
             />
           </div>
         </div>

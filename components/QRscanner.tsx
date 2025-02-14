@@ -99,7 +99,7 @@ export default function QRCodeScanner() {
           >
             {/* Show a list of devices from the useDevices hook */}
             <select
-              className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-xs focus:border-indigo-500 focus:outline-hidden focus:ring-indigo-500 sm:text-sm"
               onChange={(e) => {
                 if (!e.target.disabled) setDeviceId(e.target.value);
               }}
@@ -158,12 +158,12 @@ export default function QRCodeScanner() {
               if (e.key === "Enter") handleManualSubmit();
             }}
             required
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-hidden focus:ring-2 focus:ring-blue-600"
             ref={inputRef}
           />
           <button
             onClick={handleManualSubmit}
-            className="mt-2 w-full transform rounded-lg bg-blue-600 px-4 py-2 text-white transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 sm:mt-4"
+            className="mt-2 w-full transform rounded-lg bg-blue-600 px-4 py-2 text-white transition-transform hover:scale-105 focus:outline-hidden focus:ring-2 focus:ring-blue-600 sm:mt-4"
           >
             Submit Code
           </button>
