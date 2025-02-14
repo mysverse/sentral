@@ -21,12 +21,12 @@ export default function Error({
       as="div"
       show={true}
       appear={true}
-      enter="transform transition duration-[400ms]"
-      enterFrom="opacity-0 -translate-y-36 scale-80"
-      enterTo="opacity-100 translate-y-0 scale-100"
-      leave="transform transition duration-[400ms]"
-      leaveFrom="opacity-100 translate-y-0 scale-100"
-      leaveTo="opacity-0 -translate-y-36 scale-80"
+      enter="transform transition duration-400"
+      enterFrom="opacity-0 -translate-y-36"
+      enterTo="opacity-100 translate-y-0"
+      leave="transform transition duration-400"
+      leaveFrom="opacity-100 translate-y-0"
+      leaveTo="opacity-0 -translate-y-36"
     >
       <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
         <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
@@ -38,7 +38,7 @@ export default function Error({
               />
             </div>
             <div className="mt-4">
-              <h3 className="text-center text-lg font-medium leading-6 text-gray-900">
+              <h3 className="text-center text-lg leading-6 font-medium text-gray-900">
                 {"Uh oh, we couldn't complete that request..."}
               </h3>
               <div className="mt-4 text-center">

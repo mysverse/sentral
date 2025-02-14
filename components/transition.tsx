@@ -17,12 +17,12 @@ export default function DefaultTransitionLayout({
       as="div"
       show={show}
       appear={appear}
-      enter="transform transition duration-[400ms]"
-      enterFrom="opacity-0 -translate-y-36 scale-80"
-      enterTo="opacity-100 translate-y-0 scale-100"
-      leave="transform transition duration-[400ms]"
-      leaveFrom="opacity-100 translate-y-0 scale-100"
-      leaveTo="opacity-0 -translate-y-36 scale-80"
+      enter="transform transition duration-400"
+      enterFrom="opacity-0 -translate-y-36"
+      enterTo="opacity-100 translate-y-0"
+      leave="transform transition duration-400"
+      leaveFrom="opacity-100 translate-y-0"
+      leaveTo="opacity-0 -translate-y-36"
     >
       {children}
     </Transition>
