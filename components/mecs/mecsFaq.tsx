@@ -1,11 +1,4 @@
-/* This example requires Tailwind CSS v2.0+ */
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel
-} from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { clsx } from "clsx";
+import FAQ from "components/FAQ";
 
 const faqs = [
   {
@@ -48,42 +41,10 @@ const faqs = [
 
 export default function MECSFAQ() {
   return (
-    <div className="divide-y-2 divide-gray-200">
-      <h2 className="text-lg font-medium leading-6 text-gray-900">
-        Common questions
-      </h2>
-      <dl className="mt-4 space-y-3 divide-y divide-gray-200">
-        {faqs.map((faq) => (
-          <Disclosure as="div" key={faq.question} className="pt-6">
-            {({ open }) => (
-              <>
-                <dt className="text-base">
-                  <DisclosureButton className="flex w-full items-start justify-between text-left text-gray-400">
-                    <span className="font-medium text-gray-900">
-                      {faq.question}
-                    </span>
-                    <span className="ml-6 flex h-7 items-center">
-                      <ChevronDownIcon
-                        className={clsx(
-                          open ? "-rotate-180" : "rotate-0",
-                          "h-6 w-6 transform"
-                        )}
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </DisclosureButton>
-                </dt>
-                <DisclosurePanel as="dd" className="mt-2 pr-12">
-                  <p className="text-base text-gray-500">{faq.answer}</p>
-                </DisclosurePanel>
-              </>
-            )}
-          </Disclosure>
-        ))}
-      </dl>
-      <div className="mt-4 pt-4">
-        <p className="text-sm opacity-60">*as of 11 May 2023</p>
-      </div>
-    </div>
+    <FAQ
+      title="Common questions"
+      faqs={faqs}
+      footer={"As of 14 Feburary 2025"}
+    />
   );
 }
