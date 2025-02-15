@@ -17,7 +17,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
 
   return !loading && !error ? (
     <>
-      <h2 className="inline text-lg font-medium leading-6 text-gray-900">
+      <h2 className="inline text-lg leading-6 font-medium text-gray-900">
         {limit ? `Most active membership staff` : `All membership staff`}
       </h2>
       <span className="ml-3 inline text-sm text-slate-800 hover:underline">

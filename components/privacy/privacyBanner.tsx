@@ -40,7 +40,7 @@ export default function PrivacyBanner() {
         "pointer-events-none fixed inset-x-0 bottom-0 z-10 px-6 pb-6"
       )}
     >
-      <div className="pointer-events-auto mx-auto max-w-2xl rounded-xl bg-white p-6 shadow-lg ring-1 ring-gray-900/10">
+      <div className="pointer-events-auto mx-auto max-w-2xl rounded-xl bg-white p-6 ring-1 shadow-lg ring-gray-900/10">
         <p className="text-sm leading-6 text-gray-900">
           We collect and store data regarding your usage to improve our services
           and prevent abuse.

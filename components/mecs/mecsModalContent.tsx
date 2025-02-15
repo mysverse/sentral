@@ -34,7 +34,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
   }
   return (
     <>
-      <h2 className="mb-6 text-lg font-medium leading-6 text-gray-900">
+      <h2 className="mb-6 text-lg leading-6 font-medium text-gray-900">
         {`Ranking history`}
       </h2>
       <div className="flow-root">
@@ -52,7 +52,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                 <div className="relative pb-8">
                   {eventIdx !== history.length - 1 ? (
                     <span
-                      className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+                      className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
                       aria-hidden="true"
                     />
                   ) : null}
@@ -130,7 +130,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           ) : null}
                         </p>
                       </div>
-                      <div className="whitespace-nowrap text-right text-sm text-gray-500">
+                      <div className="text-right text-sm whitespace-nowrap text-gray-500">
                         <time
                           dateTime={event.timestamps.action.substring(0, 10)}
                         >
@@ -447,7 +447,7 @@ export default function QueryModalContent({
               </p>
             </div>
           </div>
-          <h2 className="text-lg font-medium leading-6 text-gray-900">
+          <h2 className="text-lg leading-6 font-medium text-gray-900">
             {`Criteria results`}
           </h2>
           {apiResponse.user.exempt ? (
@@ -510,7 +510,7 @@ export default function QueryModalContent({
             </div>
           )}
           <div>
-            <h2 className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            <h2 className="text-xs font-medium tracking-wide text-gray-500 uppercase">
               Mandatory criteria
             </h2>
             <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -569,7 +569,7 @@ export default function QueryModalContent({
               })}
             </dl>
           </div>
-          <h2 className="mt-6 text-xs font-medium uppercase tracking-wide text-gray-500">
+          <h2 className="mt-6 text-xs font-medium tracking-wide text-gray-500 uppercase">
             Trust factor scoring criteria
           </h2>
           <ul
@@ -602,7 +602,7 @@ export default function QueryModalContent({
                         card.displayText
                       )}
                     </div>
-                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
+                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
                       <div className="flex-1 truncate px-4 py-2 text-sm">
                         <span className="font-medium text-gray-900 hover:text-gray-600">
                           {card.title}
@@ -617,7 +617,7 @@ export default function QueryModalContent({
               }
             })}
           </ul>
-          <h2 className="mt-6 text-xs font-medium uppercase tracking-wide text-gray-500">
+          <h2 className="mt-6 text-xs font-medium tracking-wide text-gray-500 uppercase">
             Miscallaneous information
           </h2>
           <ul role="list" className="mt-3 grid grid-cols-1 gap-3">
@@ -647,7 +647,7 @@ export default function QueryModalContent({
                         card.displayText
                       )}
                     </div>
-                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
+                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
                       <div className="flex-1 truncate px-4 py-2 text-sm">
                         <span className="font-medium text-gray-900 hover:text-gray-600">
                           {card.title}
@@ -675,8 +675,8 @@ export default function QueryModalContent({
                 aria-hidden="true"
               />
             </div>
-            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
+            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
                 Uh oh, we hit a snag
               </h3>
               <div className="mt-2">

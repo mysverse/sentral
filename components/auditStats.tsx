@@ -18,7 +18,7 @@ export default function AuditStats() {
     const latest = new Date(stats.timeRange.latest);
     return (
       <>
-        <h2 className="inline text-lg font-medium leading-6 text-gray-900">
+        <h2 className="inline text-lg leading-6 font-medium text-gray-900">
           Cumulative audit statistics
         </h2>
 

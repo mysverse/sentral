@@ -63,7 +63,7 @@ export default function BlacklistSlideover({
                     tab.value === type
                       ? "border-slate-500 text-slate-600"
                       : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                    "cursor-pointer whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium"
+                    "cursor-pointer border-b-2 px-1 pb-4 text-sm font-medium whitespace-nowrap"
                   )}
                   onClick={() => setType(tab.value as "users" | "groups")}
                 >
@@ -106,10 +106,10 @@ export default function BlacklistSlideover({
                             <p className="truncate text-sm font-medium text-gray-900">
                               {type === "groups" ? item.name : `@${item.name}`}
                             </p>
-                            <p className="w-72 whitespace-normal text-sm text-gray-500">
+                            <p className="w-72 text-sm whitespace-normal text-gray-500">
                               from {item.types.sort().join(", ")}
                             </p>
-                            <p className="w-72 whitespace-normal text-sm text-gray-500">
+                            <p className="w-72 text-sm whitespace-normal text-gray-500">
                               {formatDistanceToNow(item.updated, {
                                 addSuffix: true
                               })}

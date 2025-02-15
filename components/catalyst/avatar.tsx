@@ -42,7 +42,7 @@ export function Avatar({
     >
       {initials && (
         <svg
-          className="select-none fill-current text-[48px] font-medium uppercase"
+          className="fill-current text-[48px] font-medium uppercase select-none"
           viewBox="0 0 100 100"
           aria-hidden={alt ? undefined : "true"}
         >
@@ -71,7 +71,7 @@ export function Avatar({
       )}
       {/* Add an inset border that sits on top of the image */}
       <span
-        className="ring-1 ring-inset ring-black/5 dark:ring-white/5 forced-colors:outline"
+        className="ring-1 ring-black/5 ring-inset dark:ring-white/5 forced-colors:outline"
         aria-hidden="true"
       />
     </div>

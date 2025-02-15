@@ -52,7 +52,7 @@ function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
           key={stat.name}
           className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
         >
-          <dt className="text-sm font-medium leading-6 text-gray-500">
+          <dt className="text-sm leading-6 font-medium text-gray-500">
             {stat.name}
           </dt>
           {/* <dd
@@ -65,7 +65,7 @@ function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
             {stat.value}
           </dd>
         </div>
@@ -111,7 +111,7 @@ function PosStats({
           key={stat.name}
           className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
         >
-          <dt className="text-sm font-medium leading-6 text-gray-500">
+          <dt className="text-sm leading-6 font-medium text-gray-500">
             {stat.name}
           </dt>
           {/* <dd
@@ -124,7 +124,7 @@ function PosStats({
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
             {stat.value}
           </dd>
         </div>
@@ -159,7 +159,7 @@ function TaxiStats({
           key={stat.name}
           className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
         >
-          <dt className="text-sm font-medium leading-6 text-gray-500">
+          <dt className="text-sm leading-6 font-medium text-gray-500">
             {stat.name}
           </dt>
           {/* <dd
@@ -172,7 +172,7 @@ function TaxiStats({
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
             {stat.value}
           </dd>
         </div>
@@ -230,7 +230,7 @@ function AgencyTimeStats({
           key={stat.name}
           className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
         >
-          <dt className="text-sm font-medium leading-6 text-gray-500">
+          <dt className="text-sm leading-6 font-medium text-gray-500">
             {stat.name}
           </dt>
           {/* <dd
@@ -243,7 +243,7 @@ function AgencyTimeStats({
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
             {stat.value}
           </dd>
         </div>
@@ -270,7 +270,7 @@ function BandarCars({
               alt=""
             /> */}
               <div className="min-w-0">
-                <p className="text-base font-semibold leading-6 text-gray-900">
+                <p className="text-base leading-6 font-semibold text-gray-900">
                   {car.VehicleName}
                 </p>
                 <p className="mt-1 truncate text-sm leading-5 text-gray-500">
@@ -363,7 +363,7 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
               alt={client.name}
               className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
             /> */}
-              <div className="text-sm font-medium leading-6 text-gray-900">
+              <div className="text-sm leading-6 font-medium text-gray-900">
                 {arrest.Reference}
               </div>
               <div
@@ -445,7 +445,7 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
               alt={client.name}
               className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
             /> */}
-              <div className="text-sm font-medium leading-6 text-gray-900">
+              <div className="text-sm leading-6 font-medium text-gray-900">
                 {summon.Reference}
               </div>
               <div

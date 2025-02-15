@@ -24,7 +24,7 @@ export default function RobloxAvatarDisplay({
               unoptimized
             />
           )}
-          <div className="ml-3 mr-0 text-left lg:ml-0 lg:mr-3 lg:text-right">
+          <div className="mr-0 ml-3 text-left lg:mr-3 lg:ml-0 lg:text-right">
             <p className="text-base font-medium text-white lg:text-sm">
               {`${name}`}
             </p>
