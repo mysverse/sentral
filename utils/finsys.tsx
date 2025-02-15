@@ -261,7 +261,7 @@ export async function cacheRobloxId(robloxId: number, clerkUserId: string) {
 
 async function getRobloxOauthTokenFromClerkUserId(
   client: Awaited<ReturnType<typeof clerkClient>>,
-  provider: `oauth_custom_${string}`,
+  provider: `custom_${string}`,
   clerkUserId?: string,
   robloxId?: number
 ) {
@@ -305,7 +305,7 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
     const clerkUserIds = await redis.mget<(string | null)[]>(userIds.map(key));
 
     const client = await clerkClient();
-    const provider = "oauth_custom_roblox";
+    const provider = "custom_roblox";
 
     return await Promise.all(
       clerkUserIds.map((clerkUserId, index) =>
