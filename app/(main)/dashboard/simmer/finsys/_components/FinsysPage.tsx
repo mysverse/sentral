@@ -1,12 +1,19 @@
 "use client";
 
-import React, { useActionState, useEffect, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { submitPayoutRequest } from "actions/submitPayout";
 import { toast } from "sonner";
 import Link from "next/link";
 import clsx from "clsx";
 import { extractRobloxIDs } from "utils/roblox";
+import Slider from "components/Slider";
 
 const initialState = {
   message: ""
@@ -152,6 +159,7 @@ function Checklist() {
 }
 
 function PayoutRequestComponent() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, pending] = useActionState(
     submitPayoutRequest,
     initialState
@@ -163,7 +171,7 @@ function PayoutRequestComponent() {
 
   // New state variables
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [, setCanSubmit] = useState<boolean>(false);
+  // const [override, setOverride] = useState<boolean>(false);
 
   useEffect(() => {
     // const message = state.message;
@@ -172,6 +180,16 @@ function PayoutRequestComponent() {
       toast.error(error);
     }
   }, [state]);
+
+  const submit = () => {
+    const form = formRef.current;
+    if (form) {
+      const formData = new FormData(form);
+      startTransition(() => {
+        formAction(formData);
+      });
+    }
+  };
 
   // Function to handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -185,19 +203,15 @@ function PayoutRequestComponent() {
       // Show confirmation modal
       setShowModal(true);
     } else {
-      // Allow form submission
-      setCanSubmit(true);
-      const formData = new FormData(e.currentTarget);
-      formAction(formData);
+      submit();
     }
   };
 
   // Function to proceed after confirmation
   const handleConfirm = () => {
     setShowModal(false);
-    setCanSubmit(true);
     // Submit the form
-    (document.getElementById("payout-form") as HTMLFormElement).submit();
+    submit();
   };
 
   return (
@@ -249,7 +263,7 @@ function PayoutRequestComponent() {
           />
         )}
       </div>
-      <form id="payout-form" onSubmit={handleSubmit}>
+      <form id="payout-form" onSubmit={handleSubmit} ref={formRef}>
         <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label
@@ -258,7 +272,8 @@ function PayoutRequestComponent() {
             >
               Amount
             </label>
-            <input
+            <Slider name={"amount"} min={1} max={100} onChange={setAmount} />
+            {/* <input
               type="number"
               id="amount"
               name="amount"
@@ -268,7 +283,7 @@ function PayoutRequestComponent() {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               onChange={(e) => setAmount(parseInt(e.target.value))}
               required
-            />
+            /> */}
           </div>
           <div>
             <label
@@ -441,7 +456,7 @@ function PayoutRequestComponent() {
           <button
             type="submit"
             disabled={pending}
-            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+            className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-hidden disabled:opacity-50"
           >
             Submit Request
           </button>
@@ -450,7 +465,7 @@ function PayoutRequestComponent() {
 
       {/* Confirmation Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-opacity-50 fixed inset-0 z-10 flex items-center justify-center bg-black">
           <div className="max-w-sm rounded-lg bg-white p-6 shadow-lg">
             <h2 className="mb-4 text-lg font-semibold text-gray-800">
               Are you sure you want to submit?
