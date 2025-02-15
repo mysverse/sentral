@@ -7,24 +7,30 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all
 });
 
-export default [...compat.extends(
+const config = [
+  ...compat.extends(
     "next",
     "prettier",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-), {
+    "plugin:@typescript-eslint/recommended"
+  ),
+  {
     rules: {
-        "@typescript-eslint/no-explicit-any": "off",
-    },
-}, {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
+  },
+  {
     files: ["**/*.ts", "**/*.tsx", "**/*.js"],
 
     languageOptions: {
-        parser: tsParser,
-    },
-}];
+      parser: tsParser
+    }
+  }
+];
+
+export default config;
