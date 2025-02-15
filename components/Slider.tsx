@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimateNumber } from "motion-number";
-import { useMotionValue, useSpring, useVelocity } from "motion/react";
+import { useMotionValue } from "motion/react";
 import { Slider } from "radix-ui";
 import { useEffect, useState } from "react";
 
@@ -24,7 +24,7 @@ export default function NumberSlider({
   const [editingValue, setEditingValue] = useState(initialValue.toString());
 
   const scaled = useMotionValue(scale(value[0]));
-  const velocity = useVelocity(scaled);
+  // const velocity = useVelocity(scaled);
   // const rotate = useSpring(velocity);
 
   useEffect(() => {
