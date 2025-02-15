@@ -87,9 +87,11 @@
     },
     "onlyBuiltDependencies": [
       "@clerk/shared",
+      "@parcel/watcher",
       "@prisma/client",
       "@prisma/engines",
-      "prisma"
+      "prisma",
+      "sharp"
     ]
   }
 }
