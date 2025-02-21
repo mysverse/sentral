@@ -95,7 +95,7 @@ function PayoutRequestsTable({
               >
                 <span
                   className={
-                    "mr-2 text-sm font-medium uppercase tracking-widest"
+                    "mr-2 text-sm font-medium tracking-widest uppercase"
                   }
                 >
                   {request.status}
@@ -135,36 +135,37 @@ function PayoutRequestsTable({
             {request.status === "rejected" && request.rejection_reason && (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">Rejection reason</h3>
-                <div className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600">
+                <div className="mt-1 text-sm break-words whitespace-pre-wrap text-gray-600">
                   <Markdown>{request.rejection_reason}</Markdown>
                 </div>
               </div>
             )}
             <div className="mt-2">
               <h3 className="text-sm font-semibold">Reason</h3>
-              <Markdown
-                className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-600"
-                // disallowedElements={["code"]}
-                components={{
-                  code: ({ className, children }) => {
-                    return (
-                      <code
-                        className={clsx(className, "block overflow-x-auto")}
-                      >
-                        {children}
-                      </code>
-                    );
-                  }
-                }}
-              >
-                {removeRobloxLinks(request.reason)}
-              </Markdown>
+              <div className="mt-1 text-sm break-words whitespace-pre-wrap text-gray-600">
+                <Markdown
+                  // disallowedElements={["code"]}
+                  components={{
+                    code: ({ className, children }) => {
+                      return (
+                        <code
+                          className={clsx(className, "block overflow-x-auto")}
+                        >
+                          {children}
+                        </code>
+                      );
+                    }
+                  }}
+                >
+                  {removeRobloxLinks(request.reason)}
+                </Markdown>
+              </div>
             </div>
 
             {(itemList.length > 0 || ownershipList.length > 0) && (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">List of items</h3>
-                <ul className="0 mt-1 break-words text-sm">
+                <ul className="0 mt-1 text-sm break-words">
                   {ownershipList
                     ? ownershipList.map((val, index) => {
                         return (
@@ -198,7 +199,7 @@ function PayoutRequestsTable({
                                   {typeof val.owned !== "undefined" && (
                                     <span
                                       className={clsx(
-                                        "ml-1 rounded-sm px-1.5 py-0.5 text-[0.7rem] font-normal uppercase tracking-wide text-white",
+                                        "ml-1 rounded-sm px-1.5 py-0.5 text-[0.7rem] font-normal tracking-wide text-white uppercase",
                                         (request.status === "approved" &&
                                           val.owned) ||
                                           (request.status === "pending" &&
@@ -213,7 +214,7 @@ function PayoutRequestsTable({
                                 </div>
                                 {/* {val.assetData?.price &&
                                     `R$ ${val.assetData.price.toLocaleString()}`} */}
-                                <span className="text-[0.7rem] font-normal uppercase tracking-wide">
+                                <span className="text-[0.7rem] font-normal tracking-wide uppercase">
                                   {val.assetData?.creatorName}
                                 </span>
                               </div>
@@ -246,7 +247,7 @@ function PayoutRequestsTable({
                 <h3 className="text-sm font-semibold">
                   Automatically calculated amount
                 </h3>
-                <p className="mt-1 break-words text-sm text-gray-600">
+                <p className="mt-1 text-sm break-words text-gray-600">
                   <b>
                     {ownershipList.reduce(
                       (acc, val) => acc + (val.assetData?.price || 0),
@@ -262,7 +263,7 @@ function PayoutRequestsTable({
                   <h3 className="text-sm font-semibold">
                     Expected amount (based on item list)
                   </h3>
-                  <p className="mt-1 break-words text-sm text-gray-600">
+                  <p className="mt-1 text-sm break-words text-gray-600">
                     5 R$ x {itemList.length} = <b>{itemList.length * 5} R$</b>
                   </p>
                 </div>
@@ -274,7 +275,7 @@ function PayoutRequestsTable({
                 <div>
                   <label
                     htmlFor="comment"
-                    className="block text-sm font-medium leading-6 text-gray-900"
+                    className="block text-sm leading-6 font-medium text-gray-900"
                   >
                     Rejection reason
                   </label>
@@ -284,7 +285,7 @@ function PayoutRequestsTable({
                       name="comment"
                       onChange={(e) => setRejectionReason(e.target.value)}
                       id="comment"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
                       defaultValue={""}
                     />
                   </div>
