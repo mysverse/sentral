@@ -47,91 +47,95 @@ interface PDFProps {
   externalOrg?: string;
 }
 
+function getFontPath(fontName: string) {
+  return path.join(process.cwd(), "public", "fonts", "public_sans", fontName);
+}
+
 Font.register({
   family: "Public Sans",
   fonts: [
     {
-      src: "public/fonts/public_sans/PublicSans-Thin.ttf",
+      src: getFontPath("PublicSans-Thin.ttf"),
       fontWeight: 100
     },
     {
-      src: "public/fonts/public_sans/PublicSans-ThinItalic.ttf",
+      src: getFontPath("PublicSans-ThinItalic.ttf"),
       fontWeight: 100,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-ExtraLight.ttf",
+      src: getFontPath("PublicSans-ExtraLight.ttf"),
       fontWeight: 200
     },
     {
-      src: "public/fonts/public_sans/PublicSans-ExtraLightItalic.ttf",
+      src: getFontPath("PublicSans-ExtraLightItalic.ttf"),
       fontWeight: 200,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-Light.ttf",
+      src: getFontPath("PublicSans-Light.ttf"),
       fontWeight: 300
     },
     {
-      src: "public/fonts/public_sans/PublicSans-LightItalic.ttf",
+      src: getFontPath("PublicSans-LightItalic.ttf"),
       fontWeight: 300,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-Regular.ttf",
+      src: getFontPath("PublicSans-Regular.ttf"),
       fontWeight: 400
     },
     {
-      src: "public/fonts/public_sans/PublicSans-Italic.ttf",
+      src: getFontPath("PublicSans-Italic.ttf"),
       fontWeight: 400,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-Medium.ttf",
+      src: getFontPath("PublicSans-Medium.ttf"),
       fontWeight: 500
     },
     {
-      src: "public/fonts/public_sans/PublicSans-MediumItalic.ttf",
+      src: getFontPath("PublicSans-MediumItalic.ttf"),
       fontWeight: 500,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-SemiBold.ttf",
+      src: getFontPath("PublicSans-SemiBold.ttf"),
       fontWeight: 600
     },
     {
-      src: "public/fonts/public_sans/PublicSans-SemiBoldItalic.ttf",
+      src: getFontPath("PublicSans-SemiBoldItalic.ttf"),
       fontWeight: 600,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-Bold.ttf",
+      src: getFontPath("PublicSans-Bold.ttf"),
       fontWeight: 700
     },
     {
-      src: "public/fonts/public_sans/PublicSans-BoldItalic.ttf",
+      src: getFontPath("PublicSans-BoldItalic.ttf"),
       fontWeight: 700,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-ExtraBold.ttf",
+      src: getFontPath("PublicSans-ExtraBold.ttf"),
       fontWeight: 800
     },
     {
-      src: "public/fonts/public_sans/PublicSans-ExtraBoldItalic.ttf",
+      src: getFontPath("PublicSans-ExtraBoldItalic.ttf"),
       fontWeight: 800,
       fontStyle: "italic"
     },
     {
-      src: "public/fonts/public_sans/PublicSans-Black.ttf",
+      src: getFontPath("PublicSans-Black.ttf"),
       fontWeight: 900
     },
     {
-      src: "public/fonts/public_sans/PublicSans-BlackItalic.ttf",
+      src: getFontPath("PublicSans-BlackItalic.ttf"),
       fontWeight: 900,
       fontStyle: "italic"
     }
-  ].map((f) => ({ ...f, src: path.join(process.cwd(), f.src) }))
+  ]
 });
 
 export async function exportCertificateById(id: string) {
