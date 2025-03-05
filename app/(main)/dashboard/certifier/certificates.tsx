@@ -47,91 +47,91 @@ interface PDFProps {
   externalOrg?: string;
 }
 
-function getFontPath(fontName: string) {
-  return path.join(process.cwd(), "public", "fonts", "public_sans", fontName);
+function getFontPath(fontFamily: string, fontName: string) {
+  return path.join(process.cwd(), "public", "fonts", fontFamily, fontName);
 }
 
 Font.register({
   family: "Public Sans",
   fonts: [
     {
-      src: getFontPath("PublicSans-Thin.ttf"),
+      src: getFontPath("public_sans", "PublicSans-Thin.ttf"),
       fontWeight: 100
     },
     {
-      src: getFontPath("PublicSans-ThinItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-ThinItalic.ttf"),
       fontWeight: 100,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-ExtraLight.ttf"),
+      src: getFontPath("public_sans", "PublicSans-ExtraLight.ttf"),
       fontWeight: 200
     },
     {
-      src: getFontPath("PublicSans-ExtraLightItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-ExtraLightItalic.ttf"),
       fontWeight: 200,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-Light.ttf"),
+      src: getFontPath("public_sans", "PublicSans-Light.ttf"),
       fontWeight: 300
     },
     {
-      src: getFontPath("PublicSans-LightItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-LightItalic.ttf"),
       fontWeight: 300,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-Regular.ttf"),
+      src: getFontPath("public_sans", "PublicSans-Regular.ttf"),
       fontWeight: 400
     },
     {
-      src: getFontPath("PublicSans-Italic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-Italic.ttf"),
       fontWeight: 400,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-Medium.ttf"),
+      src: getFontPath("public_sans", "PublicSans-Medium.ttf"),
       fontWeight: 500
     },
     {
-      src: getFontPath("PublicSans-MediumItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-MediumItalic.ttf"),
       fontWeight: 500,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-SemiBold.ttf"),
+      src: getFontPath("public_sans", "PublicSans-SemiBold.ttf"),
       fontWeight: 600
     },
     {
-      src: getFontPath("PublicSans-SemiBoldItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-SemiBoldItalic.ttf"),
       fontWeight: 600,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-Bold.ttf"),
+      src: getFontPath("public_sans", "PublicSans-Bold.ttf"),
       fontWeight: 700
     },
     {
-      src: getFontPath("PublicSans-BoldItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-BoldItalic.ttf"),
       fontWeight: 700,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-ExtraBold.ttf"),
+      src: getFontPath("public_sans", "PublicSans-ExtraBold.ttf"),
       fontWeight: 800
     },
     {
-      src: getFontPath("PublicSans-ExtraBoldItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-ExtraBoldItalic.ttf"),
       fontWeight: 800,
       fontStyle: "italic"
     },
     {
-      src: getFontPath("PublicSans-Black.ttf"),
+      src: getFontPath("public_sans", "PublicSans-Black.ttf"),
       fontWeight: 900
     },
     {
-      src: getFontPath("PublicSans-BlackItalic.ttf"),
+      src: getFontPath("public_sans", "PublicSans-BlackItalic.ttf"),
       fontWeight: 900,
       fontStyle: "italic"
     }
