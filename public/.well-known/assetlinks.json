@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "mysverse.sentral",
+        "sha256_cert_fingerprints": ["5A:E6:32:55:06:56:13:96:41:99:BE:36:CC:E5:4F:D7:1C:AA:95:1B:16:E2:80:51:9E:AA:D7:36:56:7F:37:56"]
+      }
+    }]
