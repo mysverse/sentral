@@ -22,7 +22,7 @@
     "@react-pdf/renderer": "^4.3.0",
     "@serwist/next": "^9.0.12",
     "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/postcss": "^4.0.13",
+    "@tailwindcss/postcss": "^4.0.14",
     "@upstash/redis": "^1.34.5",
     "@yudiel/react-qr-scanner": "^2.2.1",
     "chart.js": "^4.4.8",
@@ -51,7 +51,7 @@
     "sharp": "^0.33.5",
     "sonner": "^2.0.1",
     "swr": "^2.3.3",
-    "tailwindcss": "^4.0.13",
+    "tailwindcss": "^4.0.14",
     "tailwindcss-radix": "^4.0.2"
   },
   "devDependencies": {
@@ -73,7 +73,7 @@
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-tailwindcss": "^3.18.0",
-    "knip": "^5.45.0",
+    "knip": "^5.46.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "serwist": "^9.0.12",
