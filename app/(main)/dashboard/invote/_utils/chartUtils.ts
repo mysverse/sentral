@@ -16,6 +16,8 @@ export function getColourByName(name: string | null) {
       return "#8f00ff";
     case "GR":
       return "#1A1F60";
+    case "AKRAM":
+      return "#f25c27";
     default:
       return "gray";
   }
