@@ -182,30 +182,30 @@ export function getSeatParties(
 ) {
   if (!stats && !seatStats) return null;
 
-  const statsObject = getStatsObject(stats);
+  // const statsObject = getStatsObject(stats);
 
   const seatHolders = getSeatHolders(seatStats);
 
   // if hidden
 
-  const hidden = stats.some((item) => item.results.hidden);
+  // const hidden = stats.some((item) => item.results.hidden);
 
-  const projectedSeats = calculateSeats(statsObject);
+  // const projectedSeats = calculateSeats(statsObject);
 
-  const projectedSeatHolders = [];
+  // const projectedSeatHolders = [];
 
-  for (const key in projectedSeats) {
-    const value = projectedSeats[key];
-    for (let i = 0; i < value; i++) {
-      projectedSeatHolders.push(key);
-    }
-  }
+  // for (const key in projectedSeats) {
+  //   const value = projectedSeats[key];
+  //   for (let i = 0; i < value; i++) {
+  //     projectedSeatHolders.push(key);
+  //   }
+  // }
 
-  const hiddenSeatParties = projectedSeatHolders;
+  // const hiddenSeatParties = projectedSeatHolders;
 
-  if (hidden) {
-    return hiddenSeatParties;
-  }
+  // if (hidden) {
+  //   return hiddenSeatParties;
+  // }
 
   return seatHolders;
 }
