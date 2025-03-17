@@ -35,7 +35,7 @@ export function NotifyButton() {
     permission !== "granted" && (
       <button
         className={clsx(
-          "group rounded-md p-2.5 text-white outline-0 outline-blue-500 transition hover:bg-white hover:text-blue-500 hover:outline hover:outline-2",
+          "group rounded-md p-2.5 text-white outline-0 outline-blue-500 transition hover:bg-white hover:text-blue-500 hover:outline",
           "bg-blue-500"
         )}
         onClick={askNotificationPermission}
