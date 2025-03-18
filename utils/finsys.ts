@@ -364,7 +364,22 @@ export async function updateRobloxToClerkMap() {
     await redis.mset(idCache);
   }
 
-  return idCache;
+  const tokens = await Promise.all(
+    Object.keys(idCache).map(async (key) => {
+      const clerkId = idCache[key];
+      const oauthToken = await getRobloxOauthTokenFromClerkUserId(
+        client,
+        clerkId
+      );
+      return {
+        key,
+        value: clerkId,
+        token: oauthToken ? true : false
+      };
+    })
+  );
+
+  return tokens;
 }
 
 // Function to check if a user owns a specific asset
