@@ -14,6 +14,8 @@ import Link from "next/link";
 import clsx from "clsx";
 import { extractRobloxIDs } from "utils/roblox";
 import Slider from "components/Slider";
+import { RbxGroupData } from "utils/sim";
+import { allowedGroups } from "data/sim";
 
 const initialState = {
   message: ""
@@ -158,7 +160,9 @@ function Checklist() {
   );
 }
 
-function PayoutRequestComponent() {
+const agencies = allowedGroups;
+
+function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, pending] = useActionState(
     submitPayoutRequest,
@@ -217,7 +221,17 @@ function PayoutRequestComponent() {
   return (
     <div className="p-1">
       <h2 className="text-lg font-medium">Submit a Payout Request</h2>
-      <div className="my-4 grid grid-cols-1 gap-4">
+      <div className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Notice
+          title="Polis Bantuan (PB) payout requests will be rejected"
+          content="PB is not considered a core MYSverse Sim agency or affiliated with Polis MYSverse as of 18 March 2025, and is not eligible to use the Sim-related services on MYSverse Sentral. Efforts are ongoing to integrate uniforms into the in-game equipment module, similar to Polis MYSverse."
+          type="urgent"
+        />
+        <Notice
+          title="No claims or reimbursements for items already owned"
+          content="As MYSverse Sim is completely free to join and does not make any revenue, payouts are a needs-based system, and we will consistently enforce the policy of rejecting requests with items that are already owned. No claims will be entertained."
+          type="urgent"
+        />
         <Notice
           title="Important information on 14-day minimum waiting period for payouts"
           content={
@@ -303,14 +317,15 @@ function PayoutRequestComponent() {
               <option disabled value="">
                 Select a Sim agency
               </option>
-              <option>Tentera MYSverse - Army</option>
-              <option>Tentera MYSverse - Air Force</option>
-              <option>Tentera MYSverse - Navy</option>
-              <option>Polis MYSverse</option>
-              <option>Bomba MYSverse</option>
-              <option>Kesihatan MYSverse</option>
-              <option>Parlimen MYSverse</option>
-              <option>Other MYSverse Sim agency</option>
+              {agencies
+                .filter((agency) =>
+                  groups.find((group) => group.group.id === agency.id)
+                )
+                .map((agency) => (
+                  <option key={agency.name} value={agency.name}>
+                    {agency.name}
+                  </option>
+                ))}
             </select>
           </div>
         </div>

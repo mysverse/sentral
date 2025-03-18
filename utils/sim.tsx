@@ -4,12 +4,13 @@ import "server-only";
 import { auth } from "auth";
 import { redis } from "lib/redis";
 import { cache } from "react";
+import { allowedGroups } from "data/sim";
 
 interface RbxGroupResponse {
-  data: Datum[];
+  data: RbxGroupData[];
 }
 
-interface Datum {
+export interface RbxGroupData {
   group: Group;
   role: Role;
 }
@@ -26,52 +27,6 @@ interface Role {
   name: string;
   rank: number;
 }
-
-const allowedGroups = [
-  {
-    id: 2817134,
-    minRank: 1
-  },
-  {
-    id: 2817130,
-    minRank: 1
-  },
-  {
-    id: 2849945,
-    minRank: 1
-  },
-  {
-    id: 1182710,
-    minRank: 1
-  },
-  {
-    id: 2868511,
-    minRank: 1
-  },
-  {
-    id: 2957304,
-    minRank: 1
-  },
-  {
-    id: 5760632,
-    minRank: 1
-  },
-  {
-    // Public Services
-    id: 7919369,
-    minRank: 1
-  },
-  {
-    // Istana MYSverse
-    id: 16602842,
-    minRank: 1
-  },
-  {
-    // MYSverse Administration
-    id: 1143446,
-    minRank: 252
-  }
-];
 
 async function getUserData() {
   const session = await auth();

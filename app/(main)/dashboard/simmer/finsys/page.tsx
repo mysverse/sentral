@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 
 import PayoutRequestsTable from "./_components/PayoutRequestTable";
+import { getGroupRoles } from "utils/sim";
 
 export const metadata = {
   title: "FinSys"
@@ -23,7 +24,10 @@ export default async function Main() {
   }
 
   try {
-    const data = await getPendingRequests(session.user.id);
+    const [data, groups] = await Promise.all([
+      getPendingRequests(session.user.id),
+      getGroupRoles(parseInt(session.user.id!))
+    ]);
 
     const ownershipData =
       await injectOwnershipAndThumbnailsIntoPayoutRequests(data);
@@ -38,7 +42,7 @@ export default async function Main() {
     return (
       <div>
         <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
-          <PayoutRequestComponent />
+          <PayoutRequestComponent groups={groups} />
         </div>
         <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
         <PayoutRequestsTable payoutRequests={ownershipData} />
