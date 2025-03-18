@@ -8,6 +8,7 @@ import { redis } from "lib/redis";
 import { clerkClient, User } from "@clerk/nextjs/server";
 
 const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
+const provider = "custom_roblox";
 
 type ItemDetail = {
   id: number;
@@ -269,7 +270,7 @@ export async function getRobloxOauthTokenFromClerkUserId(
     if (clerkUserId) {
       const oauthToken = await client.users.getUserOauthAccessToken(
         clerkUserId,
-        "custom_roblox"
+        provider
       );
       const token = oauthToken.data[0]?.token;
       if (token) {
@@ -383,7 +384,7 @@ export async function updateRobloxToClerkMap() {
 
   for (const user of users) {
     const robloxAccount = user.externalAccounts.find(
-      (account) => account.provider === "custom_roblox"
+      (account) => account.provider === `oauth_${provider}`
     );
     if (robloxAccount) {
       const robloxId = parseInt(robloxAccount.externalId);
@@ -393,9 +394,11 @@ export async function updateRobloxToClerkMap() {
     }
   }
 
-  await redis.mset(idCache);
+  if (Object.keys(idCache).length > 0) {
+    await redis.mset(idCache);
+  }
 
-  return idCache;
+  return { idCache, users: users.map((user) => user.externalAccounts) };
 }
 
 // Function to check if a user owns a specific asset
