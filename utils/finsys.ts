@@ -317,40 +317,6 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
           : null
       )
     );
-
-    // if (clerkUserIds.every((id) => id !== null)) {
-
-    // }
-
-    // const users = await client.users.getUserList({ limit: 500 });
-
-    // const idCache: Record<string, string> = {};
-
-    // for (const userId of userIds) {
-    //   const clerkUserId = users.data.find((user) =>
-    //     user.externalAccounts.find(
-    //       (account) =>
-    //         account.provider === provider &&
-    //         account.externalId === userId.toString()
-    //     )
-    //   )?.id;
-    //   if (clerkUserId) {
-    //     idCache[key(userId)] = clerkUserId;
-    //   }
-    // }
-
-    // await redis.mset(idCache);
-
-    // return await Promise.all(
-    //   userIds.map((userId) =>
-    //     getRobloxOauthTokenFromClerkUserId(
-    //       client,
-    //       provider,
-    //       idCache[key(userId)],
-    //       userId
-    //     )
-    //   )
-    // );
   } catch (error) {
     if (error instanceof Error) {
       console.error(
@@ -398,7 +364,7 @@ export async function updateRobloxToClerkMap() {
     await redis.mset(idCache);
   }
 
-  return { idCache, users: users.map((user) => user.externalAccounts) };
+  return idCache;
 }
 
 // Function to check if a user owns a specific asset
