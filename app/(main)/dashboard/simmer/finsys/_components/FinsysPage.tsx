@@ -16,6 +16,7 @@ import { extractRobloxIDs } from "utils/roblox";
 import Slider from "components/Slider";
 import { RbxGroupData } from "utils/sim";
 import { allowedGroups } from "data/sim";
+import Markdown from "react-markdown";
 
 const initialState = {
   message: ""
@@ -179,9 +180,18 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
 
   useEffect(() => {
     // const message = state.message;
+    const validationErrors = state.validationErrors;
     const error = state.error;
-    if (error) {
-      toast.error(error);
+    if (validationErrors) {
+      validationErrors.forEach((error) => {
+        toast.error(<Markdown>{error}</Markdown>, {
+          closeButton: true,
+          position: "bottom-center",
+          duration: 20 * 1000
+        });
+      });
+    } else if (error) {
+      toast.error(<Markdown>{error}</Markdown>);
     }
   }, [state]);
 

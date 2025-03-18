@@ -259,9 +259,8 @@ export async function cacheRobloxId(robloxId: number, clerkUserId: string) {
   await redis.set(generateCacheKey(robloxId), clerkUserId);
 }
 
-async function getRobloxOauthTokenFromClerkUserId(
+export async function getRobloxOauthTokenFromClerkUserId(
   client: Awaited<ReturnType<typeof clerkClient>>,
-  provider: `custom_${string}`,
   clerkUserId?: string,
   robloxId?: number
 ) {
@@ -270,7 +269,7 @@ async function getRobloxOauthTokenFromClerkUserId(
     if (clerkUserId) {
       const oauthToken = await client.users.getUserOauthAccessToken(
         clerkUserId,
-        provider
+        "custom_roblox"
       );
       const token = oauthToken.data[0]?.token;
       if (token) {
@@ -280,7 +279,7 @@ async function getRobloxOauthTokenFromClerkUserId(
   } catch (error) {
     if (error instanceof Error) {
       console.error(
-        `Error fetching oauth token for user ${clerkUserId} for provider ${provider}:`,
+        `Error fetching Roblox oauth token for user ${clerkUserId}:`,
         error.message
       );
     }
@@ -305,14 +304,12 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
     const clerkUserIds = await redis.mget<(string | null)[]>(userIds.map(key));
 
     const client = await clerkClient();
-    const provider = "custom_roblox";
 
     return await Promise.all(
       clerkUserIds.map((clerkUserId, index) =>
         clerkUserId
           ? getRobloxOauthTokenFromClerkUserId(
               client,
-              provider,
               clerkUserId,
               userIds[index]
             )
@@ -541,7 +538,7 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
 }
 
 export async function getPendingRequests(
-  userId?: string,
+  userId?: string | number,
   limit?: number,
   offset?: number
 ) {
@@ -552,7 +549,7 @@ export async function getPendingRequests(
   const url = new URL(`${endpoints.finsys}/pending-requests`);
 
   if (userId) {
-    url.searchParams.set("userId", userId);
+    url.searchParams.set("userId", userId.toString());
   }
 
   if (limit) {

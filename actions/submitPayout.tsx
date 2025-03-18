@@ -1,15 +1,27 @@
 "use server";
 
+import { clerkClient } from "@clerk/nextjs/server";
 import { auth } from "auth";
 import { endpoints } from "components/constants/endpoints";
+import { allowedGroups } from "data/sim";
 import { revalidatePath } from "next/cache";
-import { cacheRobloxId } from "utils/finsys";
+
+import {
+  cacheRobloxId,
+  getAssetDetailsAndCheckOwnership,
+  getPendingRequests,
+  getRobloxOauthTokenFromClerkUserId
+} from "utils/finsys";
+import { extractRobloxIDs } from "utils/roblox";
 
 export async function submitPayoutRequest(prevState: any, formData: FormData) {
   const session = await auth();
   if (!session?.user.id) throw new Error("Unauthorized");
 
-  await cacheRobloxId(parseInt(session.user.id), session.user.clerkId);
+  const robloxUserId = parseInt(session.user.id);
+  const clerkId = session.user.clerkId;
+
+  await cacheRobloxId(robloxUserId, clerkId);
 
   const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
@@ -25,10 +37,147 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
 
   const metadata: string[] = [];
 
-  const agency = formData.get("sim_agency")?.toString().slice(0, 64);
-  if (agency) {
-    metadata.push(`**Agency**: ${agency.toString()}`);
+  if (!payload.amount || !payload.reason) {
+    return { error: "Invalid amount or reason" };
   }
+
+  const robloxIds = extractRobloxIDs(payload.reason.toString());
+
+  if (robloxIds.length === 0) {
+    return { error: "Invalid Roblox IDs" };
+  }
+
+  const agency = formData.get("sim_agency")?.toString().slice(0, 64);
+
+  if (!agency) {
+    return { error: "Invalid agency" };
+  }
+
+  const groupData = allowedGroups.find((group) => group.name === agency);
+
+  if (!groupData) {
+    return { error: "Invalid group data" };
+  }
+
+  const validOwnerIds: number[] = [groupData.id].concat(
+    groupData.approvedGroupIds || []
+  );
+
+  // Request validation start
+
+  const errors: string[] = [];
+
+  try {
+    const client = await clerkClient();
+
+    const [pendingRequests, oauthToken] = await Promise.all([
+      getPendingRequests(robloxUserId),
+      getRobloxOauthTokenFromClerkUserId(client, clerkId, robloxUserId)
+    ]);
+
+    const approvedRequests = pendingRequests.filter(
+      (request) => request.status === "approved"
+    );
+
+    const previousRobloxIds = Array.from(
+      new Set(
+        approvedRequests.flatMap((request) => extractRobloxIDs(request.reason))
+      )
+    );
+
+    const totalRobloxIds = Array.from(
+      new Set([...robloxIds, ...previousRobloxIds])
+    );
+
+    const allAssetDetails = await getAssetDetailsAndCheckOwnership(
+      robloxUserId.toString(),
+      totalRobloxIds,
+      oauthToken ?? undefined
+    );
+
+    if (allAssetDetails) {
+      const assetDetails = allAssetDetails.filter((asset) =>
+        robloxIds.includes(asset.id)
+      );
+
+      const invalidOwnerAssets = assetDetails.filter(
+        (asset) => !validOwnerIds.includes(asset.creatorTargetId)
+      );
+
+      const ownedAssets = assetDetails.filter((asset) => asset.owned);
+
+      const assetsCost = assetDetails.reduce(
+        (acc, asset) => acc + asset.price,
+        0
+      );
+
+      if (invalidOwnerAssets.length > 0) {
+        errors.push(
+          `The asset(s) ${invalidOwnerAssets
+            .map(
+              (asset) =>
+                `**[${asset.name}](https://roblox.com/catalog/${asset.id})**`
+            )
+            .join(", ")} are not owned by the selected agency.`
+        );
+      }
+
+      if (ownedAssets.length > 0) {
+        errors.push(
+          `The asset(s) ${ownedAssets
+            .map(
+              (asset) =>
+                `**[${asset.name}](https://roblox.com/catalog/${asset.id})**`
+            )
+            .join(", ")} are already owned.`
+        );
+      }
+
+      if (assetsCost !== parseInt(payload.amount.toString())) {
+        errors.push(
+          `The total cost of the assets does not match the requested amount. Total calculated cost: **${assetsCost}** / Requested amount: **${payload.amount}**`
+        );
+      }
+
+      const historicalAssetDetails = allAssetDetails.filter((asset) =>
+        previousRobloxIds.includes(asset.id)
+      );
+
+      // If there are any unowned assets from approved requests, then add an error saying they have unaccounted funds
+      const unownedAssets = historicalAssetDetails.filter(
+        (asset) => !asset.owned
+      );
+
+      if (unownedAssets.length > 0) {
+        errors.push(
+          `The asset(s) ${unownedAssets
+            .map(
+              (asset) =>
+                `**[${asset.name}](https://roblox.com/catalog/${asset.id})**`
+            )
+            .join(", ")} from previous requests are not owned.`
+        );
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to validate payout request by ${robloxUserId}`);
+    console.error(error);
+  }
+
+  const valid = errors.length === 0;
+
+  if (!valid) {
+    return {
+      error: "Failed to validate payout request",
+      validationErrors: errors
+    };
+  }
+
+  // Request validation end
+
+  metadata.push(
+    `**Agency**: [${agency.toString()}](https://roblox.com/communities/${groupData.id})`
+  );
 
   const category = formData.get("sim_reason")?.toString().slice(0, 64);
   if (category) {
@@ -68,10 +217,19 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
   });
 
   let message = "Failed to submit payout request";
+  let requestId: number | undefined;
 
   try {
-    const json = await response.json();
-    const error: string = json.error;
+    interface CreatePayoutResponse {
+      id?: number;
+      message?: string;
+      error?: string;
+    }
+    const json: CreatePayoutResponse = await response.json();
+    if (json.id) {
+      requestId = json.id as number;
+    }
+    const error = json.error;
     if (error) {
       message = `${message}: ${error}`;
     }
@@ -86,7 +244,7 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
   } else {
     // Handle successful submission
     // Optionally, mutate data or revalidate cache here
-    revalidatePath("/dashboard/finsys");
-    return { message: "Payout request successfully submitted!" };
+    revalidatePath("/dashboard/simmer/finsys");
+    return { message: `Payout request ${requestId} successfully submitted!` };
   }
 }

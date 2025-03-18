@@ -64,7 +64,7 @@ export async function updatePayoutRequest(
   } else {
     // Handle successful submission
     // Optionally, mutate data or revalidate cache here
-    revalidatePath("/dashboard/finsys/admin");
+    revalidatePath("/dashboard/simmer/finsys/admin");
     return { message: "Payout request successfully updated!" };
   }
 }

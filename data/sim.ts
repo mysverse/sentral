@@ -2,22 +2,26 @@ export const allowedGroups = [
   {
     id: 2817134,
     minRank: 1,
-    name: "Tentera MYSverse - Navy"
+    name: "Tentera MYSverse - Navy",
+    approvedGroupIds: [2936925]
   },
   {
     id: 2817130,
     minRank: 1,
-    name: "Tentera MYSverse - Army"
+    name: "Tentera MYSverse - Army",
+    approvedGroupIds: [2817712]
   },
   {
     id: 2849945,
     minRank: 1,
-    name: "Tentera MYSverse - Air Force"
+    name: "Tentera MYSverse - Air Force",
+    approvedGroupIds: [2936927]
   },
   {
     id: 1182710,
     minRank: 1,
-    name: "Polis MYSverse"
+    name: "Polis MYSverse",
+    approvedGroupIds: [3236883]
   },
   {
     id: 2868511,
