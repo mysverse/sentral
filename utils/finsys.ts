@@ -5,7 +5,7 @@ import {
 import { endpoints } from "components/constants/endpoints";
 import { extractRobloxIDs } from "./roblox";
 import { redis } from "lib/redis";
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient, User } from "@clerk/nextjs/server";
 
 const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 
@@ -359,6 +359,43 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
     }
     return userIds.map(() => null);
   }
+}
+
+export async function updateRobloxToClerkMap() {
+  const client = await clerkClient();
+
+  const users: User[] = [];
+
+  const limit = 500;
+
+  let userResponse = await client.users.getUserList({ limit });
+  users.push(...userResponse.data);
+
+  while (userResponse.totalCount > users.length) {
+    userResponse = await client.users.getUserList({
+      limit,
+      offset: users.length
+    });
+    users.push(...userResponse.data);
+  }
+
+  const idCache: Record<string, string> = {};
+
+  for (const user of users) {
+    const robloxAccount = user.externalAccounts.find(
+      (account) => account.provider === "custom_roblox"
+    );
+    if (robloxAccount) {
+      const robloxId = parseInt(robloxAccount.externalId);
+      const key = generateCacheKey(robloxId);
+      idCache[key] = user.id;
+      console.log(`Caching ${robloxId} -> ${user.id}`);
+    }
+  }
+
+  await redis.mset(idCache);
+
+  return idCache;
 }
 
 // Function to check if a user owns a specific asset
