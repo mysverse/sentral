@@ -145,7 +145,7 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
 
       // If there are any unowned assets from approved requests, then add an error saying they have unaccounted funds
       const unownedAssets = historicalAssetDetails.filter(
-        (asset) => !asset.owned
+        (asset) => !asset.owned && asset.name !== "ERROR"
       );
 
       if (unownedAssets.length > 0) {
