@@ -7,7 +7,9 @@ import Link from "next/link";
 import DateUtils from "../_utils/DateUtils";
 import clsx from "clsx";
 
-const excludeUserIds = [1285847356];
+const excludeUserIds = [
+  1285847356, 1876595055, 6071081546, 3609860927, 7546483278
+];
 
 export default function LebuhrayaLeaderboard({
   type,
@@ -72,7 +74,7 @@ export default function LebuhrayaLeaderboard({
           )}
         </div>
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <div className="overflow-hidden ring-1 shadow-sm ring-black/5 sm:rounded-lg">
+          <div className="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-50">
                 <tr>
@@ -139,9 +141,12 @@ export default function LebuhrayaLeaderboard({
                             initials={person.user.displayName.slice(0, 1)}
                             square
                           />
-                          <div className="ml-4">
-                            <div className="hidden font-medium text-gray-900 hover:underline sm:block">
-                              {`${person.user.displayName} (@${person.user.name})`}
+                          <div className="ml-4 flex flex-col">
+                            <div className="hidden font-semibold text-gray-900 hover:underline sm:block">
+                              {`${person.user.displayName}`}
+                            </div>
+                            <div className="hidden text-xs text-gray-900/70 hover:underline sm:block">
+                              {`@${person.user.name}`}
                             </div>
                             <div className="block font-medium text-gray-900 hover:underline sm:hidden">
                               {`@${person.user.name}`}
