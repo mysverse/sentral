@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useEffect, Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild
+} from "@headlessui/react";
 import { motion, AnimatePresence } from "motion/react"; // 'motion/react' renamed to 'framer-motion'
 import Image from "next/image";
 
@@ -74,7 +79,7 @@ const NewsModal: React.FC = () => {
           onClose={() => setIsOpen(false)}
         >
           {/* Overlay (semi-transparent) */}
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -84,11 +89,11 @@ const NewsModal: React.FC = () => {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
-          </Transition.Child>
+          </TransitionChild>
 
           {/* Center the deck horizontally & vertically */}
           <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Transition.Child
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
@@ -101,7 +106,7 @@ const NewsModal: React.FC = () => {
                 Use Dialog.Panel so that clicking outside this panel
                 automatically closes the dialog 
               */}
-              <Dialog.Panel
+              <DialogPanel
                 // Catch wheel events here
                 onWheel={handleWheel}
                 className="relative h-[70vh] max-h-[90vh] w-[90vw] max-w-3xl overflow-hidden"
@@ -170,8 +175,8 @@ const NewsModal: React.FC = () => {
                     );
                   })}
                 </AnimatePresence>
-              </Dialog.Panel>
-            </Transition.Child>
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </Dialog>
       </Transition>
