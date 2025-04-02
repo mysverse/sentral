@@ -1,12 +1,5 @@
 import { redis } from "lib/redis";
-import {
-  ApiSessionStats,
-  BlacklistItem,
-  DefaultAPIResponse,
-  GrowthEntry,
-  NametagTemplate,
-  StaffDecision
-} from "./apiTypes";
+import { GrowthEntry } from "./apiTypes";
 
 import { endpoints } from "./constants/endpoints";
 import { Leaderboard } from "./constants/types";
@@ -33,94 +26,94 @@ export async function getGrowthData() {
   return data;
 }
 
-interface StaffStatsItem {
-  officer: {
-    id: number;
-    name: string;
-  };
-  decisions: {
-    dar: {
-      percentage: number;
-      data: {
-        correct: number;
-        total: number;
-        valid?: {
-          total: number;
-          correct: number;
-        };
-      };
-    };
-    atbd?: {
-      mtbd: {
-        mean: number;
-        mode: number;
-        median: number;
-      };
-    };
-  };
-  last5: StaffDecision[];
-}
+// interface StaffStatsItem {
+//   officer: {
+//     id: number;
+//     name: string;
+//   };
+//   decisions: {
+//     dar: {
+//       percentage: number;
+//       data: {
+//         correct: number;
+//         total: number;
+//         valid?: {
+//           total: number;
+//           correct: number;
+//         };
+//       };
+//     };
+//     atbd?: {
+//       mtbd: {
+//         mean: number;
+//         mode: number;
+//         median: number;
+//       };
+//     };
+//   };
+//   last5: StaffDecision[];
+// }
 
-interface AuditStats {
-  actors: number;
-  dar: {
-    total: number;
-    correct: number;
-    valid?: {
-      total: number;
-      correct: number;
-    };
-  };
-  mtbd: number;
-  timeRange: {
-    latest: string;
-    oldest: string;
-  };
-}
+// interface AuditStats {
+//   actors: number;
+//   dar: {
+//     total: number;
+//     correct: number;
+//     valid?: {
+//       total: number;
+//       correct: number;
+//     };
+//   };
+//   mtbd: number;
+//   timeRange: {
+//     latest: string;
+//     oldest: string;
+//   };
+// }
 
-interface InvoteStatsItem {
-  name: string;
-  votes: number;
-}
-interface InvoteStats {
-  hidden: boolean;
-  data: InvoteStatsItem[];
-}
+// interface InvoteStatsItem {
+//   name: string;
+//   votes: number;
+// }
+// interface InvoteStats {
+//   hidden: boolean;
+//   data: InvoteStatsItem[];
+// }
 
-export interface InvoteStatsTimestamp {
-  timestamp: string;
-  results: InvoteStats;
-}
+// interface InvoteStatsTimestamp {
+//   timestamp: string;
+//   results: InvoteStats;
+// }
 
-export async function getInvoteSeriesIdentifiers() {
-  const data: string[] = await fetchURL(
-    `${endpoints.invote}/stats/series-identifiers`
-  );
+// async function getInvoteSeriesIdentifiers() {
+//   const data: string[] = await fetchURL(
+//     `${endpoints.invote}/stats/series-identifiers`
+//   );
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getInvoteStats(seriesIdentifier: string) {
-  const data: InvoteStatsTimestamp[] = await fetchURL(
-    `${endpoints.invote}/stats/timestamp?series_identifier=${encodeURIComponent(
-      seriesIdentifier
-    )}`
-  );
+// async function getInvoteStats(seriesIdentifier: string) {
+//   const data: InvoteStatsTimestamp[] = await fetchURL(
+//     `${endpoints.invote}/stats/timestamp?series_identifier=${encodeURIComponent(
+//       seriesIdentifier
+//     )}`
+//   );
 
-  return data;
-}
+//   return data;
+// }
 
 export interface InvoteSeats {
   index: number;
   party: string | null;
 }
 
-export async function getInvoteSeatStats(seriesIdentifier: string) {
-  const data: InvoteSeats[] = await fetchURL(
-    `${endpoints.invote}/stats/seats/${encodeURIComponent(seriesIdentifier)}`
-  );
-  return data;
-}
+// async function getInvoteSeatStats(seriesIdentifier: string) {
+//   const data: InvoteSeats[] = await fetchURL(
+//     `${endpoints.invote}/stats/seats/${encodeURIComponent(seriesIdentifier)}`
+//   );
+//   return data;
+// }
 
 // https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=1055048&size=420x420&format=Png&isCircular=false
 
@@ -195,127 +188,127 @@ export async function getAvatarThumbnails(
   }
 }
 
-export async function getStaffStats() {
-  const data: StaffStatsItem[] = await fetchURL(
-    `${endpoints.mecs}/audit/staff`
-  );
+// async function getStaffStats() {
+//   const data: StaffStatsItem[] = await fetchURL(
+//     `${endpoints.mecs}/audit/staff`
+//   );
 
-  return data;
-}
+//   return data;
+// }
 
-export interface TimeCaseStats {
-  time: string;
-  granted: number;
-  total: number;
-}
+// interface TimeCaseStats {
+//   time: string;
+//   granted: number;
+//   total: number;
+// }
 
-export async function getTimeCaseStats() {
-  const data: TimeCaseStats[] = await fetchURL(`${endpoints.mecs}/stats/case`);
+// async function getTimeCaseStats() {
+//   const data: TimeCaseStats[] = await fetchURL(`${endpoints.mecs}/stats/case`);
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getAuditStats() {
-  const data: AuditStats = await fetchURL(`${endpoints.mecs}/audit/accuracy`);
+// async function getAuditStats() {
+//   const data: AuditStats = await fetchURL(`${endpoints.mecs}/audit/accuracy`);
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getApiSessionStats() {
-  const data: ApiSessionStats = await fetchURL(`${endpoints.mecs}/session`);
+// async function getApiSessionStats() {
+//   const data: ApiSessionStats = await fetchURL(`${endpoints.mecs}/session`);
 
-  return data;
-}
+//   return data;
+// }
 
-export interface OpenCollectiveMemberItem {
-  MemberId: number;
-  createdAt: string;
-  type: string;
-  role: string;
-  isActive: boolean;
-  totalAmountDonated: number;
-  currency?: string;
-  lastTransactionAt: string;
-  lastTransactionAmount: number;
-  profile: string;
-  name: string;
-  company: null;
-  description: null | string;
-  image: null | string;
-  email?: null;
-  twitter: null | string;
-  github: null | string;
-  website: null | string;
-  tier?: string;
-}
+// interface OpenCollectiveMemberItem {
+//   MemberId: number;
+//   createdAt: string;
+//   type: string;
+//   role: string;
+//   isActive: boolean;
+//   totalAmountDonated: number;
+//   currency?: string;
+//   lastTransactionAt: string;
+//   lastTransactionAmount: number;
+//   profile: string;
+//   name: string;
+//   company: null;
+//   description: null | string;
+//   image: null | string;
+//   email?: null;
+//   twitter: null | string;
+//   github: null | string;
+//   website: null | string;
+//   tier?: string;
+// }
 
-export async function getOpenCollectiveMemberStats() {
-  const data: OpenCollectiveMemberItem[] = await fetchURL(
-    `https://opencollective.com/myxlabs/members.json?limit=10&offset=0`
-  );
+// async function getOpenCollectiveMemberStats() {
+//   const data: OpenCollectiveMemberItem[] = await fetchURL(
+//     `https://opencollective.com/myxlabs/members.json?limit=10&offset=0`
+//   );
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getUserData(username: string, treatAsUserId?: boolean) {
-  const url = new URL(`${endpoints.mecs}/user/${username.toLowerCase()}`);
+// async function getUserData(username: string, treatAsUserId?: boolean) {
+//   const url = new URL(`${endpoints.mecs}/user/${username.toLowerCase()}`);
 
-  if (typeof treatAsUserId !== "undefined") {
-    url.searchParams.set("paramType", treatAsUserId ? "id" : "name");
-  }
+//   if (typeof treatAsUserId !== "undefined") {
+//     url.searchParams.set("paramType", treatAsUserId ? "id" : "name");
+//   }
 
-  const data: DefaultAPIResponse = await fetchURL(url.toString());
+//   const data: DefaultAPIResponse = await fetchURL(url.toString());
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getBlacklistData(type: "users" | "groups") {
-  const data: BlacklistItem[] = await fetchURL(
-    `${endpoints.mecs}/blacklist/${type}`
-  );
+// async function getBlacklistData(type: "users" | "groups") {
+//   const data: BlacklistItem[] = await fetchURL(
+//     `${endpoints.mecs}/blacklist/${type}`
+//   );
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getCombinedBlacklistData() {
-  const apiResponse = getBlacklistData("users");
+// async function getCombinedBlacklistData() {
+//   const apiResponse = getBlacklistData("users");
 
-  const groupData = getBlacklistData("groups");
+//   const groupData = getBlacklistData("groups");
 
-  return {
-    users: apiResponse,
-    groups: groupData
-  };
-}
+//   return {
+//     users: apiResponse,
+//     groups: groupData
+//   };
+// }
 
-export async function getNametagTemplates() {
-  const data: NametagTemplate[] = await fetchURL(
-    `${endpoints.gentag}/nametag/options`
-  );
+// async function getNametagTemplates() {
+//   const data: NametagTemplate[] = await fetchURL(
+//     `${endpoints.gentag}/nametag/options`
+//   );
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getImageData(
-  name: string,
-  index: number,
-  preview: boolean = false,
-  tShirtIDs: number[] = []
-) {
-  const url = new URL(
-    `${endpoints.gentag}/nametag/${
-      preview ? "preview" : "create"
-    }/${encodeURIComponent(index)}/${encodeURIComponent(name)}`
-  );
-  for (const id of tShirtIDs) {
-    url.searchParams.append("assetId", id.toString());
-  }
-  const data = await fetch(url.toString());
+// async function getImageData(
+//   name: string,
+//   index: number,
+//   preview: boolean = false,
+//   tShirtIDs: number[] = []
+// ) {
+//   const url = new URL(
+//     `${endpoints.gentag}/nametag/${
+//       preview ? "preview" : "create"
+//     }/${encodeURIComponent(index)}/${encodeURIComponent(name)}`
+//   );
+//   for (const id of tShirtIDs) {
+//     url.searchParams.append("assetId", id.toString());
+//   }
+//   const data = await fetch(url.toString());
 
-  const blob = await data.blob();
+//   const blob = await data.blob();
 
-  return blob;
-}
+//   return blob;
+// }
 
 export interface MYSverseData {
   summons: Summon[];
@@ -323,7 +316,7 @@ export interface MYSverseData {
   bandarData: BandarData;
 }
 
-export interface Arrest {
+interface Arrest {
   LastUpdatedBy?: number;
   Location_Arrest: number[];
   TimeLastUpdated: Date | null;
@@ -337,7 +330,7 @@ export interface Arrest {
   Notes?: string;
 }
 
-export interface BandarData {
+interface BandarData {
   GE12_Votes_ByElection2: boolean;
   GE10_Registered: boolean;
   MYS_POS_2?: MysPos2;
@@ -358,26 +351,26 @@ export interface BandarData {
   MYS_Taxi_2: MYSTaxi2;
 }
 
-export interface DailyReward {
+interface DailyReward {
   reward: Reward;
   TimeClaimed: number;
   dayEpoch: number;
 }
 
-export enum Reward {
+enum Reward {
   Stuff = "stuff"
 }
 
-export interface MYSDevices1 {
+interface MYSDevices1 {
   SavedBackground: string;
 }
 
-export interface MYSMessage2 {
+interface MYSMessage2 {
   BlockedUsers: any[];
   Friends: { [key: string]: string };
 }
 
-export interface MysPos2 {
+interface MysPos2 {
   Salary: number;
   Money: number;
   MaxXP: number;
@@ -387,22 +380,22 @@ export interface MysPos2 {
   Packages: number;
 }
 
-export interface MYSPermanentVehicles2 {
+interface MYSPermanentVehicles2 {
   VehicleName: string;
   Time: number;
 }
 
-export interface MYSQuest2 {
+interface MYSQuest2 {
   Quests: string[];
 }
 
-export interface MYSTaxi2 {
+interface MYSTaxi2 {
   Suspended: boolean;
   Customer: number;
   Money: number;
 }
 
-export interface Summon {
+interface Summon {
   SummonedPlayer: number;
   Reference: string;
   Dispute: boolean;

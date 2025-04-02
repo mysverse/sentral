@@ -1,4 +1,4 @@
-export interface User {
+interface User {
   hasVerifiedBadge: boolean;
   id: number;
   name: string;

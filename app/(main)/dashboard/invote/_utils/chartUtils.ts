@@ -54,7 +54,7 @@ export function frequencySort(arr: string[]) {
   return arr;
 }
 
-export function getSeatHolders(seatData?: InvoteSeats[], ignoreEmpty = false) {
+function getSeatHolders(seatData?: InvoteSeats[], ignoreEmpty = false) {
   const seatsArray = new Array<string | null>(30).fill(null);
   if (seatData) {
     // Assuming 30 seats, make sure to insert parties into the array at the correct index, and fill null if empty

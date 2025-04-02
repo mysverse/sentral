@@ -50,7 +50,7 @@ async function getUserData() {
   };
 }
 
-export const getGroups = cache(async (userId: number) => {
+const getGroups = cache(async (userId: number) => {
   const groups = await redis.get<RbxGroupResponse>(`groups:${userId}`);
   if (groups) {
     return groups;

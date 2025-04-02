@@ -1,4 +1,4 @@
-export interface IndividualTest {
+interface IndividualTest {
   status: boolean;
   values: {
     pass: any;
@@ -14,13 +14,7 @@ export interface IndividualTest {
 export type GrowthEntry = [string, number, boolean?];
 export type DateGrowthEntry = [Date, number, boolean?];
 
-export type CombinedTestResults = Record<string, IndividualTest>;
-export interface ApiSessionStats {
-  requestCounter: {
-    valid: number;
-  };
-  sessionStart: string;
-}
+type CombinedTestResults = Record<string, IndividualTest>;
 
 export interface DefaultAPIResponse {
   user: {
@@ -67,36 +61,30 @@ export interface NametagTemplate {
   imagePath: string;
 }
 
-export interface BlacklistItem {
-  id: number;
-  reason?: string;
-  name?: string;
-}
-
 // Request Type for Creating a Payout
-export interface CreatePayoutRequest {
-  userId: number;
-  amount: number;
-  reason: string;
-}
+// interface CreatePayoutRequest {
+//   userId: number;
+//   amount: number;
+//   reason: string;
+// }
 
-// Response Type for Create Payout Request
-export interface CreatePayoutResponse {
-  success: boolean;
-  message: string;
-}
+// // Response Type for Create Payout Request
+// interface CreatePayoutResponse {
+//   success: boolean;
+//   message: string;
+// }
 
-// Request Type for Updating Payout Request Status
-export interface UpdatePayoutRequestStatus {
-  requestId: number;
-  status: "approved" | "rejected";
-}
+// // Request Type for Updating Payout Request Status
+// interface UpdatePayoutRequestStatus {
+//   requestId: number;
+//   status: "approved" | "rejected";
+// }
 
-// Response Type for Updating Payout Request Status
-export interface UpdatePayoutRequestStatusResponse {
-  success: boolean;
-  message: string;
-}
+// // Response Type for Updating Payout Request Status
+// interface UpdatePayoutRequestStatusResponse {
+//   success: boolean;
+//   message: string;
+// }
 
 // Payout Request Data Type
 export interface PayoutRequestData {

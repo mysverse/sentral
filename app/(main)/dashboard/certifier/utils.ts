@@ -25,12 +25,12 @@ export async function getCertificates() {
   return data;
 }
 
-export async function getCertificate(id: string) {
-  const data = await prisma.certificate.findUnique({
-    where: { id }
-  });
-  return data;
-}
+// async function getCertificate(id: string) {
+//   const data = await prisma.certificate.findUnique({
+//     where: { id }
+//   });
+//   return data;
+// }
 
 export async function getCertificateByCode(code?: string) {
   if (!code) {

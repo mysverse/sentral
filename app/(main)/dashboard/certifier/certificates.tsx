@@ -153,7 +153,7 @@ function getLinkFromCode(code: string) {
   return `https://mys.gg/v/${code}`;
 }
 
-export async function renderCertificateById(id: string) {
+async function renderCertificateById(id: string) {
   const certificate = await prisma.certificate.findUnique({
     where: {
       id

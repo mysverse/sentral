@@ -4,6 +4,6 @@ export interface VoteData {
   colour?: string;
 }
 
-export interface StatNumber {
-  [key: string]: number;
-}
+// interface StatNumber {
+//   [key: string]: number;
+// }

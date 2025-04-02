@@ -1,30 +1,10 @@
 import useSWR from "swr";
-import useSWRImmutable from "swr/immutable";
-import {
-  ApiSessionStats,
-  BlacklistItem,
-  DefaultAPIResponse,
-  GrowthEntry,
-  NametagTemplate,
-  StaffDecision
-} from "./apiTypes";
+
+import { DefaultAPIResponse, NametagTemplate, StaffDecision } from "./apiTypes";
 
 import { endpoints } from "./constants/endpoints";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
-
-export function useGrowthData(shouldFetch: boolean) {
-  const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.growth}` : null,
-    fetcher
-  );
-
-  return {
-    growthData: data as GrowthEntry[],
-    isLoading: !error && !data,
-    isError: error as Error
-  };
-}
 
 interface StaffStatsItem {
   officer: {
@@ -83,19 +63,6 @@ interface InvoteStats {
 export interface InvoteStatsTimestamp {
   timestamp: string;
   results: InvoteStats;
-}
-
-export function useInvoteSeriesIdentifiers(shouldFetch: boolean) {
-  const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.invote}/stats/series-identifiers` : null,
-    fetcher
-  );
-
-  return {
-    stats: data as string[],
-    isLoading: !error && !data,
-    isError: error as Error
-  };
 }
 
 export function useInvoteStats(
@@ -189,7 +156,7 @@ export function useStaffStats(shouldFetch: boolean) {
   };
 }
 
-export interface TimeCaseStats {
+interface TimeCaseStats {
   time: string;
   granted: number;
   total: number;
@@ -221,57 +188,6 @@ export function useAuditStats(shouldFetch: boolean) {
   };
 }
 
-export function useApiSessionStats(shouldFetch: boolean) {
-  const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.mecs}/session` : null,
-    fetcher
-  );
-
-  return {
-    apiSessionStats: data as ApiSessionStats,
-    isLoading: !error && !data,
-    isError: error as Error
-  };
-}
-
-export interface OpenCollectiveMemberItem {
-  MemberId: number;
-  createdAt: string;
-  type: string;
-  role: string;
-  isActive: boolean;
-  totalAmountDonated: number;
-  currency?: string;
-  lastTransactionAt: string;
-  lastTransactionAmount: number;
-  profile: string;
-  name: string;
-  company: null;
-  description: null | string;
-  image: null | string;
-  email?: null;
-  twitter: null | string;
-  github: null | string;
-  website: null | string;
-  tier?: string;
-}
-
-export function useOpenCollectiveMemberStats(shouldFetch: boolean) {
-  const { data, error } = useSWR(
-    shouldFetch
-      ? `https://opencollective.com/myxlabs/members.json?limit=10&offset=0`
-      : null,
-    fetcher,
-    { revalidateOnFocus: false }
-  );
-
-  return {
-    apiResponse: data as OpenCollectiveMemberItem[],
-    isLoading: !error && !data,
-    isError: error as Error
-  };
-}
-
 export function useUserData(
   username: string,
   shouldFetch: boolean,
@@ -289,21 +205,6 @@ export function useUserData(
 
   return {
     apiResponse: data as DefaultAPIResponse,
-    isLoading: !error && !data,
-    isError: error as Error
-  };
-}
-
-export function useBlacklistData(
-  type: "users" | "groups",
-  shouldFetch: boolean
-) {
-  const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.mecs}/blacklist/${type}` : null,
-    fetcher
-  );
-  return {
-    apiResponse: data as BlacklistItem[],
     isLoading: !error && !data,
     isError: error as Error
   };
@@ -377,120 +278,6 @@ export function useImageData(
   );
   return {
     image: data as Blob,
-    isLoading: !error && !data,
-    isError: error as Error
-  };
-}
-
-export interface MYSverseData {
-  summons: Summon[];
-  arrests: Arrest[];
-  bandarData: BandarData;
-}
-
-export interface Arrest {
-  LastUpdatedBy?: number;
-  Location_Arrest: number[];
-  TimeLastUpdated: Date | null;
-  Reference: string;
-  Description: boolean | string;
-  Time_Arrest: Date;
-  Player_Arrested: number;
-  Player_Arresting: number;
-  StringLocation?: string;
-  Time_Release: Date;
-  Notes?: string;
-}
-
-export interface BandarData {
-  GE12_Votes_ByElection2: boolean;
-  GE10_Registered: boolean;
-  MYS_POS_2: MysPos2;
-  ringgit: number;
-  DailyReward: DailyReward[];
-  MYS_Devices_1: MYSDevices1;
-  GE11_Registeredv2: boolean;
-  SessionTimeKeeper: number;
-  TimeOnMAF?: number;
-  TimeOnPDRM?: number;
-  TimeOnMYT?: number;
-  MYS_Message_2: MYSMessage2;
-  GE13_Votes_1: boolean;
-  MYS_Quest_2: MYSQuest2;
-  MYS_Refund_2: boolean;
-  bandar_ringgit: number;
-  MYS_PermanentVehicles_2: MYSPermanentVehicles2[];
-  MYS_Taxi_2: MYSTaxi2;
-}
-
-export interface DailyReward {
-  reward: Reward;
-  TimeClaimed: number;
-  dayEpoch: number;
-}
-
-export enum Reward {
-  Stuff = "stuff"
-}
-
-export interface MYSDevices1 {
-  SavedBackground: string;
-}
-
-export interface MYSMessage2 {
-  BlockedUsers: any[];
-  Friends: { [key: string]: string };
-}
-
-export interface MysPos2 {
-  Salary: number;
-  Money: number;
-  MaxXP: number;
-  Level: number;
-  Suspended: boolean;
-  XP: number;
-  Packages: number;
-}
-
-export interface MYSPermanentVehicles2 {
-  VehicleName: string;
-  Time: number;
-}
-
-export interface MYSQuest2 {
-  Quests: string[];
-}
-
-export interface MYSTaxi2 {
-  Suspended: boolean;
-  Customer: number;
-  Money: number;
-}
-
-export interface Summon {
-  SummonedPlayer: number;
-  Reference: string;
-  Dispute: boolean;
-  OffenceTime: Date;
-  Officer: number;
-  FineAmount: number;
-  OffenceDescription: string;
-}
-
-export function useMysverseData(shouldFetch: boolean, userId?: string) {
-  const url = new URL(`${endpoints.mysverse}/`);
-
-  if (userId) {
-    url.searchParams.set("userId", userId);
-  }
-
-  const { data, error } = useSWRImmutable(
-    shouldFetch ? url.toString() : null,
-    fetcher
-  );
-
-  return {
-    apiResponse: data as MYSverseData,
     isLoading: !error && !data,
     isError: error as Error
   };

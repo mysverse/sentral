@@ -253,7 +253,7 @@ async function fetchThumbnails(assetIds: number[]) {
 
 const ownershipDisabled = false;
 
-export const generateCacheKey = (robloxId: number) =>
+const generateCacheKey = (robloxId: number) =>
   `roblox_user_id_to_clerk:${robloxId}`;
 
 export async function cacheRobloxId(robloxId: number, clerkUserId: string) {
