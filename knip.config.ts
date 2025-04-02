@@ -9,12 +9,14 @@ const config = {
   },
   ignoreDependencies: [
     "@svgr/webpack",
+    "eslint",
     "eslint-config-prettier",
     "eslint-config-next",
     "@next/eslint-plugin-next",
     "@typescript-eslint/eslint-plugin",
     "eslint-plugin-react-hooks"
   ],
+
   entry: ["app/sw.ts"]
 } satisfies KnipConfig;
 

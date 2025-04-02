@@ -9,9 +9,11 @@
       "@serwist/next/typings"
     ],
     "lib": [
-      // Other libs...
+      "dom",
+      "dom.iterable",
+      "esnext",
       // Add this! Doing so adds WebWorker and ServiceWorker types to the global.
-      "webworker"
+      "WebWorker"
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
