@@ -156,6 +156,35 @@ function Checklist() {
             </p>
           </div>
         </div>
+        <div className="relative flex items-start">
+          <div className="flex h-6 items-center">
+            <input
+              id="confirmation_eqpmodule"
+              name="confirmation_eqpmodule"
+              type="checkbox"
+              aria-describedby="confirmation_eqpmodule-description"
+              className="h-4 w-4 rounded-sm border-gray-300 text-blue-600 focus:ring-blue-600"
+              required
+            />
+          </div>
+          <div className="ml-3 text-sm leading-6">
+            <label
+              htmlFor="confirmation_eqpmodule"
+              className="font-medium text-gray-900"
+            >
+              Equipment module
+            </label>
+            <p
+              id="confirmation_eqpmodule-description"
+              className="text-gray-500"
+            >
+              I have checked that the items I am requesting are not available in
+              the in-game equipment module. If they are, I am requesting them on
+              the basis of necessity such as outside MYSverse experiences like
+              overseas Ro-Nation visits.
+            </p>
+          </div>
+        </div>
       </div>
     </fieldset>
   );
@@ -233,16 +262,6 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
       <h2 className="text-lg font-medium">Submit a Payout Request</h2>
       <div className="my-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Notice
-          title="Polis Bantuan (PB) payout requests will be rejected"
-          content="PB is not considered a core MYSverse Sim agency or affiliated with Polis MYSverse as of 18 March 2025, and is not eligible to use the Sim-related services on MYSverse Sentral. Efforts are ongoing to integrate uniforms into the in-game equipment module, similar to Polis MYSverse."
-          type="urgent"
-        />
-        <Notice
-          title="No claims or reimbursements for items already owned"
-          content="As MYSverse Sim is completely free to join and does not make any revenue, payouts are a needs-based system, and we will consistently enforce the policy of rejecting requests with items that are already owned. No claims will be entertained."
-          type="urgent"
-        />
-        <Notice
           title="Important information on 14-day minimum waiting period for payouts"
           content={
             <>
@@ -261,31 +280,19 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
           }
         />
         <Notice
-          title="No payouts for non-quartermaster catalog items"
+          title="Do not request payouts for items available in equipment module"
+          type="urgent"
           content={
             <>
-              We will only process payouts for uniform items that are owned
-              either by a MYSverse quartermaster Roblox group, or the
-              quartermaster&apos;s personal Roblox account. This is to ensure
-              adequate funding and support for MYSverse Sim. Please contact your
-              Sim agency leadership if you have any questions.
+              Funds will not be provided for items that are available in the
+              in-game equipment module, unless absolutely necessary such as for
+              usage in Roblox experiences outside of MYSverse (overseas visits,
+              etc.). It is your responsibility to check that your requested
+              items are available in the equipment module before submitting a
+              payout request. Continued misuse will result in blacklists.
             </>
           }
         />
-        {agency === "Polis MYSverse" && (
-          <Notice
-            title="Do not request payouts for items available in equipment module"
-            type="urgent"
-            content={
-              <>
-                As uniform items are being added into the in-game equipment
-                module, Polis MYSverse members should only request funds for
-                uniforms that are NOT inside the module. Please contact Polis
-                MYSverse leadership if you have any questions.
-              </>
-            }
-          />
-        )}
       </div>
       <form id="payout-form" onSubmit={handleSubmit} ref={formRef}>
         <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
