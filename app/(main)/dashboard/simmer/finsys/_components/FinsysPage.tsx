@@ -198,7 +198,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
     submitPayoutRequest,
     initialState
   );
-  const [agency, setAgency] = useState<string>();
+  // const [agency, setAgency] = useState<string>();
   const [category, setCategory] = useState<string>();
   const [amount, setAmount] = useState<number>();
   const [reason, setReason] = useState<string>("");
@@ -326,7 +326,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             <select
               id="sim_agency"
               name="sim_agency"
-              onChange={(e) => setAgency(e.target.value)}
+              // onChange={(e) => setAgency(e.target.value)}
               required
               defaultValue=""
               className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
