@@ -22,13 +22,26 @@ function humanise(seconds: number) {
   });
 }
 
-export default function MainClient({ data }: { data: User[] }) {
+import { useQueryState } from "nuqs";
+import { Motion } from "components/motion";
+
+export default function MainClient({
+  data,
+  key
+}: {
+  data: User[];
+  key?: string;
+}) {
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   const defaultDate = `${year}-${month}-${day}`;
-  const [selectedDate, setSelectedDate] = useState<string>(defaultDate);
+  const [selectedDate, setSelectedDate] = useQueryState<string>("date", {
+    defaultValue: defaultDate,
+    parse: (value) => value,
+    shallow: false
+  });
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("10:00");
 
@@ -106,9 +119,7 @@ export default function MainClient({ data }: { data: User[] }) {
     );
   };
 
-  const filteredDataByDate = data.filter((entry) =>
-    entry.signOnTime.startsWith(selectedDate)
-  );
+  const filteredDataByDate = data;
 
   const totalDuration = totalDutyDurationOnDate(data, selectedDate);
   console.log(totalDuration);
@@ -131,7 +142,13 @@ export default function MainClient({ data }: { data: User[] }) {
     "Unknown";
 
   return (
-    <div className="grid grid-cols-1 gap-6">
+    <Motion
+      key={key}
+      className="grid grid-cols-1 gap-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+    >
       <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-6">
           <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:items-center">
@@ -246,6 +263,6 @@ export default function MainClient({ data }: { data: User[] }) {
           </ul>
         </div>
       </div>
-    </div>
+    </Motion>
   );
 }
