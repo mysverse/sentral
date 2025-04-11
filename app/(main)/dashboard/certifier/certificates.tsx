@@ -18,7 +18,7 @@ import {
   Link
 } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
-import { CertificateType } from "@prisma/client";
+import { CertificateType } from "generated/client";
 import path from "path";
 
 // Create an instance of Tailwind CSS for React-PDF

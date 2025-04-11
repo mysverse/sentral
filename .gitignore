@@ -46,3 +46,6 @@ public/workbox-*.js.map
 
 # WSL
 *:Zone.Identifier
+
+# Prisma
+/generated
