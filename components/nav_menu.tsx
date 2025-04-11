@@ -59,6 +59,11 @@ export default function NavMenu({
       hidden: true
     },
     {
+      name: "Feedback",
+      href: "/dashboard/feedback",
+      hidden: true
+    },
+    {
       name: "Tracer",
       href: "/dashboard/tracer",
       logo: TracerLogo

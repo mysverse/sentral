@@ -47,8 +47,10 @@ export default async function Page() {
     "kick",
     "blacklist",
     "unban",
+    "diban",
     "user",
     "name",
+    "nama",
     "player",
     "appeal"
   ];
@@ -73,58 +75,65 @@ export default async function Page() {
   ];
 
   return (
-    <div className="p-4">
-      <h1 className="mb-4 text-2xl font-bold text-white">Feedback</h1>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {data
-          .filter((feedback) => {
-            const lowerFeedback = feedback.feedback.toLowerCase();
-            return keywords.some((keyword) => lowerFeedback.includes(keyword));
-          })
-          .map((feedback) => {
-            const avatar = avatars.find(
-              (avatar) => avatar.targetId === feedback.userId
-            );
-            return (
-              <Link
-                key={`${feedback.userId}-${feedback.date}`}
-                href={`https://roblox.com/users/${feedback.userId}/profile`}
-                target="_blank"
+    <Motion
+      initial={{ opacity: 0, y: 64 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3"
+    >
+      {data
+        .filter((feedback) => {
+          // Only include feedback from the last 6 months
+          const feedbackDate = new Date(feedback.date);
+          const sixMonthsAgo = new Date();
+          sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+          if (feedbackDate < sixMonthsAgo) {
+            return false;
+          }
+          const lowerFeedback = feedback.feedback.toLowerCase();
+          return keywords.some((keyword) => lowerFeedback.includes(keyword));
+        })
+        .map((feedback) => {
+          const avatar = avatars.find(
+            (avatar) => avatar.targetId === feedback.userId
+          );
+          return (
+            <Link
+              key={`${feedback.userId}-${feedback.date}`}
+              href={`https://roblox.com/users/${feedback.userId}/profile`}
+              target="_blank"
+            >
+              <Motion
+                className="group h-full w-full rounded-lg border border-gray-200 bg-white p-4 shadow-md transition hover:border-0 hover:bg-blue-600 hover:text-white"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Motion
-                  className="group h-full w-full rounded-lg border border-gray-200 bg-white p-4 shadow-md transition hover:border-0 hover:bg-blue-600 hover:text-white"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <div className="mb-4 flex items-center">
-                    {avatar && (
-                      <Avatar src={avatar.imageUrl} className="mr-4 size-12" />
-                    )}
-                    <div>
-                      <p className="font-semibold">@{feedback.username}</p>
-                      <p className="text-sm opacity-50 group-hover:opacity-70">
-                        {placeNames.find(
-                          (place) => place.id === feedback.placeId
-                        )?.name ?? `MYSverse - ${feedback.placeId}`}
-                      </p>
-                    </div>
+                <div className="mb-4 flex items-center">
+                  {avatar && (
+                    <Avatar src={avatar.imageUrl} className="mr-4 size-12" />
+                  )}
+                  <div>
+                    <p className="font-semibold">@{feedback.username}</p>
+                    <LocalTime
+                      date={new Date(feedback.date)}
+                      type={"distance"}
+                      className="block text-sm opacity-50 group-hover:opacity-70"
+                    />
                   </div>
-                  <LocalTime
-                    date={new Date(feedback.date)}
-                    type={"distance"}
-                    className="mb-2 text-sm opacity-50 group-hover:opacity-70"
-                  />
-                  <p className="mb-2 text-sm opacity-50 group-hover:opacity-70">
-                    {feedback.type}
-                  </p>
-                  <p className="overflow-hidden text-ellipsis opacity-70 group-hover:opacity-100">
-                    {feedback.feedback}
-                  </p>
-                </Motion>
-              </Link>
-            );
-          })}
-      </div>
-    </div>
+                </div>
+                <p className="mb-2 text-sm opacity-50 group-hover:opacity-70">
+                  {feedback.type}
+                  {" - "}
+                  {placeNames.find((place) => place.id === feedback.placeId)
+                    ?.name ?? `MYSverse - ${feedback.placeId}`}
+                </p>
+                <p className="overflow-hidden text-ellipsis opacity-70 group-hover:opacity-100">
+                  {feedback.feedback}
+                </p>
+              </Motion>
+            </Link>
+          );
+        })}
+    </Motion>
   );
 }
