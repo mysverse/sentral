@@ -132,34 +132,51 @@ async function fetchAvatarThumbnails(
   size = 100,
   type: "headshot" | "bust" = "headshot"
 ) {
-  const url = new URL(`https://thumbnails.roblox.com/v1/users/avatar-${type}`);
-  url.searchParams.set("userIds", userIds.sort().join(","));
-  url.searchParams.set("size", `${size}x${size}`);
-  url.searchParams.set("format", "Webp");
+  // Deduplicate and sort user IDs
+  const dedupedIds = Array.from(new Set(userIds)).sort((a, b) => a - b);
 
-  const proxyUrl = new URL(`https://myx-proxy.yan3321.workers.dev/myxProxy/`);
-  proxyUrl.searchParams.set("apiurl", url.toString());
-
-  const response = await fetch(proxyUrl);
-
-  if (response.ok) {
-    const data: AvatarResponse = await response.json();
-    const filteredData = data.data.filter((item) => item.state === "Completed");
-    if (filteredData.length > 0) {
-      const cacheRecords: Record<string, AvatarData> = {};
-      for (const item of filteredData) {
-        if (item.targetId) {
-          cacheRecords[`avatar:${type}:${size}:${item!.targetId}`] = item;
-        }
-      }
-      await redis.mset<AvatarData>(cacheRecords);
-    }
-    return data.data;
-  } else {
-    console.error(await response.json());
+  // Chunk the IDs into arrays of 100
+  const chunks: number[][] = [];
+  for (let i = 0; i < dedupedIds.length; i += 100) {
+    chunks.push(dedupedIds.slice(i, i + 100));
   }
 
-  throw new Error("Failed to fetch avatar thumbnails");
+  let combinedData: AvatarData[] = [];
+  for (const chunk of chunks) {
+    const url = new URL(
+      `https://thumbnails.roblox.com/v1/users/avatar-${type}`
+    );
+    url.searchParams.set("userIds", chunk.join(","));
+    url.searchParams.set("size", `${size}x${size}`);
+    url.searchParams.set("format", "Webp");
+
+    const proxyUrl = new URL(`https://myx-proxy.yan3321.workers.dev/myxProxy/`);
+    proxyUrl.searchParams.set("apiurl", url.toString());
+
+    const response = await fetch(proxyUrl);
+    if (response.ok) {
+      const data: AvatarResponse = await response.json();
+      const filteredData = data.data.filter(
+        (item) => item.state === "Completed"
+      );
+
+      if (filteredData.length > 0) {
+        const cacheRecords: Record<string, AvatarData> = {};
+        for (const item of filteredData) {
+          if (item.targetId) {
+            cacheRecords[`avatar:${type}:${size}:${item.targetId}`] = item;
+          }
+        }
+        await redis.mset<AvatarData>(cacheRecords);
+      }
+
+      combinedData = combinedData.concat(data.data);
+    } else {
+      console.error(await response.json());
+      throw new Error("Failed to fetch avatar thumbnails");
+    }
+  }
+  return combinedData;
 }
 
 export async function getAvatarThumbnails(
