@@ -1,7 +1,7 @@
-import { auth } from "auth";
 import DefaultTransitionLayout from "components/transition";
 import RobloxAccountRequired from "components/robloxAccountRequired";
-import { getGroups } from "utils/sim";
+import { getFeedbackResources } from "utils/feedback";
+import { getUserId } from "utils/user";
 
 function NoAccess() {
   return (
@@ -13,7 +13,7 @@ function NoAccess() {
               You are not authorised to access this page
             </h1>
             <p className="mt-4 text-lg text-gray-500">
-              You must be a member of a MYSverse Moderation group to access this
+              You must be a member of a MYSverse internal team to access this
               page.
             </p>
           </div>
@@ -23,42 +23,20 @@ function NoAccess() {
   );
 }
 
-const allowedGroups = [
-  {
-    id: 35006850,
-    rank: 1
-  },
-  {
-    id: 1143446,
-    rank: 252
-  }
-];
-
 export default async function DefaultLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  const userIdString = session?.user.id;
+  const userId = await getUserId();
 
-  if (!userIdString) {
+  if (!userId) {
     return <RobloxAccountRequired />;
   }
 
-  const userId = parseInt(userIdString);
+  const resources = await getFeedbackResources(userId);
 
-  const groups = await getGroups(userId);
-
-  const authorised = groups.data.some((group) =>
-    allowedGroups.some(
-      (allowedGroup) =>
-        group.group.id === allowedGroup.id &&
-        group.role.rank >= allowedGroup.rank
-    )
-  );
-
-  if (!authorised) {
+  if (resources.length === 0) {
     return <NoAccess />;
   }
 
