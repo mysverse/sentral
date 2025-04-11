@@ -74,13 +74,11 @@ export default withBundleAnalyzer(
       fileLoaderRule.exclude = /\.svg$/i;
       return config;
     },
-    experimental: {
-      turbo: {
-        rules: {
-          "*.svg": {
-            loaders: ["@svgr/webpack"],
-            as: "*.js"
-          }
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js"
         }
       }
     },
