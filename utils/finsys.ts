@@ -388,7 +388,9 @@ async function checkUserOwnership(
   assetIds: number[],
   token?: string
 ): Promise<OwnershipResponse[]> {
-  if (ownershipDisabled || !token) {
+  const apiKey = process.env.ROBLOX_API_KEY;
+
+  if (ownershipDisabled || (!token && !apiKey)) {
     return assetIds.map((id) => ({
       id
     }));
@@ -399,13 +401,16 @@ async function checkUserOwnership(
   try {
     const url = `https://apis.roblox.com/cloud/v2/users/${userId}/inventory-items`;
 
+    const headers: Record<string, string> = {
+      ...(token && { authorization: `Bearer ${token}` }),
+      ...(apiKey && !token && { "x-api-key": apiKey })
+    };
+
     const response = await fetch(
       `${url}?maxPageSize=${maxPageSize}&filter=assetIds=${assetIds.join(",")}`,
       {
         method: "GET",
-        headers: {
-          authorization: `Bearer ${token}` // Replace with your API key
-        },
+        headers,
         next: {
           revalidate: 60
         }
@@ -414,11 +419,18 @@ async function checkUserOwnership(
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error(errorData);
       if (errorData?.code === "PERMISSION_DENIED") {
         // need to grant perms
+        if (!token && apiKey) {
+          // No token, but API key provided;
+          return assetIds.map((id) => ({
+            id
+          }));
+        }
+        console.error(errorData);
         throw new Error("PERMISSION_DENIED");
       }
+      console.error(errorData);
       throw new Error(`Failed to fetch user inventory: ${response.statusText}`);
     }
 
