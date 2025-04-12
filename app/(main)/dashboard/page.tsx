@@ -93,7 +93,7 @@ function AppList() {
                     {link.version}
                   </span>
                   {link.news ? (
-                    <span className="ml-3 text-xs font-medium italic text-slate-400">
+                    <span className="ml-3 text-xs font-medium text-slate-400 italic">
                       {link.news}
                     </span>
                   ) : null}

@@ -15,7 +15,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
       leaveTo="opacity-0 -translate-y-36 scale-80"
     >
       <div className="mb-6 flex flex-col items-center gap-y-6 md:mb-16">
-        <Logo className="md:h-18 h-16 w-auto fill-white" />
+        <Logo className="h-16 w-auto fill-white md:h-18" />
         {children}
       </div>
     </Transition>

@@ -9,7 +9,7 @@
     "lint": "next lint",
     "migrate:dev": "dotenv -e .env.local prisma migrate dev",
     "migrate:deploy": "dotenv -e .env.local prisma migrate deploy",
-    "format": "prettier --config .prettierrc \"{pages,components}/**/*.{ts,tsx}\" --write",
+    "format": "prettier --config .prettierrc \"{pages,app,components,actions,utils,hooks,lib}/**/*.{ts,tsx}\" --write",
     "knip": "knip",
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },

@@ -110,7 +110,7 @@ function NametagForm() {
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
             <div>
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
                 Generate nametag
               </h3>
               <p className="mt-1 text-sm text-gray-500">
@@ -230,7 +230,7 @@ function NametagForm() {
           </div>
           <div className="space-y-6 divide-y divide-gray-200 pt-8 sm:space-y-5 sm:pt-10">
             <div>
-              <h3 className="text-lg font-medium leading-6 text-gray-900">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
                 Options
               </h3>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
@@ -442,7 +442,7 @@ function NametagForm() {
                 });
               }}
               disabled={!templates}
-              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
+              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-hidden disabled:bg-blue-400"
             >
               Generate
             </button>

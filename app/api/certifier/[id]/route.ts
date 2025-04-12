@@ -1,7 +1,10 @@
 import type { NextRequest } from "next/server";
 import { exportCertificateById } from "app/(main)/dashboard/certifier/certificates";
 
-export async function GET(req: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   const url = new URL(req.url);
   const download = !(url.searchParams.get("view") === "true");

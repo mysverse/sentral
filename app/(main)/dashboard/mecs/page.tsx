@@ -65,7 +65,7 @@ function MECSForm() {
             <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
               <div>
                 <div>
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
                     Membership eligibility query
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">
@@ -92,7 +92,7 @@ function MECSForm() {
                       <option>User ID</option>
                     </select>
                   </div>
-                  <div className="mt-4 flex min-w-0 flex-1 rounded-md shadow-xs sm:ml-3 sm:mt-0">
+                  <div className="mt-4 flex min-w-0 flex-1 rounded-md shadow-xs sm:mt-0 sm:ml-3">
                     <label htmlFor="roblox_username" className="sr-only">
                       {isStandalonePWA() ? "Username" : "Roblox username"}
                     </label>
@@ -150,7 +150,7 @@ function MECSForm() {
                       </>
                     )}
                   </div>
-                  <div className="mt-4 sm:ml-3 sm:mt-0">
+                  <div className="mt-4 sm:mt-0 sm:ml-3">
                     <button
                       type="button"
                       id="btn_search"
@@ -185,7 +185,7 @@ function MECSForm() {
                           }
                         }
                       }}
-                      className="block w-full rounded-md border border-transparent bg-blue-700 px-5 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-800 focus:outline-hidden focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:bg-slate-400 sm:px-24"
+                      className="block w-full rounded-md border border-transparent bg-blue-700 px-5 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-800 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-hidden disabled:bg-slate-400 sm:px-24"
                     >
                       Check
                     </button>
@@ -205,7 +205,7 @@ function MECSForm() {
                     type="button"
                     id="btn_dismiss"
                     onClick={() => setModalOpen(false)}
-                    className="mt-4 block rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 sm:px-24 sm:text-sm"
+                    className="mt-4 block rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-hidden sm:px-24 sm:text-sm"
                   >
                     Dismiss
                   </button>
@@ -234,7 +234,7 @@ function BlacklistSection() {
       <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
         <div>
           <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
               Check blacklists
             </h3>
             <p className="mt-1 text-sm text-gray-500">
@@ -275,7 +275,7 @@ function BlacklistSection() {
                   setType("users");
                   setOpen(true);
                 }}
-                className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-hidden focus:ring-1 focus:ring-slate-500"
+                className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden"
               >
                 List of blacklisted individuals
               </button>
@@ -285,7 +285,7 @@ function BlacklistSection() {
                   setType("groups");
                   setOpen(true);
                 }}
-                className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:outline-hidden focus:ring-1 focus:ring-slate-500"
+                className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden"
               >
                 List of blacklisted communities
               </button>
@@ -314,7 +314,7 @@ export default function MecsPage() {
           <StaffStats limit={4} />
         </div>
         <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
             Memberships granted and rejected
           </h3>
           <p className="mt-1 text-sm text-gray-500">
@@ -327,7 +327,7 @@ export default function MecsPage() {
           </div>
         </div>
         <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
             Membership approval rate
           </h3>
           <p className="mt-1 text-sm text-gray-500">

@@ -143,7 +143,7 @@ export default function GrowthChartSection({
         >
           {({ open }) => (
             <div className="relative">
-              <ListboxButton className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pl-3 pr-10 text-left shadow-xs focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500 sm:text-sm">
+              <ListboxButton className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pr-10 pl-3 text-left shadow-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-hidden sm:text-sm">
                 <div className="flex items-center">
                   <span
                     aria-label={selectedMonth.valid ? "Online" : "Offline"}
@@ -171,7 +171,7 @@ export default function GrowthChartSection({
                 leaveTo="opacity-0"
               >
                 {open && (
-                  <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden sm:text-sm">
+                  <ListboxOptions className="ring-opacity-5 absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black focus:outline-hidden sm:text-sm">
                     {months.map((month, index) => (
                       <ListboxOption
                         key={index}
@@ -179,7 +179,7 @@ export default function GrowthChartSection({
                         disabled={!month.valid}
                         className={({ selected, disabled }) =>
                           clsx(
-                            "relative cursor-default select-none py-2 pl-3 pr-9",
+                            "relative cursor-default py-2 pr-9 pl-3 select-none",
                             selected
                               ? "bg-linear-to-l from-blue-500 via-blue-700 to-blue-800 text-white"
                               : "text-gray-900",

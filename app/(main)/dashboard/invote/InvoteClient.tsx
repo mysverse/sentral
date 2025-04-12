@@ -267,7 +267,7 @@ export default function InvotePage({
           <div>
             <div className="flex flex-row items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
                   Election series selection
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
@@ -283,7 +283,7 @@ export default function InvotePage({
                 <select
                   id="series_identifier"
                   name="series_identifier"
-                  className="mt-3 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-slate-500 focus:outline-hidden focus:ring-slate-500 sm:text-sm"
+                  className="mt-3 block w-full rounded-md border-gray-300 py-2 pr-10 pl-3 text-base focus:border-slate-500 focus:ring-slate-500 focus:outline-hidden sm:text-sm"
                   onChange={(e) => {
                     setSeries(e.target.value);
                   }}
@@ -304,18 +304,18 @@ export default function InvotePage({
       {stats && seatStats ? (
         <>
           <DefaultTransitionLayout show={stats.length > 0} appear={true}>
-            <h3 className="mb-4 mt-6 text-center text-lg font-medium text-gray-900">
+            <h3 className="mt-6 mb-4 text-center text-lg font-medium text-gray-900">
               Votes by Party
             </h3>
             {stats ? (
               stats.some((item) => item.results.hidden) ? (
-                <h3 className="mb-4 mt-6 text-center italic text-gray-900">
+                <h3 className="mt-6 mb-4 text-center text-gray-900 italic">
                   {
                     "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
                   }
                 </h3>
               ) : stats.length === 0 ? (
-                <h3 className="mb-4 mt-6 text-center italic text-gray-900">
+                <h3 className="mt-6 mb-4 text-center text-gray-900 italic">
                   {"No data available for this series."}
                 </h3>
               ) : null
@@ -325,11 +325,11 @@ export default function InvotePage({
               <VoteShareChart stats={stats} />
             </div>
 
-            <div className="sm:px-6- mb-8 mt-6">
+            <div className="sm:px-6- mt-6 mb-8">
               <VotesByParty stats={stats} />
             </div>
 
-            <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
+            <h3 className="mt-8 mb-6 text-center text-lg leading-6 font-medium text-gray-900">
               Votes by Polling Session
             </h3>
             <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow-sm">
@@ -337,7 +337,7 @@ export default function InvotePage({
             </div>
           </DefaultTransitionLayout>
           <DefaultTransitionLayout show={seatStats.length > 0} appear={true}>
-            <h3 className="mb-6 mt-8 text-center text-lg font-medium leading-6 text-gray-900">
+            <h3 className="mt-8 mb-6 text-center text-lg leading-6 font-medium text-gray-900">
               Parliament Seats Distribution
             </h3>
             <div className="mb-8">
