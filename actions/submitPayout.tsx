@@ -95,7 +95,11 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
       oauthToken ?? undefined
     );
 
-    if (allAssetDetails) {
+    const ownershipDataPresent = allAssetDetails?.every(
+      (asset) => asset.owned !== undefined
+    );
+
+    if (allAssetDetails && ownershipDataPresent) {
       const assetDetails = allAssetDetails.filter((asset) =>
         robloxIds.includes(asset.id)
       );
@@ -145,7 +149,7 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
 
       // If there are any unowned assets from approved requests, then add an error saying they have unaccounted funds
       const unownedAssets = historicalAssetDetails.filter(
-        (asset) => !asset.owned && asset.name !== "ERROR"
+        (asset) => asset.owned === false && asset.name !== "ERROR"
       );
 
       if (unownedAssets.length > 0) {
@@ -158,6 +162,10 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
             .join(", ")} from previous requests are not owned.`
         );
       }
+    } else {
+      errors.push(
+        `Failed to fetch asset ownership data. Please set your Roblox inventory privacy to public.`
+      );
     }
   } catch (error) {
     console.error(`Failed to validate payout request by ${robloxUserId}`);
