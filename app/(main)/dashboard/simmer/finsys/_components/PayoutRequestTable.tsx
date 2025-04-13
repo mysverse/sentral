@@ -210,7 +210,13 @@ function PayoutRequestsTable({
                                     >
                                       {val.owned
                                         ? val.ownDate
-                                          ? format(val.ownDate, "dd/MM/yyyy")
+                                          ? format(
+                                              val.ownDate,
+                                              new Date().getFullYear() ===
+                                                val.ownDate.getFullYear()
+                                                ? "dd/MM"
+                                                : "dd/MM/yyyy"
+                                            )
                                           : "owned"
                                         : "not owned"}
                                     </span>
