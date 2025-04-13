@@ -45,12 +45,24 @@ type AssetDetailResponse = {
   }>;
 };
 
-type InventoryItemResponse = {
-  inventoryItems: Array<{
-    assetDetails: {
-      assetId: string;
+interface InventoryItem {
+  path: string;
+  assetDetails: {
+    assetId: string;
+    inventoryItemAssetType: "INVENTORY_ITEM_ASSET_TYPE_UNSPECIFIED" | string;
+    instanceId: string;
+    collectibleDetails: {
+      itemId: string;
+      instanceId: string;
+      instanceState: "COLLECTIBLE_ITEM_INSTANCE_STATE_UNSPECIFIED" | string;
+      serialNumber: number;
     };
-  }>;
+  };
+  addTime: string; // ISO timestamp format
+}
+
+type InventoryItemResponse = {
+  inventoryItems: Array<InventoryItem>;
 };
 
 function timeout(ms: number): Promise<void> {
@@ -143,6 +155,7 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
 interface OwnershipResponse {
   id: number;
   owned?: boolean;
+  ownDate?: Date;
 }
 
 interface RobloxThumbnailAssetApiResponse {
@@ -438,12 +451,16 @@ async function checkUserOwnership(
 
     // console.log(data);
 
-    return assetIds.map((id) => ({
-      id,
-      owned: data.inventoryItems.some(
+    return assetIds.map((id) => {
+      const item = data.inventoryItems.find(
         (item) => parseInt(item.assetDetails.assetId) === id
-      )
-    }));
+      );
+      return {
+        id,
+        owned: item ? true : false,
+        ownDate: item?.addTime ? new Date(item.addTime) : undefined
+      };
+    });
 
     // throw new Error(`Failed to fetch user inventory: CSRF`);
   } catch {
@@ -471,7 +488,8 @@ export async function getAssetDetailsAndCheckOwnership(
       ...asset,
       owned: isOwned.find((item) => item.id === asset.id)?.owned,
       thumbnail: thumbnails.data.find((thumb) => thumb.targetId === asset.id)
-        ?.imageUrl
+        ?.imageUrl,
+      ownDate: isOwned.find((item) => item.id === asset.id)?.ownDate
     }));
   } catch (error) {
     console.error("E:", error);
@@ -500,6 +518,7 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
 
   // Create maps to store the ownership, thumbnail, and asset data results
   const ownershipMap = new Map<number, Map<number, boolean>>();
+  const ownershipDateMap = new Map<number, Map<number, Date>>();
   const thumbnailMap = new Map<number, string>();
   const assetDataMap = new Map<number, ItemDetail>();
 
@@ -515,12 +534,16 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
       ownerships[index] ?? undefined
     );
     const userOwnershipMap = new Map<number, boolean>();
+    const userOwnershipDateMap = new Map<number, Date>();
     ownership.forEach((item) => {
       if (typeof item.owned !== "undefined") {
         userOwnershipMap.set(item.id, item.owned);
       }
+      if (item.ownDate) {
+        userOwnershipDateMap.set(item.id, item.ownDate);
+      }
     });
-    return { userId, userOwnershipMap };
+    return { userId, userOwnershipMap, userOwnershipDateMap };
   });
 
   const [ownershipResults, thumbnails, assetData, userData] = await Promise.all(
@@ -532,9 +555,12 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     ]
   );
 
-  ownershipResults.forEach(({ userId, userOwnershipMap }) => {
-    ownershipMap.set(userId, userOwnershipMap);
-  });
+  ownershipResults.forEach(
+    ({ userId, userOwnershipMap, userOwnershipDateMap }) => {
+      ownershipMap.set(userId, userOwnershipMap);
+      ownershipDateMap.set(userId, userOwnershipDateMap);
+    }
+  );
 
   if (thumbnails)
     thumbnails.data.forEach((item) => {
@@ -553,9 +579,12 @@ export async function injectOwnershipAndThumbnailsIntoPayoutRequests(
     const assets = extractRobloxIDs(request.reason);
     const userOwnershipMap =
       ownershipMap.get(request.user_id) || new Map<number, boolean>();
+    const userOwnershipDateMap =
+      ownershipDateMap.get(request.user_id) || new Map<number, Date>();
     const ownedAssets = assets.map((id) => ({
       id,
       owned: userOwnershipMap.get(id),
+      ownDate: userOwnershipDateMap.get(id),
       thumbnail: thumbnailMap.get(id) || undefined,
       assetData: assetDataMap.get(id) || undefined
     }));

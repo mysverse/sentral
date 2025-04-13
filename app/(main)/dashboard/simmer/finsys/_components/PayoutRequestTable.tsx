@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import Image from "next/image";
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 
 const statuses: { [key: string]: string } = {
   pending: "text-yellow-700",
@@ -208,7 +208,11 @@ function PayoutRequestsTable({
                                           : "bg-red-600"
                                       )}
                                     >
-                                      {val.owned ? "owned" : "not owned"}
+                                      {val.owned
+                                        ? val.ownDate
+                                          ? format(val.ownDate, "dd/MM/yyyy")
+                                          : "owned"
+                                        : "not owned"}
                                     </span>
                                   )}
                                 </div>
