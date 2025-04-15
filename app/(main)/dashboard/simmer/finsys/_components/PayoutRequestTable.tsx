@@ -168,6 +168,29 @@ function PayoutRequestsTable({
                 <ul className="0 mt-1 text-sm break-words">
                   {ownershipList
                     ? ownershipList.map((val, index) => {
+                        const Ownership = typeof val.owned !== "undefined" && (
+                          <span
+                            className={clsx(
+                              "ml-1 rounded-sm px-1.5 py-0.5 text-[0.7rem] font-normal tracking-wide text-white uppercase",
+                              (request.status === "approved" && val.owned) ||
+                                (request.status === "pending" && !val.owned)
+                                ? "bg-green-600"
+                                : "bg-red-600"
+                            )}
+                          >
+                            {val.owned
+                              ? val.ownDate
+                                ? format(
+                                    val.ownDate,
+                                    new Date().getFullYear() ===
+                                      val.ownDate.getFullYear()
+                                      ? "dd/MM"
+                                      : "dd/MM/yyyy"
+                                  )
+                                : "owned"
+                              : "not owned"}
+                          </span>
+                        );
                         return (
                           <li
                             key={val.id}
@@ -192,41 +215,19 @@ function PayoutRequestsTable({
                               )}
                               <div className="flex flex-col text-center font-medium sm:text-left">
                                 <div className="block font-bold sm:hidden">
-                                  {index + 1}
+                                  {index + 1} {Ownership}
                                 </div>
                                 <div>
                                   {val.assetData ? val.assetData.name : val.id}
-                                  {typeof val.owned !== "undefined" && (
-                                    <span
-                                      className={clsx(
-                                        "ml-1 rounded-sm px-1.5 py-0.5 text-[0.7rem] font-normal tracking-wide text-white uppercase",
-                                        (request.status === "approved" &&
-                                          val.owned) ||
-                                          (request.status === "pending" &&
-                                            !val.owned)
-                                          ? "bg-green-600"
-                                          : "bg-red-600"
-                                      )}
-                                    >
-                                      {val.owned
-                                        ? val.ownDate
-                                          ? format(
-                                              val.ownDate,
-                                              new Date().getFullYear() ===
-                                                val.ownDate.getFullYear()
-                                                ? "dd/MM"
-                                                : "dd/MM/yyyy"
-                                            )
-                                          : "owned"
-                                        : "not owned"}
-                                    </span>
-                                  )}
+                                  <span className="hidden sm:inline">
+                                    {Ownership}
+                                  </span>
                                 </div>
                                 {/* {val.assetData?.price &&
                                     `R$ ${val.assetData.price.toLocaleString()}`} */}
-                                <span className="text-[0.7rem] font-normal tracking-wide uppercase">
+                                <div className="text-[0.7rem] font-normal tracking-wide uppercase">
                                   {val.assetData?.creatorName}
-                                </span>
+                                </div>
                               </div>
                             </Link>
                           </li>
