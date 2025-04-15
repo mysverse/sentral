@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  JSX,
   startTransition,
   useActionState,
   useEffect,
@@ -165,23 +166,21 @@ function Checklist() {
 
 const agencies = allowedGroups;
 
+type Content = string | JSX.Element;
+
 function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, pending] = useActionState(
     submitPayoutRequest,
     initialState
   );
-  // const [agency, setAgency] = useState<string>();
   const [category, setCategory] = useState<string>();
   const [amount, setAmount] = useState<number>();
   const [reason, setReason] = useState<string>("");
-
-  // New state variables
   const [showModal, setShowModal] = useState<boolean>(false);
-  // const [override, setOverride] = useState<boolean>(false);
+  const [modalReasons, setModalReasons] = useState<Content[]>([]);
 
   useEffect(() => {
-    // const message = state.message;
     const validationErrors = state.validationErrors;
     const error = state.error;
     if (validationErrors) {
@@ -207,26 +206,48 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
     }
   };
 
-  // Function to handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const reasons: Content[] = [];
 
     // Extract Roblox links from the reason
     const ids = extractRobloxIDs(reason);
     const expectedAmount = ids.length * 5;
 
     if (expectedAmount !== amount) {
-      // Show confirmation modal
+      reasons.push(
+        <>
+          The total estimated amount calculated from your Roblox item links does
+          not match the amount you entered.
+          <br />
+          Expected amount: {ids.length} x 5 R$ = <b>{expectedAmount} R$.</b>
+          <br />
+          Entered amount: {amount} R$.
+        </>
+      );
+    }
+
+    if (category === "Missing") {
+      reasons.push(
+        <>
+          Make sure that the items you are requesting funds for do not already
+          exist in the in-game equipment module. Misuse of this category may
+          result in <b>blacklists</b>.
+        </>
+      );
+    }
+
+    if (reasons.length > 0) {
+      setModalReasons(reasons);
       setShowModal(true);
     } else {
       submit();
     }
   };
 
-  // Function to proceed after confirmation
   const handleConfirm = () => {
     setShowModal(false);
-    // Submit the form
     submit();
   };
 
@@ -277,17 +298,6 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
               Amount
             </label>
             <Slider name={"amount"} min={1} max={100} onChange={setAmount} />
-            {/* <input
-              type="number"
-              id="amount"
-              name="amount"
-              min={"1"}
-              max={"100"}
-              placeholder="Maximum 100 R$ per request"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              onChange={(e) => setAmount(parseInt(e.target.value))}
-              required
-            /> */}
           </div>
           <div>
             <label
@@ -299,7 +309,6 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             <select
               id="sim_agency"
               name="sim_agency"
-              // onChange={(e) => setAgency(e.target.value)}
               required
               defaultValue=""
               className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -341,22 +350,9 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             <option value="Visit/Other">
               Visit to other non-MYSverse experience
             </option>
-            {/* <option value="Missing">
+            <option value="Missing">
               Uniform not in in-game equipment module
-            </option> */}
-            {/* <option value="Recruited">New member/recruit</option>
-            <option value="Promotion">Promotion</option>
-            <option value="Demotion">Demotion</option>
-            <option value="Transfer/External">
-              Transferred from other Sim agency
             </option>
-            <option value="Transfer/Internal">
-              Change of internal division/department/regiment
-            </option>
-            <option value="Update">
-              New or updated uniform requirements (please state)
-            </option>
-            <option value="Other">Other (please state)</option> */}
           </select>
         </div>
         {(category === "Visit/Foreign" || category === "Visit/Other") && (
@@ -476,27 +472,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             </div>
           </div>
         )}
-        {category === "Missing" && (
-          <div className="bg-opacity-50 fixed inset-0 z-10 flex items-center justify-center bg-black">
-            <div className="max-w-sm rounded-lg bg-white p-6 shadow-lg">
-              <h2 className="mb-4 text-lg font-semibold text-gray-800">
-                Uniform Missing in Equipment Module
-              </h2>
-              <p className="mb-4 text-gray-600">
-                Please contact your Sim agency leadership to request the uniform
-                to be added to the in-game equipment module.
-              </p>
-              <div className="flex justify-end">
-                <button
-                  onClick={() => setCategory(undefined)}
-                  className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )} */}
+        */}
         <div className="mb-4">
           <label
             htmlFor="reason"
@@ -537,27 +513,30 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
       </form>
 
       {/* Confirmation Modal */}
-      {showModal && (
-        <div className="bg-opacity-50 fixed inset-0 z-10 flex items-center justify-center bg-black">
-          <div className="max-w-sm rounded-lg bg-white p-6 shadow-lg">
+      {
+        <div
+          className={clsx(
+            "fixed inset-0 z-10 flex items-center justify-center bg-black/20 backdrop-blur transition-opacity duration-300 ease-in-out",
+            {
+              "pointer-events-none opacity-0": !showModal,
+              "opacity-100": showModal
+            }
+          )}
+        >
+          <div
+            className={clsx(
+              "max-w-sm transform rounded-lg bg-white p-6 shadow-lg transition-transform duration-300 ease-in-out",
+              { "scale-95": !showModal, "scale-100": showModal }
+            )}
+          >
             <h2 className="mb-4 text-lg font-semibold text-gray-800">
               Are you sure you want to submit?
             </h2>
-            <p className="mb-4 text-gray-600">
-              The total estimated amount calculated from your Roblox item links
-              does not match the amount you entered.
-            </p>
-            <p className="mb-4 text-gray-600">
-              Expected amount: {extractRobloxIDs(reason).length} x {5} R$ ={" "}
-              <b>{extractRobloxIDs(reason).length * 5} R$</b>
-            </p>
-            <p className="mb-4 text-gray-600">
-              Entered amount: <b>{amount} R$</b>
-            </p>
-            <p className="mb-4 text-gray-600">
-              This is assuming each item costs 5 R$ each. Do you still want to
-              proceed?
-            </p>
+            {modalReasons.map((reason, index) => (
+              <p key={index} className="mb-4 text-gray-600">
+                {reason}
+              </p>
+            ))}
             <p className="mb-4 text-sm text-gray-600">
               Your payout privileges may be <b>revoked</b> if you fail to double
               check your request and waste the approval team&apos;s review time.
@@ -565,20 +544,20 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setShowModal(false)}
-                className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirm}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700"
               >
                 Yes, Submit
               </button>
             </div>
           </div>
         </div>
-      )}
+      }
     </div>
   );
 }
