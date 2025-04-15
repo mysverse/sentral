@@ -127,7 +127,8 @@ function Checklist() {
             <p id="confirmation_reason-description" className="text-gray-500">
               I have provided a valid reason for making a payout request. I am
               making this request as a necessity to participate in MYSverse Sim
-              activities and not for personal reasons.
+              activities and not for personal reasons. The reason I am making
+              this request is accurate to the category I have selected above.
             </p>
           </div>
         </div>
@@ -152,36 +153,8 @@ function Checklist() {
             <p id="confirmation_itemlist-description" className="text-gray-500">
               I have provided the complete list of items I intend to purchase
               with the provided funds. These items are owned by a MYSverse
-              quartermaster store or an approved quartermaster.
-            </p>
-          </div>
-        </div>
-        <div className="relative flex items-start">
-          <div className="flex h-6 items-center">
-            <input
-              id="confirmation_eqpmodule"
-              name="confirmation_eqpmodule"
-              type="checkbox"
-              aria-describedby="confirmation_eqpmodule-description"
-              className="h-4 w-4 rounded-sm border-gray-300 text-blue-600 focus:ring-blue-600"
-              required
-            />
-          </div>
-          <div className="ml-3 text-sm leading-6">
-            <label
-              htmlFor="confirmation_eqpmodule"
-              className="font-medium text-gray-900"
-            >
-              Equipment module
-            </label>
-            <p
-              id="confirmation_eqpmodule-description"
-              className="text-gray-500"
-            >
-              I have checked that the items I am requesting are not available in
-              the in-game equipment module. If they are, I am requesting them on
-              the basis of necessity such as outside MYSverse experiences like
-              overseas Ro-Nation visits.
+              quartermaster store and are not available in the in-game equipment
+              module. I am unable to afford all of the listed items.
             </p>
           </div>
         </div>
@@ -284,12 +257,12 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
           type="urgent"
           content={
             <>
-              Funds will not be provided for items that are available in the
-              in-game equipment module, unless absolutely necessary such as for
-              usage in Roblox experiences outside of MYSverse (overseas visits,
-              etc.). It is your responsibility to check that your requested
-              items are available in the equipment module before submitting a
-              payout request. Continued misuse will result in blacklists.
+              As of 15 April 2025, payouts are only provided for visits to
+              non-MYSverse experiences such as foreign Ro-Nation visits. If you
+              need a uniform within a MYSverse experience that is not available
+              in the in-game equipment module, please contact your Sim agency
+              leadership to request the uniform to be added to the in-game
+              equipment module.
             </>
           }
         />
@@ -364,7 +337,14 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             <option disabled value="">
               Select a request category
             </option>
-            <option value="Recruited">New member/recruit</option>
+            <option value="Visit/Foreign">Visit to foreign Ro-Nation</option>
+            <option value="Visit/Other">
+              Visit to other non-MYSverse experience
+            </option>
+            {/* <option value="Missing">
+              Uniform not in in-game equipment module
+            </option> */}
+            {/* <option value="Recruited">New member/recruit</option>
             <option value="Promotion">Promotion</option>
             <option value="Demotion">Demotion</option>
             <option value="Transfer/External">
@@ -376,10 +356,50 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             <option value="Update">
               New or updated uniform requirements (please state)
             </option>
-            <option value="Other">Other (please state)</option>
+            <option value="Other">Other (please state)</option> */}
           </select>
         </div>
-        {(category === "Promotion" || category === "Demotion") && (
+        {(category === "Visit/Foreign" || category === "Visit/Other") && (
+          <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="visit_link"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Roblox Experience/Group Link (
+                {category === "Visit/Foreign"
+                  ? "Foreign Ro-Nation"
+                  : "Non-MYSverse"}
+                )
+              </label>
+              <input
+                type="url"
+                id="visit_link"
+                name="visit_link"
+                placeholder="https://roblox.com/games/123456789/Example"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="visit_date"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Visit Date
+              </label>
+              <input
+                type="date"
+                id="visit_date"
+                name="visit_date"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                required
+                min={new Date().toISOString().split("T")[0]} // Restrict past dates
+              />
+            </div>
+          </div>
+        )}
+        {/* {(category === "Promotion" || category === "Demotion") && (
           <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label
@@ -456,6 +476,27 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             </div>
           </div>
         )}
+        {category === "Missing" && (
+          <div className="bg-opacity-50 fixed inset-0 z-10 flex items-center justify-center bg-black">
+            <div className="max-w-sm rounded-lg bg-white p-6 shadow-lg">
+              <h2 className="mb-4 text-lg font-semibold text-gray-800">
+                Uniform Missing in Equipment Module
+              </h2>
+              <p className="mb-4 text-gray-600">
+                Please contact your Sim agency leadership to request the uniform
+                to be added to the in-game equipment module.
+              </p>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setCategory(undefined)}
+                  className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )} */}
         <div className="mb-4">
           <label
             htmlFor="reason"

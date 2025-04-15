@@ -190,6 +190,25 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
   const category = formData.get("sim_reason")?.toString().slice(0, 64);
   if (category) {
     metadata.push(`**Category**: ${category.toString()}`);
+
+    if (category.startsWith("Visit/")) {
+      const visitLink = formData.get("visit_link")?.toString();
+      const visitDate = formData.get("visit_date")?.toString();
+      if (visitLink && visitDate) {
+        const today = new Date();
+        const selectedDate = new Date(visitDate);
+        if (selectedDate.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)) {
+          // Ensure date is not in the past
+          return { error: "Visit date cannot be in the past." };
+        }
+        metadata.push(`**Visit Link**: [${visitLink}](${visitLink})`);
+        metadata.push(`**Visit Date**: ${visitDate}`);
+      }
+    } else if (category === "Missing") {
+      metadata.push(
+        `**Note**: Uniform not in in-game equipment module. Please contact Sim agency leadership to request its addition.`
+      );
+    }
   }
 
   const rankBefore = formData.get("sim_rank_previous")?.toString().slice(0, 64);
