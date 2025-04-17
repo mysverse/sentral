@@ -350,9 +350,9 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             <option value="Visit/Other">
               Visit to other non-MYSverse experience
             </option>
-            <option value="Missing">
+            {/* <option value="Missing">
               Uniform not in in-game equipment module
-            </option>
+            </option> */}
           </select>
         </div>
         {(category === "Visit/Foreign" || category === "Visit/Other") && (
