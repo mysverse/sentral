@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  barcode-detector: 3.0.1
+
 importers:
 
   .:
@@ -2730,8 +2733,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  barcode-detector@3.0.2:
-    resolution: {integrity: sha512-HxArI0tnsCa1wgzRu4f1WJ+yiildOlXKjDAM5Ip/7ZOcwqSFbBDSe5Q5eWemBKVqQQkWpCeYMG6h0o0ULKf18g==}
+  barcode-detector@3.0.1:
+    resolution: {integrity: sha512-3fCzG/Py4SVgZJhubD1mt7rVprtHEVWrxQN4FUOG0oulPE4193evbgyptxcOYsfTNEtMlWc+Ec9tdxhjlR4/Ww==}
 
   base64-js@0.0.8:
     resolution: {integrity: sha512-3XSA2cR/h/73EzlXXdU6YNycmYI7+kicTxks4eJg2g39biHR84slg2+des+p7iHYhbRg/udIS4TD53WabcOUkw==}
@@ -7786,7 +7789,7 @@ snapshots:
 
   '@yudiel/react-qr-scanner@2.2.1(@types/emscripten@1.40.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      barcode-detector: 3.0.2(@types/emscripten@1.40.1)
+      barcode-detector: 3.0.1(@types/emscripten@1.40.1)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
       webrtc-adapter: 9.0.1
@@ -7944,7 +7947,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  barcode-detector@3.0.2(@types/emscripten@1.40.1):
+  barcode-detector@3.0.1(@types/emscripten@1.40.1):
     dependencies:
       zxing-wasm: 2.1.1(@types/emscripten@1.40.1)
     transitivePeerDependencies:
