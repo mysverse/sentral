@@ -8,7 +8,7 @@ import DateUtils from "../_utils/DateUtils";
 import clsx from "clsx";
 
 const excludeUserIds = [
-  1285847356, 1876595055, 6071081546, 3609860927, 7546483278
+  1285847356, 1876595055, 6071081546, 3609860927, 7546483278, 3087471512
 ];
 
 export default function LebuhrayaLeaderboard({
