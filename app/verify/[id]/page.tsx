@@ -1,6 +1,7 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
 import Link from "next/link";
+import { ArrowDownTrayIcon } from "@heroicons/react/20/solid";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -73,12 +74,21 @@ export default async function VerifyPage(props: Props) {
           </p>
         </>
       )}
+
       <Link
         href="/verify"
-        className="text-gray-400 underline transition hover:text-gray-300 hover:no-underline"
+        className="text-sm text-gray-400 underline transition hover:text-gray-300 hover:no-underline"
       >
         Verify another certificate
       </Link>
+      {certificate && (
+        <Link
+          href={`/api/certifier/${certificate.id}`}
+          className="mt-2 flex w-full items-center justify-center gap-x-2 rounded bg-linear-to-l from-blue-500 via-blue-700 to-blue-800 py-3 font-semibold text-white opacity-100 transition hover:opacity-80"
+        >
+          <ArrowDownTrayIcon className="size-5" /> Download certificate
+        </Link>
+      )}
     </>
   );
 }

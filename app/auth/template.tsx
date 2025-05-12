@@ -1,4 +1,6 @@
 import { Transition } from "@headlessui/react";
+import { DocumentCheckIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
 import Logo from "public/img/MYSverse_Sentral_Logo.svg";
 
 export default function Template({ children }: { children: React.ReactNode }) {
@@ -17,6 +19,15 @@ export default function Template({ children }: { children: React.ReactNode }) {
       <div className="mb-6 flex flex-col items-center gap-y-6 md:mb-16">
         <Logo className="h-16 w-auto fill-white md:h-18" />
         {children}
+        <div>
+          <Link
+            href="/verify"
+            className="flex items-center gap-x-2 rounded px-4 py-2 text-white opacity-100 transition hover:opacity-80"
+          >
+            <DocumentCheckIcon className="size-5" />
+            or verify a certificate
+          </Link>
+        </div>
       </div>
     </Transition>
   );
