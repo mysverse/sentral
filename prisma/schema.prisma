@@ -15,16 +15,51 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Course {
+  id           String        @id @default(uuid())
+  name         String
+  description  String?
+  apiKeys      ApiKey[]
+  certificates Certificate[]
+  batches      Batch[]
+}
+
+model Batch {
+  id           String        @id @default(uuid())
+  name         String
+  courseId     String
+  course       Course        @relation(fields: [courseId], references: [id])
+  certificates Certificate[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Certificate {
   id              String          @id @default(uuid())
   recipientName   String
-  courseName      String
   issueDate       DateTime        @default(now())
   code            String          @unique
-  type            CertificateType // New field
+  type            CertificateType
   robloxUserID    String? // Optional, for roleplay certifications
   recipientUserID String? // Optional, for team member recognition
   externalOrg     String? // Optional, for external collaborations
+  identifier      String // For NRIC, Passport, Roblox ID etc. to ensure uniqueness per type per course
+  courseId        String
+  course          Course          @relation(fields: [courseId], references: [id])
+  batchId         String?
+  batch           Batch?          @relation(fields: [batchId], references: [id])
+
+  @@unique([courseId, identifier, type], name: "unique_certificate_identifier")
 }
 
 // New enum to represent certificate types
