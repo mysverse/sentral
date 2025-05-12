@@ -159,6 +159,21 @@ async function renderCertificateById(id: string) {
       id
     }
   });
+
+  if (!certificate) {
+    return null;
+  }
+
+  const course = await prisma.course.findUnique({
+    where: {
+      id: certificate?.courseId
+    }
+  });
+
+  if (!course) {
+    return null;
+  }
+
   if (certificate) {
     const code = certificate.code;
     const qrData = getLinkFromCode(code);
@@ -166,7 +181,7 @@ async function renderCertificateById(id: string) {
     return (
       <CertificateDocument
         recipientName={certificate.recipientName}
-        courseName={certificate.courseName}
+        courseName={course.name}
         issueDate={certificate.issueDate}
         qrCodeImage={qrCodeImage}
         code={code}
@@ -199,7 +214,9 @@ function CertificateDocument({
   if (type === "ROLEPLAY") {
     description = `This certifies that Roblox user ${recipientName} (ID: ${robloxUserID}) has achieved ${courseName} certification within the MYSverse Sim virtual roleplay community. This certificate should not imply any real-world qualifications or achievements outside of its intended context.`;
   } else if (type === "TEAM_RECOGNITION") {
-    description = `This certificate recognizes ${recipientName} (User ID: ${recipientUserID}) for their outstanding contribution as a ${courseName} in MYSverse.`;
+    description = `This certificate recognizes ${recipientName} ${
+      recipientUserID ? `(${recipientUserID})` : ""
+    } for their outstanding contribution as a ${courseName} in MYSverse.`;
   } else if (type === "EXTERNAL") {
     description = `This certifies that ${recipientName} has successfully completed tasks in collaboration with ${externalOrg} for the ${courseName} project.`;
   }
