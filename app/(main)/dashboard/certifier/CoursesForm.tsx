@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { createCourseAction, deleteCourseAction } from "./actions";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
+
 import type { Course } from "generated/client";
+import { createCourseAction, deleteCourseAction } from "./actions";
 
 interface CoursesFormProps {
   courses: Course[];
@@ -96,9 +98,20 @@ export default function CoursesForm({ courses }: CoursesFormProps) {
                 key={course.id}
                 className="flex items-center justify-between rounded-lg border p-2"
               >
-                <span>
+                <span className="flex items-center gap-2">
                   {course.name}
-                  {course.description && ` - ${course.description}`}
+                  {course.description && ` - ${course.description}`}{" "}
+                  <DocumentDuplicateIcon
+                    onClick={() => {
+                      navigator.clipboard.writeText(course.id);
+                      toast.success("Course ID copied to clipboard!");
+                    }}
+                    className="inline-block size-5 cursor-pointer text-gray-500"
+                    title="Copy Course ID"
+                    aria-hidden="true"
+                    role="img"
+                    aria-label="Copy Course ID"
+                  />
                 </span>
                 <button
                   onClick={() => handleDelete(course.id)}
