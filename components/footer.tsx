@@ -3,6 +3,7 @@
 import { JSX, SVGProps } from "react";
 import { isStandalonePWA } from "./utils";
 import Link from "next/link";
+import VerifyACertificate from "./VerifyACertificate";
 
 // import PlayStoreBadge from "public/img/store_badges/store_badge_google.svg";
 // import MicrosoftStoreBadge from "public/img/store_badges/store_badge_microsoft.svg";
@@ -67,6 +68,7 @@ export default function Footer() {
             </a>
           </div> */}
         <nav className="mt-8 flex flex-wrap justify-center" aria-label="Footer">
+          <VerifyACertificate name={"Certificate Verifier"} />
           {footerNavigation.main.map((item) => (
             <div key={item.name} className="px-5 py-2">
               <Link
