@@ -14,8 +14,8 @@
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.19.4",
-    "@headlessui/react": "^2.2.3",
+    "@clerk/nextjs": "^6.19.5",
+    "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",
     "@next/bundle-analyzer": "^15.3.2",
     "@prisma/client": "^6.8.2",
@@ -37,7 +37,7 @@
     "nuqs": "^2.4.3",
     "prisma": "^6.8.2",
     "qrcode": "^1.5.4",
-    "radix-ui": "^1.4.1",
+    "radix-ui": "^1.4.2",
     "react": "^19.1.0",
     "react-chartjs-2": "^5.3.0",
     "react-countup": "^6.5.3",
@@ -51,7 +51,7 @@
     "swr": "^2.3.3",
     "tailwindcss": "^4.1.7",
     "tailwindcss-radix": "^4.0.2",
-    "zod": "^3.24.4"
+    "zod": "^3.25.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -60,7 +60,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tsconfig/next": "^2.0.3",
     "@types/humanize-duration": "^3.27.4",
-    "@types/node": "^22.15.18",
+    "@types/node": "^22.15.20",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
@@ -70,7 +70,7 @@
     "eslint-config-next": "^15.3.2",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "knip": "^5.56.0",
+    "knip": "^5.57.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "serwist": "^9.0.14",
