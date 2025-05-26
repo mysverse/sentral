@@ -14,7 +14,7 @@
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.19.5",
+    "@clerk/nextjs": "^6.20.0",
     "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",
     "@next/bundle-analyzer": "^15.3.2",
@@ -30,7 +30,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "humanize-duration": "^3.32.2",
-    "motion": "^12.12.1",
+    "motion": "^12.12.2",
     "motion-number": "^1.0.0",
     "next": "^15.3.2",
     "next-plausible": "^3.12.4",
@@ -51,7 +51,7 @@
     "swr": "^2.3.3",
     "tailwindcss": "^4.1.7",
     "tailwindcss-radix": "^4.0.2",
-    "zod": "^3.25.7"
+    "zod": "^3.25.28"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -60,9 +60,9 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tsconfig/next": "^2.0.3",
     "@types/humanize-duration": "^3.27.4",
-    "@types/node": "^22.15.20",
+    "@types/node": "^22.15.21",
     "@types/qrcode": "^1.5.5",
-    "@types/react": "^19.1.4",
+    "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "dotenv-cli": "^8.0.0",
@@ -70,7 +70,7 @@
     "eslint-config-next": "^15.3.2",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "knip": "^5.57.0",
+    "knip": "^5.58.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "serwist": "^9.0.14",
@@ -94,5 +94,5 @@
       "unrs-resolver"
     ]
   },
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.11.0"
 }
