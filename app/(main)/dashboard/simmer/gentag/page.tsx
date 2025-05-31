@@ -9,6 +9,11 @@ import Image from "next/image";
 
 const nametagLengthLimit = 12;
 
+function sanitiseName(name: string): string {
+  // Remove any non-printable characters and trim whitespace
+  return name.replace(/[^\x20-\x7E]/g, "").trim();
+}
+
 function NametagImage(
   name: string,
   index: number,
@@ -47,7 +52,7 @@ function NametagImage(
       <a
         href={preview ? undefined : url}
         className="m-auto"
-        download={`nametag_${name}`}
+        download={`nametag_${sanitiseName(name)}`}
       >
         <div className="relative">
           <Image
