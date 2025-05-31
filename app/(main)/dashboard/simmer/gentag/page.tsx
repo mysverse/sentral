@@ -10,8 +10,12 @@ import Image from "next/image";
 const nametagLengthLimit = 12;
 
 function sanitiseName(name: string): string {
-  // Remove any non-printable characters and trim whitespace
-  return name.replace(/[^\x20-\x7E]/g, "").trim();
+  // Remove characters that break filenames, like slashes, colons, etc.
+  return name
+    .replace(/[^a-zA-Z0-9-_ ]/g, "") // Keep alphanumeric, dashes, underscores, and spaces
+    .trim() // Remove leading/trailing whitespace
+    .replace(/\s+/g, "_") // Replace spaces with underscores
+    .substring(0, nametagLengthLimit); // Limit to the maximum length
 }
 
 function NametagImage(
