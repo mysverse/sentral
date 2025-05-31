@@ -1,11 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowPathIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowPathIcon,
+  ChevronRightIcon,
+  ExclamationTriangleIcon
+} from "@heroicons/react/20/solid";
 import { useImageData, useNametagTemplates } from "components/swr";
 import { isStandalonePWA } from "components/utils";
 import { usePlausible } from "next-plausible";
 import Image from "next/image";
+import clsx from "clsx";
 
 const nametagLengthLimit = 12;
 
@@ -81,6 +86,8 @@ function NametagImage(
   );
 }
 
+const optionsEnabled = false;
+
 function NametagForm() {
   const { templates, isLoading } = useNametagTemplates(true);
   const [name, setName] = useState<string>("");
@@ -113,7 +120,7 @@ function NametagForm() {
       </div>
 
       <form
-        className="space-y-8 divide-y divide-gray-200"
+        className="space-y-8 divide-gray-200"
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
@@ -170,6 +177,36 @@ function NametagForm() {
                   </>
                 ) : null}
               </p>
+            </div>
+            <div className="mt-4 rounded-md bg-yellow-50 p-4">
+              <div className="flex">
+                <div className="shrink-0">
+                  <ExclamationTriangleIcon
+                    aria-hidden="true"
+                    className="size-5 text-yellow-400"
+                  />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-yellow-800">
+                    Known issues and limitations
+                  </h3>
+                  <ul className="mt-2 list-disc text-sm text-yellow-700">
+                    <li>
+                      Only alphabets are supported for the new templates,
+                      numbers and special characters will not render (ask Ivan
+                      to make more custom characters if you need them)
+                    </li>
+                    <li>
+                      Previews are currently broken due to a security change in
+                      Roblox asset APIs, which may take some time to resolve.
+                    </li>
+                    <li>
+                      &quot;Add T-shirt&quot; feature may also not function due
+                      to the same issue that affects previews.
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-6">
               <div className="sm:col-span-3">
@@ -237,72 +274,78 @@ function NametagForm() {
               </div>
             </div>
           </div>
-          <div className="space-y-6 divide-y divide-gray-200 pt-8 sm:space-y-5 sm:pt-10">
-            <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Options
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                {!isStandalonePWA()
-                  ? `See how your nametag looks on a shirt, or add another T-shirt
+          {optionsEnabled && (
+            <div
+              className={clsx(
+                "space-y-6 divide-y divide-gray-200 pt-8 sm:space-y-5 sm:pt-10"
+              )}
+            >
+              <div>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  Options
+                </h3>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                  {!isStandalonePWA()
+                    ? `See how your nametag looks on a shirt, or add another T-shirt
                 layer (e.g. rank slides).`
-                  : `Optionally, add any approved T-shirt layer from the catalog`}
-              </p>
-            </div>
-            {!isStandalonePWA() ? (
-              <>
-                <div className="space-y-6 divide-y divide-gray-200 sm:space-y-5">
-                  <div className="pt-6 sm:pt-5">
-                    <div role="group" aria-labelledby="label-notifications">
-                      <div className="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
-                        <div>
-                          <div
-                            className="mb-3 text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
-                            id="label-preview"
-                          >
-                            Preview
+                    : `Optionally, add any approved T-shirt layer from the catalog`}
+                </p>
+              </div>
+              {!isStandalonePWA() ? (
+                <>
+                  <div className="space-y-6 divide-y divide-gray-200 sm:space-y-5">
+                    <div className="pt-6 sm:pt-5">
+                      <div role="group" aria-labelledby="label-notifications">
+                        <div className="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
+                          <div>
+                            <div
+                              className="mb-3 text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
+                              id="label-preview"
+                            >
+                              Preview
+                            </div>
                           </div>
-                        </div>
-                        <div className="sm:col-span-2">
-                          <div className="max-w-lg">
-                            <div className="space-y-4">
-                              <div className="flex items-center">
-                                <input
-                                  id="preview-enable"
-                                  name="preview"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-                                  checked={preview}
-                                  value="enable"
-                                  onChange={(e) =>
-                                    setPreview(e.target.value === "enable")
-                                  }
-                                />
-                                <label
-                                  htmlFor="preview-enable"
-                                  className="ml-3 block text-sm font-medium text-gray-700"
-                                >
-                                  Enabled
-                                </label>
-                              </div>
-                              <div className="flex items-center">
-                                <input
-                                  id="preview-disable"
-                                  name="preview"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-                                  checked={!preview}
-                                  value="disable"
-                                  onChange={(e) =>
-                                    setPreview(e.target.value === "enable")
-                                  }
-                                />
-                                <label
-                                  htmlFor="preview-disable"
-                                  className="ml-3 block text-sm font-medium text-gray-700"
-                                >
-                                  Disabled
-                                </label>
+                          <div className="sm:col-span-2">
+                            <div className="max-w-lg">
+                              <div className="space-y-4">
+                                <div className="flex items-center">
+                                  <input
+                                    id="preview-enable"
+                                    name="preview"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    checked={preview}
+                                    value="enable"
+                                    onChange={(e) =>
+                                      setPreview(e.target.value === "enable")
+                                    }
+                                  />
+                                  <label
+                                    htmlFor="preview-enable"
+                                    className="ml-3 block text-sm font-medium text-gray-700"
+                                  >
+                                    Enabled
+                                  </label>
+                                </div>
+                                <div className="flex items-center">
+                                  <input
+                                    id="preview-disable"
+                                    name="preview"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    checked={!preview}
+                                    value="disable"
+                                    onChange={(e) =>
+                                      setPreview(e.target.value === "enable")
+                                    }
+                                  />
+                                  <label
+                                    htmlFor="preview-disable"
+                                    className="ml-3 block text-sm font-medium text-gray-700"
+                                  >
+                                    Disabled
+                                  </label>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -310,64 +353,64 @@ function NametagForm() {
                       </div>
                     </div>
                   </div>
-                </div>
-              </>
-            ) : null}
-            <div className="space-y-6 divide-y divide-gray-200 sm:space-y-5">
-              <div className="pt-6 sm:pt-5">
-                <div role="group" aria-labelledby="label-notifications">
-                  <div className="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
-                    <div>
-                      <div
-                        className="mb-3 text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
-                        id="label-addtshirt"
-                      >
-                        Add T-Shirt
+                </>
+              ) : null}
+              <div className="space-y-6 divide-y divide-gray-200 sm:space-y-5">
+                <div className="pt-6 sm:pt-5">
+                  <div role="group" aria-labelledby="label-notifications">
+                    <div className="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
+                      <div>
+                        <div
+                          className="mb-3 text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
+                          id="label-addtshirt"
+                        >
+                          Add T-Shirt
+                        </div>
                       </div>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <div className="max-w-lg">
-                        {/* <p className="text-sm text-gray-500">
+                      <div className="sm:col-span-2">
+                        <div className="max-w-lg">
+                          {/* <p className="text-sm text-gray-500">
                           These are delivered via SMS to your mobile phone.
                         </p> */}
-                        <div className="space-y-4">
-                          <div className="flex items-center">
-                            <input
-                              id="addtshirt-enable"
-                              name="addtshirt"
-                              type="radio"
-                              className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-                              checked={addTShirt}
-                              value="enable"
-                              onChange={(e) =>
-                                setAddTShirt(e.target.value === "enable")
-                              }
-                            />
-                            <label
-                              htmlFor="addtshirt-enable"
-                              className="ml-3 block text-sm font-medium text-gray-700"
-                            >
-                              Yes
-                            </label>
-                          </div>
-                          <div className="flex items-center">
-                            <input
-                              id="addtshirt-disable"
-                              name="addtshirt"
-                              type="radio"
-                              className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-                              checked={!addTShirt}
-                              value="disable"
-                              onChange={(e) =>
-                                setAddTShirt(e.target.value === "enable")
-                              }
-                            />
-                            <label
-                              htmlFor="addtshirt-disable"
-                              className="ml-3 block text-sm font-medium text-gray-700"
-                            >
-                              No
-                            </label>
+                          <div className="space-y-4">
+                            <div className="flex items-center">
+                              <input
+                                id="addtshirt-enable"
+                                name="addtshirt"
+                                type="radio"
+                                className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                                checked={addTShirt}
+                                value="enable"
+                                onChange={(e) =>
+                                  setAddTShirt(e.target.value === "enable")
+                                }
+                              />
+                              <label
+                                htmlFor="addtshirt-enable"
+                                className="ml-3 block text-sm font-medium text-gray-700"
+                              >
+                                Yes
+                              </label>
+                            </div>
+                            <div className="flex items-center">
+                              <input
+                                id="addtshirt-disable"
+                                name="addtshirt"
+                                type="radio"
+                                className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                                checked={!addTShirt}
+                                value="disable"
+                                onChange={(e) =>
+                                  setAddTShirt(e.target.value === "enable")
+                                }
+                              />
+                              <label
+                                htmlFor="addtshirt-disable"
+                                className="ml-3 block text-sm font-medium text-gray-700"
+                              >
+                                No
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -375,39 +418,38 @@ function NametagForm() {
                   </div>
                 </div>
               </div>
-            </div>
-            {addTShirt ? (
-              <>
-                <div className="space-y-6 sm:mt-5 sm:space-y-5">
-                  <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:pt-5">
-                    <label
-                      htmlFor="tshirt_id"
-                      className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                    >
-                      T-Shirt ID
-                    </label>
-                    <div className="mt-1 sm:col-span-2 sm:mt-0">
-                      <div className="flex max-w-lg rounded-md shadow-xs">
-                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
-                          roblox.com/catalog/
-                        </span>
-                        <input
-                          type="number"
-                          name="tshirt_id"
-                          id="tshirt_id"
-                          className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
-                          min={1}
-                          step={1}
-                          defaultValue={currentTShirtID}
-                          onChange={(e) => {
-                            const id = parseInt(e.target.value);
-                            setCurrentTShirtID(id);
-                            // temp testing
-                            setTShirtIDs([id]);
-                            setChangeFlag(true);
-                          }}
-                        />
-                        {/* <button
+              {addTShirt ? (
+                <>
+                  <div className="space-y-6 sm:mt-5 sm:space-y-5">
+                    <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:pt-5">
+                      <label
+                        htmlFor="tshirt_id"
+                        className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                      >
+                        T-Shirt ID
+                      </label>
+                      <div className="mt-1 sm:col-span-2 sm:mt-0">
+                        <div className="flex max-w-lg rounded-md shadow-xs">
+                          <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
+                            roblox.com/catalog/
+                          </span>
+                          <input
+                            type="number"
+                            name="tshirt_id"
+                            id="tshirt_id"
+                            className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-slate-500 focus:ring-blue-500 sm:text-sm"
+                            min={1}
+                            step={1}
+                            defaultValue={currentTShirtID}
+                            onChange={(e) => {
+                              const id = parseInt(e.target.value);
+                              setCurrentTShirtID(id);
+                              // temp testing
+                              setTShirtIDs([id]);
+                              setChangeFlag(true);
+                            }}
+                          />
+                          {/* <button
                           type="button"
                           onClick={(e) =>
                             currentTShirtID
@@ -420,20 +462,21 @@ function NametagForm() {
                         >
                           Add
                         </button> */}
-                      </div>
-                      <div>
-                        <ul>
-                          {/* {tShirtIDs.map((item, key) => (
+                        </div>
+                        <div>
+                          <ul>
+                            {/* {tShirtIDs.map((item, key) => (
                             <li key={key}>{item}</li>
                           ))} */}
-                        </ul>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </>
-            ) : null}
-          </div>
+                </>
+              ) : null}
+            </div>
+          )}
         </div>
 
         <div className="pt-5">
