@@ -74,7 +74,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "knip": "^5.61.2",
-    "prettier": "^3.6.0",
+    "prettier": "^3.6.1",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "serwist": "^9.0.15",
     "typescript": "^5.8.3"
@@ -97,5 +97,5 @@
       "unrs-resolver"
     ]
   },
-  "packageManager": "pnpm@10.12.2"
+  "packageManager": "pnpm@10.12.3"
 }
