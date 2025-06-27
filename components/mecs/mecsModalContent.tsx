@@ -631,7 +631,7 @@ export default function QueryModalContent({
           </h2>
           <ul role="list" className="mt-3 grid grid-cols-1 gap-3">
             {resultCards.map((card) => {
-              const keys = ["hcc"];
+              const keys = ["hcc", "firearm"];
               if (keys.includes(card.name)) {
                 return (
                   <li
