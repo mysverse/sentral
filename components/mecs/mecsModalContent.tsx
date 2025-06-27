@@ -382,6 +382,15 @@ export default function QueryModalContent({
         informational: true
       });
 
+      resultCards.push({
+        name: "firearm",
+        title: "Firearms licence gamepass",
+        subtitle: "Gamepass ownership check",
+        displayText: apiResponse.user.firearmsGamepassOwned ? "PASS" : "FAIL",
+        pass: apiResponse.user.firearmsGamepassOwned ? true : false,
+        informational: true
+      });
+
       if (!tfPass) {
         failReasons.push(<>{`Player's trust factor score is too low.`}</>);
       }
@@ -544,7 +553,7 @@ export default function QueryModalContent({
                       key={item.name}
                       className={clsx(
                         item.pass ? "bg-white" : "bg-red-50",
-                        "overflow-hidden rounded-lg px-3 py-3 outline outline-1 outline-gray-200 sm:p-3"
+                        "overflow-hidden rounded-lg px-3 py-3 outline outline-gray-200 sm:p-3"
                       )}
                     >
                       <dt

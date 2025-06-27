@@ -22,6 +22,7 @@ export interface DefaultAPIResponse {
     username: string;
     groupMembership?: any;
     hccGamepassOwned?: boolean;
+    firearmsGamepassOwned?: boolean;
     exempt: boolean;
   };
   tests: CombinedTestResults;
