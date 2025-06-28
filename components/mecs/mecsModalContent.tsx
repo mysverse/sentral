@@ -629,7 +629,10 @@ export default function QueryModalContent({
           <h2 className="mt-6 text-xs font-medium tracking-wide text-gray-500 uppercase">
             Miscallaneous information
           </h2>
-          <ul role="list" className="mt-3 grid grid-cols-1 gap-3">
+          <ul
+            role="list"
+            className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2"
+          >
             {resultCards.map((card) => {
               const keys = ["hcc", "firearm"];
               if (keys.includes(card.name)) {
