@@ -63,7 +63,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           event.correct || !reviewable
                             ? "bg-gray-400"
                             : "bg-red-400",
-                          "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white"
+                          "flex size-8 items-center justify-center rounded-full ring-8 ring-white"
                         )}
                       >
                         {event.action === "Grant" ? (
@@ -604,9 +604,9 @@ export default function QueryModalContent({
                       )}
                     >
                       {card.displayText === "PASS" ? (
-                        <CheckIcon className="h-8 w-8" />
+                        <CheckIcon className="size-8" />
                       ) : card.displayText === "FAIL" ? (
-                        <XMarkIcon className="h-8 w-8" />
+                        <XMarkIcon className="size-8" />
                       ) : (
                         card.displayText
                       )}
@@ -652,9 +652,9 @@ export default function QueryModalContent({
                       )}
                     >
                       {card.displayText === "PASS" ? (
-                        <CheckIcon className="h-8 w-8" />
+                        <CheckIcon className="size-8" />
                       ) : card.displayText === "FAIL" ? (
-                        <XMarkIcon className="h-8 w-8" />
+                        <XMarkIcon className="size-8" />
                       ) : (
                         card.displayText
                       )}
@@ -681,7 +681,7 @@ export default function QueryModalContent({
       ) : error ? (
         <>
           <div className="sm:flex sm:items-start">
-            <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+            <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
               <ExclamationCircleIcon
                 className="h-6 w-6 text-red-600"
                 aria-hidden="true"

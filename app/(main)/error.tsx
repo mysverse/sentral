@@ -33,7 +33,7 @@ export default function Error({
           <div className="flex h-96 flex-col items-center">
             <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-red-100">
               <ExclamationCircleIcon
-                className="h-12 w-12 text-red-600"
+                className="size-12 text-red-600"
                 aria-hidden="true"
               />
             </div>

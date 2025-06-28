@@ -76,7 +76,7 @@ function NametagImage({
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
             >
               <ArrowPathIcon
-                className="h-16 w-16 text-blue-500"
+                className="size-16 text-blue-500"
                 aria-hidden="true"
               />
             </motion.div>
@@ -84,7 +84,7 @@ function NametagImage({
         ) : isError ? (
           <div className="m-auto">
             <ArrowPathIcon
-              className="h-16 w-16 text-red-300"
+              className="size-16 text-red-300"
               aria-hidden="true"
             />
           </div>
@@ -112,7 +112,7 @@ function NametagImage({
         ) : (
           <div className="m-auto text-gray-400">
             <svg
-              className="h-16 w-16"
+              className="size-16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -363,7 +363,7 @@ function NametagForm() {
       {/* Main Content Section - Image and Inputs */}
       <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:gap-8">
         {/* Left Column - Nametag Preview */}
-        <div className="flex justify-center lg:justify-start lg:flex-shrink-0">
+        <div className="flex justify-center lg:flex-shrink-0 lg:justify-start">
           <motion.div
             className="relative h-36 w-36 overflow-hidden rounded-lg border-2 border-dashed border-gray-300"
             whileHover={{ scale: 1.02 }}
@@ -481,7 +481,7 @@ function NametagForm() {
                     T-Shirt ID
                   </label>
                   <div className="mt-1 flex rounded-md shadow-xs">
-                    <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 text-sm">
+                    <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
                       roblox.com/catalog/
                     </span>
                     <motion.input

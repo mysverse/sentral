@@ -265,7 +265,7 @@ function BandarCars({
           .map((car) => (
             <li key={car.VehicleName} className="flex gap-x-4 py-4">
               {/* <Image
-              className="h-12 w-12 flex-none rounded-full bg-gray-50"
+              className="size-12 flex-none rounded-full bg-gray-50"
               src={person.imageUrl}
               alt=""
             /> */}
@@ -361,7 +361,7 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
               {/* <img
               src={client.imageUrl}
               alt={client.name}
-              className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
+              className="size-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
             /> */}
               <div className="text-sm leading-6 font-medium text-gray-900">
                 {arrest.Reference}
@@ -443,7 +443,7 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
               {/* <img
               src={client.imageUrl}
               alt={client.name}
-              className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
+              className="size-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
             /> */}
               <div className="text-sm leading-6 font-medium text-gray-900">
                 {summon.Reference}
