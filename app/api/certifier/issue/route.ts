@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
     if (!parsedSchema.success) {
       return NextResponse.json(
-        { error: "Invalid request body", details: parsedSchema.error.errors },
+        { error: "Invalid request body", details: parsedSchema.error },
         { status: 400 }
       );
     }
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     console.error("Error generating certificate:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid request body", details: error.errors },
+        { error: "Invalid request body", details: error },
         { status: 400 }
       );
     }
