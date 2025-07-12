@@ -13,8 +13,8 @@ export const certificateSchema = z.object({
   recipientName: z.string().nonempty("Recipient Name is required"),
   courseId: z.string().nonempty("Course ID is required"), // Changed from courseName
   identifier: z.string().nonempty("Identifier is required"), // Added
-  type: z.nativeEnum(CertificateType, {
-    errorMap: () => ({ message: "Invalid Certificate Type" })
+  type: z.enum(CertificateType, {
+    error: "Invalid certificate type"
   }),
   robloxUserID: z.string().optional(),
   recipientUserID: z.string().optional(),
