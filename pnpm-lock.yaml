@@ -36,8 +36,8 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(react@19.1.0)
       '@serwist/next':
-        specifier: ^9.1.0
-        version: 9.1.0(next@15.4.2(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.89.2))(typescript@5.8.3)
+        specifier: ^9.1.1
+        version: 9.1.1(next@15.4.2(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.89.2))(typescript@5.8.3)
       '@tailwindcss/forms':
         specifier: ^0.5.10
         version: 0.5.10(tailwindcss@4.1.11)
@@ -151,8 +151,8 @@ importers:
         specifier: ^3.27.4
         version: 3.27.4
       '@types/node':
-        specifier: ^22.16.4
-        version: 22.16.4
+        specifier: ^22.16.5
+        version: 22.16.5
       '@types/qrcode':
         specifier: ^1.5.5
         version: 1.5.5
@@ -182,7 +182,7 @@ importers:
         version: 5.2.0(eslint@9.31.0(jiti@2.4.2))
       knip:
         specifier: ^5.62.0
-        version: 5.62.0(@types/node@22.16.4)(typescript@5.8.3)
+        version: 5.62.0(@types/node@22.16.5)(typescript@5.8.3)
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -190,8 +190,8 @@ importers:
         specifier: ^0.6.14
         version: 0.6.14(prettier@3.6.2)
       serwist:
-        specifier: ^9.1.0
-        version: 9.1.0(typescript@5.8.3)
+        specifier: ^9.1.1
+        version: 9.1.1(typescript@5.8.3)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -2155,8 +2155,8 @@ packages:
   '@rushstack/eslint-patch@1.12.0':
     resolution: {integrity: sha512-5EwMtOqvJMMa3HbmxLlF74e+3/HhwBTMcvt3nqVJgGCozO6hzIPOBlwm8mGVNR9SN2IJpxSnlxczyDjcn7qIyw==}
 
-  '@serwist/build@9.1.0':
-    resolution: {integrity: sha512-J/7J5R+LrsGhc6esH1Ak1ovuX5NDazvyWkQ9BPH1KUFugi76WaKpz90hC8nYyIVLUnfbXJbDNa6dAWjpJ26enQ==}
+  '@serwist/build@9.1.1':
+    resolution: {integrity: sha512-AYUwA9KtHWCYaUuo68hctm69MeT7YnYPtvoceY88C4CzjoNBrNkUZsPoDs5xde+8lX7tHYaKfM3KDpmEH1PuNQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -2164,8 +2164,8 @@ packages:
       typescript:
         optional: true
 
-  '@serwist/next@9.1.0':
-    resolution: {integrity: sha512-qRo5YwX2WxBJO80l/LQPeubF077fXCIfNU+SSpENuZqBGnop6HNm13RoYAUyN4M3d4RmTWvJp1iovGy9OmH9cw==}
+  '@serwist/next@9.1.1':
+    resolution: {integrity: sha512-QtFTCoU5vWK5YYCwD4BLRn65v6iZ0NsRXWkR8ZoGgghQH3f00wNATIWaL3MYZ2XrJWUThZL5y8wyXUoeEbvwEg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       next: '>=14.0.0'
@@ -2174,8 +2174,8 @@ packages:
       typescript:
         optional: true
 
-  '@serwist/webpack-plugin@9.1.0':
-    resolution: {integrity: sha512-KcGV2P0gCzMjUjiwS6E0B5ef87CuXUXBZtkuPAboEAmfGfiCWl3z3XZBAXMAZij6B2coHBabVIut/qwlkISuUQ==}
+  '@serwist/webpack-plugin@9.1.1':
+    resolution: {integrity: sha512-mVtP36m5/Grzh4ddHU/BLetCZfUrBARRdORHP7+RYVGMBTZYjUidHpasdCgS9hnNalb/hC6FsxOnx7+u/2WhFg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -2186,8 +2186,8 @@ packages:
       webpack:
         optional: true
 
-  '@serwist/window@9.1.0':
-    resolution: {integrity: sha512-+kOWuFcwkN9GjRmcZ9/TV5FQpKKW1QmIZwhmqM8cWaU1EvUGi/bBtlUN0NXH8SYltWQ496QiM6d2TM58U02Y4A==}
+  '@serwist/window@9.1.1':
+    resolution: {integrity: sha512-zew3GZ8Wqd7ERrr2rbD90K8Ih0Z+aQ2KszN5928K7e1EzAHXPJ3V0PFpdiyOLh2nuMK1PZg+3JftVbLYv7ziHA==}
     peerDependencies:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
@@ -2428,8 +2428,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@22.16.4':
-    resolution: {integrity: sha512-PYRhNtZdm2wH/NT2k/oAJ6/f2VD2N2Dag0lGlx2vWgMSJXGNmlce5MiTQzoWAiIJtso30mjnfQCOKVH+kAQC/g==}
+  '@types/node@22.16.5':
+    resolution: {integrity: sha512-bJFoMATwIGaxxx8VJPeM8TonI8t579oRvgAuT8zFugJsJZgzqv0Fu8Mhp68iecjzG7cnN3mO2dJQ5uUM2EFrgQ==}
 
   '@types/qrcode@1.5.5':
     resolution: {integrity: sha512-CdfBi/e3Qk+3Z/fXYShipBT13OJ2fDO2Q2w5CIP5anLTLIndQG9z6P1cnm+8zCWSpm5dnxMFd/uREtb0EXuQzg==}
@@ -4662,8 +4662,8 @@ packages:
   server-only@0.0.1:
     resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
-  serwist@9.1.0:
-    resolution: {integrity: sha512-oCiFkzRK15M6sZaO6i2RTRWgCa4ZJjgcNH37085GAYoJ9zbESxV2E3zd8AxIdhZZwrjlsuHqj9cTexfqq/9hjw==}
+  serwist@9.1.1:
+    resolution: {integrity: sha512-DGwnsIOUmCNOMMsKzmZ9854iW0L0TNYN/E6AGUdEtDP2ZAOxQm32gIQPL9ZJCrs56eLMwXtfTmWjcgNEl+1Jng==}
     peerDependencies:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
@@ -7451,7 +7451,7 @@ snapshots:
 
   '@rushstack/eslint-patch@1.12.0': {}
 
-  '@serwist/build@9.1.0(typescript@5.8.3)':
+  '@serwist/build@9.1.1(typescript@5.8.3)':
     dependencies:
       common-tags: 1.8.2
       glob: 10.4.5
@@ -7461,33 +7461,33 @@ snapshots:
     optionalDependencies:
       typescript: 5.8.3
 
-  '@serwist/next@9.1.0(next@15.4.2(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.89.2))(typescript@5.8.3)':
+  '@serwist/next@9.1.1(next@15.4.2(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.89.2))(typescript@5.8.3)':
     dependencies:
-      '@serwist/build': 9.1.0(typescript@5.8.3)
-      '@serwist/webpack-plugin': 9.1.0(typescript@5.8.3)
-      '@serwist/window': 9.1.0(typescript@5.8.3)
+      '@serwist/build': 9.1.1(typescript@5.8.3)
+      '@serwist/webpack-plugin': 9.1.1(typescript@5.8.3)
+      '@serwist/window': 9.1.1(typescript@5.8.3)
       chalk: 5.4.1
       glob: 10.4.5
       next: 15.4.2(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.89.2)
-      serwist: 9.1.0(typescript@5.8.3)
+      serwist: 9.1.1(typescript@5.8.3)
       zod: 4.0.5
     optionalDependencies:
       typescript: 5.8.3
     transitivePeerDependencies:
       - webpack
 
-  '@serwist/webpack-plugin@9.1.0(typescript@5.8.3)':
+  '@serwist/webpack-plugin@9.1.1(typescript@5.8.3)':
     dependencies:
-      '@serwist/build': 9.1.0(typescript@5.8.3)
+      '@serwist/build': 9.1.1(typescript@5.8.3)
       pretty-bytes: 6.1.1
       zod: 4.0.5
     optionalDependencies:
       typescript: 5.8.3
 
-  '@serwist/window@9.1.0(typescript@5.8.3)':
+  '@serwist/window@9.1.1(typescript@5.8.3)':
     dependencies:
       '@types/trusted-types': 2.0.7
-      serwist: 9.1.0(typescript@5.8.3)
+      serwist: 9.1.1(typescript@5.8.3)
     optionalDependencies:
       typescript: 5.8.3
 
@@ -7724,13 +7724,13 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@22.16.4':
+  '@types/node@22.16.5':
     dependencies:
       undici-types: 6.21.0
 
   '@types/qrcode@1.5.5':
     dependencies:
-      '@types/node': 22.16.4
+      '@types/node': 22.16.5
 
   '@types/react-dom@19.1.6(@types/react@19.1.8)':
     dependencies:
@@ -9207,10 +9207,10 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  knip@5.62.0(@types/node@22.16.4)(typescript@5.8.3):
+  knip@5.62.0(@types/node@22.16.5)(typescript@5.8.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
-      '@types/node': 22.16.4
+      '@types/node': 22.16.5
       fast-glob: 3.3.3
       formatly: 0.2.4
       jiti: 2.4.2
@@ -10217,7 +10217,7 @@ snapshots:
 
   server-only@0.0.1: {}
 
-  serwist@9.1.0(typescript@5.8.3):
+  serwist@9.1.1(typescript@5.8.3):
     dependencies:
       idb: 8.0.3
     optionalDependencies:
