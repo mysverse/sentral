@@ -68,3 +68,17 @@ enum CertificateType {
   TEAM_RECOGNITION
   EXTERNAL
 }
+
+model Leaderboard {
+  id         String   @id @default(uuid())
+  eventId    String // Allows multiple events to have separate leaderboards
+  eventName  String // Human-readable event name
+  playerName String // Player's chosen name from in-game
+  lapTime    Float // Lap time in seconds (with millisecond precision)
+  position   Int? // Current position in leaderboard (calculated)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([eventId, playerName], name: "unique_player_per_event")
+  @@index([eventId, lapTime])
+}
