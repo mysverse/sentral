@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import DefaultTransitionLayout from "components/transition";
@@ -39,6 +39,7 @@ export default function LeaderboardPage({
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [eventId, setEventId] = useState<string>("");
+  const [reconnectTrigger, setReconnectTrigger] = useState(0);
   const [eventDetails, setEventDetails] = useState<EventDetails>({
     name: "Live Racing Event",
     status: "live"
@@ -47,7 +48,9 @@ export default function LeaderboardPage({
   const previousPositionsRef = useRef<Map<string, number>>(new Map());
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
-  const maxReconnectAttempts = 5;
+  const lastSuccessfulConnectionRef = useRef<number>(Date.now());
+  const maxReconnectAttempts = 10; // Increased from 5
+  const reconnectResetInterval = 60000; // Reset attempts after 1 minute of successful connection
 
   // Resolve params
   useEffect(() => {
@@ -63,6 +66,22 @@ export default function LeaderboardPage({
     const seconds = (timeInSeconds % 60).toFixed(3);
     return `${minutes}:${seconds.padStart(6, "0")}`;
   };
+
+  // Function to initiate reconnection
+  const reconnectSSE = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+
+    // Trigger a new connection attempt
+    setReconnectTrigger((prev) => prev + 1);
+  }, []);
 
   const getPositionChange = (playerId: string, currentPosition: number) => {
     const previousPosition = previousPositionsRef.current.get(playerId);
@@ -115,16 +134,22 @@ export default function LeaderboardPage({
     // Don't connect if eventId is not yet resolved
     if (!eventId) return;
 
+    // Extract the base eventId (remove any reconnection markers)
+    const baseEventId = eventId.split("#")[0];
+
     // If already connected, don't create another connection
     if (eventSourceRef.current) return;
 
-    console.log(`Connecting to SSE for event: ${eventId}`);
-    const eventSource = new EventSource(`/api/leaderboard/${eventId}/events`);
+    console.log(`Connecting to SSE for event: ${baseEventId}`);
+    const eventSource = new EventSource(
+      `/api/leaderboard/${baseEventId}/events`
+    );
     eventSourceRef.current = eventSource;
 
     eventSource.onopen = () => {
       setIsConnected(true);
-      reconnectAttemptsRef.current = 0;
+      reconnectAttemptsRef.current = 0; // Reset retry attempts on successful connection
+      lastSuccessfulConnectionRef.current = Date.now();
       console.log("Connected to leaderboard updates");
     };
 
@@ -183,7 +208,7 @@ export default function LeaderboardPage({
               if (message.data.length > 0) {
                 setEventDetails((prev) => ({
                   ...prev,
-                  name: `Racing Event ${eventId}`
+                  name: `Racing Event ${baseEventId}`
                 }));
               }
             }
@@ -203,24 +228,45 @@ export default function LeaderboardPage({
       eventSource.close();
       eventSourceRef.current = null;
 
+      // Check if we've had a successful connection recently
+      const timeSinceLastSuccess =
+        Date.now() - lastSuccessfulConnectionRef.current;
+      const shouldResetAttempts = timeSinceLastSuccess > reconnectResetInterval;
+
+      if (shouldResetAttempts) {
+        reconnectAttemptsRef.current = 0;
+      }
+
       // Only attempt reconnection if we haven't exceeded max attempts
       if (reconnectAttemptsRef.current < maxReconnectAttempts) {
         const timeout = Math.min(
           1000 * Math.pow(2, reconnectAttemptsRef.current),
           30000
-        ); // Exponential backoff
+        ); // Exponential backoff with max 30 seconds
+
         toast.error(
-          `Connection lost. Reconnecting in ${timeout / 1000} seconds...`
+          `Connection lost. Reconnecting in ${Math.ceil(timeout / 1000)} seconds... (Attempt ${reconnectAttemptsRef.current + 1}/${maxReconnectAttempts})`
         );
 
         reconnectAttemptsRef.current++;
 
         reconnectTimeoutRef.current = setTimeout(() => {
-          // Force re-render to trigger reconnection
-          setEventId((current) => current);
+          reconnectSSE();
         }, timeout);
       } else {
-        toast.error("Connection failed. Please refresh the page.");
+        toast.error(
+          "Connection failed after multiple attempts. Click to retry.",
+          {
+            action: {
+              label: "Retry",
+              onClick: () => {
+                reconnectAttemptsRef.current = 0;
+                reconnectSSE();
+              }
+            },
+            duration: Infinity // Keep the toast until user clicks retry
+          }
+        );
       }
     };
 
@@ -234,7 +280,7 @@ export default function LeaderboardPage({
         eventSourceRef.current = null;
       }
     };
-  }, [eventId]);
+  }, [eventId, reconnectTrigger, reconnectSSE]);
 
   return (
     <DefaultTransitionLayout show={true} appear={true}>
@@ -281,6 +327,17 @@ export default function LeaderboardPage({
                 <span className="text-sm font-medium text-white lg:text-lg">
                   {isConnected ? "LIVE" : "OFFLINE"}
                 </span>
+                {!isConnected && (
+                  <button
+                    onClick={() => {
+                      reconnectAttemptsRef.current = 0;
+                      reconnectSSE();
+                    }}
+                    className="ml-2 rounded-lg bg-blue-600 px-3 py-1 text-sm font-medium text-white transition-colors hover:bg-blue-700 lg:px-4 lg:py-2 lg:text-base"
+                  >
+                    Retry
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>
