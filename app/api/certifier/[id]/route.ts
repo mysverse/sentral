@@ -23,4 +23,5 @@ export async function GET(
       headers
     });
   }
+  return new Response(null, { status: 404 });
 }
