@@ -59,7 +59,10 @@ const PUBLIC_SANS_FONTS = [
     fontWeight: 100,
     fontStyle: "italic" as const
   },
-  { src: getFontPath("public_sans", "PublicSans-ExtraLight.ttf"), fontWeight: 200 },
+  {
+    src: getFontPath("public_sans", "PublicSans-ExtraLight.ttf"),
+    fontWeight: 200
+  },
   {
     src: getFontPath("public_sans", "PublicSans-ExtraLightItalic.ttf"),
     fontWeight: 200,
@@ -71,7 +74,10 @@ const PUBLIC_SANS_FONTS = [
     fontWeight: 300,
     fontStyle: "italic" as const
   },
-  { src: getFontPath("public_sans", "PublicSans-Regular.ttf"), fontWeight: 400 },
+  {
+    src: getFontPath("public_sans", "PublicSans-Regular.ttf"),
+    fontWeight: 400
+  },
   {
     src: getFontPath("public_sans", "PublicSans-Italic.ttf"),
     fontWeight: 400,
@@ -83,7 +89,10 @@ const PUBLIC_SANS_FONTS = [
     fontWeight: 500,
     fontStyle: "italic" as const
   },
-  { src: getFontPath("public_sans", "PublicSans-SemiBold.ttf"), fontWeight: 600 },
+  {
+    src: getFontPath("public_sans", "PublicSans-SemiBold.ttf"),
+    fontWeight: 600
+  },
   {
     src: getFontPath("public_sans", "PublicSans-SemiBoldItalic.ttf"),
     fontWeight: 600,
@@ -95,7 +104,10 @@ const PUBLIC_SANS_FONTS = [
     fontWeight: 700,
     fontStyle: "italic" as const
   },
-  { src: getFontPath("public_sans", "PublicSans-ExtraBold.ttf"), fontWeight: 800 },
+  {
+    src: getFontPath("public_sans", "PublicSans-ExtraBold.ttf"),
+    fontWeight: 800
+  },
   {
     src: getFontPath("public_sans", "PublicSans-ExtraBoldItalic.ttf"),
     fontWeight: 800,
