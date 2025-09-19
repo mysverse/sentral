@@ -51,92 +51,68 @@ function getFontPath(fontFamily: string, fontName: string) {
   return path.join(process.cwd(), "public", "fonts", fontFamily, fontName);
 }
 
-Font.register({
-  family: "Public Sans",
-  fonts: [
-    {
-      src: getFontPath("public_sans", "PublicSans-Thin.ttf"),
-      fontWeight: 100
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-ThinItalic.ttf"),
-      fontWeight: 100,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-ExtraLight.ttf"),
-      fontWeight: 200
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-ExtraLightItalic.ttf"),
-      fontWeight: 200,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-Light.ttf"),
-      fontWeight: 300
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-LightItalic.ttf"),
-      fontWeight: 300,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-Regular.ttf"),
-      fontWeight: 400
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-Italic.ttf"),
-      fontWeight: 400,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-Medium.ttf"),
-      fontWeight: 500
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-MediumItalic.ttf"),
-      fontWeight: 500,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-SemiBold.ttf"),
-      fontWeight: 600
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-SemiBoldItalic.ttf"),
-      fontWeight: 600,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-Bold.ttf"),
-      fontWeight: 700
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-BoldItalic.ttf"),
-      fontWeight: 700,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-ExtraBold.ttf"),
-      fontWeight: 800
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-ExtraBoldItalic.ttf"),
-      fontWeight: 800,
-      fontStyle: "italic"
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-Black.ttf"),
-      fontWeight: 900
-    },
-    {
-      src: getFontPath("public_sans", "PublicSans-BlackItalic.ttf"),
-      fontWeight: 900,
-      fontStyle: "italic"
-    }
-  ]
-});
+// Define Public Sans font sources once so we can register multiple families (aliases)
+const PUBLIC_SANS_FONTS = [
+  { src: getFontPath("public_sans", "PublicSans-Thin.ttf"), fontWeight: 100 },
+  {
+    src: getFontPath("public_sans", "PublicSans-ThinItalic.ttf"),
+    fontWeight: 100,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-ExtraLight.ttf"), fontWeight: 200 },
+  {
+    src: getFontPath("public_sans", "PublicSans-ExtraLightItalic.ttf"),
+    fontWeight: 200,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-Light.ttf"), fontWeight: 300 },
+  {
+    src: getFontPath("public_sans", "PublicSans-LightItalic.ttf"),
+    fontWeight: 300,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-Regular.ttf"), fontWeight: 400 },
+  {
+    src: getFontPath("public_sans", "PublicSans-Italic.ttf"),
+    fontWeight: 400,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-Medium.ttf"), fontWeight: 500 },
+  {
+    src: getFontPath("public_sans", "PublicSans-MediumItalic.ttf"),
+    fontWeight: 500,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-SemiBold.ttf"), fontWeight: 600 },
+  {
+    src: getFontPath("public_sans", "PublicSans-SemiBoldItalic.ttf"),
+    fontWeight: 600,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-Bold.ttf"), fontWeight: 700 },
+  {
+    src: getFontPath("public_sans", "PublicSans-BoldItalic.ttf"),
+    fontWeight: 700,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-ExtraBold.ttf"), fontWeight: 800 },
+  {
+    src: getFontPath("public_sans", "PublicSans-ExtraBoldItalic.ttf"),
+    fontWeight: 800,
+    fontStyle: "italic" as const
+  },
+  { src: getFontPath("public_sans", "PublicSans-Black.ttf"), fontWeight: 900 },
+  {
+    src: getFontPath("public_sans", "PublicSans-BlackItalic.ttf"),
+    fontWeight: 900,
+    fontStyle: "italic" as const
+  }
+];
+
+// Primary family used by our components
+Font.register({ family: "Public Sans", fonts: PUBLIC_SANS_FONTS });
+// Alias for Tailwind v4 'font-sans' which resolves to 'ui-sans-serif'
+Font.register({ family: "ui-sans-serif", fonts: PUBLIC_SANS_FONTS });
 
 export async function exportCertificateById(id: string) {
   const certificate = await renderCertificateById(id);
@@ -225,7 +201,8 @@ function CertificateDocument({
     <Document title="Certificate" author="MYSverse">
       <Page
         style={tw(
-          "flex flex-col font-sans justify-between p-12 border-8 border-gray-300 bg-white h-full text-primary"
+          // Use an explicit color to avoid react-pdf-tailwind rejecting custom theme keys
+          "flex flex-col font-sans justify-between p-12 border-8 border-gray-300 bg-white h-full text-[#1F2937]"
         )}
       >
         <View style={tw("flex flex-col items-center mb-8")}>
