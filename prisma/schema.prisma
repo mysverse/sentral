@@ -53,6 +53,7 @@ model Certificate {
   robloxUserID    String? // Optional, for roleplay certifications
   recipientUserID String? // Optional, for team member recognition
   externalOrg     String? // Optional, for external collaborations
+  reason          String? // Optional, for recognition-specific messaging
   identifier      String // For NRIC, Passport, Roblox ID etc. to ensure uniqueness per type per course
   courseId        String
   course          Course          @relation(fields: [courseId], references: [id])
@@ -67,6 +68,9 @@ enum CertificateType {
   ROLEPLAY
   TEAM_RECOGNITION
   EXTERNAL
+  APPRECIATION
+  ACHIEVEMENT
+  PARTICIPATION
 }
 
 model Leaderboard {

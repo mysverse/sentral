@@ -20,6 +20,7 @@ import {
 import { createTw } from "react-pdf-tailwind";
 import { CertificateType } from "generated/client";
 import path from "path";
+import { getCertificateCopy } from "./certificateTypeConfig";
 
 // Create an instance of Tailwind CSS for React-PDF
 const tw = createTw({
@@ -45,6 +46,7 @@ interface PDFProps {
   robloxUserID?: string;
   recipientUserID?: string;
   externalOrg?: string;
+  reason?: string;
 }
 
 function getFontPath(fontFamily: string, fontName: string) {
@@ -177,6 +179,7 @@ async function renderCertificateById(id: string) {
         robloxUserID={certificate.robloxUserID || undefined}
         recipientUserID={certificate.recipientUserID || undefined}
         externalOrg={certificate.externalOrg || undefined}
+        reason={certificate.reason || undefined}
       />
     );
   }
@@ -193,21 +196,20 @@ function CertificateDocument({
   type,
   robloxUserID,
   recipientUserID,
-  externalOrg
+  externalOrg,
+  reason
 }: PDFProps) {
   const link = getLinkFromCode(code);
 
-  // Modify the certificate content based on the type
-  let description = "";
-  if (type === "ROLEPLAY") {
-    description = `This certifies that Roblox user ${recipientName}${robloxUserID ? ` (ID: ${robloxUserID})` : ""} has achieved ${courseName} certification within the MYSverse Sim virtual roleplay community. This certificate should not imply any real-world qualifications or achievements outside of its intended context.`;
-  } else if (type === "TEAM_RECOGNITION") {
-    description = `This certificate recognizes ${recipientName}${
-      recipientUserID ? ` (${recipientUserID})` : ""
-    } for their outstanding contribution as a ${courseName} in MYSverse.`;
-  } else if (type === "EXTERNAL") {
-    description = `This certifies that ${recipientName} has successfully completed tasks ${externalOrg ? `in collaboration with ${externalOrg}` : "as part of a collaboration"} for the ${courseName} project.`;
-  }
+  const { title, introLine, actionLine, mainLine, secondaryLine, description } =
+    getCertificateCopy(type, {
+      recipientName,
+      courseName,
+      reason,
+      robloxUserID,
+      recipientUserID,
+      externalOrg
+    });
 
   return (
     <Document title="Certificate" author="MYSverse">
@@ -271,16 +273,17 @@ function CertificateDocument({
             </G>
           </Svg>
         </View>
-        <View style={tw("flex flex-col items-center")}>
+        <View style={tw("flex flex-col items-center text-center")}>
           <Text style={tw("text-3xl mb-4 font-bold tracking-tight")}>
-            MYSverse Certificate of Completion
+            {title}
           </Text>
-          <Text style={tw("text-lg mb-2")}>This certifies that</Text>
+          <Text style={tw("text-lg mb-2")}>{introLine}</Text>
           <Text style={tw("text-3xl mb-4 font-semibold")}>{recipientName}</Text>
-          <Text style={tw("text-lg mb-2")}>
-            has successfully completed the module
+          <Text style={tw("text-lg mb-2")}>{actionLine}</Text>
+          <Text style={tw("text-3xl mb-2 font-semibold")}>{mainLine}</Text>
+          <Text style={tw("text-xl mb-6 font-medium")}>
+            {secondaryLine ?? " "}
           </Text>
-          <Text style={tw("text-3xl mb-6 font-semibold")}>{courseName}</Text>
         </View>
         <View style={tw("mt-auto text-center")}>
           <Text style={tw("text-sm mb-2")}>

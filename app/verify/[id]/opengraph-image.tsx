@@ -3,6 +3,7 @@ import type {
   FontWeight
 } from "next/dist/compiled/@vercel/og/satori";
 import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
+import { CERTIFICATE_TYPE_SHORT_NAMES } from "app/(main)/dashboard/certifier/certificateTypeConfig";
 import { readFile } from "fs/promises";
 import { ImageResponse } from "next/og";
 import SentralLogo from "public/img/MYSverse_Sentral_Logo.svg";
@@ -22,12 +23,6 @@ type Props = { params: { id: string } };
 
 function getCodeFromProps(props: Props) {
   return props.params.id.toUpperCase().trim();
-}
-
-enum CertificateTypeName {
-  ROLEPLAY = "MYSverse Sim",
-  TEAM_RECOGNITION = "MYSverse",
-  EXTERNAL = "Collaboration"
 }
 
 function dir(p: string) {
@@ -120,8 +115,11 @@ export default async function Image(props: Props) {
           {certificate.courseName}
         </p>
         <p tw="text-5xl font-medium mt-6">
-          {CertificateTypeName[certificate.type]}
+          {CERTIFICATE_TYPE_SHORT_NAMES[certificate.type] ?? certificate.type}
         </p>
+        {certificate.reason && (
+          <p tw="text-4xl font-medium mt-6">{certificate.reason}</p>
+        )}
       </div>
     ),
     {

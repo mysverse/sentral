@@ -6,6 +6,11 @@ import { generateCertificate } from "./actions";
 import Link from "next/link";
 import clsx from "clsx";
 import { CertificateType, Course } from "generated/client";
+import {
+  CERTIFICATE_TYPE_LABELS,
+  certificateRequiresReason,
+  certificateSupportsRobloxId
+} from "./certificateTypeConfig";
 
 interface IssuanceFormProps {
   courses: Course[];
@@ -20,12 +25,22 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
   const [robloxUserID, setRobloxUserID] = useState("");
   const [recipientUserID, setRecipientUserID] = useState("");
   const [externalOrg, setExternalOrg] = useState("");
+  const [reason, setReason] = useState("");
 
   useEffect(() => {
     if (courses.length > 0 && !courseId) {
       setCourseId(courses[0].id);
     }
   }, [courses, courseId]);
+
+  useEffect(() => {
+    if (!certificateRequiresReason(type) && reason) {
+      setReason("");
+    }
+  }, [type, reason]);
+
+  const requiresReason = certificateRequiresReason(type);
+  const showRobloxField = certificateSupportsRobloxId(type);
 
   interface FormElements extends HTMLFormControlsCollection {
     recipientName: HTMLInputElement;
@@ -35,6 +50,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
     robloxUserID?: HTMLInputElement;
     recipientUserID?: HTMLInputElement;
     externalOrg?: HTMLInputElement;
+    reason?: HTMLInputElement;
   }
 
   interface CertificateFormElement extends HTMLFormElement {
@@ -52,8 +68,16 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
       toast.error("Identifier is required.");
       return;
     }
+    if (requiresReason && !reason.trim()) {
+      toast.error("Reason is required for this certificate type.");
+      return;
+    }
     setLoading(true);
     const formData = new FormData(e.currentTarget);
+
+    if (reason) {
+      formData.set("reason", reason.trim());
+    }
 
     try {
       await generateCertificate(formData);
@@ -63,6 +87,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
       setRobloxUserID("");
       setRecipientUserID("");
       setExternalOrg("");
+      setReason("");
       // Keep courseId and type selected for potentially issuing multiple similar certs
     } catch (error) {
       toast.error(
@@ -123,12 +148,27 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
         required
         className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       >
-        <option value="ROLEPLAY">MYSverse Sim Roleplay Certification</option>
-        <option value="TEAM_RECOGNITION">Team Member Recognition</option>
-        <option value="EXTERNAL">External Collaboration</option>
+        <option value="ROLEPLAY">
+          {`${CERTIFICATE_TYPE_LABELS.ROLEPLAY} (Roleplay)`}
+        </option>
+        <option value="TEAM_RECOGNITION">
+          {`${CERTIFICATE_TYPE_LABELS.TEAM_RECOGNITION} (Team)`}
+        </option>
+        <option value="EXTERNAL">
+          {`${CERTIFICATE_TYPE_LABELS.EXTERNAL} (External)`}
+        </option>
+        <option value="APPRECIATION">
+          {CERTIFICATE_TYPE_LABELS.APPRECIATION}
+        </option>
+        <option value="ACHIEVEMENT">
+          {CERTIFICATE_TYPE_LABELS.ACHIEVEMENT}
+        </option>
+        <option value="PARTICIPATION">
+          {CERTIFICATE_TYPE_LABELS.PARTICIPATION}
+        </option>
       </select>
 
-      {type === "ROLEPLAY" && (
+  {showRobloxField && (
         <input
           type="text"
           name="robloxUserID"
@@ -157,6 +197,17 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
           placeholder="External Organization (Optional)"
           value={externalOrg}
           onChange={(e) => setExternalOrg(e.target.value)}
+          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        />
+      )}
+  {requiresReason && (
+        <input
+          type="text"
+          name="reason"
+          placeholder="Reason for recognition (e.g. Adjudicator)"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          required
           className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
       )}

@@ -34,7 +34,8 @@ export async function generateCertificate(formData: FormData) {
     type: formData.get("type"),
     robloxUserID: formData.get("robloxUserID") || undefined,
     recipientUserID: formData.get("recipientUserID") || undefined,
-    externalOrg: formData.get("externalOrg") || undefined
+    externalOrg: formData.get("externalOrg") || undefined,
+    reason: formData.get("reason") || undefined
   });
   await generateGenericCertificate(parsedData);
   revalidatePath("/dashboard/certifier");

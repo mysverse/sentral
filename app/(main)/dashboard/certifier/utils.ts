@@ -3,23 +3,52 @@ import prisma from "lib/prisma";
 import { auth } from "auth";
 import { CertificateType } from "generated/client";
 import { z } from "zod";
+import { certificateRequiresReason } from "./certificateTypeConfig";
 
 const allowed = [
   "1055048", // yan3321
   "912854402" // MYS_Network
 ];
 
-export const certificateSchema = z.object({
-  recipientName: z.string().nonempty("Recipient Name is required"),
-  courseId: z.string().nonempty("Course ID is required"), // Changed from courseName
-  identifier: z.string().nonempty("Identifier is required"), // Added
-  type: z.enum(CertificateType, {
-    error: "Invalid certificate type"
-  }),
-  robloxUserID: z.string().optional(),
-  recipientUserID: z.string().optional(),
-  externalOrg: z.string().optional()
-});
+const optionalTrimmedString = z
+  .string()
+  .optional()
+  .transform((value) => {
+    if (typeof value !== "string") {
+      return undefined;
+    }
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  });
+
+export const certificateSchema = z
+  .object({
+    recipientName: z
+      .string()
+      .trim()
+      .min(1, "Recipient Name is required"),
+  courseId: z.string().trim().min(1, "Course ID is required"), // Changed from courseName
+    identifier: z
+      .string()
+      .trim()
+      .min(1, "Identifier is required"), // Added
+    type: z.enum(CertificateType, {
+      error: "Invalid certificate type"
+    }),
+    robloxUserID: optionalTrimmedString,
+    recipientUserID: optionalTrimmedString,
+    externalOrg: optionalTrimmedString,
+    reason: optionalTrimmedString
+  })
+  .superRefine((data, ctx) => {
+    if (certificateRequiresReason(data.type) && !data.reason) {
+      ctx.addIssue({
+        path: ["reason"],
+        code: z.ZodIssueCode.custom,
+        message: "Reason is required for the selected certificate type"
+      });
+    }
+  });
 
 // Schema for creating a new course
 export const courseSchema = z.object({
@@ -49,6 +78,7 @@ export async function getCertificates() {
       robloxUserID: true,
       recipientUserID: true,
       externalOrg: true,
+      reason: true,
       identifier: true, // Added
       course: {
         select: {
@@ -87,7 +117,8 @@ export async function getCertificateByCode(code?: string) {
     return {
       ...data,
       courseName: data.course.name,
-      batchName: data.batch?.name // batch is optional
+      batchName: data.batch?.name, // batch is optional
+      reason: data.reason ?? null
     };
   }
   return null;
@@ -119,7 +150,8 @@ export async function generateGenericCertificate(
     type,
     robloxUserID,
     recipientUserID,
-    externalOrg
+    externalOrg,
+    reason
   } = parsedSchema;
 
   // Basic validation, more specific checks can be added
@@ -141,9 +173,10 @@ export async function generateGenericCertificate(
       identifier, // Added
       type,
       code: uniqueCode,
-      robloxUserID: robloxUserID || null,
-      recipientUserID: recipientUserID || null,
-      externalOrg: externalOrg || null
+  robloxUserID: robloxUserID ?? null,
+  recipientUserID: recipientUserID ?? null,
+  externalOrg: externalOrg ?? null,
+      reason: reason ?? null
       // batchId can be added here if it's part of parsedSchema and needed
     }
   });

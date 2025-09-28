@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { getCertificateByCode } from "app/(main)/dashboard/certifier/utils";
+import { CERTIFICATE_TYPE_LABELS } from "app/(main)/dashboard/certifier/certificateTypeConfig";
 import Link from "next/link";
 import { ArrowDownTrayIcon } from "@heroicons/react/20/solid";
 
@@ -55,6 +56,35 @@ export default async function VerifyPage(props: Props) {
               <p className="text-gray-700">Module</p>
               <p className="text-lg font-semibold">{certificate.courseName}</p>
             </div>
+            <hr className="my-4" />
+            <div className="mb-4">
+              <p className="text-gray-700">Certificate Type</p>
+              <p className="text-lg font-semibold">
+                {CERTIFICATE_TYPE_LABELS[certificate.type] ?? certificate.type}
+              </p>
+            </div>
+            {certificate.reason && (
+              <>
+                <hr className="my-4" />
+                <div className="mb-4">
+                  <p className="text-gray-700">Reason</p>
+                  <p className="text-lg font-semibold">
+                    {certificate.reason}
+                  </p>
+                </div>
+              </>
+            )}
+            {certificate.robloxUserID && (
+              <>
+                <hr className="my-4" />
+                <div className="mb-4">
+                  <p className="text-gray-700">Roblox ID</p>
+                  <p className="text-lg font-semibold">
+                    {certificate.robloxUserID}
+                  </p>
+                </div>
+              </>
+            )}
             <hr className="my-4" />
             <div className="mb-4">
               <p className="text-gray-700">Issued on</p>

@@ -6,6 +6,38 @@ import { toast } from "sonner";
 import { deleteCertificate } from "./actions";
 import Link from "next/link";
 import ConfirmationDialog from "components/ConfirmationDialog";
+import { CERTIFICATE_TYPE_LABELS } from "./certificateTypeConfig";
+
+function renderDetails(certificate: Certificates[number]) {
+  switch (certificate.type) {
+    case "ROLEPLAY":
+      return certificate.robloxUserID
+        ? `Roblox ID: ${certificate.robloxUserID}`
+        : null;
+    case "TEAM_RECOGNITION":
+      return certificate.recipientUserID
+        ? `User ID: ${certificate.recipientUserID}`
+        : null;
+    case "EXTERNAL":
+      return certificate.externalOrg
+        ? `Organization: ${certificate.externalOrg}`
+        : null;
+    case "APPRECIATION":
+    case "ACHIEVEMENT":
+    case "PARTICIPATION": {
+      const details: string[] = [];
+      if (certificate.reason) {
+        details.push(`Reason: ${certificate.reason}`);
+      }
+      if (certificate.robloxUserID) {
+        details.push(`Roblox ID: ${certificate.robloxUserID}`);
+      }
+      return details.join(" | ") || null;
+    }
+    default:
+      return null;
+  }
+}
 
 type Certificates = Awaited<ReturnType<typeof getCertificates>>;
 
@@ -103,15 +135,10 @@ export default function CertificatesTable({
                 {certificate.code}
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                {certificate.type}
+                {CERTIFICATE_TYPE_LABELS[certificate.type] ?? certificate.type}
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                {certificate.type === "ROLEPLAY" &&
-                  `Roblox ID: ${certificate.robloxUserID}`}
-                {certificate.type === "TEAM_RECOGNITION" &&
-                  `User ID: ${certificate.recipientUserID}`}
-                {certificate.type === "EXTERNAL" &&
-                  `Organization: ${certificate.externalOrg}`}
+                {renderDetails(certificate)}
               </td>
               <td className="space-x-3 px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                 <Link
