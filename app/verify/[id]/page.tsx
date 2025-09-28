@@ -68,9 +68,7 @@ export default async function VerifyPage(props: Props) {
                 <hr className="my-4" />
                 <div className="mb-4">
                   <p className="text-gray-700">Reason</p>
-                  <p className="text-lg font-semibold">
-                    {certificate.reason}
-                  </p>
+                  <p className="text-lg font-semibold">{certificate.reason}</p>
                 </div>
               </>
             )}

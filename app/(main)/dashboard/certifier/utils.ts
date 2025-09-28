@@ -23,15 +23,9 @@ const optionalTrimmedString = z
 
 export const certificateSchema = z
   .object({
-    recipientName: z
-      .string()
-      .trim()
-      .min(1, "Recipient Name is required"),
-  courseId: z.string().trim().min(1, "Course ID is required"), // Changed from courseName
-    identifier: z
-      .string()
-      .trim()
-      .min(1, "Identifier is required"), // Added
+    recipientName: z.string().trim().min(1, "Recipient Name is required"),
+    courseId: z.string().trim().min(1, "Course ID is required"), // Changed from courseName
+    identifier: z.string().trim().min(1, "Identifier is required"), // Added
     type: z.enum(CertificateType, {
       error: "Invalid certificate type"
     }),
@@ -173,9 +167,9 @@ export async function generateGenericCertificate(
       identifier, // Added
       type,
       code: uniqueCode,
-  robloxUserID: robloxUserID ?? null,
-  recipientUserID: recipientUserID ?? null,
-  externalOrg: externalOrg ?? null,
+      robloxUserID: robloxUserID ?? null,
+      recipientUserID: recipientUserID ?? null,
+      externalOrg: externalOrg ?? null,
       reason: reason ?? null
       // batchId can be added here if it's part of parsedSchema and needed
     }
