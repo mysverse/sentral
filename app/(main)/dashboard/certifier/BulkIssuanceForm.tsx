@@ -42,10 +42,10 @@ function splitLine(line: string): string[] {
   for (let i = 0; i < line.length; i += 1) {
     const char = line[i];
 
-    if (char === "\"") {
+    if (char === '"') {
       const nextChar = line[i + 1];
-      if (inQuotes && nextChar === "\"") {
-        current += "\"";
+      if (inQuotes && nextChar === '"') {
+        current += '"';
         i += 1;
       } else {
         inQuotes = !inQuotes;
@@ -105,7 +105,12 @@ function parseBulkInput(raw: string): ParsedLine[] {
     const lineNumber = rowIndex + 1;
     const errors: string[] = [];
 
-    const [typeInput = "", recipientNameInput = "", identifierInput = "", ...rest] = columns;
+    const [
+      typeInput = "",
+      recipientNameInput = "",
+      identifierInput = "",
+      ...rest
+    ] = columns;
 
     const type = parseCertificateTypeInput(typeInput);
     if (!type) {
@@ -167,12 +172,16 @@ function getLineStatus(
     return undefined;
   }
 
-  const successMatch = result.successes.find((entry) => entry.index === line.index);
+  const successMatch = result.successes.find(
+    (entry) => entry.index === line.index
+  );
   if (successMatch) {
     return { type: "success", code: successMatch.code };
   }
 
-  const failureMatch = result.failures.find((entry) => entry.index === line.index);
+  const failureMatch = result.failures.find(
+    (entry) => entry.index === line.index
+  );
   if (failureMatch) {
     return { type: "failure", message: failureMatch.error };
   }
@@ -238,7 +247,9 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
     }
 
     if (totalErrors > 0) {
-      toast.error("Resolve the highlighted errors before issuing certificates.");
+      toast.error(
+        "Resolve the highlighted errors before issuing certificates."
+      );
       return;
     }
 
@@ -251,8 +262,13 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
       const submissionResult = await generateBulkCertificates(formData);
       setResult(submissionResult);
 
-      if (submissionResult.successCount > 0 && submissionResult.failureCount === 0) {
-        toast.success(`Issued ${submissionResult.successCount} certificates successfully.`);
+      if (
+        submissionResult.successCount > 0 &&
+        submissionResult.failureCount === 0
+      ) {
+        toast.success(
+          `Issued ${submissionResult.successCount} certificates successfully.`
+        );
       } else if (submissionResult.successCount > 0) {
         toast.success(
           `${submissionResult.successCount} certificates issued. ${submissionResult.failureCount} failed.`
@@ -275,8 +291,9 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
         <div>
           <h2 className="text-lg font-semibold">Bulk Issue Certificates</h2>
           <p className="text-sm text-gray-600">
-            Paste rows in the format: Type, Recipient Name, Roblox User ID, Reason. Headers are
-            optional. Each row must include a valid certificate type.
+            Paste rows in the format: Type, Recipient Name, Roblox User ID,
+            Reason. Headers are optional. Each row must include a valid
+            certificate type.
           </p>
         </div>
         <div className="flex gap-2">
@@ -308,7 +325,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
             value={courseId}
             onChange={(event) => setCourseId(event.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             disabled={courses.length === 0}
           >
             <option value="" disabled>
@@ -335,20 +352,22 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
             className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-600"
           >
             <p>
-              <span className="font-semibold">Type</span> → matches any existing certificate type
-              (e.g. “Achievement” or “Certificate of Appreciation”).
+              <span className="font-semibold">Type</span> → matches any existing
+              certificate type (e.g. “Achievement” or “Certificate of
+              Appreciation”).
             </p>
             <p>
-              <span className="font-semibold">Recipient Name</span> → Roblox username or display
-              name.
+              <span className="font-semibold">Recipient Name</span> → Roblox
+              username or display name.
             </p>
             <p>
-              <span className="font-semibold">Roblox User ID</span> → used as the unique identifier
-              (defaults to the recipient name if left blank).
+              <span className="font-semibold">Roblox User ID</span> → used as
+              the unique identifier (defaults to the recipient name if left
+              blank).
             </p>
             <p>
-              <span className="font-semibold">Reason</span> → required for Appreciation, Achievement,
-              and Participation certificates.
+              <span className="font-semibold">Reason</span> → required for
+              Appreciation, Achievement, and Participation certificates.
             </p>
           </div>
         </div>
@@ -360,7 +379,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
         onChange={(event) => setRawInput(event.target.value)}
         placeholder="Appreciation,CynicallyClash,290965021,Adjudicator"
         rows={8}
-        className="w-full rounded-lg border border-gray-300 px-4 py-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-lg border border-gray-300 px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
@@ -371,7 +390,10 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
           Valid entries: <strong>{validPayloads.length}</strong>
         </span>
         <span>
-          Rows with errors: <strong className={totalErrors > 0 ? "text-red-600" : undefined}>{totalErrors}</strong>
+          Rows with errors:{" "}
+          <strong className={totalErrors > 0 ? "text-red-600" : undefined}>
+            {totalErrors}
+          </strong>
         </span>
       </div>
 
@@ -380,22 +402,22 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
           <table className="min-w-full divide-y divide-gray-200 rounded-lg border border-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
                   Row
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
                   Type
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
                   Recipient
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
                   Identifier
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
                   Reason
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
                   Status
                 </th>
               </tr>
@@ -403,7 +425,8 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
             <tbody className="divide-y divide-gray-200 bg-white text-sm">
               {parsedLines.map((line) => {
                 const status = getLineStatus(line, result);
-                const isError = line.errors.length > 0 || status?.type === "failure";
+                const isError =
+                  line.errors.length > 0 || status?.type === "failure";
                 const isSuccess = status?.type === "success";
 
                 const typeLabel = line.payload
@@ -413,20 +436,27 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
                 return (
                   <tr
                     key={line.index}
-                    className={clsx(isError && "bg-red-50", isSuccess && "bg-green-50")}
+                    className={clsx(
+                      isError && "bg-red-50",
+                      isSuccess && "bg-green-50"
+                    )}
                   >
-                    <td className="whitespace-nowrap px-4 py-2 font-mono text-xs text-gray-500">
+                    <td className="px-4 py-2 font-mono text-xs whitespace-nowrap text-gray-500">
                       {line.index}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">{typeLabel}</td>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                    <td className="px-4 py-2 whitespace-nowrap text-gray-700">
+                      {typeLabel}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap text-gray-700">
                       {line.payload?.recipientName ?? line.columns[1] ?? "—"}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                    <td className="px-4 py-2 whitespace-nowrap text-gray-700">
                       {line.payload?.identifier ?? line.columns[2] ?? "—"}
                     </td>
-                    <td className="whitespace-pre-wrap px-4 py-2 text-gray-700">
-                      {line.payload?.reason ?? line.columns.slice(3).join(" ") ?? ""}
+                    <td className="px-4 py-2 whitespace-pre-wrap text-gray-700">
+                      {line.payload?.reason ??
+                        line.columns.slice(3).join(" ") ??
+                        ""}
                     </td>
                     <td className="px-4 py-2 text-gray-700">
                       {line.errors.length > 0 ? (
@@ -460,12 +490,13 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
       {result && (
         <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
           <p>
-            <strong>{result.successCount}</strong> certificates issued successfully.
+            <strong>{result.successCount}</strong> certificates issued
+            successfully.
           </p>
           {result.failureCount > 0 && (
             <p className="text-red-600">
-              <strong>{result.failureCount}</strong> certificates failed to issue. Review the table
-              above for details.
+              <strong>{result.failureCount}</strong> certificates failed to
+              issue. Review the table above for details.
             </p>
           )}
         </div>
@@ -475,7 +506,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
         type="submit"
         disabled={isSubmitting || courses.length === 0}
         className={clsx(
-          "w-full rounded-lg px-4 py-2 text-white transition focus:outline-none focus:ring-2 focus:ring-blue-600",
+          "w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none",
           isSubmitting || courses.length === 0
             ? "cursor-not-allowed bg-gray-400"
             : "bg-blue-600 hover:bg-white hover:text-blue-600 hover:outline hover:outline-blue-600"
