@@ -27,6 +27,75 @@ export const CERTIFICATE_TYPE_SHORT_NAMES: Record<CertificateType, string> = {
   PARTICIPATION: "Participation"
 };
 
+const CERTIFICATE_TYPE_VALUES = Object.keys(
+  CERTIFICATE_TYPE_LABELS
+) as CertificateType[];
+
+type AliasRegistry = Map<string, CertificateType>;
+
+const CERTIFICATE_TYPE_ALIASES: AliasRegistry = new Map();
+
+function addAlias(type: CertificateType, alias?: string | null) {
+  if (!alias) {
+    return;
+  }
+
+  const trimmed = alias.trim();
+  if (!trimmed) {
+    return;
+  }
+
+  const normalized = trimmed.toLowerCase();
+  const squashed = normalized.replace(/[\s-]+/g, "_");
+
+  CERTIFICATE_TYPE_ALIASES.set(normalized, type);
+  CERTIFICATE_TYPE_ALIASES.set(squashed, type);
+}
+
+for (const type of CERTIFICATE_TYPE_VALUES) {
+  addAlias(type, type);
+  addAlias(type, CERTIFICATE_TYPE_LABELS[type]);
+  addAlias(type, CERTIFICATE_TYPE_TITLES[type]);
+  addAlias(
+    type,
+    CERTIFICATE_TYPE_LABELS[type]?.replace(/^Certificate\s+of\s+/i, "")
+  );
+  addAlias(
+    type,
+    CERTIFICATE_TYPE_TITLES[type]?.replace(/^Certificate\s+of\s+/i, "")
+  );
+  addAlias(
+    type,
+    CERTIFICATE_TYPE_SHORT_NAMES[type]?.replace(/^Certificate\s+of\s+/i, "")
+  );
+}
+
+export function parseCertificateTypeInput(
+  value?: string | null
+): CertificateType | null {
+  if (!value) {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const normalized = trimmed.toLowerCase();
+  const withoutPrefix = normalized.replace(/^certificate\s+of\s+/, "");
+  const collapsed = withoutPrefix.replace(/[\s-]+/g, "_");
+  const alphanumeric = collapsed.replace(/[^a-z0-9_]/g, "");
+
+  return (
+    CERTIFICATE_TYPE_ALIASES.get(normalized) ??
+    CERTIFICATE_TYPE_ALIASES.get(withoutPrefix) ??
+    CERTIFICATE_TYPE_ALIASES.get(collapsed) ??
+    CERTIFICATE_TYPE_ALIASES.get(alphanumeric) ??
+    null
+  );
+}
+
 const REASON_REQUIRED_TYPES = new Set<CertificateType>([
   "APPRECIATION",
   "ACHIEVEMENT",

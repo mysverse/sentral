@@ -1,6 +1,7 @@
 import { getCertificates, getCourses, getBatches, getApiKeys } from "./utils";
 import CertificatesTable from "./CertificatesTable";
 import IssuanceForm from "./IssuanceForm";
+import BulkIssuanceForm from "./BulkIssuanceForm";
 import CoursesForm from "./CoursesForm";
 import BatchesForm from "./BatchesForm";
 import ApiKeysForm from "./ApiKeysForm";
@@ -14,6 +15,9 @@ export default async function CertifierPage() {
   return (
     <>
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+          <BulkIssuanceForm courses={courses} />
+        </div>
         <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
           <h1 className="mb-4 text-lg font-semibold">Generate Certificate</h1>
           <IssuanceForm courses={courses} />{" "}
