@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { generateCertificate } from "./actions";
 import Link from "next/link";
@@ -18,7 +18,7 @@ interface IssuanceFormProps {
 
 export default function IssuanceForm({ courses }: IssuanceFormProps) {
   const [recipientName, setRecipientName] = useState("");
-  const [courseId, setCourseId] = useState("");
+  const [courseId, setCourseId] = useState(courses.length > 0 ? courses[0].id : "");
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<CertificateType>("ROLEPLAY");
   const [identifier, setIdentifier] = useState("");
@@ -27,20 +27,16 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
   const [externalOrg, setExternalOrg] = useState("");
   const [reason, setReason] = useState("");
 
-  useEffect(() => {
-    if (courses.length > 0 && !courseId) {
-      setCourseId(courses[0].id);
-    }
-  }, [courses, courseId]);
-
-  useEffect(() => {
-    if (!certificateRequiresReason(type) && reason) {
-      setReason("");
-    }
-  }, [type, reason]);
-
   const requiresReason = certificateRequiresReason(type);
   const showRobloxField = certificateSupportsRobloxId(type);
+
+  // Handle type change - clear reason if not needed
+  const handleTypeChange = (newType: CertificateType) => {
+    setType(newType);
+    if (!certificateRequiresReason(newType)) {
+      setReason("");
+    }
+  };
 
   interface FormElements extends HTMLFormControlsCollection {
     recipientName: HTMLInputElement;
@@ -144,7 +140,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
       <select
         name="type"
         value={type}
-        onChange={(e) => setType(e.target.value as CertificateType)}
+        onChange={(e) => handleTypeChange(e.target.value as CertificateType)}
         required
         className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       >

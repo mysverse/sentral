@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
@@ -62,26 +62,19 @@ export default function GrowthChartSection({
     ].concat(displayOptions)
   );
 
+  // Initialize with value from search params if valid
+  const getInitialMonth = () => {
+    const selectedOption = searchParams.get("displayOption");
+    const validMonth = months.find((month) => month.value === selectedOption);
+    return validMonth || months[0];
+  };
+
+  const [selectedMonth, setSelectedMonth] = useState<DisplayMonth>(getInitialMonth);
   const [selectedMonthValue, setSelectedMonthValue] = useState<string>(
-    months[0].value
+    selectedMonth.value
   );
 
-  const [selectedMonth, setSelectedMonth] = useState<DisplayMonth>(months[0]);
-
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    function isValidDisplayOption(option: string | null) {
-      return months.find((month) => month.value === option);
-    }
-    const selectedOption = searchParams.get("displayOption");
-    const result = isValidDisplayOption(selectedOption);
-    if (result) {
-      setSelectedMonthValue(result.value);
-      setSelectedMonth(result);
-      setLoading(false);
-    }
-  }, [searchParams, months]);
 
   return (
     <>

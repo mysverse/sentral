@@ -2,12 +2,19 @@
 
 import { clsx } from "clsx";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 const key = "privacy_tos_modal_0";
 
 export default function PrivacyBanner() {
-  const [privacyShown, setPrivacyShown] = useState<boolean | undefined>();
+  const [privacyShown, setPrivacyShown] = useState<boolean | undefined>(() => {
+    // Initialize state from localStorage if available
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(key);
+      return saved === key;
+    }
+    return undefined;
+  });
 
   const savePrivacyShown = useCallback(() => {
     setPrivacyShown(true);
@@ -15,21 +22,6 @@ export default function PrivacyBanner() {
       localStorage.setItem(key, key);
     }
   }, []);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(key);
-    if (saved === key) {
-      setPrivacyShown(true);
-    } else {
-      setPrivacyShown(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (privacyShown) {
-      localStorage.setItem(key, key);
-    }
-  }, [privacyShown]);
 
   const hidden = privacyShown || typeof privacyShown === "undefined";
 
@@ -67,7 +59,7 @@ export default function PrivacyBanner() {
           <button
             type="button"
             onClick={savePrivacyShown}
-            className="rounded-md bg-blue-600 px-8 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+            className="rounded-md bg-blue-600 px-8 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
             Agree and continue
           </button>

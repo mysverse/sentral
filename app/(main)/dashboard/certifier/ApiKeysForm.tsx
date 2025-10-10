@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { createApiKeyAction, deleteApiKeyAction } from "./actions";
 import clsx from "clsx";
@@ -12,15 +12,9 @@ interface ApiKeysFormProps {
 }
 
 export default function ApiKeysForm({ apiKeys, courses }: ApiKeysFormProps) {
-  const [courseId, setCourseId] = useState("");
+  const [courseId, setCourseId] = useState(courses.length > 0 ? courses[0].id : "");
   const [loading, setLoading] = useState(false);
   // const [newlyGeneratedKey, setNewlyGeneratedKey] = useState<string | null>(null); // For displaying new key
-
-  useEffect(() => {
-    if (courses.length > 0 && !courseId) {
-      setCourseId(courses[0].id);
-    }
-  }, [courses, courseId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

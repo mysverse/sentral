@@ -23,37 +23,25 @@ export default async function Main() {
     return null;
   }
 
+  // Fetch data and handle errors before rendering
+  let data, groups, ownershipData;
+  let error: Error | null = null;
+
   try {
-    const [data, groups] = await Promise.all([
+    [data, groups] = await Promise.all([
       getPendingRequests(session.user.id),
       getGroupRoles(parseInt(session.user.id!))
     ]);
 
-    const ownershipData =
+    ownershipData =
       await injectOwnershipAndThumbnailsIntoPayoutRequests(data);
+  } catch (e) {
+    error = e instanceof Error ? e : new Error("Unknown error occurred");
+  }
 
-    // const [leaderboardData, mysverseData] = await Promise.all([
-    //   getLeaderboardData(),
-    //   getMysverseData(session.user.id)
-    // ]);
-
-    // const testId = 31585182;
-
-    return (
-      <div>
-        <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
-          <PayoutRequestComponent groups={groups} />
-        </div>
-        <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
-        <PayoutRequestsTable payoutRequests={ownershipData} />
-      </div>
-    );
-  } catch (error) {
-    let errorMessage = "Unknown error occurred";
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
-    if (errorMessage.match("FINSYS_NOT_ALLOWED")) {
+  // Handle error state
+  if (error) {
+    if (error.message.match("FINSYS_NOT_ALLOWED")) {
       return (
         <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
           <DefaultTransitionLayout show={true} appear={true}>
@@ -77,6 +65,17 @@ export default async function Main() {
         </div>
       );
     }
-    throw new Error(errorMessage);
+    throw error;
   }
+
+  // Render success state
+  return (
+    <div>
+      <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+        <PayoutRequestComponent groups={groups!} />
+      </div>
+      <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
+      <PayoutRequestsTable payoutRequests={ownershipData!} />
+    </div>
+  );
 }

@@ -2,17 +2,17 @@
 
 import { BellAlertIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { notify } from "utils/notification";
 
 export function NotifyButton() {
-  const [permission, setPermission] = useState<NotificationPermission>();
-
-  useEffect(() => {
+  const [permission, setPermission] = useState<NotificationPermission | undefined>(() => {
+    // Initialize state from Notification API if available
     if (typeof window !== "undefined" && "Notification" in window) {
-      setPermission(Notification.permission);
+      return Notification.permission;
     }
-  }, []);
+    return undefined;
+  });
 
   function askNotificationPermission() {
     // Check if the browser supports notifications

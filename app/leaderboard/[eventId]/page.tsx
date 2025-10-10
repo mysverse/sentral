@@ -44,13 +44,20 @@ export default function LeaderboardPage({
     name: "Live Racing Event",
     status: "live"
   });
+  // Store position changes in state instead of calculating during render
+  const [positionChanges, setPositionChanges] = useState<Map<string, string>>(new Map());
   const eventSourceRef = useRef<EventSource | null>(null);
   const previousPositionsRef = useRef<Map<string, number>>(new Map());
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
-  const lastSuccessfulConnectionRef = useRef<number>(Date.now());
+  const lastSuccessfulConnectionRef = useRef<number>(0); // Initialize with 0, set on mount
   const maxReconnectAttempts = 10; // Increased from 5
   const reconnectResetInterval = 60000; // Reset attempts after 1 minute of successful connection
+
+  // Initialize lastSuccessfulConnectionRef on mount
+  useEffect(() => {
+    lastSuccessfulConnectionRef.current = Date.now();
+  }, []);
 
   // Resolve params
   useEffect(() => {
@@ -83,12 +90,8 @@ export default function LeaderboardPage({
     setReconnectTrigger((prev) => prev + 1);
   }, []);
 
-  const getPositionChange = (playerId: string, currentPosition: number) => {
-    const previousPosition = previousPositionsRef.current.get(playerId);
-    if (previousPosition === undefined) return "new";
-    if (currentPosition < previousPosition) return "up";
-    if (currentPosition > previousPosition) return "down";
-    return "same";
+  const getPositionChange = (playerId: string) => {
+    return positionChanges.get(playerId) || "new";
   };
 
   const getPositionChangeIcon = (change: string) => {
@@ -170,6 +173,25 @@ export default function LeaderboardPage({
             if (message.data) {
               // Use functional update to get current leaderboard
               setLeaderboard((currentLeaderboard) => {
+                // Calculate position changes
+                const newPositionChanges = new Map<string, string>();
+                
+                message.data!.forEach((entry) => {
+                  const previousPosition = previousPositionsRef.current.get(entry.id);
+                  if (previousPosition === undefined) {
+                    newPositionChanges.set(entry.id, "new");
+                  } else if (entry.position < previousPosition) {
+                    newPositionChanges.set(entry.id, "up");
+                  } else if (entry.position > previousPosition) {
+                    newPositionChanges.set(entry.id, "down");
+                  } else {
+                    newPositionChanges.set(entry.id, "same");
+                  }
+                });
+                
+                // Update position changes state
+                setPositionChanges(newPositionChanges);
+                
                 // Update previous positions before setting new data
                 currentLeaderboard.forEach((entry) => {
                   previousPositionsRef.current.set(entry.id, entry.position);
@@ -390,10 +412,7 @@ export default function LeaderboardPage({
                     ) : (
                       <div className="space-y-1 p-2 lg:p-4">
                         {leaderboard.slice(0, 10).map((entry) => {
-                          const positionChange = getPositionChange(
-                            entry.id,
-                            entry.position
-                          );
+                          const positionChange = getPositionChange(entry.id);
                           const isTopThree = entry.position <= 3;
 
                           return (

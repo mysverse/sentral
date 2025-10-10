@@ -296,22 +296,22 @@ function NametagForm() {
   const [currentTShirtID, setCurrentTShirtID] = useState<number>();
   const [tShirtIDs, setTShirtIDs] = useState<number[]>([]);
   const [shouldGenerate, setShouldGenerate] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
 
   const plausible = usePlausible();
 
-  // Debounced auto-generation
+  // Derived value: we're "generating" while waiting for debounce
+  const isGenerating = !!(name.trim() && templates);
+
+  // Debounced auto-generation - setState in setTimeout is acceptable for debouncing
   useEffect(() => {
+    // Early return if conditions not met
     if (!name.trim() || !templates) {
-      setShouldGenerate(false);
-      setIsGenerating(false);
       return;
     }
 
-    setIsGenerating(true);
+    // Set up debounced callback
     const debounceTimer = setTimeout(() => {
       setShouldGenerate(true);
-      setIsGenerating(false);
 
       // Track analytics
       plausible("gentagAutoGenerate", {

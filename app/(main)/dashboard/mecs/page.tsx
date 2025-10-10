@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import QueryModalContent from "components/mecs/mecsModalContent";
 
@@ -20,22 +20,22 @@ import BlacklistSlideover from "components/mecs/BlacklistSlideover";
 const regex = /^(?=^[^_]+_?[^_]+$)\w{3,20}$/;
 
 function MECSForm() {
-  const [username, setUsername] = useState("");
-  const [currentUsername, setCurrentUsername] = useState("");
-  const [changeFlag, setChangeFlag] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [treatAsUserId, setTreatAsUserId] = useState(false);
   const query = useSearchParams();
-
-  useEffect(() => {
+  
+  // Initialize state from search params
+  const getUserFromParams = () => {
     const user = query.get("user");
-    if (user && !Array.isArray(user)) {
-      if (regex.test(user)) {
-        setCurrentUsername(user);
-        setModalOpen(true);
-      }
+    if (user && !Array.isArray(user) && regex.test(user)) {
+      return user;
     }
-  }, [query]);
+    return "";
+  };
+
+  const [username, setUsername] = useState("");
+  const [currentUsername, setCurrentUsername] = useState(getUserFromParams);
+  const [changeFlag, setChangeFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(!!getUserFromParams());
+  const [treatAsUserId, setTreatAsUserId] = useState(false);
 
   const shouldFetch = modalOpen && currentUsername.trim().length > 0;
 

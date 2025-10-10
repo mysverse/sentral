@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { createBatchAction, deleteBatchAction } from "./actions";
 import clsx from "clsx";
@@ -13,14 +13,8 @@ interface BatchesFormProps {
 
 export default function BatchesForm({ batches, courses }: BatchesFormProps) {
   const [name, setName] = useState("");
-  const [courseId, setCourseId] = useState("");
+  const [courseId, setCourseId] = useState(courses.length > 0 ? courses[0].id : "");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (courses.length > 0 && !courseId) {
-      setCourseId(courses[0].id);
-    }
-  }, [courses, courseId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
