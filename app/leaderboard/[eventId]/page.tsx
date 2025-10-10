@@ -45,7 +45,9 @@ export default function LeaderboardPage({
     status: "live"
   });
   // Store position changes in state instead of calculating during render
-  const [positionChanges, setPositionChanges] = useState<Map<string, string>>(new Map());
+  const [positionChanges, setPositionChanges] = useState<Map<string, string>>(
+    new Map()
+  );
   const eventSourceRef = useRef<EventSource | null>(null);
   const previousPositionsRef = useRef<Map<string, number>>(new Map());
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -175,9 +177,11 @@ export default function LeaderboardPage({
               setLeaderboard((currentLeaderboard) => {
                 // Calculate position changes
                 const newPositionChanges = new Map<string, string>();
-                
+
                 message.data!.forEach((entry) => {
-                  const previousPosition = previousPositionsRef.current.get(entry.id);
+                  const previousPosition = previousPositionsRef.current.get(
+                    entry.id
+                  );
                   if (previousPosition === undefined) {
                     newPositionChanges.set(entry.id, "new");
                   } else if (entry.position < previousPosition) {
@@ -188,10 +192,10 @@ export default function LeaderboardPage({
                     newPositionChanges.set(entry.id, "same");
                   }
                 });
-                
+
                 // Update position changes state
                 setPositionChanges(newPositionChanges);
-                
+
                 // Update previous positions before setting new data
                 currentLeaderboard.forEach((entry) => {
                   previousPositionsRef.current.set(entry.id, entry.position);

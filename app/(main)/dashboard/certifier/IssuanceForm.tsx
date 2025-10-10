@@ -18,7 +18,9 @@ interface IssuanceFormProps {
 
 export default function IssuanceForm({ courses }: IssuanceFormProps) {
   const [recipientName, setRecipientName] = useState("");
-  const [courseId, setCourseId] = useState(courses.length > 0 ? courses[0].id : "");
+  const [courseId, setCourseId] = useState(
+    courses.length > 0 ? courses[0].id : ""
+  );
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<CertificateType>("ROLEPLAY");
   const [identifier, setIdentifier] = useState("");

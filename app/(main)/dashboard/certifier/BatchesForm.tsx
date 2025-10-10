@@ -13,7 +13,9 @@ interface BatchesFormProps {
 
 export default function BatchesForm({ batches, courses }: BatchesFormProps) {
   const [name, setName] = useState("");
-  const [courseId, setCourseId] = useState(courses.length > 0 ? courses[0].id : "");
+  const [courseId, setCourseId] = useState(
+    courses.length > 0 ? courses[0].id : ""
+  );
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

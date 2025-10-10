@@ -69,7 +69,8 @@ export default function GrowthChartSection({
     return validMonth || months[0];
   };
 
-  const [selectedMonth, setSelectedMonth] = useState<DisplayMonth>(getInitialMonth);
+  const [selectedMonth, setSelectedMonth] =
+    useState<DisplayMonth>(getInitialMonth);
   const [selectedMonthValue, setSelectedMonthValue] = useState<string>(
     selectedMonth.value
   );

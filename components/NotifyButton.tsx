@@ -6,7 +6,9 @@ import { useState } from "react";
 import { notify } from "utils/notification";
 
 export function NotifyButton() {
-  const [permission, setPermission] = useState<NotificationPermission | undefined>(() => {
+  const [permission, setPermission] = useState<
+    NotificationPermission | undefined
+  >(() => {
     // Initialize state from Notification API if available
     if (typeof window !== "undefined" && "Notification" in window) {
       return Notification.permission;

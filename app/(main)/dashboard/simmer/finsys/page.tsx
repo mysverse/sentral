@@ -33,8 +33,7 @@ export default async function Main() {
       getGroupRoles(parseInt(session.user.id!))
     ]);
 
-    ownershipData =
-      await injectOwnershipAndThumbnailsIntoPayoutRequests(data);
+    ownershipData = await injectOwnershipAndThumbnailsIntoPayoutRequests(data);
   } catch (e) {
     error = e instanceof Error ? e : new Error("Unknown error occurred");
   }

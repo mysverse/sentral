@@ -21,7 +21,7 @@ const regex = /^(?=^[^_]+_?[^_]+$)\w{3,20}$/;
 
 function MECSForm() {
   const query = useSearchParams();
-  
+
   // Initialize state from search params
   const getUserFromParams = () => {
     const user = query.get("user");

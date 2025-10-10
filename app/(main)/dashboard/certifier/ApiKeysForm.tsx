@@ -12,7 +12,9 @@ interface ApiKeysFormProps {
 }
 
 export default function ApiKeysForm({ apiKeys, courses }: ApiKeysFormProps) {
-  const [courseId, setCourseId] = useState(courses.length > 0 ? courses[0].id : "");
+  const [courseId, setCourseId] = useState(
+    courses.length > 0 ? courses[0].id : ""
+  );
   const [loading, setLoading] = useState(false);
   // const [newlyGeneratedKey, setNewlyGeneratedKey] = useState<string | null>(null); // For displaying new key
 
