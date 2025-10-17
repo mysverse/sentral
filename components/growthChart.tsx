@@ -29,7 +29,11 @@ ChartJS.register(
 const skipped = (ctx: ScriptableLineSegmentContext, value: any) =>
   ctx.p0.skip || ctx.p1.skip ? value : undefined;
 const down = (ctx: ScriptableLineSegmentContext, value: any) =>
-  ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+  ctx.p0.parsed.y != null &&
+  ctx.p1.parsed.y != null &&
+  ctx.p0.parsed.y > ctx.p1.parsed.y
+    ? value
+    : undefined;
 
 export default function GrowthChart({
   chartData,
