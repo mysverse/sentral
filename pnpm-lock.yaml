@@ -68,9 +68,9 @@ importers:
       motion:
         specifier: ^12.23.24
         version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      motion-number:
-        specifier: ^1.0.0
-        version: 1.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      motion-plus:
+        specifier: https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=8c607e92916af0f1aacc329d400c4d881c94c75d72be9d0b91d67343977e2425
+        version: https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=8c607e92916af0f1aacc329d400c4d881c94c75d72be9d0b91d67343977e2425(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       next:
         specifier: ^15.5.6
         version: 15.5.6(@babel/core@7.28.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2)
@@ -2713,8 +2713,8 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-  baseline-browser-mapping@2.8.17:
-    resolution: {integrity: sha512-j5zJcx6golJYTG6c05LUZ3Z8Gi+M62zRT/ycz4Xq4iCOdpcxwg7ngEYD4KA0eWZC7U17qh/Smq8bYbACJ0ipBA==}
+  baseline-browser-mapping@2.8.18:
+    resolution: {integrity: sha512-UYmTpOBwgPScZpS4A+YbapwWuBwasxvO/2IOHArSsAhL/+ZdmATBXTex3t+l2hXwLVYK382ibr/nKoY9GKe86w==}
     hasBin: true
 
   bidi-js@1.0.3:
@@ -3997,8 +3997,24 @@ packages:
   motion-dom@12.23.23:
     resolution: {integrity: sha512-n5yolOs0TQQBRUFImrRfs/+6X4p3Q4n1dUEqt/H58Vx7OW6RF+foWEgmTVDhIWJIMXOuNNL0apKH2S16en9eiA==}
 
-  motion-number@1.0.0:
-    resolution: {integrity: sha512-gFVxzQoX2RwZATHGjhYlnAe//+ygC1bx6tDbYlZWuOBhaDDrgkx6bOtgMhoqtYHJ7srEp5qLmTnuCnfzIvo2Tg==}
+  motion-plus-dom@1.6.0:
+    resolution: {integrity: sha512-A4uGFtMG8rl+wQCXBt6h6+G9PK7ZCF2yB4n6RTvmm2kXuSZaXz6LmK9hBWH86RWY2uQUrLTuLypqTZxW1fIM5Q==}
+
+  motion-plus-react@1.5.4:
+    resolution: {integrity: sha512-uOqiUhZH00N+Y81f6zY+v5CMCeH4J4FGiz2fOY/F7/gkL8yAXE/G6tB66NVuvoOXKtLoPF4Er1PnzHOAZkAxBw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
+  motion-plus@https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=8c607e92916af0f1aacc329d400c4d881c94c75d72be9d0b91d67343977e2425:
+    resolution: {tarball: https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=8c607e92916af0f1aacc329d400c4d881c94c75d72be9d0b91d67343977e2425}
+    version: 1.5.4
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -7847,7 +7863,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  baseline-browser-mapping@2.8.17: {}
+  baseline-browser-mapping@2.8.18: {}
 
   bidi-js@1.0.3:
     dependencies:
@@ -7878,7 +7894,7 @@ snapshots:
 
   browserslist@4.26.3:
     dependencies:
-      baseline-browser-mapping: 2.8.17
+      baseline-browser-mapping: 2.8.18
       caniuse-lite: 1.0.30001751
       electron-to-chromium: 1.5.237
       node-releases: 2.0.25
@@ -9381,9 +9397,32 @@ snapshots:
     dependencies:
       motion-utils: 12.23.6
 
-  motion-number@1.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  motion-plus-dom@1.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       motion: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      motion-dom: 12.23.23
+      motion-utils: 12.23.6
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+      - react
+      - react-dom
+
+  motion-plus-react@1.5.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+    dependencies:
+      motion: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      motion-dom: 12.23.23
+      motion-plus-dom: 1.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      motion-utils: 12.23.6
+    optionalDependencies:
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+
+  motion-plus@https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=8c607e92916af0f1aacc329d400c4d881c94c75d72be9d0b91d67343977e2425(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+    dependencies:
+      motion-plus-dom: 1.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      motion-plus-react: 1.5.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     optionalDependencies:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)

@@ -34,7 +34,7 @@
     "date-fns": "^4.1.0",
     "humanize-duration": "^3.33.1",
     "motion": "^12.23.24",
-    "motion-number": "^1.0.0",
+    "motion-plus": "https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=8c607e92916af0f1aacc329d400c4d881c94c75d72be9d0b91d67343977e2425",
     "next": "^15.5.6",
     "next-plausible": "^3.12.4",
     "nuqs": "^2.7.2",
