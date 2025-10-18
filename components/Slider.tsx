@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimateNumber } from "motion-number";
+import { AnimateNumber } from "motion-plus/react";
 import { useMotionValue } from "motion/react";
 import { Slider } from "radix-ui";
 import { useEffect, useState } from "react";
