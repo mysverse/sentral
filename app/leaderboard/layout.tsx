@@ -2,8 +2,12 @@ import { Suspense } from "react";
 
 export const metadata = {
   title: "Live Leaderboard",
-  description: "Real-time racing leaderboard with live updates",
-  viewport: "width=device-width, initial-scale=1"
+  description: "Real-time racing leaderboard with live updates"
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
