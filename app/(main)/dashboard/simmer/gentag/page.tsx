@@ -300,7 +300,7 @@ function NametagForm() {
   const plausible = usePlausible();
 
   // Derived value: we're "generating" while waiting for debounce
-  const isGenerating = !!(name.trim() && templates);
+  const isGenerating = !!(name.trim() && templates && !shouldGenerate);
 
   // Debounced auto-generation - setState in setTimeout is acceptable for debouncing
   useEffect(() => {
