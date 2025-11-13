@@ -8,13 +8,15 @@ import { type SearchParams } from "nuqs/server";
 import { endpoints } from "components/constants/endpoints";
 import { searchParamsCache } from "utils/searchParams";
 
+const currentSeries = "GE25";
+
 async function getInvoteSeriesIdentifiers() {
   const response = await fetch(`${endpoints.invote}/stats/series-identifiers`);
 
   if (response.ok) {
     const data: string[] = await response.json();
-    if (data.find((item) => item === "GE22") === undefined) {
-      return ["GE22", ...data];
+    if (data.find((item) => item === currentSeries) === undefined) {
+      return [currentSeries, ...data];
     }
     return data;
   }
