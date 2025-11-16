@@ -8,6 +8,8 @@ export function getColourByName(name: string | null) {
       return "#000000";
     case "PTA":
       return "#0000AD";
+    case "GSB":
+      return "#B4151D";
     case "BRM":
       return "#FF1414";
     case "PPR":
