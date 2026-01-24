@@ -34,6 +34,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "humanize-duration": "^3.33.2",
     "motion": "^12.29.0",
     "motion-plus": "https://api.motion.dev/registry.tgz?package=motion-plus&version=2.6.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a",
