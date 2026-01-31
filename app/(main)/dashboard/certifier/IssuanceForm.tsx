@@ -40,22 +40,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
     }
   };
 
-  interface FormElements extends HTMLFormControlsCollection {
-    recipientName: HTMLInputElement;
-    courseId: HTMLSelectElement;
-    identifier: HTMLInputElement;
-    type: HTMLSelectElement;
-    robloxUserID?: HTMLInputElement;
-    recipientUserID?: HTMLInputElement;
-    externalOrg?: HTMLInputElement;
-    reason?: HTMLInputElement;
-  }
-
-  interface CertificateFormElement extends HTMLFormElement {
-    readonly elements: FormElements;
-  }
-
-  const handleSubmit = async (e: React.FormEvent<CertificateFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!courseId) {
       toast.error("Please select a course.");
