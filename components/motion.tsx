@@ -3,8 +3,9 @@
 import type { JSX, ReactNode } from "react";
 import { motion, MotionProps } from "motion/react";
 
-interface CustomMotionProps<Tag extends keyof JSX.IntrinsicElements>
-  extends MotionProps {
+interface CustomMotionProps<
+  Tag extends keyof JSX.IntrinsicElements
+> extends MotionProps {
   type?: Tag;
   children?: ReactNode;
   className?: string;

@@ -29,10 +29,10 @@ const serwist = new Serwist({
         cacheName: "api-cache",
         expiration: {
           maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24, // 24 hours
+          maxAgeSeconds: 60 * 60 * 24 // 24 hours
         },
-        networkTimeoutSeconds: 5, // Fallback to cache if network is slow
-      },
+        networkTimeoutSeconds: 5 // Fallback to cache if network is slow
+      }
     },
     // Cache fonts for long-term offline use
     {
@@ -44,12 +44,12 @@ const serwist = new Serwist({
         cacheName: "font-cache",
         expiration: {
           maxEntries: 10,
-          maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-        },
-      },
+          maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+        }
+      }
     },
     // Use the standard Serwist default cache for everything else
-    ...defaultCache,
+    ...defaultCache
   ],
   fallbacks: {
     entries: [
@@ -57,10 +57,10 @@ const serwist = new Serwist({
         url: "/~offline",
         matcher({ request }) {
           return request.destination === "document";
-        },
-      },
-    ],
-  },
+        }
+      }
+    ]
+  }
 });
 
 // Add a generic Push notification listener
@@ -71,7 +71,7 @@ self.addEventListener("push", (event) => {
     body: data.body || "New update available!",
     icon: "/img/favicons/favicon-192x192.png",
     badge: "/img/favicons/monochrome-512x512.png",
-    data: data.url || "/",
+    data: data.url || "/"
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
@@ -80,9 +80,7 @@ self.addEventListener("push", (event) => {
 // Open the relevant URL when the user clicks the notification
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  event.waitUntil(
-    self.clients.openWindow(event.notification.data)
-  );
+  event.waitUntil(self.clients.openWindow(event.notification.data));
 });
 
 serwist.addEventListeners();

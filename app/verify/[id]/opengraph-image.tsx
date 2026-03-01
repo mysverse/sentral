@@ -88,15 +88,11 @@ export default async function Image(props: Props) {
 
   if (!certificate) {
     return new ImageResponse(
-      (
-        <div tw="bg-red-600 text-white w-full h-full flex flex-col items-center justify-center">
-          <SentralLogo height={128} alt="MYSverse Sentral Logo" fill="white" />
-          <h1 tw="text-7xl font-bold tracking-tight mt-6">
-            Invalid certificate
-          </h1>
-          <p tw="text-5xl mt-6">The given certificate is invalid.</p>
-        </div>
-      ),
+      <div tw="bg-red-600 text-white w-full h-full flex flex-col items-center justify-center">
+        <SentralLogo height={128} alt="MYSverse Sentral Logo" fill="white" />
+        <h1 tw="text-7xl font-bold tracking-tight mt-6">Invalid certificate</h1>
+        <p tw="text-5xl mt-6">The given certificate is invalid.</p>
+      </div>,
       {
         ...size,
         fonts
@@ -105,23 +101,21 @@ export default async function Image(props: Props) {
   }
 
   return new ImageResponse(
-    (
-      <div tw="bg-blue-600 text-white w-full h-full flex flex-col items-center justify-center">
-        <SentralLogo height={128} alt="MYSverse Sentral Logo" fill="white" />
-        <h1 tw="text-7xl font-bold tracking-tight mt-12">
-          {certificate.recipientName}
-        </h1>
-        <p tw="text-5xl font-semibold tracking-tight mt-6">
-          {certificate.courseName}
-        </p>
-        <p tw="text-5xl font-medium mt-6">
-          {CERTIFICATE_TYPE_SHORT_NAMES[certificate.type] ?? certificate.type}
-        </p>
-        {certificate.reason && (
-          <p tw="text-4xl font-medium mt-6">{certificate.reason}</p>
-        )}
-      </div>
-    ),
+    <div tw="bg-blue-600 text-white w-full h-full flex flex-col items-center justify-center">
+      <SentralLogo height={128} alt="MYSverse Sentral Logo" fill="white" />
+      <h1 tw="text-7xl font-bold tracking-tight mt-12">
+        {certificate.recipientName}
+      </h1>
+      <p tw="text-5xl font-semibold tracking-tight mt-6">
+        {certificate.courseName}
+      </p>
+      <p tw="text-5xl font-medium mt-6">
+        {CERTIFICATE_TYPE_SHORT_NAMES[certificate.type] ?? certificate.type}
+      </p>
+      {certificate.reason && (
+        <p tw="text-4xl font-medium mt-6">{certificate.reason}</p>
+      )}
+    </div>,
     {
       ...size,
       fonts

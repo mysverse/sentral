@@ -56,7 +56,10 @@ export default function RootLayout({
     >
       <ClerkProvider>
         <NuqsAdapter>
-          <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
+          <SerwistProvider
+            swUrl="/serwist/sw.js"
+            disable={process.env.NODE_ENV === "development"}
+          >
             {children}
           </SerwistProvider>
         </NuqsAdapter>
