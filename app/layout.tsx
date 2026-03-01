@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import PlausibleProvider from "next-plausible";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SerwistProvider } from "./serwist";
 
 const APP_NAME = "MYSverse Sentral";
 const APP_DEFAULT_TITLE = "Sentral";
@@ -22,6 +23,11 @@ export const metadata: Metadata = {
   },
   description: APP_DESCRIPTION,
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_DEFAULT_TITLE
+  },
   formatDetection: {
     telephone: false
   },
@@ -49,7 +55,11 @@ export default function RootLayout({
       exclude="/auth/*"
     >
       <ClerkProvider>
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <NuqsAdapter>
+          <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
+            {children}
+          </SerwistProvider>
+        </NuqsAdapter>
       </ClerkProvider>
     </PlausibleProvider>
   );

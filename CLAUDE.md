@@ -34,7 +34,7 @@ No test framework is configured.
 - **Real-time:** SSE for leaderboards, WebSocket (`react-use-websocket`) for election data
 - **URL state:** `nuqs` (`useQueryState`)
 - **PDF:** `@react-pdf/renderer` + `react-pdf-tailwind` for certificates
-- **PWA:** Serwist (`@serwist/next`), service worker at `app/sw.ts`
+- **PWA:** Serwist (`@serwist/turbopack`), service worker at `app/sw.ts` with route handler at `app/serwist/[path]/route.ts`
 - **Analytics:** `next-plausible` (custom domain: `plausible.yan.gg`)
 - **Validation:** Zod v4
 

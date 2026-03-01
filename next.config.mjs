@@ -1,18 +1,12 @@
-import withSerwistInit from "@serwist/next";
+import { withSerwist } from "@serwist/turbopack";
 import NextBundleAnalyzer from "@next/bundle-analyzer";
 
 const withBundleAnalyzer = NextBundleAnalyzer({
   enabled: process.env.ANALYZE === "true"
 });
 
-const withSerwist = withSerwistInit({
-  swSrc: "app/sw.ts",
-  swDest: "public/sw.js",
-  disable: process.env.NODE_ENV === "development"
-});
-
-export default withBundleAnalyzer(
-  withSerwist({
+export default withSerwist(
+  withBundleAnalyzer({
     async redirects() {
       return [
         {

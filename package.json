@@ -25,7 +25,6 @@
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-switch": "^1.2.6",
     "@react-pdf/renderer": "^4.3.2",
-    "@serwist/next": "^9.5.6",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.2.1",
     "@upstash/redis": "^1.36.3",
@@ -62,6 +61,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.4",
     "@next/eslint-plugin-next": "^16.1.6",
+    "@serwist/turbopack": "^9.5.6",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tsconfig/next": "^2.0.6",
@@ -72,6 +72,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "dotenv-cli": "^11.0.0",
+    "esbuild": "^0.27.3",
     "eslint": "^9.39.3",
     "eslint-config-next": "^16.1.6",
     "eslint-config-prettier": "^10.1.8",
