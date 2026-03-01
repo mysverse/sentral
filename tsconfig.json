@@ -9,11 +9,9 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext",
-      // Add this! Doing so adds WebWorker and ServiceWorker types to the global.
-      "WebWorker"
+      "esnext"
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "public/sw.js"]
+  "exclude": ["node_modules", "public/sw.js", "app/sw.ts"]
 }

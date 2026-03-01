@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client";
+
 import { Button } from "components/catalyst/button";
 
 export default function OfflinePage() {
@@ -28,8 +29,8 @@ export default function OfflinePage() {
       </p>
       <div className="flex gap-4">
         <Button onClick={() => window.location.reload()}>Try Again</Button>
-        <Button outline asChild>
-          <Link href="/">Go Home</Link>
+        <Button outline href="/">
+          Go Home
         </Button>
       </div>
     </div>
