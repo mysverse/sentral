@@ -23,7 +23,7 @@ jobs:
         run: pnpm install
 
       - name: Generate Prisma Client
-        run: prisma generate
+        run: pnpm prisma generate
 
       - name: Build
         run: pnpm build
