@@ -9,6 +9,7 @@ import { DefaultAPIResponse, StaffDecision } from "../apiTypes";
 import { isStandalonePWA } from "../utils";
 import { clsx } from "clsx";
 import { useAvatarThumbnails } from "../swr";
+import { motion, AnimatePresence } from "motion/react";
 
 import {
   CheckCircleIcon,
@@ -48,7 +49,16 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                 new Date(event.timestamps.review).toDateString();
             }
             return (
-              <li key={eventIdx}>
+              <motion.li
+                key={eventIdx}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.3,
+                  delay: Math.min(eventIdx, 10) * 0.05
+                }}
+              >
                 <div className="relative pb-8">
                   {eventIdx !== history.length - 1 ? (
                     <span
@@ -88,12 +98,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           {automated ? (
                             <>
                               {"via "}
-                              <a
-                              // href={`https://roblox.com/users/${event.officer}`}
-                              // className="font-medium"
-                              >
-                                automated review
-                              </a>
+                              <a>automated review</a>
                             </>
                           ) : (
                             <>
@@ -143,7 +148,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                     </div>
                   </div>
                 </div>
-              </li>
+              </motion.li>
             );
           })}
         </ul>
@@ -197,6 +202,52 @@ function getRoleText(text: string) {
   } else {
     return "Non-member";
   }
+}
+
+function ResultCardItem({
+  card,
+  index,
+  delay
+}: {
+  card: resultCard;
+  index: number;
+  delay: number;
+}) {
+  return (
+    <motion.li
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3, delay: delay + index * 0.06 }}
+      className="col-span-1 flex rounded-md shadow-xs"
+    >
+      <div
+        className={clsx(
+          card.informational === true
+            ? "bg-slate-400"
+            : card.pass
+              ? "bg-green-500"
+              : "bg-red-500",
+          "flex w-16 shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
+        )}
+      >
+        {card.displayText === "PASS" ? (
+          <CheckIcon className="size-8" />
+        ) : card.displayText === "FAIL" ? (
+          <XMarkIcon className="size-8" />
+        ) : (
+          card.displayText
+        )}
+      </div>
+      <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
+        <div className="flex-1 truncate px-4 py-2 text-sm">
+          <span className="font-medium text-gray-900 hover:text-gray-600">
+            {card.title}
+          </span>
+          <p className="truncate text-gray-500">{card.subtitle}</p>
+        </div>
+      </div>
+    </motion.li>
+  );
 }
 
 export default function QueryModalContent({
@@ -405,11 +456,32 @@ export default function QueryModalContent({
     apiResponse ? [apiResponse.user.userId] : []
   );
 
+  const mandatoryCards = resultCards.filter((item) =>
+    ["age", "blacklist", "trustFactor"].includes(item.name)
+  );
+  const trustFactorCards = resultCards.filter((card) =>
+    ["accessory", "badges", "friends", "groups"].includes(card.name)
+  );
+  const miscCards = resultCards.filter((card) =>
+    ["hcc", "firearm"].includes(card.name)
+  );
+
   return (
-    <>
+    <AnimatePresence mode="wait">
       {!loading && !error ? (
-        <>
-          <div className="mb-6 flex flex-col items-center sm:flex-row sm:space-x-5">
+        <motion.div
+          key="results"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="mb-6 flex flex-col items-center sm:flex-row sm:space-x-5"
+          >
             <div className="shrink-0">
               <div className="relative">
                 <Image
@@ -444,137 +516,139 @@ export default function QueryModalContent({
                   @{apiResponse.user.username}
                 </h1>
               </a>
-              {/* <span className="px-2 py-1 text-sm bg-slate-100 rounded-md">
-                {apiResponse.user.userId}
-              </span> */}
               <p className="text-sm font-medium text-gray-500">
                 {getRoleText(apiResponse.user.groupMembership?.role.name)}
-                {/* <a href="#" className="text-gray-900">
-                  Front End Developer
-                </a>{" "}
-                on <time dateTime="2020-08-25">August 25, 2020</time> */}
               </p>
             </div>
-          </div>
+          </motion.div>
           <h2 className="text-lg leading-6 font-medium text-gray-900">
             {`Criteria results`}
           </h2>
-          {apiResponse.user.exempt ? (
-            <div className="my-4 rounded-md bg-blue-50 p-4">
-              <div className="flex">
-                <div className="shrink-0">
-                  <InformationCircleIcon
-                    className="h-5 w-5 text-blue-400"
-                    aria-hidden="true"
-                  />
-                </div>
-                <div className="ml-3 flex-1 md:flex md:justify-between">
-                  <p className="text-sm text-blue-700">
-                    {`@${apiResponse.user.username}`} is in a role exempt from
-                    criteria-based eligibility checks.
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : pass ? (
-            <div className="my-4 rounded-md bg-green-50 p-4">
-              <div className="flex">
-                <div className="shrink-0">
-                  <CheckCircleIcon
-                    className="h-5 w-5 text-green-400"
-                    aria-hidden="true"
-                  />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-green-800">
-                    {`@${apiResponse.user.username}`} meets minimum system
-                    criteria for membership.
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="my-4 rounded-md bg-red-50 p-4">
-              <div className="flex">
-                <div className="shrink-0">
-                  <XCircleIcon
-                    className="h-5 w-5 text-red-400"
-                    aria-hidden="true"
-                  />
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">
-                    {`@${apiResponse.user.username}`} failed to meet{" "}
-                    {`${failReasons.length}`} mandatory criteria:
-                  </h3>
-                  <div className="mt-2 text-sm text-red-700">
-                    <ul role="list" className="list-disc space-y-1 pl-5">
-                      {failReasons.map((reason, index) => (
-                        <li key={index}>{reason}</li>
-                      ))}
-                    </ul>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            {apiResponse.user.exempt ? (
+              <div className="my-4 rounded-md bg-blue-50 p-4">
+                <div className="flex">
+                  <div className="shrink-0">
+                    <InformationCircleIcon
+                      className="h-5 w-5 text-blue-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="ml-3 flex-1 md:flex md:justify-between">
+                    <p className="text-sm text-blue-700">
+                      {`@${apiResponse.user.username}`} is in a role exempt from
+                      criteria-based eligibility checks.
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            ) : pass ? (
+              <div className="my-4 rounded-md bg-green-50 p-4">
+                <div className="flex">
+                  <div className="shrink-0">
+                    <CheckCircleIcon
+                      className="h-5 w-5 text-green-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-green-800">
+                      {`@${apiResponse.user.username}`} meets minimum system
+                      criteria for membership.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="my-4 rounded-md bg-red-50 p-4">
+                <div className="flex">
+                  <div className="shrink-0">
+                    <XCircleIcon
+                      className="h-5 w-5 text-red-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">
+                      {`@${apiResponse.user.username}`} failed to meet{" "}
+                      {`${failReasons.length}`} mandatory criteria:
+                    </h3>
+                    <div className="mt-2 text-sm text-red-700">
+                      <ul role="list" className="list-disc space-y-1 pl-5">
+                        {failReasons.map((reason, index) => (
+                          <li key={index}>{reason}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
           <div>
             <h2 className="text-xs font-medium tracking-wide text-gray-500 uppercase">
               Mandatory criteria
             </h2>
             <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {resultCards.map((item) => {
-                const mandatoryKeys = ["age", "blacklist", "trustFactor"];
-                if (mandatoryKeys.includes(item.name)) {
-                  if (item.name === "blacklist") {
-                    if (item.pass) {
-                      item.displayText = "None";
-                    } else {
-                      const ind = apiResponse.tests.blacklist.metadata?.player
-                        ? true
-                        : false;
-                      const group = Array.isArray(
-                        apiResponse.tests.blacklist.metadata?.group
-                      )
-                        ? apiResponse.tests.blacklist.metadata?.group.length > 0
-                        : false;
-                      item.displayText =
-                        ind && group
-                          ? "Multiple"
-                          : ind
-                            ? "Individual"
-                            : group
-                              ? "Group"
-                              : "Yes";
-                    }
+              {mandatoryCards.map((item, cardIndex) => {
+                if (item.name === "blacklist") {
+                  if (item.pass) {
+                    item.displayText = "None";
+                  } else {
+                    const ind = apiResponse.tests.blacklist.metadata?.player
+                      ? true
+                      : false;
+                    const group = Array.isArray(
+                      apiResponse.tests.blacklist.metadata?.group
+                    )
+                      ? apiResponse.tests.blacklist.metadata?.group.length > 0
+                      : false;
+                    item.displayText =
+                      ind && group
+                        ? "Multiple"
+                        : ind
+                          ? "Individual"
+                          : group
+                            ? "Group"
+                            : "Yes";
                   }
-                  return (
-                    <div
-                      key={item.name}
+                }
+                return (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: 0.3 + cardIndex * 0.08
+                    }}
+                    className={clsx(
+                      item.pass ? "bg-white" : "bg-red-50",
+                      "overflow-hidden rounded-lg px-3 py-3 outline outline-gray-200 sm:p-3"
+                    )}
+                  >
+                    <dt
                       className={clsx(
-                        item.pass ? "bg-white" : "bg-red-50",
-                        "overflow-hidden rounded-lg px-3 py-3 outline outline-gray-200 sm:p-3"
+                        item.pass ? "text-gray-500" : "text-red-700",
+                        "truncate text-sm font-medium"
                       )}
                     >
-                      <dt
-                        className={clsx(
-                          item.pass ? "text-gray-500" : "text-red-700",
-                          "truncate text-sm font-medium"
-                        )}
-                      >
-                        {item.title}
-                      </dt>
-                      <dd
-                        className={clsx(
-                          item.pass ? "text-gray-900" : "text-red-800",
-                          "mt-1 text-2xl font-semibold"
-                        )}
-                      >
-                        {item.displayText}
-                      </dd>
-                    </div>
-                  );
-                }
+                      {item.title}
+                    </dt>
+                    <dd
+                      className={clsx(
+                        item.pass ? "text-gray-900" : "text-red-800",
+                        "mt-1 text-2xl font-semibold"
+                      )}
+                    >
+                      {item.displayText}
+                    </dd>
+                  </motion.div>
+                );
               })}
             </dl>
           </div>
@@ -585,46 +659,14 @@ export default function QueryModalContent({
             role="list"
             className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2"
           >
-            {resultCards.map((card) => {
-              const keys = ["accessory", "badges", "friends", "groups"];
-              if (keys.includes(card.name)) {
-                return (
-                  <li
-                    key={card.name}
-                    className="col-span-1 flex rounded-md shadow-xs"
-                  >
-                    <div
-                      className={clsx(
-                        card.informational === true
-                          ? "bg-slate-400"
-                          : card.pass
-                            ? "bg-green-500"
-                            : "bg-red-500",
-                        "flex w-16 shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
-                      )}
-                    >
-                      {card.displayText === "PASS" ? (
-                        <CheckIcon className="size-8" />
-                      ) : card.displayText === "FAIL" ? (
-                        <XMarkIcon className="size-8" />
-                      ) : (
-                        card.displayText
-                      )}
-                    </div>
-                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
-                      <div className="flex-1 truncate px-4 py-2 text-sm">
-                        <span className="font-medium text-gray-900 hover:text-gray-600">
-                          {card.title}
-                        </span>
-                        <p className="truncate text-gray-500">
-                          {card.subtitle}
-                        </p>
-                      </div>
-                    </div>
-                  </li>
-                );
-              }
-            })}
+            {trustFactorCards.map((card, index) => (
+              <ResultCardItem
+                key={card.name}
+                card={card}
+                index={index}
+                delay={0.5}
+              />
+            ))}
           </ul>
           <h2 className="mt-6 text-xs font-medium tracking-wide text-gray-500 uppercase">
             Miscallaneous information
@@ -633,53 +675,29 @@ export default function QueryModalContent({
             role="list"
             className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2"
           >
-            {resultCards.map((card) => {
-              const keys = ["hcc", "firearm"];
-              if (keys.includes(card.name)) {
-                return (
-                  <li
-                    key={card.name}
-                    className="col-span-1 flex rounded-md shadow-xs"
-                  >
-                    <div
-                      className={clsx(
-                        card.informational === true
-                          ? "bg-slate-400"
-                          : card.pass
-                            ? "bg-green-500"
-                            : "bg-red-500",
-                        "flex w-16 shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
-                      )}
-                    >
-                      {card.displayText === "PASS" ? (
-                        <CheckIcon className="size-8" />
-                      ) : card.displayText === "FAIL" ? (
-                        <XMarkIcon className="size-8" />
-                      ) : (
-                        card.displayText
-                      )}
-                    </div>
-                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
-                      <div className="flex-1 truncate px-4 py-2 text-sm">
-                        <span className="font-medium text-gray-900 hover:text-gray-600">
-                          {card.title}
-                        </span>
-                        <p className="text-gray-500">{card.subtitle}</p>
-                      </div>
-                    </div>
-                  </li>
-                );
-              }
-            })}
+            {miscCards.map((card, index) => (
+              <ResultCardItem
+                key={card.name}
+                card={card}
+                index={index}
+                delay={0.7}
+              />
+            ))}
           </ul>
           <div className="my-8">
             <RankHistoryFeed
               history={apiResponse.history ? apiResponse.history : []}
             />
           </div>
-        </>
+        </motion.div>
       ) : error ? (
-        <>
+        <motion.div
+          key="error"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
           <div className="sm:flex sm:items-start">
             <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
               <ExclamationCircleIcon
@@ -703,12 +721,19 @@ export default function QueryModalContent({
               </div>
             </div>
           </div>
-        </>
+        </motion.div>
       ) : (
-        <div className="py-24">
+        <motion.div
+          key="loading"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="py-24"
+        >
           <Spinner />
-        </div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }

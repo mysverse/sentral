@@ -9,7 +9,9 @@ import {
   CategoryScale,
   Tooltip,
   LinearScale,
-  Ticks
+  Ticks,
+  Filler,
+  Legend
 } from "chart.js";
 
 import "chartjs-adapter-date-fns";
@@ -23,10 +25,10 @@ ChartJS.register(
   LogarithmicScale,
   TimeScale,
   CategoryScale,
-  Tooltip
+  Tooltip,
+  Filler,
+  Legend
 );
-
-// ChartJS.defaults.font.family = "'JetBrains Mono', sans-serif";
 
 export default function MECSChart2() {
   const { stats } = useTimeCaseStats(true);
@@ -43,6 +45,9 @@ export default function MECSChart2() {
             time: {
               unit: "month",
               tooltipFormat: "MMMM yyyy"
+            },
+            grid: {
+              color: "rgba(0, 0, 0, 0.04)"
             }
           },
           y: {
@@ -50,15 +55,20 @@ export default function MECSChart2() {
             ticks: {
               callback: function (value, index, ticks) {
                 if (typeof value === "number") {
-                  const formatterOutput = Ticks.formatters.logarithmic.apply(
-                    this,
-                    [value, index, ticks]
-                  );
+                  const formatterOutput =
+                    Ticks.formatters.logarithmic.apply(this, [
+                      value,
+                      index,
+                      ticks
+                    ]);
                   if (formatterOutput.trim().length !== 0) {
                     return `${formatterOutput}%`;
                   }
                 }
               }
+            },
+            grid: {
+              color: "rgba(0, 0, 0, 0.04)"
             }
           }
         },
@@ -66,6 +76,10 @@ export default function MECSChart2() {
         indexAxis: "x",
         maintainAspectRatio: false,
         responsive: true,
+        animation: {
+          duration: 800,
+          easing: "easeOutQuart"
+        },
         plugins: {
           tooltip: {
             enabled: true,
@@ -84,6 +98,10 @@ export default function MECSChart2() {
                 return label;
               }
             }
+          },
+          legend: {
+            display: true,
+            position: "top" as const
           }
         }
       }}
@@ -95,8 +113,13 @@ export default function MECSChart2() {
             data: statsLast12Months.map(
               (stat) => (stat.granted / stat.total) * 100
             ),
-            backgroundColor: "green",
-            borderColor: "green"
+            backgroundColor: "rgba(59, 130, 246, 0.1)",
+            borderColor: "rgba(59, 130, 246, 1)",
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            tension: 0.3,
+            fill: true
           }
         ]
       }}
