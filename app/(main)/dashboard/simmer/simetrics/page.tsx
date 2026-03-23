@@ -1,24 +1,12 @@
-import React from "react";
-import MainClient from "./MainClient";
 import type { SearchParams } from "nuqs/server";
 import { dateParamsCache } from "utils/searchParams";
+
+import MainClient from "./MainClient";
+import type { User } from "./types";
 
 export const metadata = {
   title: "Simetrics"
 };
-
-export interface User {
-  name: {
-    name: string;
-    userId: number;
-  };
-  rank?: string;
-  signOnTime: string; // ISO date string
-  signOffTime: string; // ISO date string
-  dutyDuration: number; // in seconds
-  cumulativeDutyDuration: number; // in seconds
-  location: string;
-}
 
 export default async function SimetryPage(props: {
   searchParams: Promise<SearchParams>; // Next.js 15+: async searchParams prop
