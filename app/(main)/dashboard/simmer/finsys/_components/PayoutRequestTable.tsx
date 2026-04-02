@@ -126,10 +126,16 @@ function PayoutRequestsTable({
                 className="mt-1 text-sm text-gray-600"
                 suppressHydrationWarning
               >
-                {new Date(request.created_at).getTime() ===
-                new Date(request.updated_at).getTime()
+                {request.created_at &&
+                request.updated_at &&
+                new Date(request.created_at).getTime() ===
+                  new Date(request.updated_at).getTime()
                   ? `Created ${formatDistanceToNow(new Date(request.created_at), { addSuffix: true })}`
-                  : `Updated ${formatDistanceToNow(new Date(request.updated_at), { addSuffix: true })}`}
+                  : request.updated_at
+                    ? `Updated ${formatDistanceToNow(new Date(request.updated_at), { addSuffix: true })}`
+                    : request.created_at
+                      ? `Created ${formatDistanceToNow(new Date(request.created_at), { addSuffix: true })}`
+                      : null}
               </p>
             </div>
             {request.status === "rejected" && request.rejection_reason && (

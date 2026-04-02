@@ -94,12 +94,12 @@ export interface PayoutRequestData {
   amount: number;
   reason: string;
   status: "pending" | "approved" | "rejected";
-  roblox_group_id: number | null;
+  group_id: number | null;
   category: string | null;
-  approved_by_roblox_user_id: number | null;
+  approver_id: number | null;
   rejection_reason: string | null;
-  created_at: Date; // Assuming TIMESTAMP maps to JavaScript Date
-  updated_at: Date; // Assuming TIMESTAMP maps to JavaScript Date
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 // Response Type for Fetching Pending Requests

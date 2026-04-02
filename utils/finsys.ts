@@ -641,7 +641,8 @@ export async function getPendingRequests(
       }
       // Then, within the same status, sort by created_at in descending order
       return (
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        new Date(b.created_at ?? 0).getTime() -
+        new Date(a.created_at ?? 0).getTime()
       );
     });
     return data.requests;

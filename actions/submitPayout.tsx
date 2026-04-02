@@ -30,8 +30,8 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
   }
   // Construct the payload
   const payload = {
-    userId: session.user.id,
-    amount: formData.get("amount"),
+    userId: robloxUserId,
+    amount: parseInt(formData.get("amount") as string),
     reason: formData.get("reason")
   };
 
