@@ -5,6 +5,7 @@ import { auth } from "auth";
 import { endpoints } from "components/constants/endpoints";
 import { allowedGroups } from "data/sim";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 import {
   cacheRobloxId,
@@ -13,6 +14,61 @@ import {
   getRobloxOauthTokenFromClerkUserId
 } from "utils/finsys";
 import { extractRobloxIDs } from "utils/roblox";
+
+const allowedGroupNames = allowedGroups.map(
+  (g) => g.name
+) as [string, ...string[]];
+
+const submitPayoutSchema = z
+  .object({
+    amount: z.coerce
+      .number()
+      .int("Amount must be a whole number")
+      .min(1, "Amount must be at least 1")
+      .max(100, "Amount must be at most 100"),
+    reason: z
+      .string()
+      .min(1, "Reason is required")
+      .max(4096, "Reason must be 4096 characters or fewer"),
+    sim_agency: z.enum(allowedGroupNames, {
+      error: "Invalid agency"
+    }),
+    sim_reason: z.string().optional(),
+    visit_link: z.string().url("Invalid visit link URL").optional(),
+    visit_date: z.string().optional(),
+    sim_rank_previous: z.string().max(64).optional(),
+    sim_rank_after: z.string().max(64).optional(),
+    sim_transfer_previous: z.string().max(64).optional(),
+    sim_transfer_after: z.string().max(64).optional()
+  })
+  .refine(
+    (data) => {
+      if (data.sim_reason?.startsWith("Visit/")) {
+        return !!data.visit_link && !!data.visit_date;
+      }
+      return true;
+    },
+    {
+      message: "Visit link and date are required for visit categories",
+      path: ["visit_link"]
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.visit_date) {
+        const today = new Date();
+        const selected = new Date(data.visit_date);
+        return (
+          selected.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0)
+        );
+      }
+      return true;
+    },
+    {
+      message: "Visit date cannot be in the past",
+      path: ["visit_date"]
+    }
+  );
 
 export async function submitPayoutRequest(prevState: any, formData: FormData) {
   const session = await auth();
@@ -28,32 +84,60 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
   if (!session || !apiKey) {
     throw new Error("Unauthorized or missing API key");
   }
+
+  // Validate form inputs
+  const raw = {
+    amount: formData.get("amount"),
+    reason: formData.get("reason"),
+    sim_agency: formData.get("sim_agency"),
+    sim_reason: formData.get("sim_reason") || undefined,
+    visit_link: formData.get("visit_link") || undefined,
+    visit_date: formData.get("visit_date") || undefined,
+    sim_rank_previous: formData.get("sim_rank_previous") || undefined,
+    sim_rank_after: formData.get("sim_rank_after") || undefined,
+    sim_transfer_previous:
+      formData.get("sim_transfer_previous") || undefined,
+    sim_transfer_after: formData.get("sim_transfer_after") || undefined
+  };
+
+  const parsed = submitPayoutSchema.safeParse(raw);
+  if (!parsed.success) {
+    return {
+      error: parsed.error.issues.map((i) => i.message).join(", ")
+    };
+  }
+
+  const {
+    amount,
+    reason,
+    sim_agency,
+    sim_reason,
+    visit_link,
+    visit_date,
+    sim_rank_previous,
+    sim_rank_after,
+    sim_transfer_previous,
+    sim_transfer_after
+  } = parsed.data;
+
   // Construct the payload
   const payload = {
     userId: robloxUserId,
-    amount: parseInt(formData.get("amount") as string),
-    reason: formData.get("reason")
+    amount,
+    reason
   };
 
   const metadata: string[] = [];
 
-  if (!payload.amount || !payload.reason) {
-    return { error: "Invalid amount or reason" };
-  }
-
-  const robloxIds = extractRobloxIDs(payload.reason.toString());
+  const robloxIds = extractRobloxIDs(reason);
 
   if (robloxIds.length === 0) {
     return { error: "Invalid Roblox IDs" };
   }
 
-  const agency = formData.get("sim_agency")?.toString().slice(0, 64);
-
-  if (!agency) {
-    return { error: "Invalid agency" };
-  }
-
-  const groupData = allowedGroups.find((group) => group.name === agency);
+  const groupData = allowedGroups.find(
+    (group) => group.name === sim_agency
+  );
 
   if (!groupData) {
     return { error: "Invalid group data" };
@@ -137,7 +221,7 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
         );
       }
 
-      if (assetsCost !== parseInt(payload.amount.toString())) {
+      if (assetsCost !== payload.amount) {
         errors.push(
           `The total cost of the assets does not match the requested amount. Total calculated cost: **${assetsCost}** / Requested amount: **${payload.amount}**`
         );
@@ -184,53 +268,34 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
   // Request validation end
 
   metadata.push(
-    `**Agency**: [${agency.toString()}](https://roblox.com/communities/${groupData.id})`
+    `**Agency**: [${sim_agency}](https://roblox.com/communities/${groupData.id})`
   );
 
-  const category = formData.get("sim_reason")?.toString().slice(0, 64);
-  if (category) {
-    metadata.push(`**Category**: ${category.toString()}`);
+  if (sim_reason) {
+    metadata.push(`**Category**: ${sim_reason}`);
 
-    if (category.startsWith("Visit/")) {
-      const visitLink = formData.get("visit_link")?.toString();
-      const visitDate = formData.get("visit_date")?.toString();
-      if (visitLink && visitDate) {
-        const today = new Date();
-        const selectedDate = new Date(visitDate);
-        if (selectedDate.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)) {
-          // Ensure date is not in the past
-          return { error: "Visit date cannot be in the past." };
-        }
-        metadata.push(`**Visit Link**: [${visitLink}](${visitLink})`);
-        metadata.push(`**Visit Date**: ${visitDate}`);
-      }
-    } else if (category === "Missing") {
+    if (sim_reason.startsWith("Visit/") && visit_link && visit_date) {
+      metadata.push(`**Visit Link**: [${visit_link}](${visit_link})`);
+      metadata.push(`**Visit Date**: ${visit_date}`);
+    } else if (sim_reason === "Missing") {
       metadata.push(
         `**Note**: Uniform not in in-game equipment module. Please contact Sim agency leadership to request its addition.`
       );
     }
   }
 
-  const rankBefore = formData.get("sim_rank_previous")?.toString().slice(0, 64);
-  const rankAfter = formData.get("sim_rank_after")?.toString().slice(0, 64);
-  if (rankBefore && rankAfter) {
-    metadata.push(`**From/To**: ${rankBefore} > ${rankAfter}`);
+  if (sim_rank_previous && sim_rank_after) {
+    metadata.push(`**From/To**: ${sim_rank_previous} > ${sim_rank_after}`);
   }
 
-  const transferBefore = formData
-    .get("sim_transfer_previous")
-    ?.toString()
-    .slice(0, 64);
-  const transferAfter = formData
-    .get("sim_transfer_after")
-    ?.toString()
-    .slice(0, 64);
-  if (transferBefore && transferAfter) {
-    metadata.push(`**From/To**: ${transferBefore} > ${transferAfter}`);
+  if (sim_transfer_previous && sim_transfer_after) {
+    metadata.push(
+      `**From/To**: ${sim_transfer_previous} > ${sim_transfer_after}`
+    );
   }
 
   if (metadata.length > 0) {
-    payload.reason = `${metadata.join("\n")}\n${payload.reason?.toString().slice(0, 4096)}`;
+    payload.reason = `${metadata.join("\n")}\n${payload.reason}`;
   }
 
   // Call the FinSys API to submit the payout request

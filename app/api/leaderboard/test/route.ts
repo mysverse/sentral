@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+const testScoreSchema = z.object({
+  eventId: z.string().min(1).max(100),
+  playerName: z.string().min(1).max(50),
+  lapTime: z.number().positive()
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const { eventId, playerName, lapTime } = await request.json();
+    const body = await request.json();
+    const { eventId, playerName, lapTime } = testScoreSchema.parse(body);
 
     // Call the actual leaderboard API
     const response = await fetch(
@@ -33,6 +41,12 @@ export async function POST(request: NextRequest) {
       data: result
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: "Invalid test data", details: error.issues },
+        { status: 400 }
+      );
+    }
     console.error("Error adding test data:", error);
     return NextResponse.json(
       { error: "Failed to add test data" },

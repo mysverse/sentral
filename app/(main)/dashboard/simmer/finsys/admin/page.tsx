@@ -6,8 +6,11 @@ import {
 import PayoutRequestsTable from "../_components/PayoutRequestTable";
 import { auth } from "auth";
 import Link from "next/link";
+import { z } from "zod";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+const pageSchema = z.coerce.number().int().min(1).catch(1);
 
 export const metadata = {
   title: "FinSys Admin"
@@ -26,10 +29,7 @@ export default async function Main(props: { searchParams: SearchParams }) {
 
   const PAGE_SIZE = 10;
 
-  const page =
-    searchParams.page && typeof searchParams.page === "string"
-      ? parseInt(searchParams.page)
-      : 1;
+  const page = pageSchema.parse(searchParams.page);
 
   if (permissions.canEdit) {
     const limit = PAGE_SIZE;

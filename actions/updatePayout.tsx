@@ -2,7 +2,22 @@
 import { auth } from "auth";
 import { endpoints } from "components/constants/endpoints";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getPermissions } from "utils/finsys";
+
+const updatePayoutSchema = z
+  .object({
+    requestId: z.number().int().positive("Invalid request ID"),
+    approved: z.boolean(),
+    rejectionReason: z.string().max(1024).optional()
+  })
+  .refine(
+    (data) => data.approved || !!data.rejectionReason?.trim(),
+    {
+      message: "Rejection reason is required when rejecting",
+      path: ["rejectionReason"]
+    }
+  );
 
 export async function updatePayoutRequest(
   requestId: number,
@@ -20,6 +35,17 @@ export async function updatePayoutRequest(
     throw new Error("Unauthorized or missing API key");
   }
 
+  const parsed = updatePayoutSchema.safeParse({
+    requestId,
+    approved,
+    rejectionReason
+  });
+  if (!parsed.success) {
+    return {
+      error: parsed.error.issues.map((i) => i.message).join(", ")
+    };
+  }
+
   const permissions = await getPermissions(userId);
 
   if (!permissions.canEdit) {
@@ -28,10 +54,9 @@ export async function updatePayoutRequest(
 
   // Construct the payload
   const payload = {
-    // userId: session.user.id,
-    requestId,
-    status: approved ? "approved" : "rejected",
-    rejectionReason,
+    requestId: parsed.data.requestId,
+    status: parsed.data.approved ? "approved" : "rejected",
+    rejectionReason: parsed.data.rejectionReason,
     approverId
   };
 
