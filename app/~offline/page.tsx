@@ -21,10 +21,10 @@ export default function OfflinePage() {
         </svg>
       </div>
       <h1 className="mb-2 text-2xl font-bold tracking-tight text-zinc-950 dark:text-white">
-        You're Offline
+        You&apos;re Offline
       </h1>
       <p className="mb-8 max-w-sm text-zinc-500 dark:text-zinc-400">
-        It looks like you've lost your connection. Don't worry, Sentral has
+        It looks like you&apos;ve lost your connection. Don&apos;t worry, Sentral has
         cached some of your data for offline viewing.
       </p>
       <div className="flex gap-4">
