@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { toast } from "sonner";
 import { CertificateType, Course } from "generated/client";
@@ -215,9 +215,11 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
     0
   );
 
-  useEffect(() => {
+  const [resultDeps, setResultDeps] = useState({ rawInput, courseId });
+  if (resultDeps.rawInput !== rawInput || resultDeps.courseId !== courseId) {
+    setResultDeps({ rawInput, courseId });
     setResult(null);
-  }, [rawInput, courseId]);
+  }
 
   const handleInsertSample = () => {
     setRawInput(SAMPLE_DATA);
