@@ -48,22 +48,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <PlausibleProvider
-      domain="sentral.mysver.se"
-      customDomain="https://plausible.yan.gg"
-      exclude="/auth/*"
-    >
-      <ClerkProvider>
-        <NuqsAdapter>
-          <SerwistProvider
-            swUrl="/serwist/sw.js"
-            disable={process.env.NODE_ENV === "development"}
-          >
-            {children}
-          </SerwistProvider>
-        </NuqsAdapter>
-      </ClerkProvider>
-    </PlausibleProvider>
+  const plausibleSrc = process.env.NEXT_PUBLIC_PLAUSIBLE_SRC;
+
+  const tree = (
+    <ClerkProvider>
+      <NuqsAdapter>
+        <SerwistProvider
+          swUrl="/serwist/sw.js"
+          disable={process.env.NODE_ENV === "development"}
+        >
+          {children}
+        </SerwistProvider>
+      </NuqsAdapter>
+    </ClerkProvider>
+  );
+
+  return plausibleSrc ? (
+    <PlausibleProvider src={plausibleSrc}>{tree}</PlausibleProvider>
+  ) : (
+    tree
   );
 }
