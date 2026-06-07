@@ -72,8 +72,8 @@ importers:
         specifier: ^12.40.0
         version: 12.40.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       motion-plus:
-        specifier: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a
-        version: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.10.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a
+        version: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.10.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       next:
         specifier: ^16.2.7
         version: 16.2.7(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.100.0)
@@ -4623,9 +4623,9 @@ packages:
   motion-plus-dom@2.11.2:
     resolution: {integrity: sha512-WNXCn7XRS7H5ZJiwceJMbNjXbhVwjhQquJn/3LuyPkwMcxtOtQmc+cCas46bNpYNfKCyJs94oN9XRcBWmT2LxQ==}
 
-  motion-plus@https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a:
-    resolution: {tarball: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a}
-    version: 2.11.0
+  motion-plus@https://api.motion.dev/registry.tgz?package=motion-plus&version=2.10.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a:
+    resolution: {integrity: sha512-EivZ2Xiv35aij7qojgs09WsxvpqpJgSu43Hk2CqEF0lHfOR/OF7DOgQXiRj80u+tBzCRhadkd8jjSI2sSeYMIQ==, tarball: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.10.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a}
+    version: 2.10.0
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -10500,7 +10500,7 @@ snapshots:
       - react
       - react-dom
 
-  motion-plus@https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  motion-plus@https://api.motion.dev/registry.tgz?package=motion-plus&version=2.10.0&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       motion: 12.40.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       motion-dom: 12.40.0
