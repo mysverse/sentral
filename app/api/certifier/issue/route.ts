@@ -6,6 +6,7 @@ import {
   certificateSchema,
   generateGenericCertificate
 } from "../../../(main)/dashboard/certifier/utils"; // Corrected import path
+import { toApiError } from "lib/errors";
 
 export async function POST(request: Request) {
   try {
@@ -59,12 +60,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json(toApiError(error), { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { toApiError } from "lib/errors";
 
 const testScoreSchema = z.object({
   eventId: z.string().min(1).max(100),
@@ -48,9 +49,6 @@ export async function POST(request: NextRequest) {
       );
     }
     console.error("Error adding test data:", error);
-    return NextResponse.json(
-      { error: "Failed to add test data" },
-      { status: 500 }
-    );
+    return NextResponse.json(toApiError(error), { status: 500 });
   }
 }

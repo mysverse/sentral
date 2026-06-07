@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "lib/prisma";
 import { z } from "zod";
 import { broadcastLeaderboardUpdate } from "../../../../lib/sse-connections";
+import { toApiError } from "lib/errors";
 
 const addScoreSchema = z.object({
   playerName: z.string().min(1).max(50),
@@ -49,10 +50,7 @@ export async function GET(
     return NextResponse.json(leaderboardWithPositions);
   } catch (error) {
     console.error("Error fetching leaderboard:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch leaderboard" },
-      { status: 500 }
-    );
+    return NextResponse.json(toApiError(error), { status: 500 });
   }
 }
 
@@ -148,6 +146,6 @@ export async function POST(
     }
 
     console.error("Error adding score:", error);
-    return NextResponse.json({ error: "Failed to add score" }, { status: 500 });
+    return NextResponse.json(toApiError(error), { status: 500 });
   }
 }
