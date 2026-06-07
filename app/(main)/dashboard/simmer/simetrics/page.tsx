@@ -3,6 +3,7 @@ import { dateParamsCache } from "utils/searchParams";
 
 import MainClient from "./MainClient";
 import type { User } from "./types";
+import { fetchJsonOrThrow } from "lib/http";
 
 export const metadata = {
   title: "Simetrics"
@@ -23,9 +24,9 @@ export default async function SimetryPage(props: {
 
   url.searchParams.set("date", date.toISOString());
 
-  const response = await fetch(url, { next: { revalidate: 60 } });
-
-  const data: User[] = await response.json();
+  const data = await fetchJsonOrThrow<User[]>(url.toString(), {
+    next: { revalidate: 60 }
+  });
 
   return <MainClient data={data} key={date.toISOString()} />;
 }

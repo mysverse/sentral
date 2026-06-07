@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import type { SWRConfiguration } from "swr";
 
 import { DefaultAPIResponse, NametagTemplate, StaffDecision } from "./apiTypes";
 
@@ -80,17 +81,61 @@ const responseErrorMessage = (data: unknown, fallback: string) => {
   return fallback;
 };
 
+// Non-retryable HTTP statuses: client auth/validation errors, not found
+const NON_RETRYABLE_STATUSES = new Set([400, 401, 403, 404]);
+
+// Attach status to error so onErrorRetry can inspect it
+class FetchError extends Error {
+  status?: number;
+  retryable: boolean;
+
+  constructor(message: string, status?: number) {
+    super(message);
+    this.status = status;
+    this.retryable =
+      typeof status === "undefined" || !NON_RETRYABLE_STATUSES.has(status);
+  }
+}
+
 const fetcher = async (url: string) => {
   const response = await fetch(url);
   const data = await readJson(response);
 
   if (!response.ok) {
-    throw new Error(
-      responseErrorMessage(data, `Request failed (${response.status})`)
+    throw new FetchError(
+      responseErrorMessage(data, `Request failed (${response.status})`),
+      response.status
     );
   }
 
   return data;
+};
+
+/**
+ * SWR onErrorRetry handler that applies retryability rules:
+ * - Never retry 400, 401, 403, 404 or explicitly non-retryable errors.
+ * - Apply exponential backoff for everything else (max 5 retries).
+ */
+export const swrOnErrorRetry: SWRConfiguration["onErrorRetry"] = (
+  error,
+  _key,
+  _config,
+  revalidate,
+  { retryCount }
+) => {
+  if (error instanceof FetchError && !error.retryable) {
+    return;
+  }
+  if (retryCount >= 5) {
+    return;
+  }
+  const delay = Math.min(1000 * 2 ** retryCount, 30_000);
+  setTimeout(() => revalidate({ retryCount }), delay);
+};
+
+/** Default SWR options with resilient retry behavior. */
+export const defaultSwrOptions: SWRConfiguration = {
+  onErrorRetry: swrOnErrorRetry
 };
 
 const unexpectedResponseError = (label: string) =>

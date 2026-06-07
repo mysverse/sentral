@@ -7,21 +7,28 @@ import { type SearchParams } from "nuqs/server";
 
 import { endpoints } from "components/constants/endpoints";
 import { searchParamsCache } from "utils/searchParams";
+import { readJsonSafe } from "lib/http";
 
 const currentSeries = "GE25";
 
 async function getInvoteSeriesIdentifiers() {
-  const response = await fetch(`${endpoints.invote}/stats/series-identifiers`);
+  try {
+    const response = await fetch(
+      `${endpoints.invote}/stats/series-identifiers`
+    );
 
-  if (response.ok) {
-    const data: string[] = await response.json();
-    if (data.find((item) => item === currentSeries) === undefined) {
-      return [currentSeries, ...data];
+    if (response.ok) {
+      const data = (await readJsonSafe(response)) as string[];
+      if (data.find((item) => item === currentSeries) === undefined) {
+        return [currentSeries, ...data];
+      }
+      return data;
     }
-    return data;
+  } catch {
+    // fall through to default
   }
 
-  return [];
+  return [currentSeries];
 }
 
 type PageProps = {

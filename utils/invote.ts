@@ -1,5 +1,7 @@
 import { endpoints } from "components/constants/endpoints";
 import { InvoteSeats } from "components/fetcher";
+import { readJsonSafe } from "lib/http";
+
 export interface ConstituencyData {
   constituencyCode: string;
   username: string;
@@ -13,7 +15,7 @@ export async function getInvoteSeats(series: string) {
   const url = `${endpoints.invote}/stats/seats/${encodeURIComponent(series)}`;
   const response = await fetch(url);
   if (response.ok) {
-    const data: InvoteSeats[] = await response.json();
+    const data = (await readJsonSafe(response)) as InvoteSeats[];
     return data;
   }
   return undefined;
@@ -28,9 +30,9 @@ export async function getConstituencyData(series?: string) {
     next: {
       revalidate: 60
     }
-  });
+  } as RequestInit);
   if (response.ok) {
-    const data: ConstituencyData[] = await response.json();
+    const data = (await readJsonSafe(response)) as ConstituencyData[];
     return data;
   }
   return undefined;

@@ -61,7 +61,13 @@ export const getGroups = cache(async (userId: number) => {
   if (!response.ok) {
     if (groups) return groups;
   } else {
-    const data: RbxGroupResponse = await response.json();
+    const text = await response.text();
+    let data: RbxGroupResponse;
+    try {
+      data = JSON.parse(text) as RbxGroupResponse;
+    } catch {
+      throw new Error("Failed to parse groups response");
+    }
     await redis.set(`groups:${userId}`, data, { ex: 60 });
     return data;
   }
