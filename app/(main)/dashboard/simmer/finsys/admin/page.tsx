@@ -1,6 +1,6 @@
 import {
   getPendingRequests,
-  getPermissions,
+  getPermissionsOrThrow,
   injectOwnershipAndThumbnailsIntoPayoutRequests
 } from "utils/finsys";
 import PayoutRequestsTable from "../_components/PayoutRequestTable";
@@ -25,7 +25,18 @@ export default async function Main(props: { searchParams: SearchParams }) {
     throw new Error("Not authenticated");
   }
 
-  const permissions = await getPermissions(userId);
+  let permissions: Awaited<ReturnType<typeof getPermissionsOrThrow>>;
+  try {
+    permissions = await getPermissionsOrThrow(userId);
+  } catch {
+    return (
+      <div className="container mx-auto px-6 py-6 text-white">
+        <p className="text-center">
+          Unable to verify permissions. Please try again later.
+        </p>
+      </div>
+    );
+  }
 
   const PAGE_SIZE = 10;
 

@@ -6,6 +6,7 @@ import { endpoints } from "components/constants/endpoints";
 import { allowedGroups } from "data/sim";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { readJsonSafe } from "lib/http";
 
 import {
   cacheRobloxId,
@@ -317,11 +318,11 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
       message?: string;
       error?: string;
     }
-    const json: CreatePayoutResponse = await response.json();
-    if (json.id) {
-      requestId = json.id as number;
+    const json = (await readJsonSafe(response)) as CreatePayoutResponse | null;
+    if (json?.id) {
+      requestId = json.id;
     }
-    const error = json.error;
+    const error = json?.error;
     if (error) {
       message = `${message}: ${error}`;
     }

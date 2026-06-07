@@ -6,6 +6,20 @@ import { endpoints } from "components/constants/endpoints";
 import { extractRobloxIDs } from "./roblox";
 import { redis } from "lib/redis";
 import { clerkClient, User } from "@clerk/nextjs/server";
+import {
+  AppError,
+  logAppError,
+  toAppError,
+  toApiError
+} from "lib/errors";
+import {
+  fetchJsonResult,
+  readJsonSafe,
+  FINSYS_PENDING_TIMEOUT,
+  THUMBNAIL_TIMEOUT
+} from "lib/http";
+
+export { toApiError };
 
 const apiKey = process.env.MYSVERSE_FINSYS_API_KEY;
 const provider = "custom_roblox";
@@ -65,7 +79,7 @@ type InventoryItemResponse = {
   inventoryItems: Array<InventoryItem>;
 };
 
-function timeout(ms: number): Promise<void> {
+function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -116,19 +130,20 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
     });
 
     if (!response.ok) {
-      console.error(await response.json());
+      const errorBody = await readJsonSafe(response).catch(() => null);
+      console.error(errorBody);
       const responseCsrf = response.headers.get("x-csrf-token");
       if (!csrf && responseCsrf) {
         csrf = responseCsrf;
         continue;
       } else {
         retries++;
-        await timeout(1000);
+        await sleep(1000);
         continue;
       }
     }
 
-    const data: AssetDetailResponse = await response.json();
+    const data = await readJsonSafe(response) as AssetDetailResponse;
 
     const returnData = data.data.map((item) => ({
       id: item.id,
@@ -197,7 +212,7 @@ async function fetchUserData(userIds: number[]) {
     next: { revalidate: 5 * 60 }
   });
 
-  const data: RobloxUserResponse = await response.json();
+  const data = await response.json() as RobloxUserResponse;
 
   // Replace individual redis.set with mset
   const userDataToCache: Record<string, string> = {};
@@ -232,36 +247,54 @@ async function fetchThumbnails(assetIds: number[]) {
   while (retries < maxRetries) {
     const url = `https://thumbnails.roblox.com/v1/assets`;
 
-    const response = await fetch(
-      `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
-        `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`
-      )}`,
-      {
-        method: "GET",
-        // cache: "force-cache",
-        next: { revalidate: 5 * 60 }
-      }
-    );
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), THUMBNAIL_TIMEOUT);
 
-    if (response.ok) {
-      const data: RobloxThumbnailAssetApiResponse = await response.json();
-      // Replace individual redis.set with mset
-      const thumbnailDataToCache: Record<string, string> = {};
-      data.data.forEach((item) => {
-        thumbnailDataToCache[`thumbnail:${item.targetId}`] =
-          JSON.stringify(item);
-      });
-      await redis.mset(thumbnailDataToCache);
-      return data;
-    } else {
-      const errorData = await response.json();
-      console.error(errorData);
+    try {
+      const response = await fetch(
+        `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
+          `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`
+        )}`,
+        {
+          method: "GET",
+          next: { revalidate: 5 * 60 },
+          signal: controller.signal
+        } as RequestInit
+      );
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const data = await readJsonSafe(response) as RobloxThumbnailAssetApiResponse;
+        // Replace individual redis.set with mset
+        const thumbnailDataToCache: Record<string, string> = {};
+        data.data.forEach((item) => {
+          thumbnailDataToCache[`thumbnail:${item.targetId}`] =
+            JSON.stringify(item);
+        });
+        await redis.mset(thumbnailDataToCache);
+        return data;
+      } else {
+        const errorBody = await readJsonSafe(response).catch(() => null);
+        console.error(errorBody);
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      const appError = toAppError(error, { service: "thumbnails" });
+      if (appError.kind === "timeout") {
+        console.error("Thumbnail fetch timed out");
+      } else {
+        logAppError(appError, { service: "thumbnails" });
+      }
     }
-    await timeout(1000);
+    await sleep(1000);
     retries++;
   }
 
-  throw new Error(`Failed to fetch asset thumbnails`);
+  throw new AppError("Failed to fetch asset thumbnails", {
+    kind: "http",
+    service: "thumbnails",
+    retryable: true
+  });
 }
 
 const ownershipDisabled = false;
@@ -431,8 +464,13 @@ async function checkUserOwnership(
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
-      if (errorData?.code === "PERMISSION_DENIED") {
+      const errorData = await readJsonSafe(response).catch(() => null);
+      if (
+        errorData &&
+        typeof errorData === "object" &&
+        "code" in errorData &&
+        (errorData as { code: unknown }).code === "PERMISSION_DENIED"
+      ) {
         // need to grant perms
         if (!token && apiKey) {
           // No token, but API key provided;
@@ -441,13 +479,25 @@ async function checkUserOwnership(
           }));
         }
         console.error(errorData);
-        throw new Error("PERMISSION_DENIED");
+        throw new AppError("Inventory permission denied", {
+          kind: "auth",
+          service: "roblox-inventory",
+          retryable: false
+        });
       }
       console.error(errorData);
-      throw new Error(`Failed to fetch user inventory: ${response.statusText}`);
+      throw new AppError(
+        `Failed to fetch user inventory: ${response.statusText}`,
+        {
+          kind: "http",
+          service: "roblox-inventory",
+          status: response.status,
+          retryable: response.status >= 500
+        }
+      );
     }
 
-    const data: InventoryItemResponse = await response.json();
+    const data = (await readJsonSafe(response)) as InventoryItemResponse;
 
     // console.log(data);
 
@@ -605,7 +655,11 @@ export async function getPendingRequests(
   offset?: number
 ) {
   if (!apiKey) {
-    throw new Error("Missing API key for FinSys");
+    throw new AppError("Missing API key for FinSys", {
+      kind: "config",
+      service: "finsys",
+      retryable: false
+    });
   }
 
   const url = new URL(`${endpoints.finsys}/pending-requests`);
@@ -622,15 +676,29 @@ export async function getPendingRequests(
     url.searchParams.set("offset", offset.toString());
   }
 
-  const res = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey
-    }
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    FINSYS_PENDING_TIMEOUT
+  );
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey
+      },
+      signal: controller.signal
+    });
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw toAppError(error, { service: "finsys" });
+  }
+  clearTimeout(timeoutId);
 
   if (res.ok) {
-    const data: PendingPayoutRequestsResponse = await res.json();
+    const data = (await readJsonSafe(res)) as PendingPayoutRequestsResponse;
 
     data.requests.sort((a, b) => {
       // First, prioritize pending requests
@@ -648,9 +716,32 @@ export async function getPendingRequests(
     return data.requests;
   }
 
-  const data = await res.json();
+  const data = await readJsonSafe(res).catch(() => null);
+  const message =
+    data && typeof data === "object" && "error" in data
+      ? String((data as { error: unknown }).error)
+      : `HTTP ${res.status}`;
+  throw new AppError(message, {
+    kind: "http",
+    service: "finsys",
+    status: res.status,
+    retryable: res.status >= 500
+  });
+}
 
-  throw new Error(data.error);
+export async function getPendingRequestsResult(
+  userId?: string | number,
+  limit?: number,
+  offset?: number
+) {
+  try {
+    const data = await getPendingRequests(userId, limit, offset);
+    return { ok: true as const, data };
+  } catch (error) {
+    const appError = toAppError(error, { service: "finsys" });
+    logAppError(appError, { service: "finsys" });
+    return { ok: false as const, error: appError };
+  }
 }
 
 interface FinsysPermissions {
@@ -659,27 +750,79 @@ interface FinsysPermissions {
   canEdit: boolean;
 }
 
+export async function getPermissionsOrThrow(userId: string) {
+  if (!apiKey) {
+    throw new AppError("Missing API key for FinSys", {
+      kind: "config",
+      service: "finsys",
+      retryable: false
+    });
+  }
+
+  const url = new URL(`${endpoints.finsys}/permissions`);
+  url.searchParams.set("userId", userId);
+
+  const result = await fetchJsonResult<FinsysPermissions>(url.toString(), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey
+    },
+    service: "finsys"
+  });
+
+  if (!result.ok) {
+    throw result.error;
+  }
+
+  return result.data;
+}
+
 export async function getPermissions(userId: string) {
   if (!apiKey) {
-    throw new Error("Missing API key for FinSys");
+    throw new AppError("Missing API key for FinSys", {
+      kind: "config",
+      service: "finsys",
+      retryable: false
+    });
   }
 
   const url = new URL(`${endpoints.finsys}/permissions`);
 
   url.searchParams.set("userId", userId);
 
-  const res = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey
-    }
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8_000);
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey
+      },
+      signal: controller.signal
+    });
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw toAppError(error, { service: "finsys" });
+  }
+  clearTimeout(timeoutId);
 
   if (res.ok) {
-    const data: FinsysPermissions = await res.json();
+    const data = (await readJsonSafe(res)) as FinsysPermissions;
     return data;
   }
 
-  const data = await res.json();
-  throw new Error(data.error);
+  const data = await readJsonSafe(res).catch(() => null);
+  const message =
+    data && typeof data === "object" && "error" in data
+      ? String((data as { error: unknown }).error)
+      : `HTTP ${res.status}`;
+  throw new AppError(message, {
+    kind: "http",
+    service: "finsys",
+    status: res.status,
+    retryable: false
+  });
 }

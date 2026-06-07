@@ -4,13 +4,14 @@ import { auth } from "auth";
 import PayoutRequestComponent from "./_components/FinsysPage";
 import DefaultTransitionLayout from "components/transition";
 import {
-  getPendingRequests,
+  getPendingRequestsResult,
   injectOwnershipAndThumbnailsIntoPayoutRequests
 } from "utils/finsys";
 import Link from "next/link";
 
 import PayoutRequestsTable from "./_components/PayoutRequestTable";
 import { getGroupRoles } from "utils/sim";
+import { InlineUnavailable } from "components/errorState";
 
 export const metadata = {
   title: "FinSys"
@@ -23,24 +24,36 @@ export default async function Main() {
     return null;
   }
 
-  // Fetch data and handle errors before rendering
-  let data, groups, ownershipData;
-  let error: Error | null = null;
+  // Fetch group roles; fail closed if unavailable
+  let groups: Awaited<ReturnType<typeof getGroupRoles>> | undefined;
+  let accessError: string | undefined;
 
   try {
-    [data, groups] = await Promise.all([
-      getPendingRequests(session.user.id),
-      getGroupRoles(parseInt(session.user.id!))
-    ]);
-
-    ownershipData = await injectOwnershipAndThumbnailsIntoPayoutRequests(data);
-  } catch (e) {
-    error = e instanceof Error ? e : new Error("Unknown error occurred");
+    groups = await getGroupRoles(parseInt(session.user.id!));
+  } catch {
+    accessError = "Unable to verify group membership. Please try again later.";
   }
 
-  // Handle error state
-  if (error) {
-    if (error.message.match("FINSYS_NOT_ALLOWED")) {
+  if (accessError) {
+    return (
+      <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
+        <DefaultTransitionLayout show={true} appear={true}>
+          <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+            <div className="text-medium text-center text-xl">
+              <p>{accessError}</p>
+            </div>
+          </div>
+        </DefaultTransitionLayout>
+      </div>
+    );
+  }
+
+  // Fetch pending requests independently
+  const requestsResult = await getPendingRequestsResult(session.user.id);
+
+  if (!requestsResult.ok) {
+    const err = requestsResult.error;
+    if (err.message.match("FINSYS_NOT_ALLOWED")) {
       return (
         <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
           <DefaultTransitionLayout show={true} appear={true}>
@@ -64,17 +77,42 @@ export default async function Main() {
         </div>
       );
     }
-    throw error;
+
+    // Request list failed but access is confirmed — render form with unavailable notice
+    return (
+      <div>
+        <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+          <PayoutRequestComponent groups={groups!} />
+        </div>
+        <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
+        <InlineUnavailable label="Your payout requests could not be loaded right now. Please refresh to try again." />
+      </div>
+    );
   }
 
-  // Render success state
+  // Enrich with ownership/thumbnails; degrade gracefully if enrichment fails
+  let ownershipData: Awaited<
+    ReturnType<typeof injectOwnershipAndThumbnailsIntoPayoutRequests>
+  >;
+  try {
+    ownershipData = await injectOwnershipAndThumbnailsIntoPayoutRequests(
+      requestsResult.data
+    );
+  } catch {
+    ownershipData = requestsResult.data.map((r) => ({
+      ...r,
+      ownership: [],
+      user: undefined
+    }));
+  }
+
   return (
     <div>
       <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
         <PayoutRequestComponent groups={groups!} />
       </div>
       <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
-      <PayoutRequestsTable payoutRequests={ownershipData!} />
+      <PayoutRequestsTable payoutRequests={ownershipData} />
     </div>
   );
 }

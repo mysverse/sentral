@@ -4,6 +4,7 @@ import { endpoints } from "components/constants/endpoints";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getPermissions } from "utils/finsys";
+import { readJsonSafe } from "lib/http";
 
 const updatePayoutSchema = z
   .object({
@@ -73,8 +74,10 @@ export async function updatePayoutRequest(
   let message = "Failed to update payout request";
 
   try {
-    const json = await response.json();
-    const error: string = json.error;
+    const json = (await readJsonSafe(response)) as {
+      error?: string;
+    } | null;
+    const error = json?.error;
     if (error) {
       message = `${message}: ${error}`;
     }
