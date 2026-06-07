@@ -30,11 +30,35 @@ ChartJS.register(
 );
 
 export default function MECSChart() {
-  const { stats } = useTimeCaseStats(true);
+  const { stats, isError } = useTimeCaseStats(true);
+  if (isError) {
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-gray-500">
+        Unable to load membership trend data.
+      </div>
+    );
+  }
+
   if (!stats) {
     return null;
   }
-  const statsLast12Months = stats.slice(-13, -1);
+  const statsLast12Months = stats
+    .filter(
+      (stat) =>
+        typeof stat.time === "string" &&
+        typeof stat.granted === "number" &&
+        typeof stat.total === "number"
+    )
+    .slice(-13, -1);
+
+  if (statsLast12Months.length === 0) {
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-gray-500">
+        No membership trend data is available.
+      </div>
+    );
+  }
+
   return (
     <Line
       options={{
@@ -89,9 +113,7 @@ export default function MECSChart() {
           },
           {
             label: "Denied",
-            data: statsLast12Months.map(
-              (stat) => stat.total - stat.granted
-            ),
+            data: statsLast12Months.map((stat) => stat.total - stat.granted),
             backgroundColor: "rgba(239, 68, 68, 0.1)",
             borderColor: "rgba(239, 68, 68, 1)",
             borderWidth: 2,

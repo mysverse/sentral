@@ -29,6 +29,11 @@ interface resultCard {
   informational?: boolean;
 }
 
+const avatarPlaceholder = "/img/user_placeholder.webp";
+
+const getBlacklistGroups = (metadata: any) =>
+  Array.isArray(metadata?.group) ? metadata.group : [];
+
 function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
   if (history.length === 0) {
     return null;
@@ -158,7 +163,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
 }
 
 function calculateTrustFactor(data: DefaultAPIResponse) {
-  const tests = data.tests;
+  const tests = data.tests ?? {};
   const count = {
     pass: 0,
     total: 0
@@ -169,7 +174,7 @@ function calculateTrustFactor(data: DefaultAPIResponse) {
 
   for (const key in tests) {
     const testData = tests[key];
-    if (testData) {
+    if (testData && typeof testData.status === "boolean") {
       if (key !== "blacklist") {
         count.total++;
         if (testData.status === true) {
@@ -255,16 +260,19 @@ export default function QueryModalContent({
   loading,
   error
 }: {
-  apiResponse: DefaultAPIResponse;
+  apiResponse?: DefaultAPIResponse;
   loading: boolean;
-  error: boolean;
+  error?: Error;
 }) {
+  const hasError = Boolean(error) || (!loading && !apiResponse);
+  const userId = apiResponse?.user?.userId;
+  const username = apiResponse?.user?.username ?? "player";
   const resultCards: resultCard[] = [];
 
   const [pass, failReasons] = (() => {
     const failReasons = [] as JSX.Element[];
-    if (!loading && !error) {
-      const tests = apiResponse.tests;
+    if (!loading && !hasError && apiResponse) {
+      const tests = apiResponse.tests ?? {};
 
       const [tfPass, tfScore] = calculateTrustFactor(apiResponse);
 
@@ -292,31 +300,36 @@ export default function QueryModalContent({
         const result = tests[key];
         if (result) {
           let title = key[0].toUpperCase() + key.slice(1);
+          const currentValue = result.values?.current;
+          const passValue = result.values?.pass;
           let displayText =
-            typeof result.values.current === "string" ||
-            typeof result.values.current === "number"
-              ? `${result.values.current}`
+            typeof currentValue === "string" || typeof currentValue === "number"
+              ? `${currentValue}`
               : result.status
                 ? "PASS"
                 : "FAIL";
 
           switch (key) {
             case "age": {
-              const days = result.values.current;
-              const duration = days * 24 * 60 * 60 * 1000;
               title = "Account Age";
-              displayText =
-                days > 60
-                  ? humanizeDuration(duration, {
-                      units: ["y", "mo"],
-                      largest: 1,
-                      round: true
-                    })
-                  : humanizeDuration(duration, {
-                      units: ["d"],
-                      largest: 1,
-                      round: true
-                    });
+              const days = Number(currentValue);
+              if (Number.isFinite(days)) {
+                const duration = days * 24 * 60 * 60 * 1000;
+                displayText =
+                  days > 60
+                    ? humanizeDuration(duration, {
+                        units: ["y", "mo"],
+                        largest: 1,
+                        round: true
+                      })
+                    : humanizeDuration(duration, {
+                        units: ["d"],
+                        largest: 1,
+                        round: true
+                      });
+              } else {
+                displayText = "Unavailable";
+              }
               break;
             }
 
@@ -325,46 +338,50 @@ export default function QueryModalContent({
           }
           if (!result.status) {
             if (key === "age") {
-              const date = new Date();
-              const duration =
-                (result.values.pass - result.values.current) *
-                24 *
-                60 *
-                60 *
-                1000;
-              date.setDate(
-                date.getDate() + (result.values.pass - result.values.current)
-              );
-              failReasons.push(
-                <>
-                  {`Player's account age is below ${
-                    result.values.pass
-                  } days. Wait around ${humanizeDuration(duration, {
-                    units: ["d"],
-                    largest: 1,
-                    round: true
-                  })} (${date.toLocaleDateString()}) for this requirement to pass.`}
-                </>
-              );
+              const currentDays = Number(currentValue);
+              const requiredDays = Number(passValue);
+
+              if (
+                Number.isFinite(currentDays) &&
+                Number.isFinite(requiredDays)
+              ) {
+                const date = new Date();
+                const duration =
+                  (requiredDays - currentDays) * 24 * 60 * 60 * 1000;
+                date.setDate(date.getDate() + (requiredDays - currentDays));
+                failReasons.push(
+                  <>
+                    {`Player's account age is below ${requiredDays} days. Wait around ${humanizeDuration(
+                      duration,
+                      {
+                        units: ["d"],
+                        largest: 1,
+                        round: true
+                      }
+                    )} (${date.toLocaleDateString()}) for this requirement to pass.`}
+                  </>
+                );
+              } else {
+                failReasons.push(
+                  <>Player&apos;s account age could not be checked.</>
+                );
+              }
             } else if (key === "blacklist") {
-              const reason = apiResponse.tests.blacklist.metadata
-                ?.reason as string;
-              const ind = apiResponse.tests.blacklist.metadata?.player
-                ? true
-                : false;
-              const array = apiResponse.tests.blacklist.metadata
-                ?.group as any[];
-              const group = Array.isArray(array) ? array.length > 0 : false;
+              const metadata = tests.blacklist?.metadata;
+              const reason = metadata?.reason as string | undefined;
+              const ind = metadata?.player ? true : false;
+              const groups = getBlacklistGroups(metadata);
+              const group = groups.length > 0;
               if (ind && group) {
                 failReasons.push(
                   <>
                     <>{`Player is individually blacklisted ${
                       reason ? `(reason: "${reason}")` : null
                     } and in ${
-                      apiResponse.tests.blacklist.metadata?.group.length
-                    } blacklisted group${array.length > 1 ? "s" : ""}`}</>
+                      groups.length
+                    } blacklisted group${groups.length > 1 ? "s" : ""}`}</>
                     <ul className="list-disc pl-4">
-                      {array.map((group) => (
+                      {groups.map((group: any) => (
                         <li key={group.id}>
                           <a
                             href={`https://roblox.com/groups/${group.id}`}
@@ -390,11 +407,11 @@ export default function QueryModalContent({
               } else if (group) {
                 failReasons.push(
                   <>
-                    <>{`Player is in ${
-                      apiResponse.tests.blacklist.metadata?.group.length
-                    } blacklisted group${array.length > 1 ? "s" : ""}`}</>
+                    <>{`Player is in ${groups.length} blacklisted group${
+                      groups.length > 1 ? "s" : ""
+                    }`}</>
                     <ul className="list-disc pl-4">
-                      {array.map((group) => (
+                      {groups.map((group: any) => (
                         <li key={group.id}>
                           <a
                             href={`https://roblox.com/groups/${group.id}`}
@@ -445,15 +462,17 @@ export default function QueryModalContent({
       if (!tfPass) {
         failReasons.push(<>{`Player's trust factor score is too low.`}</>);
       }
-      const pass = tests.age.status && tests.blacklist.status && tfPass;
+      const pass = Boolean(
+        tests.age?.status && tests.blacklist?.status && tfPass
+      );
       return [pass, failReasons] as [boolean, JSX.Element[]];
     }
     return [false, failReasons] as [boolean, JSX.Element[]];
   })();
 
   const { stats: avatarData } = useAvatarThumbnails(
-    apiResponse ? true : false,
-    apiResponse ? [apiResponse.user.userId] : []
+    typeof userId === "number",
+    typeof userId === "number" ? [userId] : []
   );
 
   const mandatoryCards = resultCards.filter((item) =>
@@ -468,7 +487,7 @@ export default function QueryModalContent({
 
   return (
     <AnimatePresence mode="wait">
-      {!loading && !error ? (
+      {!loading && !hasError && apiResponse ? (
         <motion.div
           key="results"
           initial={{ opacity: 0 }}
@@ -489,14 +508,11 @@ export default function QueryModalContent({
                   width={100}
                   height={100}
                   src={
-                    avatarData
-                      ? avatarData.data.find(
-                          (avatarItem) =>
-                            avatarItem.targetId === apiResponse.user.userId
-                        )?.imageUrl || "/img/user_placeholder.webp"
-                      : "/img/user_placeholder.webp"
+                    avatarData?.data.find(
+                      (avatarItem) => avatarItem.targetId === userId
+                    )?.imageUrl || avatarPlaceholder
                   }
-                  alt={`Profile picture of player @${apiResponse.user.username}`}
+                  alt={`Profile picture of player @${username}`}
                   unoptimized
                 />
                 <span
@@ -513,11 +529,11 @@ export default function QueryModalContent({
                 rel="noreferrer"
               >
                 <h1 className="text-2xl font-bold text-gray-900">
-                  @{apiResponse.user.username}
+                  @{username}
                 </h1>
               </a>
               <p className="text-sm font-medium text-gray-500">
-                {getRoleText(apiResponse.user.groupMembership?.role.name)}
+                {getRoleText(apiResponse.user.groupMembership?.role?.name)}
               </p>
             </div>
           </motion.div>
@@ -540,8 +556,8 @@ export default function QueryModalContent({
                   </div>
                   <div className="ml-3 flex-1 md:flex md:justify-between">
                     <p className="text-sm text-blue-700">
-                      {`@${apiResponse.user.username}`} is in a role exempt from
-                      criteria-based eligibility checks.
+                      {`@${username}`} is in a role exempt from criteria-based
+                      eligibility checks.
                     </p>
                   </div>
                 </div>
@@ -557,8 +573,8 @@ export default function QueryModalContent({
                   </div>
                   <div className="ml-3">
                     <p className="text-sm font-medium text-green-800">
-                      {`@${apiResponse.user.username}`} meets minimum system
-                      criteria for membership.
+                      {`@${username}`} meets minimum system criteria for
+                      membership.
                     </p>
                   </div>
                 </div>
@@ -574,8 +590,8 @@ export default function QueryModalContent({
                   </div>
                   <div className="ml-3">
                     <h3 className="text-sm font-medium text-red-800">
-                      {`@${apiResponse.user.username}`} failed to meet{" "}
-                      {`${failReasons.length}`} mandatory criteria:
+                      {`@${username}`} failed to meet {`${failReasons.length}`}{" "}
+                      mandatory criteria:
                     </h3>
                     <div className="mt-2 text-sm text-red-700">
                       <ul role="list" className="list-disc space-y-1 pl-5">
@@ -599,14 +615,9 @@ export default function QueryModalContent({
                   if (item.pass) {
                     item.displayText = "None";
                   } else {
-                    const ind = apiResponse.tests.blacklist.metadata?.player
-                      ? true
-                      : false;
-                    const group = Array.isArray(
-                      apiResponse.tests.blacklist.metadata?.group
-                    )
-                      ? apiResponse.tests.blacklist.metadata?.group.length > 0
-                      : false;
+                    const metadata = apiResponse.tests.blacklist?.metadata;
+                    const ind = metadata?.player ? true : false;
+                    const group = getBlacklistGroups(metadata).length > 0;
                     item.displayText =
                       ind && group
                         ? "Multiple"
@@ -686,11 +697,13 @@ export default function QueryModalContent({
           </ul>
           <div className="my-8">
             <RankHistoryFeed
-              history={apiResponse.history ? apiResponse.history : []}
+              history={
+                Array.isArray(apiResponse.history) ? apiResponse.history : []
+              }
             />
           </div>
         </motion.div>
-      ) : error ? (
+      ) : hasError ? (
         <motion.div
           key="error"
           initial={{ opacity: 0 }}
@@ -718,6 +731,11 @@ export default function QueryModalContent({
                   It is also possible the server is down, in which case please
                   try again at a later time.
                 </p>
+                {error?.message ? (
+                  <p className="mt-2 text-sm text-gray-500">
+                    Error: {error.message}
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>

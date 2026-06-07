@@ -15,10 +15,11 @@ export default function StaffStats({ limit }: { limit?: number }) {
     stats ? true : false,
     stats ? stats.map((item) => item.officer.id) : []
   );
+  const avatarItems = avatarData?.data ?? [];
 
   return (
     <AnimatePresence mode="wait">
-      {!loading && !error ? (
+      {!loading && !error && stats ? (
         <motion.div
           key="content"
           initial={{ opacity: 0 }}
@@ -33,9 +34,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
             transition={{ duration: 0.4 }}
           >
             <h2 className="inline text-lg leading-6 font-medium text-gray-900">
-              {limit
-                ? `Most active membership staff`
-                : `All membership staff`}
+              {limit ? `Most active membership staff` : `All membership staff`}
             </h2>
             <span className="ml-3 inline text-sm text-slate-800 hover:underline">
               {limit ? (
@@ -72,12 +71,10 @@ export default function StaffStats({ limit }: { limit?: number }) {
                         width={75}
                         height={75}
                         src={
-                          avatarData
-                            ? avatarData.data.find(
-                                (avatarItem) =>
-                                  avatarItem.targetId === item.officer.id
-                              )?.imageUrl || "/img/user_placeholder.webp"
-                            : "/img/user_placeholder.webp"
+                          avatarItems.find(
+                            (avatarItem) =>
+                              avatarItem.targetId === item.officer.id
+                          )?.imageUrl || "/img/user_placeholder.webp"
                         }
                         alt={`Profile picture of player @${item.officer.name}`}
                         unoptimized
@@ -131,6 +128,18 @@ export default function StaffStats({ limit }: { limit?: number }) {
               </motion.div>
             ))}
           </div>
+        </motion.div>
+      ) : error ? (
+        <motion.div
+          key="error"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="py-8 text-sm text-gray-500"
+        >
+          Unable to load membership staff statistics.
+          {error.message ? ` ${error.message}` : null}
         </motion.div>
       ) : (
         <motion.div

@@ -11,11 +11,12 @@ export default function AuditStats() {
     isError: error
   } = useAuditStats(true);
 
-  if (!loading && !error) {
-    const percentage =
-      (stats.dar.valid
-        ? stats.dar.valid.correct / stats.dar.valid.total
-        : stats.dar.correct / stats.dar.total) * 100;
+  if (!loading && !error && stats) {
+    const total = stats.dar.valid ? stats.dar.valid.total : stats.dar.total;
+    const correct = stats.dar.valid
+      ? stats.dar.valid.correct
+      : stats.dar.correct;
+    const percentage = total > 0 ? (correct / total) * 100 : 0;
     const oldest = new Date(stats.timeRange.oldest);
     const latest = new Date(stats.timeRange.latest);
 
@@ -32,15 +33,11 @@ export default function AuditStats() {
       },
       {
         label: "correct* decisions",
-        value: stats.dar.valid
-          ? stats.dar.valid.correct
-          : stats.dar.correct
+        value: correct
       },
       {
         label: "wrong* decisions",
-        value: stats.dar.valid
-          ? stats.dar.valid.total - stats.dar.valid.correct
-          : stats.dar.total - stats.dar.correct
+        value: total - correct
       }
     ];
 
@@ -60,11 +57,10 @@ export default function AuditStats() {
           <p className="text-sm text-gray-500">
             Analysis based on{" "}
             <span className="font-medium">
-              {stats.dar.total.toLocaleString()}
+              {stats.dar.total?.toLocaleString()}
             </span>{" "}
             group audit log records between{" "}
-            <span className="font-medium">{oldest.toDateString()}</span>{" "}
-            and{" "}
+            <span className="font-medium">{oldest.toDateString()}</span> and{" "}
             <span className="font-medium">{latest.toDateString()}</span>
           </p>
 
@@ -98,9 +94,7 @@ export default function AuditStats() {
                       >
                         {item.value ?? 0}
                       </AnimateNumber>
-                      {item.suffix && (
-                        <span>{item.suffix}</span>
-                      )}
+                      {item.suffix && <span>{item.suffix}</span>}
                     </>
                   )}
                 </dd>
@@ -110,14 +104,24 @@ export default function AuditStats() {
 
           <div className="mt-4">
             <p className="text-sm text-gray-500">
-              *as determined by MECS, where automated review date is
-              within 1 day of actual decision date
+              *as determined by MECS, where automated review date is within 1
+              day of actual decision date
             </p>
           </div>
         </motion.div>
       </AnimatePresence>
     );
   }
+
+  if (error) {
+    return (
+      <div className="py-8 text-sm text-gray-500">
+        Unable to load cumulative audit statistics.
+        {error.message ? ` ${error.message}` : null}
+      </div>
+    );
+  }
+
   return (
     <div className="py-24">
       <Spinner />

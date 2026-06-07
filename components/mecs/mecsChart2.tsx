@@ -31,11 +31,35 @@ ChartJS.register(
 );
 
 export default function MECSChart2() {
-  const { stats } = useTimeCaseStats(true);
+  const { stats, isError } = useTimeCaseStats(true);
+  if (isError) {
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-gray-500">
+        Unable to load approval rate data.
+      </div>
+    );
+  }
+
   if (!stats) {
     return null;
   }
-  const statsLast12Months = stats.slice(-13, -1);
+  const statsLast12Months = stats
+    .filter(
+      (stat) =>
+        typeof stat.time === "string" &&
+        typeof stat.granted === "number" &&
+        typeof stat.total === "number"
+    )
+    .slice(-13, -1);
+
+  if (statsLast12Months.length === 0) {
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-gray-500">
+        No approval rate data is available.
+      </div>
+    );
+  }
+
   return (
     <Line
       options={{
@@ -55,12 +79,10 @@ export default function MECSChart2() {
             ticks: {
               callback: function (value, index, ticks) {
                 if (typeof value === "number") {
-                  const formatterOutput =
-                    Ticks.formatters.logarithmic.apply(this, [
-                      value,
-                      index,
-                      ticks
-                    ]);
+                  const formatterOutput = Ticks.formatters.logarithmic.apply(
+                    this,
+                    [value, index, ticks]
+                  );
                   if (formatterOutput.trim().length !== 0) {
                     return `${formatterOutput}%`;
                   }
@@ -110,8 +132,8 @@ export default function MECSChart2() {
         datasets: [
           {
             label: "Approval rate",
-            data: statsLast12Months.map(
-              (stat) => (stat.granted / stat.total) * 100
+            data: statsLast12Months.map((stat) =>
+              stat.total > 0 ? (stat.granted / stat.total) * 100 : 0
             ),
             backgroundColor: "rgba(59, 130, 246, 0.1)",
             borderColor: "rgba(59, 130, 246, 1)",

@@ -23,10 +23,11 @@ export default function BlacklistSlideover({
   setType: Dispatch<SetStateAction<"users" | "groups">>;
 }) {
   const { apiResponse, isLoading, isError } = useCombinedBlacklistData(true);
-
-  if (isLoading || isError) {
-    return null;
-  }
+  const items = apiResponse
+    ? type === "groups"
+      ? apiResponse.groups
+      : apiResponse.users
+    : [];
 
   return (
     <Dialog
@@ -76,8 +77,17 @@ export default function BlacklistSlideover({
             role="list"
             className="flex-1 divide-y divide-gray-200 overflow-y-auto px-2"
           >
-            {apiResponse &&
-              (type === "groups" ? apiResponse.groups : apiResponse.users)
+            {isLoading ? (
+              <li className="px-5 py-6 text-sm text-gray-500">
+                Loading blacklist data...
+              </li>
+            ) : isError ? (
+              <li className="px-5 py-6 text-sm text-gray-500">
+                Unable to load blacklist data.
+                {isError.message ? ` ${isError.message}` : null}
+              </li>
+            ) : (
+              [...items]
                 .sort((a, b) =>
                   new Date(a.updated).getTime() < new Date(b.updated).getTime()
                     ? 1
@@ -107,10 +117,13 @@ export default function BlacklistSlideover({
                               {type === "groups" ? item.name : `@${item.name}`}
                             </p>
                             <p className="w-72 text-sm whitespace-normal text-gray-500">
-                              from {item.types.sort().join(", ")}
+                              from{" "}
+                              {Array.isArray(item.types)
+                                ? item.types.sort().join(", ")
+                                : "unknown source"}
                             </p>
                             <p className="w-72 text-sm whitespace-normal text-gray-500">
-                              {formatDistanceToNow(item.updated, {
+                              {formatDistanceToNow(new Date(item.updated), {
                                 addSuffix: true
                               })}
                             </p>
@@ -119,7 +132,8 @@ export default function BlacklistSlideover({
                       </Link>
                     </div>
                   </li>
-                ))}
+                ))
+            )}
           </ul>
         </DialogPanel>
       </div>

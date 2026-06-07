@@ -52,7 +52,7 @@ function MECSForm() {
     <QueryModalContent
       apiResponse={apiResponse}
       loading={isLoading}
-      error={isError !== null && typeof isError !== "undefined"}
+      error={isError}
     />
   );
   return (

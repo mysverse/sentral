@@ -4,7 +4,114 @@ import { DefaultAPIResponse, NametagTemplate, StaffDecision } from "./apiTypes";
 
 import { endpoints } from "./constants/endpoints";
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  value !== null && typeof value === "object";
+
+const isNumber = (value: unknown): value is number =>
+  typeof value === "number" && Number.isFinite(value);
+
+const isString = (value: unknown): value is string => typeof value === "string";
+
+const endpointUrl = (base: string | undefined, path: string) => {
+  if (!base) {
+    return null;
+  }
+
+  const normalizedBase = base.replace(/\/$/, "");
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+
+  try {
+    return new URL(`${normalizedBase}${normalizedPath}`).toString();
+  } catch {
+    return null;
+  }
+};
+
+const readJson = async (response: Response) => {
+  const text = await response.text();
+
+  if (!text) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    throw new Error("The API returned a response Sentral could not read.");
+  }
+};
+
+const responseErrorMessage = (data: unknown, fallback: string) => {
+  if (typeof data === "string" && data.trim().length > 0) {
+    return data;
+  }
+
+  if (!isRecord(data)) {
+    return fallback;
+  }
+
+  const message = data.message ?? data.error ?? data.detail;
+  if (typeof message === "string" && message.trim().length > 0) {
+    return message;
+  }
+
+  if (Array.isArray(data.errors)) {
+    const messages = data.errors.flatMap((error) => {
+      if (typeof error === "string") {
+        return [error];
+      }
+
+      if (
+        isRecord(error) &&
+        typeof error.message === "string" &&
+        error.message.trim().length > 0
+      ) {
+        return [error.message];
+      }
+
+      return [];
+    });
+
+    if (messages.length > 0) {
+      return messages.join(", ");
+    }
+  }
+
+  return fallback;
+};
+
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  const data = await readJson(response);
+
+  if (!response.ok) {
+    throw new Error(
+      responseErrorMessage(data, `Request failed (${response.status})`)
+    );
+  }
+
+  return data;
+};
+
+const unexpectedResponseError = (label: string) =>
+  new Error(`${label} returned an unexpected response.`);
+
+const hasData = (data: unknown) => typeof data !== "undefined";
+
+const isDefaultAPIResponse = (data: unknown): data is DefaultAPIResponse => {
+  if (!isRecord(data) || !isRecord(data.user)) {
+    return false;
+  }
+
+  return (
+    typeof data.user.userId === "number" &&
+    typeof data.user.username === "string" &&
+    isRecord(data.tests)
+  );
+};
+
+const isStatsCount = (data: unknown) =>
+  isRecord(data) && isNumber(data.total) && isNumber(data.correct);
 
 interface StaffStatsItem {
   officer: {
@@ -124,11 +231,67 @@ interface AvatarResponse {
   data: AvatarData[];
 }
 
+const isAvatarData = (data: unknown): data is AvatarData =>
+  isRecord(data) &&
+  isNumber(data.targetId) &&
+  isString(data.state) &&
+  isString(data.imageUrl);
+
+const isStaffStatsItem = (data: unknown): data is StaffStatsItem => {
+  if (
+    !isRecord(data) ||
+    !isRecord(data.officer) ||
+    !isRecord(data.decisions) ||
+    !isRecord(data.decisions.dar)
+  ) {
+    return false;
+  }
+
+  const dar = data.decisions.dar;
+  const darData = dar.data;
+
+  if (!isRecord(darData)) {
+    return false;
+  }
+
+  return (
+    isNumber(data.officer.id) &&
+    isString(data.officer.name) &&
+    isNumber(dar.percentage) &&
+    isStatsCount(darData) &&
+    (!darData.valid || isStatsCount(darData.valid)) &&
+    Array.isArray(data.last5)
+  );
+};
+
+const isTimeCaseStats = (data: unknown): data is TimeCaseStats =>
+  isRecord(data) &&
+  isString(data.time) &&
+  isNumber(data.granted) &&
+  isNumber(data.total);
+
+const isAuditStats = (data: unknown): data is AuditStats => {
+  if (!isRecord(data) || !isRecord(data.dar) || !isRecord(data.timeRange)) {
+    return false;
+  }
+
+  return (
+    isStatsCount(data.dar) &&
+    (!data.dar.valid || isStatsCount(data.dar.valid)) &&
+    isNumber(data.mtbd) &&
+    isString(data.timeRange.latest) &&
+    isString(data.timeRange.oldest)
+  );
+};
+
 export function useAvatarThumbnails(shouldFetch: boolean, userIds: number[]) {
+  const validUserIds = userIds.filter((id) => Number.isFinite(id));
+  const shouldLoad = shouldFetch && validUserIds.length > 0;
+
   const { data, error } = useSWR(
-    shouldFetch && userIds
+    shouldLoad
       ? `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
-          `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds.join(
+          `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${validUserIds.join(
             ","
           )}&size=100x100&format=Png&isCircular=false`
         )}`
@@ -136,23 +299,37 @@ export function useAvatarThumbnails(shouldFetch: boolean, userIds: number[]) {
     fetcher
   );
 
+  const stats =
+    isRecord(data) && Array.isArray(data.data)
+      ? ({ data: data.data.filter(isAvatarData) } satisfies AvatarResponse)
+      : undefined;
+
   return {
-    stats: data as AvatarResponse,
-    isLoading: !error && !data,
-    isError: error as Error
+    stats,
+    isLoading: shouldLoad && !error && !hasData(data),
+    isError: (error ||
+      (hasData(data) && !stats
+        ? unexpectedResponseError("Roblox thumbnails")
+        : undefined)) as Error | undefined
   };
 }
 
 export function useStaffStats(shouldFetch: boolean) {
-  const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.mecs}/audit/staff` : null,
-    fetcher
-  );
+  const url = endpointUrl(endpoints.mecs, "/audit/staff");
+  const { data, error } = useSWR(shouldFetch ? url : null, fetcher);
+  const staffStats = Array.isArray(data)
+    ? data.filter(isStaffStatsItem)
+    : undefined;
 
   return {
-    staffStats: data as StaffStatsItem[],
-    isLoading: !error && !data,
-    isError: error as Error
+    staffStats,
+    isLoading: shouldFetch && !!url && !error && !hasData(data),
+    isError: (error ||
+      (shouldFetch && !url
+        ? new Error("The MECS API is not configured.")
+        : hasData(data) && !staffStats
+          ? unexpectedResponseError("MECS staff stats")
+          : undefined)) as Error | undefined
   };
 }
 
@@ -163,28 +340,36 @@ interface TimeCaseStats {
 }
 
 export function useTimeCaseStats(shouldFetch: boolean) {
-  const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.mecs}/stats/case` : null,
-    fetcher
-  );
+  const url = endpointUrl(endpoints.mecs, "/stats/case");
+  const { data, error } = useSWR(shouldFetch ? url : null, fetcher);
+  const stats = Array.isArray(data) ? data.filter(isTimeCaseStats) : undefined;
 
   return {
-    stats: data as TimeCaseStats[],
-    isLoading: !error && !data,
-    isError: error as Error
+    stats,
+    isLoading: shouldFetch && !!url && !error && !hasData(data),
+    isError: (error ||
+      (shouldFetch && !url
+        ? new Error("The MECS API is not configured.")
+        : hasData(data) && !stats
+          ? unexpectedResponseError("MECS case stats")
+          : undefined)) as Error | undefined
   };
 }
 
 export function useAuditStats(shouldFetch: boolean) {
-  const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.mecs}/audit/accuracy` : null,
-    fetcher
-  );
+  const url = endpointUrl(endpoints.mecs, "/audit/accuracy");
+  const { data, error } = useSWR(shouldFetch ? url : null, fetcher);
+  const auditStats = isAuditStats(data) ? data : undefined;
 
   return {
-    auditStats: data as AuditStats,
-    isLoading: !error && !data,
-    isError: error as Error
+    auditStats,
+    isLoading: shouldFetch && !!url && !error && !hasData(data),
+    isError: (error ||
+      (shouldFetch && !url
+        ? new Error("The MECS API is not configured.")
+        : hasData(data) && !auditStats
+          ? unexpectedResponseError("MECS audit stats")
+          : undefined)) as Error | undefined
   };
 }
 
@@ -193,20 +378,34 @@ export function useUserData(
   shouldFetch: boolean,
   treatAsUserId?: boolean
 ) {
-  const url = new URL(`${endpoints.mecs}/user/${username.toLowerCase()}`);
+  const urlString = endpointUrl(
+    endpoints.mecs,
+    `/user/${encodeURIComponent(username.toLowerCase())}`
+  );
+  const url = urlString ? new URL(urlString) : null;
 
-  if (typeof treatAsUserId !== "undefined") {
+  if (url && typeof treatAsUserId !== "undefined") {
     url.searchParams.set("paramType", treatAsUserId ? "id" : "name");
   }
 
-  const { data, error } = useSWR(shouldFetch ? url.toString() : null, fetcher, {
-    revalidateOnFocus: false
-  });
+  const { data, error } = useSWR(
+    shouldFetch ? url?.toString() : null,
+    fetcher,
+    {
+      revalidateOnFocus: false
+    }
+  );
+  const apiResponse = isDefaultAPIResponse(data) ? data : undefined;
 
   return {
-    apiResponse: data as DefaultAPIResponse,
-    isLoading: !error && !data,
-    isError: error as Error
+    apiResponse,
+    isLoading: shouldFetch && !!url && !error && !hasData(data),
+    isError: (error ||
+      (shouldFetch && !url
+        ? new Error("The MECS API is not configured.")
+        : hasData(data) && !apiResponse
+          ? unexpectedResponseError("MECS user search")
+          : undefined)) as Error | undefined
   };
 }
 
@@ -218,13 +417,23 @@ interface NewBlacklistData {
   types: string[];
 }
 
+const isNewBlacklistData = (data: unknown): data is NewBlacklistData =>
+  isRecord(data) &&
+  isString(data.name) &&
+  (typeof data.id === "undefined" || isString(data.id)) &&
+  (data.type === "user" || data.type === "group") &&
+  isString(data.updated) &&
+  Array.isArray(data.types);
+
 export function useCombinedBlacklistData(shouldFetch: boolean) {
   const { data, isLoading, error } = useSWR(
     shouldFetch ? `https://mysverse-blacklist.yan3321.workers.dev/new` : null,
     fetcher
   );
 
-  const response = data as NewBlacklistData[] | undefined;
+  const response = Array.isArray(data)
+    ? data.filter(isNewBlacklistData)
+    : undefined;
 
   return {
     apiResponse: response && {
@@ -232,14 +441,22 @@ export function useCombinedBlacklistData(shouldFetch: boolean) {
       groups: response.filter((item) => item.type === "group")
     },
     isLoading: isLoading,
-    isError: error
+    isError: (error ||
+      (hasData(data) && !response
+        ? unexpectedResponseError("Blacklist")
+        : undefined)) as Error | undefined
   };
 }
 
 const blobFetcher = async (input: RequestInfo) => {
   const res = await fetch(input);
   if (!res.ok) {
-    throw new Error((res.json() as any).error);
+    throw new Error(
+      responseErrorMessage(
+        await readJson(res),
+        `Request failed (${res.status})`
+      )
+    );
   }
   return res.blob();
 };
