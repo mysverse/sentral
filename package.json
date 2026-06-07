@@ -83,25 +83,5 @@
     "serwist": "^9.5.11",
     "typescript": "^6.0.3"
   },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "react": ">=19.0.0"
-      }
-    },
-    "onlyBuiltDependencies": [
-      "@clerk/shared",
-      "@parcel/watcher",
-      "@prisma/client",
-      "@prisma/engines",
-      "@swc/core",
-      "@tailwindcss/oxide",
-      "esbuild",
-      "oxc-resolver",
-      "prisma",
-      "sharp",
-      "unrs-resolver"
-    ]
-  },
   "packageManager": "pnpm@11.5.2"
 }

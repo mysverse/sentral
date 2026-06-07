@@ -4624,7 +4624,7 @@ packages:
     resolution: {integrity: sha512-WNXCn7XRS7H5ZJiwceJMbNjXbhVwjhQquJn/3LuyPkwMcxtOtQmc+cCas46bNpYNfKCyJs94oN9XRcBWmT2LxQ==}
 
   motion-plus@https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.2&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a:
-    resolution: {tarball: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.2&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a}
+    resolution: {tarball: https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.2&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a, integrity: sha512-WAmMJ8YMJvXSbdyzg9d7SESp+WrlbN39Svbxf/nVqoX7ZBhlHMt/Y/4jtozmnVWyDh3oN1DDdYlj89JBE7PqeQ==}
     version: 2.11.2
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
