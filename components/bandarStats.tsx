@@ -22,19 +22,19 @@ function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
     },
     {
       name: "Cars owned",
-      value: bandarData.MYS_PermanentVehicles_2.length || 0
+      value: bandarData.MYS_PermanentVehicles_2?.length ?? 0
       // change: "-1.39%",
       // changeType: "positive"
     },
     {
       name: "Quests completed",
-      value: bandarData.MYS_Quest_2.Quests.length || 0
+      value: bandarData.MYS_Quest_2?.Quests?.length ?? 0
       // change: "-1.39%",
       // changeType: "positive"
     },
     {
       name: "Friends in phone",
-      value: Object.keys(bandarData.MYS_Message_2.Friends).length || 0
+      value: Object.keys(bandarData.MYS_Message_2?.Friends ?? {}).length ?? 0
       // change: "+54.02%",
       // changeType: "negative"
     }
@@ -324,7 +324,8 @@ function BandarStats({
           <AgencyTimeStats bandarData={bandarData} />
         </div>
       ) : null}
-      {bandarData.MYS_PermanentVehicles_2.length > 0 ? (
+      {bandarData.MYS_PermanentVehicles_2 &&
+      bandarData.MYS_PermanentVehicles_2.length > 0 ? (
         <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:col-span-2 sm:px-6">
           <header>
             <h3 className="mb-2 text-xl font-bold">Owned vehicles</h3>
@@ -514,7 +515,7 @@ export default function MysverseStats({ data }: { data: MYSverseData }) {
             <li className="opacity-80">{`Players will be held inside a lock-up for a fixed time period, after which they are released and gameplay resumes.`}</li>
           </ul>
         </header>
-        <Arrests arrests={data.arrests} />
+        <Arrests arrests={data.arrests ?? []} />
       </div>
 
       <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
@@ -525,7 +526,7 @@ export default function MysverseStats({ data }: { data: MYSverseData }) {
             <li className="opacity-80">{`The fine amount is typically deducted directly from the player's in-game bank account.`}</li>
           </ul>
         </header>
-        <Summons summons={data.summons} />
+        <Summons summons={data.summons ?? []} />
       </div>
     </>
   );

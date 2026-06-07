@@ -3,24 +3,11 @@ import { GrowthEntry } from "./apiTypes";
 
 import { endpoints } from "./constants/endpoints";
 import { Leaderboard } from "./constants/types";
-
-async function fetchURL(
-  url: string | URL | Request,
-  init?: RequestInit | undefined
-) {
-  if (!url) {
-    throw new Error("URL is null");
-  }
-  const res = await fetch(url, init);
-  if (!res.ok) {
-    throw new Error(await res.json());
-  }
-  const data = await res.json();
-  return data;
-}
+import { fetchJsonOrThrow, readJsonSafe, THUMBNAIL_TIMEOUT } from "lib/http";
+import { logAppError, toAppError } from "lib/errors";
 
 export async function getGrowthData() {
-  const data: GrowthEntry[] = await fetchURL(`${endpoints.growth}`, {
+  const data = await fetchJsonOrThrow<GrowthEntry[]>(`${endpoints.growth}`, {
     next: { revalidate: 60 }
   });
   return data;
@@ -153,27 +140,40 @@ async function fetchAvatarThumbnails(
     const proxyUrl = new URL(`https://myx-proxy.yan3321.workers.dev/myxProxy/`);
     proxyUrl.searchParams.set("apiurl", url.toString());
 
-    const response = await fetch(proxyUrl);
-    if (response.ok) {
-      const data: AvatarResponse = await response.json();
-      const filteredData = data.data.filter(
-        (item) => item.state === "Completed"
-      );
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), THUMBNAIL_TIMEOUT);
 
-      if (filteredData.length > 0) {
-        const cacheRecords: Record<string, AvatarData> = {};
-        for (const item of filteredData) {
-          if (item.targetId) {
-            cacheRecords[`avatar:${type}:${size}:${item.targetId}`] = item;
+    try {
+      const response = await fetch(proxyUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const data = (await readJsonSafe(response)) as AvatarResponse;
+        const filteredData = data.data.filter(
+          (item) => item.state === "Completed"
+        );
+
+        if (filteredData.length > 0) {
+          const cacheRecords: Record<string, AvatarData> = {};
+          for (const item of filteredData) {
+            if (item.targetId) {
+              cacheRecords[`avatar:${type}:${size}:${item.targetId}`] = item;
+            }
           }
+          await redis.mset<AvatarData>(cacheRecords);
         }
-        await redis.mset<AvatarData>(cacheRecords);
-      }
 
-      combinedData = combinedData.concat(data.data);
-    } else {
-      console.error(await response.json());
-      throw new Error("Failed to fetch avatar thumbnails");
+        combinedData = combinedData.concat(data.data);
+      } else {
+        const errorBody = await readJsonSafe(response).catch(() => null);
+        console.error(errorBody);
+        throw new Error("Failed to fetch avatar thumbnails");
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      const appError = toAppError(error, { service: "avatar-thumbnails" });
+      logAppError(appError, { service: "avatar-thumbnails" });
+      throw appError;
     }
   }
   return combinedData;
@@ -430,7 +430,7 @@ export async function getLeaderboardData(type?: string) {
     url.searchParams.set("leaderboardType", type);
   }
 
-  const data: Leaderboard[] = await fetchURL(url.toString(), {
+  const data = await fetchJsonOrThrow<Leaderboard[]>(url.toString(), {
     next: { revalidate: 60 }
   });
 
@@ -444,9 +444,30 @@ export async function getMysverseData(userId?: number) {
     url.searchParams.set("userId", userId.toString());
   }
 
-  const data: MYSverseData = await fetchURL(url.toString(), {
+  const data = await fetchJsonOrThrow<MYSverseData>(url.toString(), {
     next: { revalidate: 60 }
   });
 
-  return data;
+  return normalizeMysverseData(data);
+}
+
+export function normalizeMysverseData(data: MYSverseData): MYSverseData {
+  return {
+    ...data,
+    summons: data.summons ?? [],
+    arrests: data.arrests ?? [],
+    bandarData: {
+      ...data.bandarData,
+      MYS_PermanentVehicles_2: data.bandarData?.MYS_PermanentVehicles_2 ?? [],
+      MYS_Quest_2: {
+        ...data.bandarData?.MYS_Quest_2,
+        Quests: data.bandarData?.MYS_Quest_2?.Quests ?? []
+      },
+      MYS_Message_2: {
+        ...data.bandarData?.MYS_Message_2,
+        Friends: data.bandarData?.MYS_Message_2?.Friends ?? {},
+        BlockedUsers: data.bandarData?.MYS_Message_2?.BlockedUsers ?? []
+      }
+    }
+  };
 }
