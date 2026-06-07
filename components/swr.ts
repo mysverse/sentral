@@ -150,7 +150,7 @@ const isDefaultAPIResponse = (data: unknown): data is DefaultAPIResponse => {
 
   return (
     typeof data.user.userId === "number" &&
-    typeof data.user.username === "string" &&
+    (typeof data.user.username === "string" || data.user.username === null) &&
     isRecord(data.tests)
   );
 };

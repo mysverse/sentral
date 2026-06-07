@@ -19,7 +19,7 @@ type CombinedTestResults = Record<string, IndividualTest>;
 export interface DefaultAPIResponse {
   user: {
     userId: number;
-    username: string;
+    username: string | null;
     groupMembership?: any;
     hccGamepassOwned?: boolean;
     firearmsGamepassOwned?: boolean;
