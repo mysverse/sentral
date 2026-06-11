@@ -135,7 +135,9 @@ export const swrOnErrorRetry: SWRConfiguration["onErrorRetry"] = (
 
 /** Default SWR options with resilient retry behavior. */
 export const defaultSwrOptions: SWRConfiguration = {
-  onErrorRetry: swrOnErrorRetry
+  onErrorRetry: swrOnErrorRetry,
+  dedupingInterval: 10_000,
+  focusThrottleInterval: 30_000
 };
 
 const unexpectedResponseError = (label: string) =>

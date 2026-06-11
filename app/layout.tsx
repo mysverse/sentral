@@ -5,6 +5,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import PlausibleProvider from "next-plausible";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SerwistProvider } from "./serwist";
+import SwrProvider from "components/SwrProvider";
 
 const APP_NAME = "MYSverse Sentral";
 const APP_DEFAULT_TITLE = "Sentral";
@@ -52,14 +53,16 @@ export default function RootLayout({
 
   const tree = (
     <ClerkProvider>
-      <NuqsAdapter>
-        <SerwistProvider
-          swUrl="/serwist/sw.js"
-          disable={process.env.NODE_ENV === "development"}
-        >
-          {children}
-        </SerwistProvider>
-      </NuqsAdapter>
+      <SwrProvider>
+        <NuqsAdapter>
+          <SerwistProvider
+            swUrl="/serwist/sw.js"
+            disable={process.env.NODE_ENV === "development"}
+          >
+            {children}
+          </SerwistProvider>
+        </NuqsAdapter>
+      </SwrProvider>
     </ClerkProvider>
   );
 
