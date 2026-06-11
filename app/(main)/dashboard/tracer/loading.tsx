@@ -1,9 +1,12 @@
-import Spinner from "components/spinner";
+import { SkeletonTableCard } from "components/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div className="rounded-lg bg-white px-5 py-32 shadow-sm sm:px-6">
-      <Spinner />
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <SkeletonTableCard rows={10} cols={3} />
+      <SkeletonTableCard rows={10} cols={3} />
+      <SkeletonTableCard rows={10} cols={3} />
+      <SkeletonTableCard rows={10} cols={3} />
     </div>
   );
 }

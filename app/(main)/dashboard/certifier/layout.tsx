@@ -1,4 +1,4 @@
-import DefaultTransitionLayout from "components/transition";
+import { PageContainer } from "components/ui/page-container";
 import { checkPermissions } from "./utils";
 
 export const metadata = {
@@ -7,21 +7,19 @@ export const metadata = {
 
 function NoAccess() {
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-      <DefaultTransitionLayout show={true} appear={true}>
-        <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
-          <div className="text-center">
-            <h1 className="text-3xl font-extrabold text-gray-900">
-              You are not authorised to access this page
-            </h1>
-            <p className="mt-4 text-lg text-gray-500">
-              You must be a member of a MYSverse Administration to access this
-              page.
-            </p>
-          </div>
+    <PageContainer>
+      <div className="bg-surface rounded-lg px-4 py-4 shadow-sm sm:px-6">
+        <div className="text-center">
+          <h1 className="text-strong text-3xl font-extrabold">
+            You are not authorised to access this page
+          </h1>
+          <p className="text-muted mt-4 text-lg">
+            You must be a member of a MYSverse Administration to access this
+            page.
+          </p>
         </div>
-      </DefaultTransitionLayout>
-    </div>
+      </div>
+    </PageContainer>
   );
 }
 
@@ -35,10 +33,8 @@ export default async function DefaultLayout({
     return <NoAccess />;
   }
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-      <DefaultTransitionLayout show={true} appear={true}>
-        <div className="grid grid-cols-1 gap-6">{children}</div>
-      </DefaultTransitionLayout>
-    </div>
+    <PageContainer>
+      <div className="grid grid-cols-1 gap-6">{children}</div>
+    </PageContainer>
   );
 }

@@ -1,11 +1,9 @@
+import { PageContainer } from "components/ui/page-container";
+
 export const metadata = {
   title: "inVote"
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mx-auto my-auto max-w-7xl grow px-4 sm:px-6 lg:px-8">
-      {children}
-    </div>
-  );
+  return <PageContainer>{children}</PageContainer>;
 }
