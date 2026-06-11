@@ -1,8 +1,5 @@
-import { clsx } from "clsx";
 import Footer from "components/footer";
 import Navigation from "components/nav";
-import { Toaster } from "sonner";
-import { publicSans } from "styles/fonts";
 
 export default function DefaultLayout({
   children
@@ -10,16 +7,10 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={clsx("bg-slate-200", publicSans.className)}>
-      <body className="flex min-h-dvh flex-col">
-        <Toaster
-          richColors
-          toastOptions={{ className: publicSans.className }}
-        />
-        <Navigation />
-        <main className="-mt-32 grow">{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <div className="bg-page flex grow flex-col">
+      <Navigation />
+      <main className="-mt-32 grow">{children}</main>
+      <Footer />
+    </div>
   );
 }

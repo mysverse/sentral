@@ -4,8 +4,10 @@ import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import PlausibleProvider from "next-plausible";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 import { SerwistProvider } from "./serwist";
 import SwrProvider from "components/SwrProvider";
+import { publicSans } from "styles/fonts";
 
 const APP_NAME = "MYSverse Sentral";
 const APP_DEFAULT_TITLE = "Sentral";
@@ -66,9 +68,18 @@ export default function RootLayout({
     </ClerkProvider>
   );
 
-  return plausibleSrc ? (
-    <PlausibleProvider src={plausibleSrc}>{tree}</PlausibleProvider>
-  ) : (
-    tree
+  // Single root html so navigation between route groups stays client-side
+  // (SPA) and view transitions can run across surfaces
+  return (
+    <html lang="en" className={publicSans.className}>
+      <body className="flex min-h-dvh flex-col">
+        <Toaster richColors toastOptions={{ className: publicSans.className }} />
+        {plausibleSrc ? (
+          <PlausibleProvider src={plausibleSrc}>{tree}</PlausibleProvider>
+        ) : (
+          tree
+        )}
+      </body>
+    </html>
   );
 }
