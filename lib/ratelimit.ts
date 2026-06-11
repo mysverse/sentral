@@ -3,7 +3,11 @@ import { NextResponse } from "next/server";
 import { redis } from "./redis";
 import { AppError, logAppError, toAppError, toApiError } from "./errors";
 
-function createLimiter(tokens: number, window: Parameters<typeof Ratelimit.slidingWindow>[1], prefix: string) {
+function createLimiter(
+  tokens: number,
+  window: Parameters<typeof Ratelimit.slidingWindow>[1],
+  prefix: string
+) {
   return new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(tokens, window),

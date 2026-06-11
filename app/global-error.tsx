@@ -26,8 +26,7 @@ export default function GlobalError({
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "#f9fafb",
-          fontFamily:
-            "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+          fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
         }}
       >
         <div

@@ -8,7 +8,9 @@ export async function GET(request: NextRequest) {
 
   if (!cronSecret) {
     return Response.json(
-      toApiError(new AppError("CRON_SECRET not configured", { kind: "config" })),
+      toApiError(
+        new AppError("CRON_SECRET not configured", { kind: "config" })
+      ),
       { status: 503 }
     );
   }

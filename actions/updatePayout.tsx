@@ -12,13 +12,10 @@ const updatePayoutSchema = z
     approved: z.boolean(),
     rejectionReason: z.string().max(1024).optional()
   })
-  .refine(
-    (data) => data.approved || !!data.rejectionReason?.trim(),
-    {
-      message: "Rejection reason is required when rejecting",
-      path: ["rejectionReason"]
-    }
-  );
+  .refine((data) => data.approved || !!data.rejectionReason?.trim(), {
+    message: "Rejection reason is required when rejecting",
+    path: ["rejectionReason"]
+  });
 
 export async function updatePayoutRequest(
   requestId: number,

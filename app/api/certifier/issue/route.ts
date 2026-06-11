@@ -54,9 +54,12 @@ export async function POST(request: Request) {
     const parsedSchema = certificateSchema.safeParse(json);
 
     if (!parsedSchema.success) {
-      return NextResponse.json(toValidationApiError(parsedSchema.error.issues), {
-        status: 400
-      });
+      return NextResponse.json(
+        toValidationApiError(parsedSchema.error.issues),
+        {
+          status: 400
+        }
+      );
     }
 
     const code = await generateGenericCertificate(parsedSchema.data);

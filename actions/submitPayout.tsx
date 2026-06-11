@@ -18,9 +18,10 @@ import {
 } from "utils/finsys";
 import { extractRobloxIDs } from "utils/roblox";
 
-const allowedGroupNames = allowedGroups.map(
-  (g) => g.name
-) as [string, ...string[]];
+const allowedGroupNames = allowedGroups.map((g) => g.name) as [
+  string,
+  ...string[]
+];
 
 const submitPayoutSchema = z
   .object({
@@ -63,9 +64,7 @@ const submitPayoutSchema = z
       if (data.visit_date) {
         const today = new Date();
         const selected = new Date(data.visit_date);
-        return (
-          selected.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0)
-        );
+        return selected.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0);
       }
       return true;
     },
@@ -108,8 +107,7 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
     visit_date: formData.get("visit_date") || undefined,
     sim_rank_previous: formData.get("sim_rank_previous") || undefined,
     sim_rank_after: formData.get("sim_rank_after") || undefined,
-    sim_transfer_previous:
-      formData.get("sim_transfer_previous") || undefined,
+    sim_transfer_previous: formData.get("sim_transfer_previous") || undefined,
     sim_transfer_after: formData.get("sim_transfer_after") || undefined
   };
 
@@ -148,9 +146,7 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
     return { error: "Invalid Roblox IDs" };
   }
 
-  const groupData = allowedGroups.find(
-    (group) => group.name === sim_agency
-  );
+  const groupData = allowedGroups.find((group) => group.name === sim_agency);
 
   if (!groupData) {
     return { error: "Invalid group data" };

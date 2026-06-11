@@ -24,8 +24,8 @@ export default function OfflinePage() {
         You&apos;re Offline
       </h1>
       <p className="mb-8 max-w-sm text-zinc-500 dark:text-zinc-400">
-        It looks like you&apos;ve lost your connection. Don&apos;t worry, Sentral has
-        cached some of your data for offline viewing.
+        It looks like you&apos;ve lost your connection. Don&apos;t worry,
+        Sentral has cached some of your data for offline viewing.
       </p>
       <div className="flex gap-4">
         <Button onClick={() => window.location.reload()}>Try Again</Button>

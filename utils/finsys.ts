@@ -12,12 +12,7 @@ import {
   safeRedisSet
 } from "lib/redis";
 import { clerkClient, User } from "@clerk/nextjs/server";
-import {
-  AppError,
-  logAppError,
-  toAppError,
-  toApiError
-} from "lib/errors";
+import { AppError, logAppError, toAppError, toApiError } from "lib/errors";
 import {
   fetchJsonOrThrow,
   fetchJsonResult,
@@ -156,7 +151,7 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
       }
     }
 
-    const data = await readJsonSafe(response) as AssetDetailResponse;
+    const data = (await readJsonSafe(response)) as AssetDetailResponse;
 
     const returnData = data.data.map((item) => ({
       id: item.id,
@@ -276,7 +271,9 @@ async function fetchThumbnails(assetIds: number[]) {
       clearTimeout(timeoutId);
 
       if (response.ok) {
-        const data = await readJsonSafe(response) as RobloxThumbnailAssetApiResponse;
+        const data = (await readJsonSafe(
+          response
+        )) as RobloxThumbnailAssetApiResponse;
         // Replace individual redis.set with mset
         const thumbnailDataToCache: Record<string, string> = {};
         data.data.forEach((item) => {
