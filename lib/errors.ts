@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import * as Sentry from "@sentry/nextjs";
 
 export type ErrorKind =
   | "network"
@@ -166,6 +167,21 @@ interface LogContext {
 
 export function logAppError(error: unknown, context: LogContext = {}): void {
   const appError = toAppError(error);
+  // Single choke point for error reporting: every logAppError call site
+  // reports to Sentry automatically (no-op when the SDK is not initialised)
+  Sentry.captureException(appError, {
+    tags: {
+      kind: appError.kind,
+      service: context.service ?? appError.service
+    },
+    extra: {
+      status: context.status ?? appError.status,
+      route: context.route,
+      duration: context.duration,
+      attempts: context.attempts ?? appError.attempts,
+      referenceId: context.referenceId ?? appError.referenceId
+    }
+  });
   console.error(
     JSON.stringify({
       level: "error",
