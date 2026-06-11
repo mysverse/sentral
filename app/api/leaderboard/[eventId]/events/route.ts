@@ -1,9 +1,12 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "lib/prisma";
 import {
   addConnection,
-  removeConnection
+  isEventFull,
+  removeConnection,
+  type SSEWriter
 } from "../../../../../lib/sse-connections";
+import { AppError, toApiError } from "lib/errors";
 
 export async function GET(
   request: NextRequest,
@@ -11,13 +14,28 @@ export async function GET(
 ) {
   const { eventId } = await params;
 
+  if (isEventFull(eventId)) {
+    return NextResponse.json(
+      toApiError(
+        new AppError("Too many open connections for this event", {
+          kind: "http",
+          status: 503,
+          retryable: true,
+          publicMessage:
+            "Too many viewers are connected right now. Please try again shortly."
+        })
+      ),
+      { status: 503 }
+    );
+  }
+
   // Create a readable stream for SSE
   const stream = new ReadableStream({
     start(controller) {
       const encoder = new TextEncoder();
 
       // Create a writer for this connection
-      const writer = {
+      const writer: SSEWriter = {
         write: (data: string) => {
           try {
             controller.enqueue(encoder.encode(data));
@@ -76,7 +94,7 @@ export async function GET(
   });
 }
 
-async function fetchAndSendLeaderboard(eventId: string, writer: any) {
+async function fetchAndSendLeaderboard(eventId: string, writer: SSEWriter) {
   try {
     const leaderboard = await prisma.leaderboard.findMany({
       where: { eventId },

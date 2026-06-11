@@ -1,14 +1,25 @@
-// Global map to store active SSE connections per event
-const connections = new Map<string, Set<any>>();
+export interface SSEWriter {
+  write: (data: string) => void;
+  close: () => void;
+}
 
-export function addConnection(eventId: string, writer: any) {
+// Global map to store active SSE connections per event
+const connections = new Map<string, Set<SSEWriter>>();
+
+export const MAX_CONNECTIONS_PER_EVENT = 100;
+
+export function isEventFull(eventId: string): boolean {
+  return getConnectionCount(eventId) >= MAX_CONNECTIONS_PER_EVENT;
+}
+
+export function addConnection(eventId: string, writer: SSEWriter) {
   if (!connections.has(eventId)) {
     connections.set(eventId, new Set());
   }
   connections.get(eventId)!.add(writer);
 }
 
-export function removeConnection(eventId: string, writer: any) {
+export function removeConnection(eventId: string, writer: SSEWriter) {
   const eventConnections = connections.get(eventId);
   if (eventConnections) {
     eventConnections.delete(writer);
@@ -37,8 +48,24 @@ export function getConnectionCount(eventId: string): number {
   return connections.get(eventId)?.size || 0;
 }
 
-// Function to broadcast leaderboard updates to all connections for an event
-export async function broadcastLeaderboardUpdate(eventId: string) {
+const BROADCAST_DEBOUNCE_MS = 500;
+const pendingBroadcasts = new Map<string, NodeJS.Timeout>();
+
+// Coalesce bursts of score submissions into a single DB query + broadcast:
+// the first submission schedules a broadcast, further ones within the window
+// piggyback on it. Worst-case latency for listeners is BROADCAST_DEBOUNCE_MS.
+export function broadcastLeaderboardUpdate(eventId: string) {
+  if (getConnectionCount(eventId) === 0 || pendingBroadcasts.has(eventId)) {
+    return;
+  }
+  const timeout = setTimeout(() => {
+    pendingBroadcasts.delete(eventId);
+    void doBroadcast(eventId);
+  }, BROADCAST_DEBOUNCE_MS);
+  pendingBroadcasts.set(eventId, timeout);
+}
+
+async function doBroadcast(eventId: string) {
   const { default: prisma } = await import("./prisma");
 
   try {
