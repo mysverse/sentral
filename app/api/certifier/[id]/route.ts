@@ -1,10 +1,16 @@
 import type { NextRequest } from "next/server";
 import { exportCertificateById } from "app/(main)/dashboard/certifier/certificates";
+import { clientIp, enforceRateLimit, pdfLimiter } from "lib/ratelimit";
 
 export async function GET(
   req: NextRequest,
   props: { params: Promise<{ id: string }> }
 ) {
+  const limited = await enforceRateLimit(pdfLimiter, clientIp(req));
+  if (limited) {
+    return limited;
+  }
+
   const params = await props.params;
   const url = new URL(req.url);
   const download = !(url.searchParams.get("view") === "true");

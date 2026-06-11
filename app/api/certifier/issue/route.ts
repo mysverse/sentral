@@ -6,13 +6,17 @@ import {
   certificateSchema,
   generateGenericCertificate
 } from "../../../(main)/dashboard/certifier/utils"; // Corrected import path
-import { toApiError } from "lib/errors";
+import { AppError, toApiError, toValidationApiError } from "lib/errors";
+import { certIssueLimiter, enforceRateLimit } from "lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
     const apiKeyHeader = request.headers.get("X-API-KEY");
     if (!apiKeyHeader) {
-      return NextResponse.json({ error: "API Key missing" }, { status: 401 });
+      return NextResponse.json(
+        toApiError(new AppError("API key missing", { kind: "auth" })),
+        { status: 401 }
+      );
     }
 
     const json = await request.json();
@@ -21,7 +25,7 @@ export async function POST(request: Request) {
 
     if (!preliminaryParse.success || !preliminaryParse.data.courseId) {
       return NextResponse.json(
-        { error: "Invalid request body, missing or invalid courseId" },
+        toValidationApiError(preliminaryParse.error?.issues ?? []),
         { status: 400 }
       );
     }
@@ -35,18 +39,24 @@ export async function POST(request: Request) {
 
     if (!apiKey) {
       return NextResponse.json(
-        { error: "Unauthorized or Invalid API Key for the course" },
+        toApiError(
+          new AppError("Invalid API key for the course", { kind: "auth" })
+        ),
         { status: 401 }
       );
+    }
+
+    const limited = await enforceRateLimit(certIssueLimiter, apiKey.id);
+    if (limited) {
+      return limited;
     }
 
     const parsedSchema = certificateSchema.safeParse(json);
 
     if (!parsedSchema.success) {
-      return NextResponse.json(
-        { error: "Invalid request body", details: parsedSchema.error },
-        { status: 400 }
-      );
+      return NextResponse.json(toValidationApiError(parsedSchema.error.issues), {
+        status: 400
+      });
     }
 
     const code = await generateGenericCertificate(parsedSchema.data);
@@ -55,10 +65,9 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error generating certificate:", error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Invalid request body", details: error },
-        { status: 400 }
-      );
+      return NextResponse.json(toValidationApiError(error.issues), {
+        status: 400
+      });
     }
     return NextResponse.json(toApiError(error), { status: 500 });
   }

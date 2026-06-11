@@ -7,6 +7,8 @@ import { allowedGroups } from "data/sim";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { readJsonSafe } from "lib/http";
+import { logAppError, toAppError } from "lib/errors";
+import { checkRateLimit, payoutSubmitLimiter } from "lib/ratelimit";
 
 import {
   cacheRobloxId,
@@ -35,7 +37,9 @@ const submitPayoutSchema = z
       error: "Invalid agency"
     }),
     sim_reason: z.string().optional(),
-    visit_link: z.string().url("Invalid visit link URL").optional(),
+    visit_link: z
+      .url({ protocol: /^https?$/, error: "Invalid visit link URL" })
+      .optional(),
     visit_date: z.string().optional(),
     sim_rank_previous: z.string().max(64).optional(),
     sim_rank_after: z.string().max(64).optional(),
@@ -84,6 +88,14 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
 
   if (!session || !apiKey) {
     throw new Error("Unauthorized or missing API key");
+  }
+
+  const rateLimit = await checkRateLimit(
+    payoutSubmitLimiter,
+    String(robloxUserId)
+  );
+  if (!rateLimit.success) {
+    return { error: "Too many requests. Please try again shortly." };
   }
 
   // Validate form inputs
@@ -300,14 +312,21 @@ export async function submitPayoutRequest(prevState: any, formData: FormData) {
   }
 
   // Call the FinSys API to submit the payout request
-  const response = await fetch(`${endpoints.finsys}/create-payout`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey
-    },
-    body: JSON.stringify(payload)
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${endpoints.finsys}/create-payout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (error) {
+    const appError = toAppError(error, { service: "finsys" });
+    logAppError(appError, { service: "finsys" });
+    return { error: appError.publicMessage };
+  }
 
   let message = "Failed to submit payout request";
   let requestId: number | undefined;
