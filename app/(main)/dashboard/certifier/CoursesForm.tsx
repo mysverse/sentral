@@ -1,9 +1,9 @@
 "use client";
 
+import { Button } from "components/catalyst/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 
 import type { Course } from "generated/client";
 import { createCourseAction, deleteCourseAction } from "./actions";
@@ -64,7 +64,7 @@ export default function CoursesForm({ courses }: CoursesFormProps) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
         <textarea
           name="description"
@@ -72,20 +72,11 @@ export default function CoursesForm({ courses }: CoursesFormProps) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
-        <button
-          type="submit"
-          disabled={loading}
-          className={clsx(
-            `w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none`,
-            loading
-              ? "cursor-not-allowed bg-gray-400"
-              : "bg-blue-600 hover:bg-blue-700"
-          )}
-        >
+        <Button type="submit" disabled={loading} className="w-full">
           {loading ? "Creating..." : "Create Course"}
-        </button>
+        </Button>
       </form>
       <div>
         <h2 className="text-md mb-2 font-semibold">Existing Courses</h2>
@@ -106,7 +97,7 @@ export default function CoursesForm({ courses }: CoursesFormProps) {
                       navigator.clipboard.writeText(course.id);
                       toast.success("Course ID copied to clipboard!");
                     }}
-                    className="inline-block size-5 cursor-pointer text-gray-500"
+                    className="text-muted inline-block size-5 cursor-pointer"
                     title="Copy Course ID"
                     aria-hidden="true"
                     role="img"

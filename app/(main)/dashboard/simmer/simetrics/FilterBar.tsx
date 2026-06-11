@@ -30,17 +30,17 @@ export default function FilterBar({
   maxDate: string;
 }) {
   return (
-    <div className="rounded-lg bg-white shadow-sm">
+    <div className="bg-surface rounded-lg shadow-sm">
       <Disclosure defaultOpen>
         {({ open }) => (
           <>
             <DisclosureButton className="flex w-full items-center justify-between px-4 py-4 sm:px-6">
-              <h2 className="text-sm font-semibold text-gray-900">Filters</h2>
+              <h2 className="text-strong text-sm font-semibold">Filters</h2>
               <motion.div
                 animate={{ rotate: open ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+                <ChevronDownIcon className="text-muted h-5 w-5" />
               </motion.div>
             </DisclosureButton>
 
@@ -57,8 +57,8 @@ export default function FilterBar({
                     <div className="border-t border-gray-100 px-4 pb-4 sm:px-6">
                       <div className="flex flex-col gap-4 pt-4 sm:flex-row sm:items-end">
                         <div className="flex flex-col gap-1.5 sm:flex-1">
-                          <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
-                            <CalendarIcon className="h-4 w-4 text-gray-400" />
+                          <label className="text-strong flex items-center gap-1.5 text-sm font-medium">
+                            <CalendarIcon className="text-muted h-4 w-4" />
                             Date
                           </label>
                           <input
@@ -66,31 +66,31 @@ export default function FilterBar({
                             value={selectedDate}
                             max={maxDate}
                             onChange={(e) => onDateChange(e.target.value)}
-                            className="rounded-md border-gray-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            className="border-edge rounded-md text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5 sm:flex-1">
-                          <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
-                            <ClockIcon className="h-4 w-4 text-gray-400" />
+                          <label className="text-strong flex items-center gap-1.5 text-sm font-medium">
+                            <ClockIcon className="text-muted h-4 w-4" />
                             Start time
                           </label>
                           <input
                             type="time"
                             value={startTime}
                             onChange={(e) => onStartTimeChange(e.target.value)}
-                            className="rounded-md border-gray-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            className="border-edge rounded-md text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5 sm:flex-1">
-                          <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
-                            <ClockIcon className="h-4 w-4 text-gray-400" />
+                          <label className="text-strong flex items-center gap-1.5 text-sm font-medium">
+                            <ClockIcon className="text-muted h-4 w-4" />
                             End time
                           </label>
                           <input
                             type="time"
                             value={endTime}
                             onChange={(e) => onEndTimeChange(e.target.value)}
-                            className="rounded-md border-gray-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            className="border-edge rounded-md text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           />
                         </div>
                       </div>

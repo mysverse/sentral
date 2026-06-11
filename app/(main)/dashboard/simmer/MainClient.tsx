@@ -31,8 +31,8 @@ export default function MainClient({
 }: MainClientProps) {
   if (!authorised) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <h1 className="text-2xl font-bold text-gray-800">
+      <div className="flex items-center justify-center py-32">
+        <h1 className="text-strong text-2xl font-bold">
           You are not authorised to view this page.
         </h1>
       </div>
@@ -53,12 +53,12 @@ export default function MainClient({
           {groups.map((group) => (
             <div
               key={group.group.id}
-              className="col-span-1 rounded-lg border border-gray-200 bg-white p-6 shadow-xs"
+              className="col-span-1 rounded-lg border border-edge bg-surface p-6 shadow-xs"
             >
-              <h3 className="text-lg font-semibold text-gray-800 md:text-xl">
+              <h3 className="text-lg font-semibold text-strong md:text-xl">
                 {group.group.name}
               </h3>
-              <p className="text-gray-600">{group.role.name}</p>
+              <p className="text-muted">{group.role.name}</p>
             </div>
           ))}
         </div>

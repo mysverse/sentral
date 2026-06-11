@@ -72,42 +72,42 @@ export default function CertificatesTable({
 
   return (
     <>
-      <table className="min-w-full divide-y divide-gray-200 rounded-lg bg-white shadow-md">
-        <thead className="bg-gray-50">
+      <table className="divide-edge bg-surface min-w-full divide-y rounded-lg shadow-md">
+        <thead className="bg-surface-muted">
           <tr>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Recipient Name
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Course Name
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Issued On
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Certificate Code
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Type
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Details
             </th>
@@ -116,40 +116,40 @@ export default function CertificatesTable({
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200">
+        <tbody className="divide-edge divide-y">
           {certificates.map((certificate) => (
             <tr key={certificate.id}>
-              <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900">
+              <td className="text-strong px-6 py-4 text-sm font-medium whitespace-nowrap">
                 {certificate.recipientName}
               </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+              <td className="text-muted px-6 py-4 text-sm whitespace-nowrap">
                 {certificate.courseName}
               </td>
               <td
-                className="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
+                className="text-muted px-6 py-4 text-sm whitespace-nowrap"
                 suppressHydrationWarning
               >
                 {new Date(certificate.issueDate).toLocaleDateString()}
               </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+              <td className="text-muted px-6 py-4 text-sm whitespace-nowrap">
                 {certificate.code}
               </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+              <td className="text-muted px-6 py-4 text-sm whitespace-nowrap">
                 {CERTIFICATE_TYPE_LABELS[certificate.type] ?? certificate.type}
               </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+              <td className="text-muted px-6 py-4 text-sm whitespace-nowrap">
                 {renderDetails(certificate)}
               </td>
               <td className="space-x-3 px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                 <Link
                   href={`/api/certifier/${certificate.id}`}
-                  className="text-blue-600 hover:text-blue-900"
+                  className="text-primary-600 hover:text-blue-900"
                 >
                   Download
                 </Link>
                 <Link
                   href={`/api/certifier/${certificate.id}?view=true`}
-                  className="text-blue-600 hover:text-blue-900"
+                  className="text-primary-600 hover:text-blue-900"
                 >
                   View
                 </Link>

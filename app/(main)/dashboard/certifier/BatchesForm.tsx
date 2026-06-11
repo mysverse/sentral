@@ -1,9 +1,9 @@
 "use client";
 
+import { Button } from "components/catalyst/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { createBatchAction, deleteBatchAction } from "./actions";
-import clsx from "clsx";
 import type { Batch, Course } from "generated/client";
 
 interface BatchesFormProps {
@@ -68,14 +68,14 @@ export default function BatchesForm({ batches, courses }: BatchesFormProps) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
         <select
           name="courseId"
           value={courseId}
           onChange={(e) => setCourseId(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           disabled={courses.length === 0}
         >
           <option value="" disabled={courseId !== ""}>
@@ -87,18 +87,13 @@ export default function BatchesForm({ batches, courses }: BatchesFormProps) {
             </option>
           ))}
         </select>
-        <button
+        <Button
           type="submit"
           disabled={loading || courses.length === 0}
-          className={clsx(
-            `w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none`,
-            loading || courses.length === 0
-              ? "cursor-not-allowed bg-gray-400"
-              : "bg-blue-600 hover:bg-blue-700"
-          )}
+          className="w-full"
         >
           {loading ? "Creating..." : "Create Batch"}
-        </button>
+        </Button>
         {courses.length === 0 && (
           <p className="text-sm text-red-500">Please create a course first.</p>
         )}

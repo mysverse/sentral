@@ -27,30 +27,30 @@ export default function BatchesTable({ batches }: BatchesTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+      <table className="divide-edge min-w-full divide-y">
+        <thead className="bg-surface-muted">
           <tr>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Batch Name
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Course Name
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+              className="text-muted px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
             >
               Actions
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
+        <tbody className="divide-edge bg-surface divide-y">
           {batches.map((batch) => (
             <tr key={batch.id}>
               <td className="px-6 py-4 whitespace-nowrap">{batch.name}</td>

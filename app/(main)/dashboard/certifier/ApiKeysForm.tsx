@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "components/catalyst/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { createApiKeyAction, deleteApiKeyAction } from "./actions";
@@ -70,7 +71,7 @@ export default function ApiKeysForm({ apiKeys, courses }: ApiKeysFormProps) {
           value={courseId}
           onChange={(e) => setCourseId(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           disabled={courses.length === 0}
         >
           <option value="" disabled={courseId !== ""}>
@@ -82,18 +83,13 @@ export default function ApiKeysForm({ apiKeys, courses }: ApiKeysFormProps) {
             </option>
           ))}
         </select>
-        <button
+        <Button
           type="submit"
           disabled={loading || courses.length === 0}
-          className={clsx(
-            `w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none`,
-            loading || courses.length === 0
-              ? "cursor-not-allowed bg-gray-400"
-              : "bg-blue-600 hover:bg-blue-700"
-          )}
+          className="w-full"
         >
           {loading ? "Creating..." : "Create API Key"}
-        </button>
+        </Button>
         {courses.length === 0 && (
           <p className="text-sm text-red-500">Please create a course first.</p>
         )}
@@ -119,7 +115,7 @@ export default function ApiKeysForm({ apiKeys, courses }: ApiKeysFormProps) {
                 className="flex items-center justify-between rounded-lg border p-2"
               >
                 <div>
-                  <span className="rounded bg-gray-100 p-1 font-mono break-all">
+                  <span className="bg-surface-muted rounded p-1 font-mono break-all">
                     {apiKey.key}
                   </span>
                   <span className="ml-2">(Course: {apiKey.course.name})</span>

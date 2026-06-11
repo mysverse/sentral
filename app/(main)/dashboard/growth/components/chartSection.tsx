@@ -79,7 +79,7 @@ export default function GrowthChartSection({
 
   return (
     <>
-      <div className="rounded-lg bg-white px-1 py-6 shadow-sm sm:px-5">
+      <div className="bg-surface rounded-lg px-1 py-6 shadow-sm sm:px-5">
         <div className="relative h-[28rem] w-[99%]">
           <GrowthChart
             chartData={chartData}
@@ -88,7 +88,7 @@ export default function GrowthChartSection({
           />
         </div>
       </div>
-      <div className="mt-8 grid grid-cols-1 justify-center gap-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:grid-cols-2 sm:px-6">
+      <div className="bg-surface mt-8 grid grid-cols-1 justify-center gap-6 rounded-lg px-5 py-6 shadow-sm sm:grid-cols-2 sm:px-6">
         <RadioGroup
           value={logarithmic ? "logarithmic" : "linear"}
           onChange={(e) => {
@@ -108,8 +108,8 @@ export default function GrowthChartSection({
                       ? "cursor-pointer focus:outline-hidden"
                       : "cursor-not-allowed opacity-25",
                     checked
-                      ? "border-transparent bg-blue-600 text-white hover:bg-blue-700"
-                      : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50",
+                      ? "bg-primary-600 hover:bg-primary-700 border-transparent text-white"
+                      : "border-edge bg-surface text-strong hover:bg-surface-muted",
                     hover ? "ring-2 ring-blue-500 ring-offset-2" : ""
                   )
                 }
@@ -137,12 +137,12 @@ export default function GrowthChartSection({
         >
           {({ open }) => (
             <div className="relative">
-              <ListboxButton className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-3 pr-10 pl-3 text-left shadow-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-hidden sm:text-sm">
+              <ListboxButton className="border-edge bg-surface relative w-full cursor-default rounded-md border py-3 pr-10 pl-3 text-left shadow-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-hidden sm:text-sm">
                 <div className="flex items-center">
                   <span
                     aria-label={selectedMonth.valid ? "Online" : "Offline"}
                     className={clsx(
-                      selectedMonth.valid ? "bg-green-400" : "bg-gray-200",
+                      selectedMonth.valid ? "bg-green-400" : "bg-edge",
                       "inline-block h-2 w-2 shrink-0 rounded-full"
                     )}
                   />
@@ -152,7 +152,7 @@ export default function GrowthChartSection({
                 </div>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ArrowsUpDownIcon
-                    className="h-5 w-5 text-gray-400"
+                    className="text-muted h-5 w-5"
                     aria-hidden="true"
                   />
                 </span>
@@ -165,7 +165,7 @@ export default function GrowthChartSection({
                 leaveTo="opacity-0"
               >
                 {open && (
-                  <ListboxOptions className="ring-opacity-5 absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black focus:outline-hidden sm:text-sm">
+                  <ListboxOptions className="ring-opacity-5 bg-surface absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md py-1 text-base shadow-lg ring-1 ring-black focus:outline-hidden sm:text-sm">
                     {months.map((month, index) => (
                       <ListboxOption
                         key={index}
@@ -175,8 +175,8 @@ export default function GrowthChartSection({
                           clsx(
                             "relative cursor-default py-2 pr-9 pl-3 select-none",
                             selected
-                              ? "bg-linear-to-l from-blue-500 via-blue-700 to-blue-800 text-white"
-                              : "text-gray-900",
+                              ? "bg-brand-gradient text-white"
+                              : "text-strong",
                             disabled && "opacity-50"
                           )
                         }
@@ -186,7 +186,7 @@ export default function GrowthChartSection({
                             <div className="flex items-center">
                               <span
                                 className={clsx(
-                                  month.valid ? "bg-green-400" : "bg-gray-200",
+                                  month.valid ? "bg-green-400" : "bg-edge",
                                   "inline-block h-2 w-2 shrink-0 rounded-full"
                                 )}
                                 aria-hidden="true"
@@ -207,7 +207,7 @@ export default function GrowthChartSection({
                             {selected ? (
                               <span
                                 className={clsx(
-                                  selected ? "text-white" : "text-blue-600",
+                                  selected ? "text-white" : "text-primary-600",
                                   "absolute inset-y-0 right-0 flex items-center pr-4"
                                 )}
                               >

@@ -18,8 +18,8 @@ export default function FeatureCard({
   href
 }: FeatureCardProps) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-xs">
-      <h2 className="mb-2 text-xl font-semibold text-gray-800">
+    <div className="border-edge bg-surface rounded-lg border p-6 shadow-xs">
+      <h2 className="text-strong mb-2 text-xl font-semibold">
         {logo ? (
           <>
             {React.createElement(logo, {
@@ -31,9 +31,9 @@ export default function FeatureCard({
           <>{title}</>
         )}
       </h2>
-      <p className="mb-4 text-gray-600">{description}</p>
+      <p className="text-muted mb-4">{description}</p>
       <Link href={href}>
-        <button className="flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white outline outline-0 transition hover:bg-white hover:font-semibold hover:text-blue-600 hover:outline-2 hover:outline-blue-600">
+        <button className="bg-primary-600 hover:bg-surface hover:text-primary-600 flex w-full flex-row items-center justify-center gap-2 rounded-lg px-6 py-3 text-white outline outline-0 transition hover:font-semibold hover:outline-2 hover:outline-blue-600">
           <ArrowTopRightOnSquareIcon className="h-5 w-5" aria-hidden="true" />{" "}
           Access application
         </button>

@@ -216,7 +216,7 @@ function CertificateDocument({
       <Page
         style={tw(
           // Use an explicit color to avoid react-pdf-tailwind rejecting custom theme keys
-          "flex flex-col font-sans justify-between p-12 border-8 border-gray-300 bg-white h-full text-[#1F2937]"
+          "flex flex-col font-sans justify-between p-12 border-8 border-edge bg-surface h-full text-[#1F2937]"
         )}
       >
         <View style={tw("flex flex-col items-center mb-8")}>
@@ -304,7 +304,9 @@ function CertificateDocument({
           </Text> */}
           <Text style={tw("text-sm mt-4")}>
             For more information, visit{" "}
-            <Text style={tw("text-blue-600 underline")}>https://mysver.se</Text>
+            <Text style={tw("text-primary-600 underline")}>
+              https://mysver.se
+            </Text>
           </Text>
           <Text style={tw("text-sm mt-4 opacity-50")}>
             © {new Date().getFullYear()} MYSverse Digital Ventures. All rights

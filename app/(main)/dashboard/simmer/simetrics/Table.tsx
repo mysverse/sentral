@@ -96,9 +96,9 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
       return <ChevronDownIcon className="ml-1 inline h-4 w-4 text-gray-300" />;
     }
     return sortOrder === "desc" ? (
-      <ChevronDownIcon className="ml-1 inline h-4 w-4 text-blue-600" />
+      <ChevronDownIcon className="text-primary-600 ml-1 inline h-4 w-4" />
     ) : (
-      <ChevronUpIcon className="ml-1 inline h-4 w-4 text-blue-600" />
+      <ChevronUpIcon className="text-primary-600 ml-1 inline h-4 w-4" />
     );
   };
 
@@ -106,16 +106,16 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
     <>
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-base leading-6 font-semibold text-gray-900">
+          <h2 className="text-strong text-base leading-6 font-semibold">
             Duty Duration Metrics
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="text-muted mt-1 text-sm">
             Individual user duty duration breakdown.
           </p>
         </div>
         <div className="mt-3 sm:mt-0">
           <div className="relative">
-            <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <MagnifyingGlassIcon className="text-muted pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search by name..."
@@ -124,27 +124,27 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-md border-gray-300 py-2 pr-3 pl-9 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-64"
+              className="border-edge w-full rounded-md py-2 pr-3 pl-9 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-64"
             />
           </div>
         </div>
       </div>
 
       <div className="mt-4 overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-300">
+        <table className="divide-edge min-w-full divide-y">
           <thead>
             <tr>
-              <th className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900">
+              <th className="text-strong py-3.5 pr-3 pl-4 text-left text-sm font-semibold">
                 Name
               </th>
-              <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+              <th className="text-strong px-3 py-3.5 text-left text-sm font-semibold">
                 Rank
               </th>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   onClick={() => toggleSort(col.key)}
-                  className="cursor-pointer px-3 py-3.5 text-left text-sm font-semibold text-gray-900 select-none hover:text-blue-600"
+                  className="text-strong hover:text-primary-600 cursor-pointer px-3 py-3.5 text-left text-sm font-semibold select-none"
                 >
                   {col.label}
                   <SortIcon columnKey={col.key} />
@@ -152,7 +152,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white">
+          <tbody className="bg-surface">
             <AnimatePresence mode="popLayout">
               {paginatedData.map((user) => (
                 <motion.tr
@@ -162,21 +162,21 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="even:bg-gray-50"
+                  className="even:bg-surface-muted"
                 >
-                  <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900">
+                  <td className="text-strong py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap">
                     @{user.name.name}
                   </td>
-                  <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                  <td className="text-muted px-3 py-4 text-sm whitespace-nowrap">
                     {user.rank || "—"}
                   </td>
-                  <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                  <td className="text-muted px-3 py-4 text-sm whitespace-nowrap">
                     {totalSessionsMap.get(user.name.userId) ?? 0}
                   </td>
-                  <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                  <td className="text-muted px-3 py-4 text-sm whitespace-nowrap">
                     {humanise(avgMap.get(user.name.userId) ?? 0)}
                   </td>
-                  <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                  <td className="text-muted px-3 py-4 text-sm whitespace-nowrap">
                     {humanise(user.cumulativeDutyDuration)}
                   </td>
                 </motion.tr>
@@ -188,7 +188,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
 
       {/* Pagination */}
       <div className="mt-4 flex flex-col items-center justify-between gap-4 sm:flex-row">
-        <p className="text-sm text-gray-700">
+        <p className="text-strong text-sm">
           {totalItems > 0 ? (
             <>
               Showing{" "}
@@ -214,7 +214,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
               "rounded-md px-2.5 py-1.5 text-sm transition",
               safePage === 1
                 ? "cursor-not-allowed text-gray-300"
-                : "text-gray-600 hover:bg-gray-100"
+                : "text-muted hover:bg-surface-muted"
             )}
           >
             First
@@ -226,13 +226,13 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             className={clsx(
               "rounded-md px-3 py-1.5 text-sm transition",
               safePage === 1
-                ? "cursor-not-allowed bg-gray-100 text-gray-400"
-                : "border border-gray-300 bg-white text-gray-700 hover:bg-blue-600 hover:text-white"
+                ? "bg-surface-muted text-muted cursor-not-allowed"
+                : "border-edge bg-surface text-strong hover:bg-primary-600 border hover:text-white"
             )}
           >
             Previous
           </button>
-          <span className="px-3 text-sm text-gray-600">
+          <span className="text-muted px-3 text-sm">
             Page {safePage} of {totalPages}
           </span>
           <button
@@ -242,8 +242,8 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             className={clsx(
               "rounded-md px-3 py-1.5 text-sm transition",
               safePage === totalPages
-                ? "cursor-not-allowed bg-gray-100 text-gray-400"
-                : "border border-gray-300 bg-white text-gray-700 hover:bg-blue-600 hover:text-white"
+                ? "bg-surface-muted text-muted cursor-not-allowed"
+                : "border-edge bg-surface text-strong hover:bg-primary-600 border hover:text-white"
             )}
           >
             Next
@@ -256,7 +256,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
               "rounded-md px-2.5 py-1.5 text-sm transition",
               safePage === totalPages
                 ? "cursor-not-allowed text-gray-300"
-                : "text-gray-600 hover:bg-gray-100"
+                : "text-muted hover:bg-surface-muted"
             )}
           >
             Last

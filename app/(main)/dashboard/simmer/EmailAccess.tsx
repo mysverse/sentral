@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button } from "components/catalyst/button";
 import Spinner from "components/spinner";
 import { checkEmail, createEmail, resetEmail } from "utils/sim";
 
@@ -52,13 +53,13 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-xs sm:col-span-3">
-      <h2 className="mb-4 text-xl font-semibold text-gray-800">Email Access</h2>
+    <div className="border-edge bg-surface rounded-lg border p-6 shadow-xs sm:col-span-3">
+      <h2 className="text-strong mb-4 text-xl font-semibold">Email Access</h2>
       {loading ? (
         <Spinner />
       ) : emailPassword ? (
         <div className="rounded-lg bg-yellow-50 p-4">
-          <p className="mb-4 text-lg font-semibold text-gray-800">
+          <p className="text-strong mb-4 text-lg font-semibold">
             {passwordConfirmed
               ? passwordReset
                 ? "Your password has been reset successfully!"
@@ -68,10 +69,10 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
                 : "Your email has been created!"}
           </p>
           <div className="mb-4">
-            <p className="text-sm text-gray-700">Email:</p>
-            <p className="text-xl font-medium text-gray-800">{email}</p>
-            <p className="mt-2 text-sm text-gray-700">Password:</p>
-            <p className="text-xl font-medium text-gray-800">{emailPassword}</p>
+            <p className="text-strong text-sm">Email:</p>
+            <p className="text-strong text-xl font-medium">{email}</p>
+            <p className="text-strong mt-2 text-sm">Password:</p>
+            <p className="text-strong text-xl font-medium">{emailPassword}</p>
           </div>
           {!passwordConfirmed ? (
             <>
@@ -79,7 +80,7 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
                 Please copy your password now. You won&apos;t be able to see it
                 again.
               </p>
-              <button
+              <Button
                 onClick={() => {
                   setPasswordConfirmed(true);
                   if (passwordReset) {
@@ -87,10 +88,10 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
                     setPasswordReset(false);
                   }
                 }}
-                className="mt-2 w-full rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+                className="mt-2 w-full"
               >
                 I have copied my password
-              </button>
+              </Button>
             </>
           ) : (
             <>
@@ -100,12 +101,12 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
                   href="https://mail.mysver.se"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline"
+                  className="text-primary-600 underline"
                 >
                   mail.mysver.se
                 </a>
               </p>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="text-muted mt-2 text-sm">
                 Note: It may take a few minutes for your account to be fully
                 updated. During this time, you may experience login issues.{" "}
                 <strong>
@@ -118,7 +119,7 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
         </div>
       ) : emailExists && email ? (
         <div className="rounded-lg bg-green-50 p-4">
-          <p className="mb-2 text-gray-800">
+          <p className="text-strong mb-2">
             Your email:
             <span className="font-medium"> {email}</span>
           </p>
@@ -128,28 +129,22 @@ export default function EmailAccess({ userId, username }: EmailAccessProps) {
               href="https://mail.mysver.se"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 underline"
+              className="text-primary-600 underline"
             >
               mail.mysver.se
             </a>
           </p>
-          <button
-            onClick={handleResetPassword}
-            className="mt-3 rounded-lg bg-red-600 px-4 py-2 text-sm text-white transition-colors hover:bg-red-700"
-          >
+          <Button onClick={handleResetPassword} color="red" className="mt-3">
             Reset Password
-          </button>
-          <p className="mt-2 text-sm text-gray-500">
+          </Button>
+          <p className="text-muted mt-2 text-sm">
             Note: After resetting, you will receive a new password.
           </p>
         </div>
       ) : (
-        <button
-          onClick={handleClaimEmail}
-          className="w-full rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
-        >
+        <Button onClick={handleClaimEmail} className="w-full">
           Claim your email
-        </button>
+        </Button>
       )}
     </div>
   );

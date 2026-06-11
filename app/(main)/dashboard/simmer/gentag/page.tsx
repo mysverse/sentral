@@ -110,7 +110,7 @@ function NametagImage({
             </a>
           </div>
         ) : (
-          <div className="m-auto text-gray-400">
+          <div className="text-muted m-auto">
             <svg
               className="size-16"
               fill="none"
@@ -155,19 +155,19 @@ function CustomSelect({
         <motion.button
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          className="inline-flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-xs transition-colors duration-200 hover:bg-gray-50 focus:border-slate-500 focus:ring-blue-500 focus:outline-none"
+          className="border-edge bg-surface text-strong hover:bg-surface-muted inline-flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm shadow-xs transition-colors duration-200 focus:border-slate-500 focus:ring-blue-500 focus:outline-none"
           style={{ willChange: "transform" }}
         >
           <Select.Value placeholder="Select a variant..." />
           <Select.Icon>
-            <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+            <ChevronDownIcon className="text-muted h-4 w-4" />
           </Select.Icon>
         </motion.button>
       </Select.Trigger>
       <Select.Portal>
         <Select.Content asChild>
           <motion.div
-            className="z-50 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg"
+            className="border-edge bg-surface z-50 mt-1 w-full rounded-md border shadow-lg"
             initial={{ opacity: 0, y: -8, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
@@ -179,7 +179,7 @@ function CustomSelect({
                 <Select.Item
                   key={index}
                   value={String(index)}
-                  className="cursor-pointer px-3 py-2 text-sm text-gray-900 transition-colors duration-150 hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[highlighted]:bg-blue-50"
+                  className="text-strong cursor-pointer px-3 py-2 text-sm transition-colors duration-150 hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[highlighted]:bg-blue-50"
                 >
                   <Select.ItemText>
                     {!isStandalonePWA()
@@ -214,7 +214,7 @@ function CustomSwitch({
       >
         <Switch.Thumb asChild>
           <motion.div
-            className="block h-6 w-6 rounded-full bg-white shadow"
+            className="bg-surface block h-6 w-6 rounded-full shadow"
             layout
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
           />
@@ -227,10 +227,10 @@ function CustomSwitch({
 function FormHeader() {
   return (
     <div>
-      <h3 className="text-lg leading-6 font-medium text-gray-900">
+      <h3 className="text-strong text-lg leading-6 font-medium">
         Generate nametag
       </h3>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="text-muted mt-1 text-sm">
         Enter a name{" "}
         <ChevronRightIcon className="inline h-4 w-4" aria-hidden="true" />
         <span>Select a nametag variant</span>
@@ -241,7 +241,7 @@ function FormHeader() {
         {!isStandalonePWA() && (
           <>
             <ChevronRightIcon className="inline h-4 w-4" aria-hidden="true" />
-            <span className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800">
+            <span className="text-primary-600 underline visited:text-purple-600 hover:text-blue-800">
               <a
                 href="https://create.roblox.com/dashboard/creations/upload?assetType=TShirt"
                 target="_blank"
@@ -365,7 +365,7 @@ function NametagForm() {
         {/* Left Column - Nametag Preview */}
         <div className="flex justify-center lg:flex-shrink-0 lg:justify-start">
           <motion.div
-            className="relative h-36 w-36 overflow-hidden rounded-lg border-2 border-dashed border-gray-300"
+            className="border-edge relative h-36 w-36 overflow-hidden rounded-lg border-2 border-dashed"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
@@ -388,7 +388,7 @@ function NametagForm() {
             <div>
               <label
                 htmlFor="nametag_name"
-                className="block text-sm font-medium text-gray-700"
+                className="text-strong block text-sm font-medium"
               >
                 Text
               </label>
@@ -400,7 +400,7 @@ function NametagForm() {
                   autoComplete="nametag_name"
                   placeholder="12 characters max"
                   value={name}
-                  className="block w-full rounded-md border-gray-300 px-3 py-2 text-sm shadow-xs transition-all duration-200 hover:border-gray-400 focus:scale-[1.01] focus:border-slate-500 focus:ring-blue-500"
+                  className="border-edge block w-full rounded-md px-3 py-2 text-sm shadow-xs transition-all duration-200 hover:border-gray-400 focus:scale-[1.01] focus:border-slate-500 focus:ring-blue-500"
                   maxLength={NAMETAG_LENGTH_LIMIT}
                   whileFocus={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -413,7 +413,7 @@ function NametagForm() {
             <div>
               <label
                 htmlFor="nametag_type"
-                className="block text-sm font-medium text-gray-700"
+                className="text-strong block text-sm font-medium"
               >
                 Variant
               </label>
@@ -431,12 +431,10 @@ function NametagForm() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {/* Preview Toggle */}
             {!isStandalonePWA() && (
-              <div className="flex items-center justify-between rounded-md border border-gray-200 p-3">
-                <span className="text-sm font-medium text-gray-700">
-                  Preview
-                </span>
+              <div className="border-edge flex items-center justify-between rounded-md border p-3">
+                <span className="text-strong text-sm font-medium">Preview</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-500">
+                  <span className="text-muted text-sm">
                     {preview ? "Enabled" : "Disabled"}
                   </span>
                   <CustomSwitch
@@ -448,12 +446,12 @@ function NametagForm() {
             )}
 
             {/* Add T-Shirt Toggle */}
-            <div className="flex items-center justify-between rounded-md border border-gray-200 p-3">
-              <span className="text-sm font-medium text-gray-700">
+            <div className="border-edge flex items-center justify-between rounded-md border p-3">
+              <span className="text-strong text-sm font-medium">
                 Add T-Shirt
               </span>
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">
+                <span className="text-muted text-sm">
                   {addTShirt ? "Yes" : "No"}
                 </span>
                 <CustomSwitch
@@ -476,19 +474,19 @@ function NametagForm() {
                 <div>
                   <label
                     htmlFor="tshirt_id"
-                    className="block text-sm font-medium text-gray-700"
+                    className="text-strong block text-sm font-medium"
                   >
                     T-Shirt ID
                   </label>
                   <div className="mt-1 flex rounded-md shadow-xs">
-                    <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
+                    <span className="border-edge bg-surface-muted text-muted inline-flex items-center rounded-l-md border border-r-0 px-3 text-sm">
                       roblox.com/catalog/
                     </span>
                     <motion.input
                       type="number"
                       name="tshirt_id"
                       id="tshirt_id"
-                      className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 text-sm transition-all duration-200 hover:border-gray-400 focus:border-slate-500 focus:ring-blue-500"
+                      className="border-edge block w-full min-w-0 flex-1 rounded-none rounded-r-md px-3 py-2 text-sm transition-all duration-200 hover:border-gray-400 focus:border-slate-500 focus:ring-blue-500"
                       min={1}
                       step={1}
                       defaultValue={currentTShirtID}
@@ -532,14 +530,16 @@ function NametagForm() {
                   >
                     <ArrowPathIcon className="h-4 w-4 text-blue-500" />
                   </motion.div>
-                  <span className="text-blue-600">Generating nametag...</span>
+                  <span className="text-primary-600">
+                    Generating nametag...
+                  </span>
                 </>
               ) : shouldGenerate ? (
                 <span className="text-green-600">
                   ✓ Nametag ready! Click to download.
                 </span>
               ) : (
-                <span className="text-gray-500">
+                <span className="text-muted">
                   Type to generate automatically
                 </span>
               )}

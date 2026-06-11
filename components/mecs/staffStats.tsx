@@ -33,7 +33,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="inline text-lg leading-6 font-medium text-gray-900">
+            <h2 className="text-strong inline text-lg leading-6 font-medium">
               {limit ? `Most active membership staff` : `All membership staff`}
             </h2>
             <span className="ml-3 inline text-sm text-slate-800 hover:underline">
@@ -91,11 +91,11 @@ export default function StaffStats({ limit }: { limit?: number }) {
                     href={`https://roblox.com/users/${item.officer.id}`}
                     className="hover:underline"
                   >
-                    <h1 className="truncate text-lg font-bold text-gray-900">
+                    <h1 className="text-strong truncate text-lg font-bold">
                       @{item.officer.name}
                     </h1>
                   </a>
-                  <p className="text-sm font-normal text-gray-500">
+                  <p className="text-muted text-sm font-normal">
                     DAR{" "}
                     <span className="font-medium">
                       {(item.decisions.dar.data.valid
@@ -117,7 +117,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
                       </>
                     ) : null}
                   </p>
-                  <p className="text-sm font-normal text-gray-500">
+                  <p className="text-muted text-sm font-normal">
                     <span className="font-medium">
                       {item.decisions.dar.data.total.toLocaleString()}
                     </span>{" "}
@@ -136,7 +136,7 @@ export default function StaffStats({ limit }: { limit?: number }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="py-8 text-sm text-gray-500"
+          className="text-muted py-8 text-sm"
         >
           Unable to load membership staff statistics.
           {error.message ? ` ${error.message}` : null}

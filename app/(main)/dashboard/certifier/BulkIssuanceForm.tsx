@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "components/catalyst/button";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { toast } from "sonner";
@@ -292,7 +293,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold">Bulk Issue Certificates</h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-muted text-sm">
             Paste rows in the format: Type, Recipient Name, Roblox User ID,
             Reason. Headers are optional. Each row must include a valid
             certificate type.
@@ -302,14 +303,14 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
           <button
             type="button"
             onClick={handleInsertSample}
-            className="rounded border border-blue-200 px-3 py-1 text-sm text-blue-600 transition hover:bg-blue-50"
+            className="text-primary-600 rounded border border-blue-200 px-3 py-1 text-sm transition hover:bg-blue-50"
           >
             Insert sample
           </button>
           <button
             type="button"
             onClick={handleClear}
-            className="rounded border border-gray-200 px-3 py-1 text-sm text-gray-600 transition hover:bg-gray-50"
+            className="border-edge text-muted hover:bg-surface-muted rounded border px-3 py-1 text-sm transition"
           >
             Clear
           </button>
@@ -327,7 +328,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
             value={courseId}
             onChange={(event) => setCourseId(event.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             disabled={courses.length === 0}
           >
             <option value="" disabled>
@@ -351,7 +352,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
           </label>
           <div
             id="bulk-format"
-            className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-600"
+            className="border-edge bg-surface-muted text-muted rounded-lg border border-dashed px-4 py-3 text-sm"
           >
             <p>
               <span className="font-semibold">Type</span> → matches any existing
@@ -381,10 +382,10 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
         onChange={(event) => setRawInput(event.target.value)}
         placeholder="Appreciation,CynicallyClash,290965021,Adjudicator"
         rows={8}
-        className="w-full rounded-lg border border-gray-300 px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
-      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+      <div className="text-muted flex flex-wrap items-center gap-4 text-sm">
         <span>
           Parsed rows: <strong>{totalLines}</strong>
         </span>
@@ -401,30 +402,30 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
 
       {parsedLines.length > 0 && (
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 rounded-lg border border-gray-200">
-            <thead className="bg-gray-50">
+          <table className="divide-edge border-edge min-w-full divide-y rounded-lg border">
+            <thead className="bg-surface-muted">
               <tr>
-                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <th className="text-muted px-4 py-2 text-left text-xs font-semibold tracking-wide uppercase">
                   Row
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <th className="text-muted px-4 py-2 text-left text-xs font-semibold tracking-wide uppercase">
                   Type
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <th className="text-muted px-4 py-2 text-left text-xs font-semibold tracking-wide uppercase">
                   Recipient
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <th className="text-muted px-4 py-2 text-left text-xs font-semibold tracking-wide uppercase">
                   Identifier
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <th className="text-muted px-4 py-2 text-left text-xs font-semibold tracking-wide uppercase">
                   Reason
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                <th className="text-muted px-4 py-2 text-left text-xs font-semibold tracking-wide uppercase">
                   Status
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white text-sm">
+            <tbody className="divide-edge bg-surface divide-y text-sm">
               {parsedLines.map((line) => {
                 const status = getLineStatus(line, result);
                 const isError =
@@ -443,24 +444,24 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
                       isSuccess && "bg-green-50"
                     )}
                   >
-                    <td className="px-4 py-2 font-mono text-xs whitespace-nowrap text-gray-500">
+                    <td className="text-muted px-4 py-2 font-mono text-xs whitespace-nowrap">
                       {line.index}
                     </td>
-                    <td className="px-4 py-2 whitespace-nowrap text-gray-700">
+                    <td className="text-strong px-4 py-2 whitespace-nowrap">
                       {typeLabel}
                     </td>
-                    <td className="px-4 py-2 whitespace-nowrap text-gray-700">
+                    <td className="text-strong px-4 py-2 whitespace-nowrap">
                       {line.payload?.recipientName ?? line.columns[1] ?? "—"}
                     </td>
-                    <td className="px-4 py-2 whitespace-nowrap text-gray-700">
+                    <td className="text-strong px-4 py-2 whitespace-nowrap">
                       {line.payload?.identifier ?? line.columns[2] ?? "—"}
                     </td>
-                    <td className="px-4 py-2 whitespace-pre-wrap text-gray-700">
+                    <td className="text-strong px-4 py-2 whitespace-pre-wrap">
                       {line.payload?.reason ??
                         line.columns.slice(3).join(" ") ??
                         ""}
                     </td>
-                    <td className="px-4 py-2 text-gray-700">
+                    <td className="text-strong px-4 py-2">
                       {line.errors.length > 0 ? (
                         <ul className="list-inside list-disc text-xs text-red-600">
                           {line.errors.map((error) => (
@@ -478,7 +479,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
                           </span>
                         )
                       ) : (
-                        <span className="text-xs text-gray-500">Ready</span>
+                        <span className="text-muted text-xs">Ready</span>
                       )}
                     </td>
                   </tr>
@@ -490,7 +491,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
       )}
 
       {result && (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+        <div className="border-edge bg-surface-muted text-strong rounded-lg border px-4 py-3 text-sm">
           <p>
             <strong>{result.successCount}</strong> certificates issued
             successfully.
@@ -504,18 +505,13 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
         </div>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={isSubmitting || courses.length === 0}
-        className={clsx(
-          "w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none",
-          isSubmitting || courses.length === 0
-            ? "cursor-not-allowed bg-gray-400"
-            : "bg-blue-600 hover:bg-white hover:text-blue-600 hover:outline hover:outline-blue-600"
-        )}
+        className="w-full"
       >
         {isSubmitting ? "Issuing certificates…" : "Issue certificates"}
-      </button>
+      </Button>
     </form>
   );
 }

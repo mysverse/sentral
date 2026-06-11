@@ -55,7 +55,7 @@ export default function ConstituencyCard({
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
-      className="group relative flex h-24 overflow-hidden rounded-sm border border-gray-200 transition hover:border-none"
+      className="group border-edge relative flex h-24 overflow-hidden rounded-sm border transition hover:border-none"
     >
       <div
         className="w-2 transition"
@@ -76,11 +76,11 @@ export default function ConstituencyCard({
             @{contestant.username}
             {won && " 🏆"}
           </p>
-          <p className="text-sm text-gray-500 group-hover:text-white">
+          <p className="text-muted text-sm group-hover:text-white">
             {contestant.party}
           </p>
           {contestant.shadowCabinet && (
-            <p className="mt-1 text-xs text-gray-500 group-hover:text-white">
+            <p className="text-muted mt-1 text-xs group-hover:text-white">
               {processString(contestant.shadowCabinet)}
             </p>
           )}

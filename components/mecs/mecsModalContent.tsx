@@ -40,7 +40,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
   }
   return (
     <>
-      <h2 className="mb-6 text-lg leading-6 font-medium text-gray-900">
+      <h2 className="text-strong mb-6 text-lg leading-6 font-medium">
         {`Ranking history`}
       </h2>
       <div className="flow-root">
@@ -67,7 +67,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                 <div className="relative pb-8">
                   {eventIdx !== history.length - 1 ? (
                     <span
-                      className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+                      className="bg-edge absolute top-4 left-4 -ml-px h-full w-0.5"
                       aria-hidden="true"
                     />
                   ) : null}
@@ -96,7 +96,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                     </div>
                     <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                       <div>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-muted text-sm">
                           {event.action === "Grant"
                             ? `Membership granted `
                             : `Membership rejected `}{" "}
@@ -110,7 +110,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                               {"by staff member "}
                               <a
                                 href={`https://roblox.com/users/${event.officer}`}
-                                className="font-medium text-gray-900 hover:underline"
+                                className="text-strong font-medium hover:underline"
                               >
                                 {event.officerName
                                   ? `@${event.officerName}`
@@ -121,18 +121,18 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           {reviewable ? (
                             <>
                               {event.correct ? (
-                                <span className="inline-block rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500 sm:ml-3 sm:inline">
+                                <span className="bg-surface-muted text-muted inline-block rounded-md px-2 py-1 text-xs font-medium sm:ml-3 sm:inline">
                                   Correct decision
                                 </span>
                               ) : (
-                                <span className="inline-block rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500 sm:ml-3 sm:inline">
+                                <span className="bg-surface-muted text-muted inline-block rounded-md px-2 py-1 text-xs font-medium sm:ml-3 sm:inline">
                                   Wrong decision
                                 </span>
                               )}
                               {!event.correct &&
                               event.action === "Refusal" &&
                               eventIdx === 0 ? (
-                                <span className="ml-3 rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500">
+                                <span className="bg-surface-muted text-muted ml-3 rounded-md px-2 py-1 text-xs font-medium">
                                   Appeal suggested
                                 </span>
                               ) : null}
@@ -140,7 +140,7 @@ function RankHistoryFeed({ history }: { history: StaffDecision[] }) {
                           ) : null}
                         </p>
                       </div>
-                      <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                      <div className="text-muted text-right text-sm whitespace-nowrap">
                         <time
                           dateTime={event.timestamps.action.substring(0, 10)}
                         >
@@ -243,12 +243,12 @@ function ResultCardItem({
           card.displayText
         )}
       </div>
-      <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
+      <div className="border-edge bg-surface flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b">
         <div className="flex-1 truncate px-4 py-2 text-sm">
-          <span className="font-medium text-gray-900 hover:text-gray-600">
+          <span className="text-strong hover:text-muted font-medium">
             {card.title}
           </span>
-          <p className="truncate text-gray-500">{card.subtitle}</p>
+          <p className="text-muted truncate">{card.subtitle}</p>
         </div>
       </div>
     </motion.li>
@@ -528,16 +528,14 @@ export default function QueryModalContent({
                 target="_blank"
                 rel="noreferrer"
               >
-                <h1 className="text-2xl font-bold text-gray-900">
-                  @{username}
-                </h1>
+                <h1 className="text-strong text-2xl font-bold">@{username}</h1>
               </a>
-              <p className="text-sm font-medium text-gray-500">
+              <p className="text-muted text-sm font-medium">
                 {getRoleText(apiResponse.user.groupMembership?.role?.name)}
               </p>
             </div>
           </motion.div>
-          <h2 className="text-lg leading-6 font-medium text-gray-900">
+          <h2 className="text-strong text-lg leading-6 font-medium">
             {`Criteria results`}
           </h2>
           <motion.div
@@ -606,7 +604,7 @@ export default function QueryModalContent({
             )}
           </motion.div>
           <div>
-            <h2 className="text-xs font-medium tracking-wide text-gray-500 uppercase">
+            <h2 className="text-muted text-xs font-medium tracking-wide uppercase">
               Mandatory criteria
             </h2>
             <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -638,13 +636,13 @@ export default function QueryModalContent({
                       delay: 0.3 + cardIndex * 0.08
                     }}
                     className={clsx(
-                      item.pass ? "bg-white" : "bg-red-50",
+                      item.pass ? "bg-surface" : "bg-red-50",
                       "overflow-hidden rounded-lg px-3 py-3 outline outline-gray-200 sm:p-3"
                     )}
                   >
                     <dt
                       className={clsx(
-                        item.pass ? "text-gray-500" : "text-red-700",
+                        item.pass ? "text-muted" : "text-red-700",
                         "truncate text-sm font-medium"
                       )}
                     >
@@ -652,7 +650,7 @@ export default function QueryModalContent({
                     </dt>
                     <dd
                       className={clsx(
-                        item.pass ? "text-gray-900" : "text-red-800",
+                        item.pass ? "text-strong" : "text-red-800",
                         "mt-1 text-2xl font-semibold"
                       )}
                     >
@@ -663,7 +661,7 @@ export default function QueryModalContent({
               })}
             </dl>
           </div>
-          <h2 className="mt-6 text-xs font-medium tracking-wide text-gray-500 uppercase">
+          <h2 className="text-muted mt-6 text-xs font-medium tracking-wide uppercase">
             Trust factor scoring criteria
           </h2>
           <ul
@@ -679,7 +677,7 @@ export default function QueryModalContent({
               />
             ))}
           </ul>
-          <h2 className="mt-6 text-xs font-medium tracking-wide text-gray-500 uppercase">
+          <h2 className="text-muted mt-6 text-xs font-medium tracking-wide uppercase">
             Miscallaneous information
           </h2>
           <ul
@@ -719,20 +717,20 @@ export default function QueryModalContent({
               />
             </div>
             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-strong text-lg leading-6 font-medium">
                 Uh oh, we hit a snag
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">
+                <p className="text-muted text-sm">
                   The user you are querying might not exist, or there may be a
                   problem with your input.
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-muted text-sm">
                   It is also possible the server is down, in which case please
                   try again at a later time.
                 </p>
                 {error?.message ? (
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="text-muted mt-2 text-sm">
                     Error: {error.message}
                   </p>
                 ) : null}

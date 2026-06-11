@@ -38,21 +38,21 @@ export default function BlacklistSlideover({
     >
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
       <div className="fixed inset-0 flex items-end justify-end">
-        <DialogPanel className="flex h-full w-full max-w-md flex-col bg-white">
+        <DialogPanel className="bg-surface flex h-full w-full max-w-md flex-col">
           <div className="flex items-start justify-between p-6">
-            <DialogTitle className="text-lg font-medium text-gray-900">
+            <DialogTitle className="text-strong text-lg font-medium">
               Blacklisted
             </DialogTitle>
             <button
               type="button"
-              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-slate-500"
+              className="bg-surface text-muted hover:text-muted rounded-md focus:ring-2 focus:ring-slate-500"
               onClick={() => setOpen(false)}
             >
               <span className="sr-only">Close panel</span>
               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-          <div className="border-b border-gray-200 px-6">
+          <div className="border-edge border-b px-6">
             <nav className="-mb-px flex space-x-6">
               {[
                 { name: "Users", value: "users" },
@@ -63,7 +63,7 @@ export default function BlacklistSlideover({
                   className={clsx(
                     tab.value === type
                       ? "border-slate-500 text-slate-600"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                      : "text-muted hover:border-edge hover:text-strong border-transparent",
                     "cursor-pointer border-b-2 px-1 pb-4 text-sm font-medium whitespace-nowrap"
                   )}
                   onClick={() => setType(tab.value as "users" | "groups")}
@@ -75,14 +75,14 @@ export default function BlacklistSlideover({
           </div>
           <ul
             role="list"
-            className="flex-1 divide-y divide-gray-200 overflow-y-auto px-2"
+            className="divide-edge flex-1 divide-y overflow-y-auto px-2"
           >
             {isLoading ? (
-              <li className="px-5 py-6 text-sm text-gray-500">
+              <li className="text-muted px-5 py-6 text-sm">
                 Loading blacklist data...
               </li>
             ) : isError ? (
-              <li className="px-5 py-6 text-sm text-gray-500">
+              <li className="text-muted px-5 py-6 text-sm">
                 Unable to load blacklist data.
                 {isError.message ? ` ${isError.message}` : null}
               </li>
@@ -108,21 +108,21 @@ export default function BlacklistSlideover({
                         className="-m-1 block flex-1 p-1"
                       >
                         <div
-                          className="absolute inset-0 group-hover:bg-gray-50"
+                          className="group-hover:bg-surface-muted absolute inset-0"
                           aria-hidden="true"
                         />
                         <div className="relative flex min-w-0 flex-1 items-center">
                           <div className="truncate">
-                            <p className="truncate text-sm font-medium text-gray-900">
+                            <p className="text-strong truncate text-sm font-medium">
                               {type === "groups" ? item.name : `@${item.name}`}
                             </p>
-                            <p className="w-72 text-sm whitespace-normal text-gray-500">
+                            <p className="text-muted w-72 text-sm whitespace-normal">
                               from{" "}
                               {Array.isArray(item.types)
                                 ? item.types.sort().join(", ")
                                 : "unknown source"}
                             </p>
-                            <p className="w-72 text-sm whitespace-normal text-gray-500">
+                            <p className="text-muted w-72 text-sm whitespace-normal">
                               {formatDistanceToNow(new Date(item.updated), {
                                 addSuffix: true
                               })}

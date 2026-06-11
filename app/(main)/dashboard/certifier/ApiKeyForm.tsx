@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "components/catalyst/button";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { createApiKeyAction } from "./actions";
 import { getCourses } from "./utils"; // To fetch courses for the dropdown
 import { Course } from "generated/client";
-import clsx from "clsx";
 
 export default function ApiKeyForm() {
   const [courseId, setCourseId] = useState("");
@@ -77,7 +77,7 @@ export default function ApiKeyForm() {
         onChange={(e) => setCourseId(e.target.value)}
         required
         disabled={coursesLoading || courses.length === 0}
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       >
         {coursesLoading ? (
           <option>Loading courses...</option>
@@ -91,18 +91,13 @@ export default function ApiKeyForm() {
           ))
         )}
       </select>
-      <button
+      <Button
         type="submit"
         disabled={loading || coursesLoading || courses.length === 0}
-        className={clsx(
-          `w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none`,
-          loading || coursesLoading || courses.length === 0
-            ? "cursor-not-allowed bg-gray-400"
-            : "bg-blue-600 hover:bg-blue-700"
-        )}
+        className="w-full"
       >
         {loading ? "Generating..." : "Generate API Key"}
-      </button>
+      </Button>
       {generatedKey && (
         <div className="mt-4 rounded-lg border border-green-300 bg-green-50 p-3">
           <p className="text-sm text-green-700">
@@ -113,7 +108,7 @@ export default function ApiKeyForm() {
             <button
               type="button"
               onClick={() => copyToClipboard(generatedKey)}
-              className="ml-2 text-sm text-blue-600 hover:text-blue-900"
+              className="text-primary-600 ml-2 text-sm hover:text-blue-900"
             >
               Copy
             </button>

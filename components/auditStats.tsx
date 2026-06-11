@@ -50,11 +50,11 @@ export default function AuditStats() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <h2 className="inline text-lg leading-6 font-medium text-gray-900">
+          <h2 className="text-strong inline text-lg leading-6 font-medium">
             Cumulative audit statistics
           </h2>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-muted text-sm">
             Analysis based on{" "}
             <span className="font-medium">
               {stats.dar.total?.toLocaleString()}
@@ -78,10 +78,10 @@ export default function AuditStats() {
                 }}
                 className="flex flex-col"
               >
-                <dt className="order-2 text-base font-medium text-gray-500">
+                <dt className="text-muted order-2 text-base font-medium">
                   {item.label}
                 </dt>
-                <dd className="order-1 text-xl font-extrabold text-slate-700 sm:text-2xl">
+                <dd className="text-strong order-1 text-xl font-extrabold sm:text-2xl">
                   {item.displayValue ? (
                     item.displayValue
                   ) : (
@@ -103,7 +103,7 @@ export default function AuditStats() {
           </div>
 
           <div className="mt-4">
-            <p className="text-sm text-gray-500">
+            <p className="text-muted text-sm">
               *as determined by MECS, where automated review date is within 1
               day of actual decision date
             </p>
@@ -115,7 +115,7 @@ export default function AuditStats() {
 
   if (error) {
     return (
-      <div className="py-8 text-sm text-gray-500">
+      <div className="text-muted py-8 text-sm">
         Unable to load cumulative audit statistics.
         {error.message ? ` ${error.message}` : null}
       </div>

@@ -26,14 +26,14 @@ interface statistics {
 function StatDisplay(stats: statistics[]) {
   return (
     <div>
-      {/* <h3 className="text-lg leading-6 font-medium text-gray-900">
+      {/* <h3 className="text-lg leading-6 font-medium text-strong">
         Last 30 days
       </h3> */}
       <dl className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((item) => (
           <div
             key={item.id}
-            className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6"
+            className="bg-surface relative overflow-hidden rounded-lg px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6"
           >
             <dt>
               <div
@@ -42,20 +42,18 @@ function StatDisplay(stats: statistics[]) {
                     ? "bg-green-400"
                     : item.changeType === "decrease"
                       ? "bg-red-400"
-                      : "bg-blue-500",
+                      : "bg-primary-500",
                   "absolute rounded-md p-3"
                 )}
               >
                 <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
-              <p className="ml-16 truncate text-sm font-medium text-gray-500">
+              <p className="text-muted ml-16 truncate text-sm font-medium">
                 {item.name}
               </p>
             </dt>
             <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-              <p className="text-2xl font-semibold text-gray-900">
-                {item.stat}
-              </p>
+              <p className="text-strong text-2xl font-semibold">{item.stat}</p>
               {item.changeType && item.change ? (
                 <p
                   className={clsx(
@@ -84,8 +82,8 @@ function StatDisplay(stats: statistics[]) {
                   {item.change}
                 </p>
               ) : null}
-              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                <p className="text-sm font-normal text-gray-500">
+              <div className="bg-surface-muted absolute inset-x-0 bottom-0 px-4 py-4 sm:px-6">
+                <p className="text-muted text-sm font-normal">
                   {item.subtitle}
                   <span className="sr-only"> {item.name} stats</span>
                 </p>

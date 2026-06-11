@@ -31,13 +31,13 @@ function StatCard({ item, index }: { item: StatCardData; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.08, ease: "easeOut" }}
-      className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6"
+      className="bg-surface relative overflow-hidden rounded-lg px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6"
     >
       <dt>
         <div className={clsx("absolute rounded-md p-3", item.iconColor)}>
           <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
         </div>
-        <p className="ml-16 truncate text-sm font-medium text-gray-500">
+        <p className="text-muted ml-16 truncate text-sm font-medium">
           {item.name}
         </p>
       </dt>
@@ -45,15 +45,15 @@ function StatCard({ item, index }: { item: StatCardData; index: number }) {
         {item.numericStat !== undefined ? (
           <AnimateNumber
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-2xl font-semibold text-gray-900"
+            className="text-strong text-2xl font-semibold"
           >
             {item.numericStat}
           </AnimateNumber>
         ) : (
-          <p className="text-2xl font-semibold text-gray-900">{item.stat}</p>
+          <p className="text-strong text-2xl font-semibold">{item.stat}</p>
         )}
-        <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-          <p className="text-sm font-normal text-gray-500">{item.subtitle}</p>
+        <div className="bg-surface-muted absolute inset-x-0 bottom-0 px-4 py-4 sm:px-6">
+          <p className="text-muted text-sm font-normal">{item.subtitle}</p>
         </div>
       </dd>
     </motion.div>
@@ -88,7 +88,7 @@ export default function StatCards({
       stat: humanise(totalDuration),
       subtitle: `On ${selectedDate}`,
       icon: ClockIcon,
-      iconColor: "bg-blue-500"
+      iconColor: "bg-primary-500"
     },
     {
       id: 2,

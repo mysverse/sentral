@@ -78,7 +78,7 @@ function PayoutRequestsTable({
         return (
           <div
             key={request.id}
-            className="flex h-full flex-col rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6"
+            className="bg-surface flex h-full flex-col rounded-lg px-4 py-4 shadow-sm sm:px-6"
           >
             <div
               className={clsx(
@@ -115,17 +115,14 @@ function PayoutRequestsTable({
                       : `/dashboard/simmer/finsys/admin/${request.user_id}`
                   }
                   target={altMode ? "_blank" : "_self"}
-                  className="text-sm font-medium text-blue-600 transition hover:underline hover:opacity-50"
+                  className="text-primary-600 text-sm font-medium transition hover:underline hover:opacity-50"
                 >
                   {request.user
                     ? `@${request.user.name} (${request.user_id})`
                     : request.user_id}
                 </Link>
               )}
-              <p
-                className="mt-1 text-sm text-gray-600"
-                suppressHydrationWarning
-              >
+              <p className="text-muted mt-1 text-sm" suppressHydrationWarning>
                 {request.created_at &&
                 request.updated_at &&
                 new Date(request.created_at).getTime() ===
@@ -141,14 +138,14 @@ function PayoutRequestsTable({
             {request.status === "rejected" && request.rejection_reason && (
               <div className="mt-2">
                 <h3 className="text-sm font-semibold">Rejection reason</h3>
-                <div className="mt-1 text-sm break-words whitespace-pre-wrap text-gray-600">
+                <div className="text-muted mt-1 text-sm break-words whitespace-pre-wrap">
                   <Markdown>{request.rejection_reason}</Markdown>
                 </div>
               </div>
             )}
             <div className="mt-2">
               <h3 className="text-sm font-semibold">Reason</h3>
-              <div className="mt-1 text-sm break-words whitespace-pre-wrap text-gray-600">
+              <div className="text-muted mt-1 text-sm break-words whitespace-pre-wrap">
                 <Markdown
                   // disallowedElements={["code"]}
                   components={{
@@ -200,7 +197,7 @@ function PayoutRequestsTable({
                         return (
                           <li
                             key={val.id}
-                            className="rounded-xl px-0 text-gray-600 transition hover:bg-blue-600 hover:text-white sm:px-1"
+                            className="text-muted hover:bg-primary-600 rounded-xl px-0 transition hover:text-white sm:px-1"
                           >
                             <Link
                               target="_blank"
@@ -243,7 +240,7 @@ function PayoutRequestsTable({
                         return (
                           <li
                             key={val}
-                            className="group rounded-xl transition hover:bg-blue-600 hover:text-white"
+                            className="group hover:bg-primary-600 rounded-xl transition hover:text-white"
                           >
                             <Link href={val}>{val}</Link>
                           </li>
@@ -264,7 +261,7 @@ function PayoutRequestsTable({
                 <h3 className="text-sm font-semibold">
                   Automatically calculated amount
                 </h3>
-                <p className="mt-1 text-sm break-words text-gray-600">
+                <p className="text-muted mt-1 text-sm break-words">
                   <b>
                     {ownershipList.reduce(
                       (acc, val) => acc + (val.assetData?.price || 0),
@@ -280,7 +277,7 @@ function PayoutRequestsTable({
                   <h3 className="text-sm font-semibold">
                     Expected amount (based on item list)
                   </h3>
-                  <p className="mt-1 text-sm break-words text-gray-600">
+                  <p className="text-muted mt-1 text-sm break-words">
                     5 R$ x {itemList.length} = <b>{itemList.length * 5} R$</b>
                   </p>
                 </div>
@@ -292,7 +289,7 @@ function PayoutRequestsTable({
                 <div>
                   <label
                     htmlFor="comment"
-                    className="block text-sm leading-6 font-medium text-gray-900"
+                    className="text-strong block text-sm leading-6 font-medium"
                   >
                     Rejection reason
                   </label>
@@ -302,7 +299,7 @@ function PayoutRequestsTable({
                       name="comment"
                       onChange={(e) => setRejectionReason(e.target.value)}
                       id="comment"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
+                      className="text-strong placeholder:text-muted block w-full rounded-md border-0 py-1.5 shadow-xs ring-1 ring-gray-300 ring-inset focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
                       defaultValue={""}
                     />
                   </div>

@@ -1,9 +1,9 @@
 "use client";
 
+import { Button } from "components/catalyst/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { createCourseAction } from "./actions";
-import clsx from "clsx";
 
 export default function CourseForm() {
   const [name, setName] = useState("");
@@ -39,7 +39,7 @@ export default function CourseForm() {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
       <textarea
         name="description"
@@ -47,20 +47,11 @@ export default function CourseForm() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         rows={3}
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
-      <button
-        type="submit"
-        disabled={loading}
-        className={clsx(
-          `w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none`,
-          loading
-            ? "cursor-not-allowed bg-gray-400"
-            : "bg-blue-600 hover:bg-blue-700"
-        )}
-      >
+      <Button type="submit" disabled={loading} className="w-full">
         {loading ? "Creating..." : "Create Course"}
-      </button>
+      </Button>
     </form>
   );
 }

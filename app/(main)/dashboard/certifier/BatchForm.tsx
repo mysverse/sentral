@@ -66,7 +66,7 @@ export default function BatchForm() {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
       <select
         name="courseId"
@@ -74,7 +74,7 @@ export default function BatchForm() {
         onChange={(e) => setCourseId(e.target.value)}
         required
         disabled={coursesLoading || courses.length === 0}
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       >
         {coursesLoading ? (
           <option>Loading courses...</option>
@@ -95,7 +95,7 @@ export default function BatchForm() {
           `w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none`,
           loading || coursesLoading || courses.length === 0
             ? "cursor-not-allowed bg-gray-400"
-            : "bg-blue-600 hover:bg-blue-700"
+            : "bg-primary-600 hover:bg-primary-700"
         )}
       >
         {loading ? "Creating..." : "Create Batch"}

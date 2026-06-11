@@ -1,10 +1,10 @@
 "use client";
 
+import { Button } from "components/catalyst/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { generateCertificate } from "./actions";
 import Link from "next/link";
-import clsx from "clsx";
 import { CertificateType, Course } from "generated/client";
 import {
   CERTIFICATE_TYPE_LABELS,
@@ -89,14 +89,14 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
         value={recipientName}
         onChange={(e) => setRecipientName(e.target.value)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
       <select
         name="courseId"
         value={courseId}
         onChange={(e) => setCourseId(e.target.value)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         disabled={courses.length === 0}
       >
         <option value="" disabled={courseId !== ""}>
@@ -121,7 +121,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
         value={identifier}
         onChange={(e) => setIdentifier(e.target.value)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
       <select
@@ -129,7 +129,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
         value={type}
         onChange={(e) => handleTypeChange(e.target.value as CertificateType)}
         required
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       >
         <option value="ROLEPLAY">
           {`${CERTIFICATE_TYPE_LABELS.ROLEPLAY} (Roleplay)`}
@@ -158,7 +158,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
           placeholder="Roblox User ID (Optional, if different from Identifier)"
           value={robloxUserID}
           onChange={(e) => setRobloxUserID(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
       )}
 
@@ -169,7 +169,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
           placeholder="Recipient User ID (e.g. Discord ID, Optional)"
           value={recipientUserID}
           onChange={(e) => setRecipientUserID(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
       )}
 
@@ -180,7 +180,7 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
           placeholder="External Organization (Optional)"
           value={externalOrg}
           onChange={(e) => setExternalOrg(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
       )}
       {requiresReason && (
@@ -191,26 +191,21 @@ export default function IssuanceForm({ courses }: IssuanceFormProps) {
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
       )}
       <div className="flex flex-col items-center gap-y-4">
-        <button
+        <Button
           type="submit"
           disabled={loading || courses.length === 0}
-          className={clsx(
-            `w-full rounded-lg px-4 py-2 text-white transition focus:ring-2 focus:ring-blue-600 focus:outline-none`,
-            loading || courses.length === 0
-              ? "cursor-not-allowed bg-gray-400"
-              : "bg-blue-600 outline hover:bg-white hover:text-blue-600 hover:outline-blue-600"
-          )}
+          className="w-full"
         >
           {loading ? "Generating..." : "Generate certificate"}
-        </button>
+        </Button>
         <Link
           href="/verify"
           target="_blank"
-          className="text-blue-600 underline transition hover:text-blue-400 hover:no-underline"
+          className="text-primary-600 underline transition hover:text-blue-400 hover:no-underline"
         >
           Verify certificate
         </Link>
