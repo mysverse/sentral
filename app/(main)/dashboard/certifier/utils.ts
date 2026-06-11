@@ -135,6 +135,41 @@ function generateUniqueCode() {
   return randomBytes(5).toString("hex").toUpperCase();
 }
 
+export type CertificateInput = z.infer<typeof certificateSchema>;
+
+export async function findExistingCertificateKeys(
+  courseId: string,
+  keys: Array<{ identifier: string; type: CertificateType }>
+) {
+  if (keys.length === 0) {
+    return [];
+  }
+  return prisma.certificate.findMany({
+    where: {
+      courseId,
+      OR: keys.map(({ identifier, type }) => ({ identifier, type }))
+    },
+    select: { identifier: true, type: true }
+  });
+}
+
+// Bulk insert with pre-generated codes; one round trip instead of N
+export async function createCertificatesBulk(rows: CertificateInput[]) {
+  const data = rows.map((row) => ({
+    recipientName: row.recipientName,
+    courseId: row.courseId,
+    identifier: row.identifier,
+    type: row.type,
+    code: generateUniqueCode(),
+    robloxUserID: row.robloxUserID ?? null,
+    recipientUserID: row.recipientUserID ?? null,
+    externalOrg: row.externalOrg ?? null,
+    reason: row.reason ?? null
+  }));
+  await prisma.certificate.createMany({ data });
+  return data.map((row) => row.code);
+}
+
 export async function generateGenericCertificate(
   parsedSchema: z.infer<typeof certificateSchema>
 ) {
@@ -197,12 +232,14 @@ export async function createCourse(data: z.infer<typeof courseSchema>) {
 }
 
 export async function deleteCourse(id: string) {
-  // Ensure related API Keys and Certificates are handled or cascade deletion is set up in Prisma schema
-  // For now, we assume related Batches might need to be deleted or disassociated first if not cascaded
-  await prisma.batch.deleteMany({ where: { courseId: id } });
-  await prisma.apiKey.deleteMany({ where: { courseId: id } });
-  await prisma.certificate.deleteMany({ where: { courseId: id } });
-  return prisma.course.delete({ where: { id } });
+  // Atomic: a failure mid-way must not strand certificates without a course
+  const [, , , course] = await prisma.$transaction([
+    prisma.batch.deleteMany({ where: { courseId: id } }),
+    prisma.apiKey.deleteMany({ where: { courseId: id } }),
+    prisma.certificate.deleteMany({ where: { courseId: id } }),
+    prisma.course.delete({ where: { id } })
+  ]);
+  return course;
 }
 
 // Functions for Batches
@@ -221,9 +258,11 @@ export async function createBatch(data: z.infer<typeof batchSchema>) {
 }
 
 export async function deleteBatch(id: string) {
-  // Ensure related Certificates are handled or cascade deletion is set up
-  await prisma.certificate.deleteMany({ where: { batchId: id } });
-  return prisma.batch.delete({ where: { id } });
+  const [, batch] = await prisma.$transaction([
+    prisma.certificate.deleteMany({ where: { batchId: id } }),
+    prisma.batch.delete({ where: { id } })
+  ]);
+  return batch;
 }
 
 // Functions for API Keys
