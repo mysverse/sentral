@@ -22,6 +22,10 @@ const securityHeaders = [
 
 export default withSerwist(
   withBundleAnalyzer({
+    experimental: {
+      // React ViewTransition support — powers AnimateView page transitions
+      viewTransition: true
+    },
     async headers() {
       return [
         {
