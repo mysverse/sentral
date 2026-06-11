@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.5.1",
+    "@clerk/themes": "^2.4.57",
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
     "@next/bundle-analyzer": "^16.2.9",
@@ -41,6 +42,7 @@
     "motion-plus": "https://api.motion.dev/registry.tgz?package=motion-plus&version=2.11.2&token=65a016326afe0ae8bdb421c58d3ee596c18c692519e30c84914b81f3b136fa7a",
     "next": "^16.2.9",
     "next-plausible": "^4.0.0",
+    "next-themes": "^0.4.6",
     "nuqs": "^2.8.9",
     "prisma": "^7.8.0",
     "qrcode": "^1.5.4",
