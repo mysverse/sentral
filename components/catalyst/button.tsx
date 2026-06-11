@@ -158,6 +158,10 @@ const styles = {
       "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--color-blue-600)] [--btn-border:var(--color-blue-700)]/90",
       "[--btn-icon:var(--color-blue-400)] data-active:[--btn-icon:var(--color-blue-300)] data-hover:[--btn-icon:var(--color-blue-300)]"
     ],
+    primary: [
+      "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--color-primary-600)] [--btn-border:var(--color-primary-700)]/90",
+      "[--btn-icon:var(--color-primary-400)] data-active:[--btn-icon:var(--color-primary-300)] data-hover:[--btn-icon:var(--color-primary-300)]"
+    ],
     violet: [
       "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--color-violet-500)] [--btn-border:var(--color-violet-600)]/90",
       "[--btn-icon:var(--color-violet-300)] data-active:[--btn-icon:var(--color-violet-200)] data-hover:[--btn-icon:var(--color-violet-200)]"
@@ -201,7 +205,7 @@ export const Button = React.forwardRef(function Button(
       ? styles.outline
       : plain
         ? styles.plain
-        : clsx(styles.solid, styles.colors[color ?? "dark/zinc"])
+        : clsx(styles.solid, styles.colors[color ?? "primary"])
   );
 
   return "href" in props ? (
