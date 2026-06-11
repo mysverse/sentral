@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
-import DefaultTransitionLayout from "components/transition";
 import clsx from "clsx";
 import Image from "next/image";
 
@@ -309,8 +308,8 @@ export default function LeaderboardPage({
   }, [eventId, reconnectTrigger, reconnectSSE]);
 
   return (
-    <DefaultTransitionLayout show={true} appear={true}>
-      <div className="min-h-screen w-full bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+    <div>
+      <div className="bg-brand-gradient-dark min-h-screen w-full">
         {/* TV Optimized Layout */}
         <div className="flex h-screen flex-col p-4 lg:p-8">
           {/* Header Section - Event Info */}
@@ -377,7 +376,7 @@ export default function LeaderboardPage({
             <div className="h-full overflow-hidden rounded-2xl border border-white/20 bg-white/5 backdrop-blur-lg">
               <div className="flex h-full flex-col">
                 {/* Table Header */}
-                <div className="flex-shrink-0 bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 lg:px-8 lg:py-6">
+                <div className="from-primary-600 to-primary-800 flex-shrink-0 bg-gradient-to-r px-6 py-4 lg:px-8 lg:py-6">
                   <div className="grid grid-cols-12 gap-4 font-bold text-white">
                     <div className="col-span-2 text-center text-lg lg:text-xl xl:text-2xl">
                       Position
@@ -517,6 +516,6 @@ export default function LeaderboardPage({
           </motion.div>
         </div>
       </div>
-    </DefaultTransitionLayout>
+    </div>
   );
 }

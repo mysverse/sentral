@@ -38,7 +38,7 @@ export default function LeaderboardIndex() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4">
+    <div className="bg-brand-gradient-dark min-h-screen w-full p-4">
       <div className="mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -128,7 +128,7 @@ export default function LeaderboardIndex() {
                 <div className="mt-4">
                   <Link
                     href="/leaderboard/admin"
-                    className="inline-block rounded-lg bg-green-600 px-4 py-2 text-sm text-white transition-colors hover:bg-green-500"
+                    className="bg-primary-600 hover:bg-primary-500 inline-block rounded-lg px-4 py-2 text-sm text-white transition-colors"
                   >
                     🛠️ Admin Panel & Testing
                   </Link>
