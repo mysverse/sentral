@@ -29,7 +29,21 @@ function dir(p: string) {
   return path.join(process.cwd(), p);
 }
 
-async function getFonts() {
+// Memoised at module level so the font files are read once per server
+// instance instead of on every OG image request
+let fontsPromise: ReturnType<typeof loadFonts> | null = null;
+
+function getFonts() {
+  if (!fontsPromise) {
+    fontsPromise = loadFonts().catch((error) => {
+      fontsPromise = null;
+      throw error;
+    });
+  }
+  return fontsPromise;
+}
+
+async function loadFonts() {
   const [fontRegular, fontBold, fontMedium, fontSemibold, fontLight] =
     await Promise.all([
       readFile(dir("public/fonts/public_sans/PublicSans-Regular.ttf")),
