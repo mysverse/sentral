@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { toApiError } from "lib/errors";
+import { toApiError, toValidationApiError } from "lib/errors";
 
 const testScoreSchema = z.object({
   eventId: z.string().min(1).max(100),
@@ -9,18 +9,23 @@ const testScoreSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  // Test-data injection endpoint; never expose in production
+  if (process.env.NODE_ENV === "production") {
+    return new NextResponse(null, { status: 404 });
+  }
+
   try {
     const body = await request.json();
     const { eventId, playerName, lapTime } = testScoreSchema.parse(body);
 
     // Call the actual leaderboard API
     const response = await fetch(
-      `${process.env.NEXTAUTH_URL || "http://localhost:4300"}/api/leaderboard/${eventId}`,
+      `${request.nextUrl.origin}/api/leaderboard/${eventId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": process.env.LEADERBOARD_API_KEY || "development-key"
+          "x-api-key": process.env.LEADERBOARD_API_KEY ?? ""
         },
         body: JSON.stringify({
           playerName,
@@ -43,10 +48,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Invalid test data", details: error.issues },
-        { status: 400 }
-      );
+      return NextResponse.json(toValidationApiError(error.issues), {
+        status: 400
+      });
     }
     console.error("Error adding test data:", error);
     return NextResponse.json(toApiError(error), { status: 500 });

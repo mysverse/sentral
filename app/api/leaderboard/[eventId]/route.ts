@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "lib/prisma";
 import { z } from "zod";
 import { broadcastLeaderboardUpdate } from "../../../../lib/sse-connections";
-import { toApiError } from "lib/errors";
+import { AppError, toApiError, toValidationApiError } from "lib/errors";
+import { secureCompare } from "lib/secureCompare";
+import { enforceRateLimit, leaderboardSubmitLimiter } from "lib/ratelimit";
 
 const addScoreSchema = z.object({
   playerName: z.string().min(1).max(50),
@@ -11,18 +13,23 @@ const addScoreSchema = z.object({
 });
 
 // API Key validation function
-function validateApiKey(request: NextRequest): boolean {
+function validateApiKey(
+  request: NextRequest
+): "ok" | "unauthorized" | "unconfigured" {
   const apiKey =
     request.headers.get("x-api-key") ||
     request.headers.get("authorization")?.replace("Bearer ", "");
   const validApiKey = process.env.LEADERBOARD_API_KEY;
 
   if (!validApiKey) {
-    console.warn("LEADERBOARD_API_KEY not set - API is unsecured!");
-    return true; // Allow if no key is set (development mode)
+    if (process.env.NODE_ENV === "development") {
+      console.warn("LEADERBOARD_API_KEY not set - allowing in development");
+      return "ok";
+    }
+    return "unconfigured";
   }
 
-  return apiKey === validApiKey;
+  return secureCompare(apiKey, validApiKey) ? "ok" : "unauthorized";
 }
 
 // GET - Fetch leaderboard for an event
@@ -61,14 +68,31 @@ export async function POST(
 ) {
   try {
     // Validate API key for POST requests
-    if (!validateApiKey(request)) {
+    const keyCheck = validateApiKey(request);
+    if (keyCheck === "unconfigured") {
       return NextResponse.json(
-        { error: "Unauthorized. Valid API key required." },
+        toApiError(
+          new AppError("LEADERBOARD_API_KEY not configured", {
+            kind: "config"
+          })
+        ),
+        { status: 503 }
+      );
+    }
+    if (keyCheck === "unauthorized") {
+      return NextResponse.json(
+        toApiError(new AppError("Invalid API key", { kind: "auth" })),
         { status: 401 }
       );
     }
 
     const { eventId } = await params;
+
+    const limited = await enforceRateLimit(leaderboardSubmitLimiter, eventId);
+    if (limited) {
+      return limited;
+    }
+
     const body = await request.json();
 
     const { playerName, lapTime, eventName } = addScoreSchema.parse(body);
@@ -112,7 +136,8 @@ export async function POST(
       isNewRecord = true;
     }
 
-    // Get current position
+    // Position is computed on read everywhere (GET, SSE) — the stored
+    // column is never read back, so only compute it for this response
     const betterTimes = await prisma.leaderboard.count({
       where: {
         eventId,
@@ -121,12 +146,6 @@ export async function POST(
     });
 
     const position = betterTimes + 1;
-
-    // Update position in the record
-    await prisma.leaderboard.update({
-      where: { id: result.id },
-      data: { position }
-    });
 
     // Broadcast update to SSE connections
     broadcastLeaderboardUpdate(eventId);
@@ -139,10 +158,9 @@ export async function POST(
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Invalid request data", details: error.issues },
-        { status: 400 }
-      );
+      return NextResponse.json(toValidationApiError(error.issues), {
+        status: 400
+      });
     }
 
     console.error("Error adding score:", error);
