@@ -32,6 +32,33 @@ export async function generateMetadata(
   };
 }
 
+function DetailRow({
+  label,
+  value,
+  divider = true,
+  suppressHydrationWarning
+}: {
+  label: string;
+  value: string;
+  divider?: boolean;
+  suppressHydrationWarning?: boolean;
+}) {
+  return (
+    <>
+      {divider && <hr className="my-4" />}
+      <div className="mb-4">
+        <dt className="text-gray-700">{label}</dt>
+        <dd
+          className="text-lg font-semibold"
+          suppressHydrationWarning={suppressHydrationWarning}
+        >
+          {value}
+        </dd>
+      </div>
+    </>
+  );
+}
+
 export default async function VerifyPage(props: Props) {
   const code = await getCodeFromProps(props);
 
@@ -44,53 +71,31 @@ export default async function VerifyPage(props: Props) {
           <h1 className="mb-4 text-2xl font-bold text-green-600">
             Verified Certificate
           </h1>
-          <div className="w-full text-center">
-            <div className="mb-4">
-              <p className="text-gray-700">Recipient</p>
-              <p className="text-lg font-semibold">
-                {certificate.recipientName}
-              </p>
-            </div>
-            <hr className="my-4" />
-            <div className="mb-4">
-              <p className="text-gray-700">Module</p>
-              <p className="text-lg font-semibold">{certificate.courseName}</p>
-            </div>
-            <hr className="my-4" />
-            <div className="mb-4">
-              <p className="text-gray-700">Certificate Type</p>
-              <p className="text-lg font-semibold">
-                {CERTIFICATE_TYPE_LABELS[certificate.type] ?? certificate.type}
-              </p>
-            </div>
+          <dl className="w-full text-center">
+            <DetailRow
+              label="Recipient"
+              value={certificate.recipientName}
+              divider={false}
+            />
+            <DetailRow label="Module" value={certificate.courseName} />
+            <DetailRow
+              label="Certificate Type"
+              value={
+                CERTIFICATE_TYPE_LABELS[certificate.type] ?? certificate.type
+              }
+            />
             {certificate.reason && (
-              <>
-                <hr className="my-4" />
-                <div className="mb-4">
-                  <p className="text-gray-700">Reason</p>
-                  <p className="text-lg font-semibold">{certificate.reason}</p>
-                </div>
-              </>
+              <DetailRow label="Reason" value={certificate.reason} />
             )}
             {certificate.robloxUserID && (
-              <>
-                <hr className="my-4" />
-                <div className="mb-4">
-                  <p className="text-gray-700">Roblox ID</p>
-                  <p className="text-lg font-semibold">
-                    {certificate.robloxUserID}
-                  </p>
-                </div>
-              </>
+              <DetailRow label="Roblox ID" value={certificate.robloxUserID} />
             )}
-            <hr className="my-4" />
-            <div className="mb-4">
-              <p className="text-gray-700">Issued on</p>
-              <p className="text-lg font-semibold" suppressHydrationWarning>
-                {new Date(certificate.issueDate).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
+            <DetailRow
+              label="Issued on"
+              value={new Date(certificate.issueDate).toLocaleDateString()}
+              suppressHydrationWarning
+            />
+          </dl>
         </>
       ) : (
         <>
@@ -112,7 +117,7 @@ export default async function VerifyPage(props: Props) {
       {certificate && (
         <Link
           href={`/api/certifier/${certificate.id}`}
-          className="mt-2 flex w-full items-center justify-center gap-x-2 rounded bg-linear-to-l from-blue-500 via-blue-700 to-blue-800 py-3 font-semibold text-white opacity-100 transition hover:opacity-80"
+          className="bg-brand-gradient mt-2 flex w-full items-center justify-center gap-x-2 rounded py-3 font-semibold text-white opacity-100 transition hover:opacity-80"
         >
           <ArrowDownTrayIcon className="size-5" /> Download certificate
         </Link>
