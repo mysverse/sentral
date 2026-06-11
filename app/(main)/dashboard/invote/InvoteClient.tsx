@@ -232,7 +232,13 @@ export default function InvotePage({
 
   const handleUpdate = useCallback(
     (lastMessage: MessageEvent) => {
-      const msg: InvoteWSMessage = JSON.parse(lastMessage.data);
+      let msg: InvoteWSMessage;
+      try {
+        msg = JSON.parse(lastMessage.data);
+      } catch {
+        console.warn("Ignoring malformed invote WebSocket message");
+        return;
+      }
       if (msg.s === series && msg.d && msg.d.type === "seat") {
         const code = getCodeFromIndex(msg.d.index);
         const title = `${msg.d.party} wins ${code}`;

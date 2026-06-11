@@ -2,9 +2,11 @@ import clsx from "clsx";
 import Link from "next/link";
 
 import { Avatar } from "components/catalyst/avatar";
+import { InlineUnavailable } from "components/errorState";
 import { getAvatarThumbnails } from "components/fetcher";
 import { LocalTime } from "components/LocalTime";
 import { Motion } from "components/motion";
+import { fetchJsonResult } from "lib/http";
 import { getFeedbackResources } from "utils/feedback";
 import { getUserId } from "utils/user";
 
@@ -84,8 +86,6 @@ export default async function Page(props: Props) {
     url.searchParams.set("limit", "0");
   }
 
-  const response = await fetch(url);
-
   interface Feedback {
     date: string;
     type: string;
@@ -95,7 +95,17 @@ export default async function Page(props: Props) {
     placeId: number;
   }
 
-  const data: Feedback[] = await response.json();
+  const result = await fetchJsonResult<Feedback[]>(url, {
+    service: "feedback"
+  });
+
+  if (!result.ok) {
+    return (
+      <InlineUnavailable label="Feedback is temporarily unavailable. Please try again later." />
+    );
+  }
+
+  const data = Array.isArray(result.data) ? result.data : [];
 
   const avatars = await getAvatarThumbnails(
     data.map((feedback) => feedback.userId),
