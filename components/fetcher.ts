@@ -1,4 +1,4 @@
-import { redis } from "lib/redis";
+import { safeRedisMget, safeRedisMset } from "lib/redis";
 import { GrowthEntry } from "./apiTypes";
 
 import { endpoints } from "./constants/endpoints";
@@ -114,6 +114,8 @@ interface AvatarResponse {
   data: AvatarData[];
 }
 
+const AVATAR_TTL_SECONDS = 60 * 60;
+
 async function fetchAvatarThumbnails(
   userIds: number[],
   size = 100,
@@ -160,7 +162,7 @@ async function fetchAvatarThumbnails(
               cacheRecords[`avatar:${type}:${size}:${item.targetId}`] = item;
             }
           }
-          await redis.mset<AvatarData>(cacheRecords);
+          await safeRedisMset(cacheRecords, AVATAR_TTL_SECONDS);
         }
 
         combinedData = combinedData.concat(data.data);
@@ -190,7 +192,7 @@ export async function getAvatarThumbnails(
     return [];
   }
 
-  const cachedThumbnails = await redis.mget<(AvatarData | null)[]>(
+  const cachedThumbnails = await safeRedisMget<AvatarData>(
     userIds.map((id) => `avatar:${type}:${size}:${id}`)
   );
 

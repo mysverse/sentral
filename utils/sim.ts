@@ -2,7 +2,8 @@
 import "server-only";
 
 import { auth } from "auth";
-import { redis } from "lib/redis";
+import { safeRedisGet, safeRedisSet } from "lib/redis";
+import { fetchJsonOrThrow } from "lib/http";
 import { cache } from "react";
 import { allowedGroups } from "data/sim";
 
@@ -51,7 +52,7 @@ async function getUserData() {
 }
 
 export const getGroups = cache(async (userId: number) => {
-  const groups = await redis.get<RbxGroupResponse>(`groups:${userId}`);
+  const groups = await safeRedisGet<RbxGroupResponse>(`groups:${userId}`);
   if (groups) {
     return groups;
   }
@@ -68,7 +69,7 @@ export const getGroups = cache(async (userId: number) => {
     } catch {
       throw new Error("Failed to parse groups response");
     }
-    await redis.set(`groups:${userId}`, data, { ex: 60 });
+    await safeRedisSet(`groups:${userId}`, data, { ttlSeconds: 60 });
     return data;
   }
   throw new Error("Failed to fetch groups");
@@ -113,14 +114,13 @@ export async function createEmail() {
   );
   url.searchParams.append("userId", userId.toString());
   url.searchParams.append("username", username);
-  const response = await fetch(url, {
+  return await fetchJsonOrThrow<EmailCreateResponse>(url, {
     method: "POST",
     headers: {
       "x-api-key": apiKey
-    }
+    },
+    service: "email-issuer"
   });
-  const data: EmailCreateResponse = await response.json();
-  return data;
 }
 
 export async function resetEmail() {
@@ -131,14 +131,13 @@ export async function resetEmail() {
   );
   url.searchParams.append("userId", userId.toString());
   url.searchParams.append("username", username);
-  const response = await fetch(url, {
+  return await fetchJsonOrThrow<EmailResetResponse>(url, {
     method: "POST",
     headers: {
       "x-api-key": apiKey
-    }
+    },
+    service: "email-issuer"
   });
-  const data: EmailResetResponse = await response.json();
-  return data;
 }
 
 export async function checkEmail() {
@@ -149,12 +148,11 @@ export async function checkEmail() {
   );
   url.searchParams.append("userId", userId.toString());
   url.searchParams.append("username", username);
-  const response = await fetch(url, {
+  return await fetchJsonOrThrow<EmailCheckResponse>(url, {
     method: "POST",
     headers: {
       "x-api-key": apiKey
-    }
+    },
+    service: "email-issuer"
   });
-  const data: EmailCheckResponse = await response.json();
-  return data;
 }
