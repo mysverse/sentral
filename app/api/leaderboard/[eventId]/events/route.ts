@@ -64,15 +64,14 @@ export async function GET(
     }
   });
 
+  // Same-origin only: the Sentral frontend is the sole consumer,
+  // so no CORS headers are needed
   return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-store, must-revalidate",
       Connection: "keep-alive",
-      "X-Accel-Buffering": "no", // Disable nginx buffering
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET",
-      "Access-Control-Allow-Headers": "Cache-Control"
+      "X-Accel-Buffering": "no" // Disable nginx buffering
     }
   });
 }
