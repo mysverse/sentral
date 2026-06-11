@@ -134,6 +134,27 @@ export function toApiError(error: unknown): {
   };
 }
 
+// Standard shape for 400 responses to Zod validation failures
+export function toValidationApiError(issues: unknown[]): {
+  error: {
+    code: string;
+    message: string;
+    retryable: boolean;
+    referenceId: string;
+    issues: unknown[];
+  };
+} {
+  const base = toApiError(
+    new AppError("Request validation failed", { kind: "validation" })
+  );
+  return {
+    error: {
+      ...base.error,
+      issues
+    }
+  };
+}
+
 interface LogContext {
   route?: string;
   service?: string;
