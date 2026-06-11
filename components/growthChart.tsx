@@ -1,3 +1,4 @@
+import { useChartThemeSync } from "hooks/useChartTheme";
 import { Line } from "react-chartjs-2";
 
 import {
@@ -48,6 +49,8 @@ export default function GrowthChart({
   logarithmic: boolean;
   loading: boolean;
 }) {
+  useChartThemeSync();
+
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">

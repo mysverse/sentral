@@ -1,5 +1,6 @@
 "use client";
 
+import { useChartThemeSync } from "hooks/useChartTheme";
 import { Bar } from "react-chartjs-2";
 import {
   BarElement,
@@ -20,6 +21,8 @@ export default function DurationByRankChart({
 }: {
   data: RankDuration[];
 }) {
+  useChartThemeSync();
+
   if (data.length === 0) return null;
 
   return (
@@ -29,9 +32,9 @@ export default function DurationByRankChart({
       viewport={{ once: true }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       whileHover={{ scale: 1.01 }}
-      className="rounded-lg bg-white p-6 shadow-sm"
+      className="bg-surface rounded-lg p-6 shadow-sm"
     >
-      <h3 className="mb-4 text-sm font-semibold text-gray-900">
+      <h3 className="text-strong mb-4 text-sm font-semibold">
         Duty Duration by Rank
       </h3>
       <div className="h-64">
@@ -53,7 +56,7 @@ export default function DurationByRankChart({
                   callback: (value) => humanise(value as number)
                 },
                 grid: {
-                  color: "rgba(0, 0, 0, 0.04)"
+                  color: "rgba(127, 127, 127, 0.12)"
                 }
               },
               y: {

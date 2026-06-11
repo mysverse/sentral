@@ -1,3 +1,4 @@
+import { useChartThemeSync } from "hooks/useChartTheme";
 import React, { useRef } from "react";
 import { Doughnut } from "react-chartjs-2";
 import {
@@ -14,6 +15,8 @@ export default function VoteChart({
   hidden: boolean;
   dataset: VoteData[];
 }) {
+  useChartThemeSync();
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (

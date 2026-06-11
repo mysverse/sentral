@@ -1,3 +1,4 @@
+import { useChartThemeSync } from "hooks/useChartTheme";
 import { InvoteStatsTimestamp } from "components/swr";
 import { Bar } from "react-chartjs-2";
 import {
@@ -12,6 +13,8 @@ export default function VoteShareChart({
 }: {
   stats: InvoteStatsTimestamp[];
 }) {
+  useChartThemeSync();
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 

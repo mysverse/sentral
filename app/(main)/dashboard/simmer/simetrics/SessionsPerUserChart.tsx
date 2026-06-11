@@ -1,5 +1,6 @@
 "use client";
 
+import { useChartThemeSync } from "hooks/useChartTheme";
 import { Bar } from "react-chartjs-2";
 import {
   BarElement,
@@ -19,6 +20,8 @@ export default function SessionsPerUserChart({
 }: {
   data: UserSessionCount[];
 }) {
+  useChartThemeSync();
+
   const top10 = data.slice(0, 10);
 
   if (top10.length === 0) return null;
@@ -30,12 +33,12 @@ export default function SessionsPerUserChart({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
       whileHover={{ scale: 1.01 }}
-      className="rounded-lg bg-white p-6 shadow-sm"
+      className="bg-surface rounded-lg p-6 shadow-sm"
     >
-      <h3 className="mb-1 text-sm font-semibold text-gray-900">
+      <h3 className="text-strong mb-1 text-sm font-semibold">
         Sessions per User
       </h3>
-      <p className="mb-4 text-xs text-gray-500">Showing top 10</p>
+      <p className="text-muted mb-4 text-xs">Showing top 10</p>
       <div className="h-64">
         <Bar
           options={{
@@ -64,7 +67,7 @@ export default function SessionsPerUserChart({
                   stepSize: 1
                 },
                 grid: {
-                  color: "rgba(0, 0, 0, 0.04)"
+                  color: "rgba(127, 127, 127, 0.12)"
                 }
               }
             }

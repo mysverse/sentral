@@ -1,3 +1,4 @@
+import { useChartThemeSync } from "hooks/useChartTheme";
 import { Pie } from "react-chartjs-2";
 import { VoteData } from "../_schema/types";
 import {
@@ -12,6 +13,8 @@ export default function SeatChart({
   hidden: boolean;
   dataset: VoteData[];
 }) {
+  useChartThemeSync();
+
   return (
     <div className="relative h-48 w-full">
       <Pie

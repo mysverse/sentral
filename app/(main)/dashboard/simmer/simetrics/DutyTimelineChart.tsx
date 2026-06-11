@@ -1,5 +1,6 @@
 "use client";
 
+import { useChartThemeSync } from "hooks/useChartTheme";
 import { Bar } from "react-chartjs-2";
 import {
   BarElement,
@@ -29,6 +30,8 @@ export default function DutyTimelineChart({
   data: User[];
   selectedDate: string;
 }) {
+  useChartThemeSync();
+
   if (data.length === 0) return null;
 
   // Get unique users sorted by cumulative duration, capped at 20
@@ -62,12 +65,10 @@ export default function DutyTimelineChart({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
       whileHover={{ scale: 1.005 }}
-      className="rounded-lg bg-white p-6 shadow-sm"
+      className="bg-surface rounded-lg p-6 shadow-sm"
     >
-      <h3 className="mb-1 text-sm font-semibold text-gray-900">
-        Duty Timeline
-      </h3>
-      <p className="mb-4 text-xs text-gray-500">
+      <h3 className="text-strong mb-1 text-sm font-semibold">Duty Timeline</h3>
+      <p className="text-muted mb-4 text-xs">
         Showing when each user was on duty (top 20 by cumulative duration)
       </p>
       <div
@@ -111,7 +112,7 @@ export default function DutyTimelineChart({
                   }
                 },
                 grid: {
-                  color: "rgba(0, 0, 0, 0.04)"
+                  color: "rgba(127, 127, 127, 0.12)"
                 }
               },
               y: {

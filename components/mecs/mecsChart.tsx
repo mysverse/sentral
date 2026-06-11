@@ -1,3 +1,4 @@
+import { useChartThemeSync } from "hooks/useChartTheme";
 import { Line } from "react-chartjs-2";
 
 import {
@@ -30,10 +31,12 @@ ChartJS.register(
 );
 
 export default function MECSChart() {
+  useChartThemeSync();
+
   const { stats, isError } = useTimeCaseStats(true);
   if (isError) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-gray-500">
+      <div className="text-muted flex h-full items-center justify-center text-sm">
         Unable to load membership trend data.
       </div>
     );
@@ -53,7 +56,7 @@ export default function MECSChart() {
 
   if (statsLast12Months.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-gray-500">
+      <div className="text-muted flex h-full items-center justify-center text-sm">
         No membership trend data is available.
       </div>
     );
@@ -70,13 +73,13 @@ export default function MECSChart() {
               tooltipFormat: "MMMM yyyy"
             },
             grid: {
-              color: "rgba(0, 0, 0, 0.04)"
+              color: "rgba(127, 127, 127, 0.12)"
             }
           },
           y: {
             type: "logarithmic",
             grid: {
-              color: "rgba(0, 0, 0, 0.04)"
+              color: "rgba(127, 127, 127, 0.12)"
             }
           }
         },
