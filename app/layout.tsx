@@ -4,9 +4,10 @@ import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import PlausibleProvider from "next-plausible";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "sonner";
+import { ThemeProvider } from "next-themes";
 import { SerwistProvider } from "./serwist";
 import SwrProvider from "components/SwrProvider";
+import AppToaster from "components/ui/app-toaster";
 import { publicSans } from "styles/fonts";
 
 const APP_NAME = "MYSverse Sentral";
@@ -43,7 +44,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#4976d8"
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#4976d8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1120" }
+  ]
 };
 
 export default function RootLayout({
@@ -71,14 +75,16 @@ export default function RootLayout({
   // Single root html so navigation between route groups stays client-side
   // (SPA) and view transitions can run across surfaces
   return (
-    <html lang="en" className={publicSans.className}>
+    <html lang="en" className={publicSans.className} suppressHydrationWarning>
       <body className="flex min-h-dvh flex-col">
-        <Toaster richColors toastOptions={{ className: publicSans.className }} />
-        {plausibleSrc ? (
-          <PlausibleProvider src={plausibleSrc}>{tree}</PlausibleProvider>
-        ) : (
-          tree
-        )}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AppToaster />
+          {plausibleSrc ? (
+            <PlausibleProvider src={plausibleSrc}>{tree}</PlausibleProvider>
+          ) : (
+            tree
+          )}
+        </ThemeProvider>
       </body>
     </html>
   );
