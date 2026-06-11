@@ -19,6 +19,9 @@ import SimetricsLogo from "public/img/simetrics/MYS_Simetrics_Logo.svg";
 import Link from "next/link";
 import { clsx } from "clsx";
 import PrivacyBanner from "./privacy/privacyBanner";
+import ThemeToggle from "components/ui/theme-toggle";
+import { motion } from "motion/react";
+import { springUI } from "components/ui/motion";
 import { usePathname } from "next/navigation";
 
 import { ReactNode } from "react";
@@ -157,10 +160,10 @@ export default function NavMenu({
   return (
     <>
       <PrivacyBanner />
-      <div className="bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 pb-32">
+      <div className="bg-brand-gradient pb-32">
         <Disclosure
           as="nav"
-          className="border-b border-blue-300/25 bg-linear-to-r from-blue-500 via-blue-700 to-blue-800 lg:border-none"
+          className="bg-brand-gradient border-b border-blue-300/25 lg:border-none"
         >
           {({ open }) => (
             <>
@@ -186,45 +189,57 @@ export default function NavMenu({
                     <div className="flex space-x-4">
                       {navigation
                         .filter((item) => !item.hidden)
-                        .map((item) =>
-                          item.href.includes("http") ? (
+                        .map((item) => {
+                          const linkClasses = clsx(
+                            "relative rounded-md px-3 py-2 text-sm font-medium text-white transition",
+                            !item.current &&
+                              "hover:bg-opacity-75 hover:bg-blue-400"
+                          );
+                          // Sliding active pill shared across items via layoutId
+                          const activePill = item.current ? (
+                            <motion.span
+                              layoutId="nav-active"
+                              transition={springUI}
+                              className="bg-primary-600 absolute inset-0 rounded-md"
+                            />
+                          ) : null;
+                          const label = (
+                            <span className="relative">{item.name}</span>
+                          );
+                          return item.href.includes("http") ? (
                             <a
                               href={item.href}
                               key={item.name}
-                              className={clsx(
-                                item.current
-                                  ? "bg-blue-600 text-white"
-                                  : "hover:bg-opacity-75 text-white hover:bg-blue-400",
-                                "rounded-md px-3 py-2 text-sm font-medium transition"
-                              )}
+                              className={linkClasses}
                               aria-current={item.current ? "page" : undefined}
                             >
-                              {item.name}
+                              {activePill}
+                              {label}
                             </a>
                           ) : (
                             <Link
                               key={item.name}
                               href={item.href}
-                              className={clsx(
-                                item.current
-                                  ? "bg-blue-600 text-white"
-                                  : "hover:bg-opacity-75 text-white hover:bg-blue-400",
-                                "rounded-md px-3 py-2 text-sm font-medium transition"
-                              )}
+                              className={linkClasses}
                               aria-current={item.current ? "page" : undefined}
                             >
-                              {item.name}
+                              {activePill}
+                              {label}
                             </Link>
-                          )
-                        )}
+                          );
+                        })}
                     </div>
                   </div>
-                  {avatar ? (
-                    <div className="hidden w-28 flex-col items-end justify-end lg:flex">
-                      {avatar}
-                    </div>
-                  ) : null}
-                  <div className="flex lg:hidden">
+                  <div className="hidden items-center gap-2 lg:flex">
+                    <ThemeToggle className="hover:bg-opacity-75 rounded-md p-2 text-blue-200 transition hover:bg-blue-500 hover:text-white" />
+                    {avatar ? (
+                      <div className="flex w-28 flex-col items-end justify-end">
+                        {avatar}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="flex items-center gap-1 lg:hidden">
+                    <ThemeToggle className="hover:bg-opacity-75 rounded-md p-2 text-blue-200 transition hover:bg-blue-500 hover:text-white" />
                     {/* Mobile menu button */}
                     <DisclosureButton className="hover:bg-opacity-75 inline-flex items-center justify-center rounded-md p-2 text-blue-200 transition hover:bg-blue-500 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 focus:outline-hidden">
                       <span className="sr-only">Open main menu</span>
