@@ -1,4 +1,5 @@
 import "server-only";
+import { randomBytes } from "node:crypto";
 import prisma from "lib/prisma";
 import { auth } from "auth";
 import { CertificateType } from "generated/client";
@@ -131,7 +132,7 @@ export async function checkPermissions() {
 
 // Helper functions
 function generateUniqueCode() {
-  return Math.random().toString(36).substring(2, 9).toUpperCase();
+  return randomBytes(5).toString("hex").toUpperCase();
 }
 
 export async function generateGenericCertificate(
@@ -237,12 +238,8 @@ export async function getApiKeys() {
 }
 
 function generateUniqueApiKey() {
-  // A simple way to generate a more "API-key-like" string
   const prefix = "msk_"; // MySverse Key
-  const randomPart =
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15);
-  return prefix + randomPart;
+  return prefix + randomBytes(24).toString("base64url");
 }
 
 export async function createApiKey(data: z.infer<typeof apiKeySchema>) {
