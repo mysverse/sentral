@@ -2,7 +2,6 @@
 import { auth } from "auth";
 
 import PayoutRequestComponent from "./_components/FinsysPage";
-import DefaultTransitionLayout from "components/transition";
 import {
   getPendingRequestsResult,
   injectOwnershipAndThumbnailsIntoPayoutRequests
@@ -36,14 +35,10 @@ export default async function Main() {
 
   if (accessError) {
     return (
-      <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
-        <DefaultTransitionLayout show={true} appear={true}>
-          <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
-            <div className="text-medium text-center text-xl">
-              <p>{accessError}</p>
-            </div>
-          </div>
-        </DefaultTransitionLayout>
+      <div className="bg-surface rounded-lg px-4 py-4 shadow-sm sm:px-6">
+        <div className="text-medium text-center text-xl">
+          <p>{accessError}</p>
+        </div>
       </div>
     );
   }
@@ -55,25 +50,21 @@ export default async function Main() {
     const err = requestsResult.error;
     if (err.message.match("FINSYS_NOT_ALLOWED")) {
       return (
-        <div className="mx-auto max-w-7xl px-3 pb-12 sm:px-6 lg:px-8">
-          <DefaultTransitionLayout show={true} appear={true}>
-            <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
-              <div className="text-medium text-center text-xl">
-                <p>{`MYSverse FinSys is only available to selected members of
-                MYSverse Sim.`}</p>
-                <p>{`If you are already a member of a qualifying Sim Roblox group, please also ensure you have joined the MYSverse Malaysian Community Roblox group.`}</p>
-                <p>{`Please read the following guide and ensure you fulfill all the criteria
-                for more information: `}</p>
-                <Link
-                  href="https://dev.mysver.se/finsys-usage-guide/"
-                  className="text-blue-600 underline hover:no-underline"
-                  target="_blank"
-                >
-                  https://dev.mysver.se/finsys-usage-guide/
-                </Link>
-              </div>
-            </div>
-          </DefaultTransitionLayout>
+        <div className="bg-surface rounded-lg px-4 py-4 shadow-sm sm:px-6">
+          <div className="text-medium text-center text-xl">
+            <p>{`MYSverse FinSys is only available to selected members of
+            MYSverse Sim.`}</p>
+            <p>{`If you are already a member of a qualifying Sim Roblox group, please also ensure you have joined the MYSverse Malaysian Community Roblox group.`}</p>
+            <p>{`Please read the following guide and ensure you fulfill all the criteria
+            for more information: `}</p>
+            <Link
+              href="https://dev.mysver.se/finsys-usage-guide/"
+              className="text-primary-600 underline hover:no-underline"
+              target="_blank"
+            >
+              https://dev.mysver.se/finsys-usage-guide/
+            </Link>
+          </div>
         </div>
       );
     }
@@ -81,7 +72,7 @@ export default async function Main() {
     // Request list failed but access is confirmed — render form with unavailable notice
     return (
       <div>
-        <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+        <div className="bg-surface rounded-lg px-4 py-4 shadow-sm sm:px-6">
           <PayoutRequestComponent groups={groups!} />
         </div>
         <h2 className="my-6 text-lg font-medium">Payout Requests</h2>
@@ -108,7 +99,7 @@ export default async function Main() {
 
   return (
     <div>
-      <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+      <div className="bg-surface rounded-lg px-4 py-4 shadow-sm sm:px-6">
         <PayoutRequestComponent groups={groups!} />
       </div>
       <h2 className="my-6 text-lg font-medium">Payout Requests</h2>

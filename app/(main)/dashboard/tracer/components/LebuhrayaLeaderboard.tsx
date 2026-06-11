@@ -2,7 +2,6 @@
 
 import { Avatar } from "components/catalyst/avatar";
 import { Leaderboard } from "components/constants/types";
-import DefaultTransitionLayout from "components/transition";
 import Link from "next/link";
 import DateUtils from "../_utils/DateUtils";
 import clsx from "clsx";
@@ -28,7 +27,7 @@ export default function LebuhrayaLeaderboard({
     .slice(0, limit);
   const currentWeekInfo = DateUtils.getCurrentWeekInfo();
   return (
-    <DefaultTransitionLayout show={!!data} appear={true}>
+    <div>
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div
           className={clsx(
@@ -75,25 +74,25 @@ export default function LebuhrayaLeaderboard({
         </div>
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div className="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead className="bg-gray-50">
+            <table className="divide-edge min-w-full divide-y">
+              <thead className="bg-surface-muted">
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                    className="text-strong py-3.5 pr-3 pl-4 text-left text-sm font-semibold sm:pl-6"
                   >
                     <span className="hidden sm:block">Position</span>
                     <span className="block sm:hidden">No.</span>
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="text-strong px-3 py-3.5 text-left text-sm font-semibold"
                   >
                     Player
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="text-strong px-3 py-3.5 text-left text-sm font-semibold"
                   >
                     {type === "school"
                       ? "Quiz Score"
@@ -103,7 +102,7 @@ export default function LebuhrayaLeaderboard({
                   </th>
                   {/* <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-strong"
                   >
                     Role
                   </th> */}
@@ -115,21 +114,21 @@ export default function LebuhrayaLeaderboard({
                   </th> */}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
+              <tbody className="divide-edge bg-surface divide-y">
                 {data
                   .filter((person) => person.user)
                   .map((person, index) => (
                     <tr key={person.user.id}>
-                      <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
+                      <td className="text-strong py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap sm:pl-6">
                         {`${(index + 1).toString().padStart(3, "0")}`}
                       </td>
-                      {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-muted">
                       {person.title}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-muted">
                       {person.email}
                     </td> */}
-                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                      <td className="text-muted px-3 py-4 text-sm whitespace-nowrap">
                         <Link
                           href={`https://roblox.com/users/${person.user.id}/profile`}
                           target="=_blank"
@@ -142,19 +141,19 @@ export default function LebuhrayaLeaderboard({
                             square
                           />
                           <div className="ml-4 flex flex-col">
-                            <div className="hidden font-semibold text-gray-900 hover:underline sm:block">
+                            <div className="text-strong hidden font-semibold hover:underline sm:block">
                               {`${person.user.displayName}`}
                             </div>
-                            <div className="hidden text-xs text-gray-900/70 hover:underline sm:block">
+                            <div className="text-strong/70 hidden text-xs hover:underline sm:block">
                               {`@${person.user.name}`}
                             </div>
-                            <div className="block font-medium text-gray-900 hover:underline sm:hidden">
+                            <div className="text-strong block font-medium hover:underline sm:hidden">
                               {`@${person.user.name}`}
                             </div>
                           </div>
                         </Link>
                       </td>
-                      <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                      <td className="text-muted px-3 py-4 text-sm whitespace-nowrap">
                         {(person.time ?? person.score)?.toLocaleString()}
                       </td>
                       {/* <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -172,6 +171,6 @@ export default function LebuhrayaLeaderboard({
           </div>
         </div>
       </div>
-    </DefaultTransitionLayout>
+    </div>
   );
 }

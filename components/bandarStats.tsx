@@ -1,6 +1,5 @@
 import humanizeDuration from "humanize-duration";
 import clsx from "clsx";
-import DefaultTransitionLayout from "./transition";
 import { MYSverseData } from "./fetcher";
 import CountUp from "./Countup";
 
@@ -50,22 +49,22 @@ function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
       {stats.map((stat) => (
         <div
           key={stat.name}
-          className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
+          className="bg-surface flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 py-4"
         >
-          <dt className="text-sm leading-6 font-medium text-gray-500">
+          <dt className="text-muted text-sm leading-6 font-medium">
             {stat.name}
           </dt>
           {/* <dd
             className={clsx(
               stat.changeType === "negative"
                 ? "text-rose-600"
-                : "text-gray-700",
+                : "text-strong",
               "text-xs font-medium"
             )}
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
+          <dd className="text-strong w-full flex-none text-3xl leading-10 font-medium tracking-tight">
             {stat.value}
           </dd>
         </div>
@@ -109,22 +108,22 @@ function PosStats({
       {stats.map((stat) => (
         <div
           key={stat.name}
-          className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
+          className="bg-surface flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 py-4"
         >
-          <dt className="text-sm leading-6 font-medium text-gray-500">
+          <dt className="text-muted text-sm leading-6 font-medium">
             {stat.name}
           </dt>
           {/* <dd
             className={clsx(
               stat.changeType === "negative"
                 ? "text-rose-600"
-                : "text-gray-700",
+                : "text-strong",
               "text-xs font-medium"
             )}
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
+          <dd className="text-strong w-full flex-none text-3xl leading-10 font-medium tracking-tight">
             {stat.value}
           </dd>
         </div>
@@ -157,22 +156,22 @@ function TaxiStats({
       {stats.map((stat) => (
         <div
           key={stat.name}
-          className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
+          className="bg-surface flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 py-4"
         >
-          <dt className="text-sm leading-6 font-medium text-gray-500">
+          <dt className="text-muted text-sm leading-6 font-medium">
             {stat.name}
           </dt>
           {/* <dd
             className={clsx(
               stat.changeType === "negative"
                 ? "text-rose-600"
-                : "text-gray-700",
+                : "text-strong",
               "text-xs font-medium"
             )}
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
+          <dd className="text-strong w-full flex-none text-3xl leading-10 font-medium tracking-tight">
             {stat.value}
           </dd>
         </div>
@@ -228,22 +227,22 @@ function AgencyTimeStats({
       {stats.map((stat) => (
         <div
           key={stat.name}
-          className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white py-4"
+          className="bg-surface flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 py-4"
         >
-          <dt className="text-sm leading-6 font-medium text-gray-500">
+          <dt className="text-muted text-sm leading-6 font-medium">
             {stat.name}
           </dt>
           {/* <dd
             className={clsx(
               stat.changeType === "negative"
                 ? "text-rose-600"
-                : "text-gray-700",
+                : "text-strong",
               "text-xs font-medium"
             )}
           >
             {stat.change}
           </dd> */}
-          <dd className="w-full flex-none text-3xl leading-10 font-medium tracking-tight text-gray-900">
+          <dd className="text-strong w-full flex-none text-3xl leading-10 font-medium tracking-tight">
             {stat.value}
           </dd>
         </div>
@@ -265,15 +264,15 @@ function BandarCars({
           .map((car) => (
             <li key={car.VehicleName} className="flex gap-x-4 py-4">
               {/* <Image
-              className="size-12 flex-none rounded-full bg-gray-50"
+              className="size-12 flex-none rounded-full bg-surface-muted"
               src={person.imageUrl}
               alt=""
             /> */}
               <div className="min-w-0">
-                <p className="text-base leading-6 font-semibold text-gray-900">
+                <p className="text-strong text-base leading-6 font-semibold">
                   {car.VehicleName}
                 </p>
-                <p className="mt-1 truncate text-sm leading-5 text-gray-500">
+                <p className="text-muted mt-1 truncate text-sm leading-5">
                   {`Purchased ${new Date(
                     car.Time * 1000
                   ).toLocaleDateString()}`}
@@ -293,7 +292,7 @@ function BandarStats({
 }) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <div className="rounded-lg bg-white px-6 py-6 shadow-sm">
+      <div className="bg-surface rounded-lg px-6 py-6 shadow-sm">
         <header>
           <h3 className="mb-2 text-xl font-bold">General stats</h3>
         </header>
@@ -301,7 +300,7 @@ function BandarStats({
       </div>
 
       {bandarData.MYS_POS_2 ? (
-        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
+        <div className="bg-surface rounded-lg px-5 py-6 shadow-sm sm:px-6">
           <header>
             <h3 className="mb-2 text-xl font-bold">POS stats</h3>
           </header>
@@ -309,7 +308,7 @@ function BandarStats({
         </div>
       ) : null}
       {bandarData.MYS_Taxi_2 ? (
-        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
+        <div className="bg-surface rounded-lg px-5 py-6 shadow-sm sm:px-6">
           <header>
             <h3 className="mb-2 text-xl font-bold">Taxi stats</h3>
           </header>
@@ -317,7 +316,7 @@ function BandarStats({
         </div>
       ) : null}
       {bandarData.TimeOnMAF || bandarData.TimeOnMYT || bandarData.TimeOnPDRM ? (
-        <div className="rounded-lg bg-white px-6 py-6 shadow-sm">
+        <div className="bg-surface rounded-lg px-6 py-6 shadow-sm">
           <header>
             <h3 className="mb-2 text-xl font-bold">Occupational stats</h3>
           </header>
@@ -326,7 +325,7 @@ function BandarStats({
       ) : null}
       {bandarData.MYS_PermanentVehicles_2 &&
       bandarData.MYS_PermanentVehicles_2.length > 0 ? (
-        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:col-span-2 sm:px-6">
+        <div className="bg-surface rounded-lg px-5 py-6 shadow-sm sm:col-span-2 sm:px-6">
           <header>
             <h3 className="mb-2 text-xl font-bold">Owned vehicles</h3>
           </header>
@@ -340,7 +339,7 @@ function BandarStats({
 function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
   const statuses = {
     Served: "text-green-700 bg-green-50 ring-green-600/20",
-    Ongoing: "text-gray-600 bg-gray-50 ring-gray-500/10",
+    Ongoing: "text-muted bg-surface-muted ring-gray-500/10",
     Issue: "text-red-700 bg-red-50 ring-red-600/10"
   };
 
@@ -356,15 +355,15 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
         return (
           <li
             key={arrest.Reference}
-            className="overflow-hidden rounded-xl border border-gray-200"
+            className="border-edge overflow-hidden rounded-xl border"
           >
-            <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 px-6 py-4">
+            <div className="bg-surface-muted flex items-center gap-x-4 border-b border-gray-900/5 px-6 py-4">
               {/* <img
               src={client.imageUrl}
               alt={client.name}
-              className="size-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
+              className="size-12 flex-none rounded-lg bg-surface object-cover ring-1 ring-gray-900/10"
             /> */}
-              <div className="text-sm leading-6 font-medium text-gray-900">
+              <div className="text-strong text-sm leading-6 font-medium">
                 {arrest.Reference}
               </div>
               <div
@@ -379,36 +378,36 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
 
             <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
-                <dt className="text-gray-500">Time arrested</dt>
-                <dd className="text-gray-700">
+                <dt className="text-muted">Time arrested</dt>
+                <dd className="text-strong">
                   <time dateTime={timeArrest.toLocaleString()}>
                     {timeArrest.toLocaleString()}
                   </time>
                 </dd>
               </div>
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
-                <dt className="text-gray-500">Time released</dt>
-                <dd className="text-gray-700">
+                <dt className="text-muted">Time released</dt>
+                <dd className="text-strong">
                   <time dateTime={timeRelease.toLocaleString()}>
                     {timeRelease.toLocaleString()}
                   </time>
                 </dd>
               </div>
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
-                <dt className="text-gray-500">Officer ID</dt>
-                <dd className="text-gray-700">{arrest.Player_Arresting}</dd>
+                <dt className="text-muted">Officer ID</dt>
+                <dd className="text-strong">{arrest.Player_Arresting}</dd>
               </div>
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
-                <dt className="text-gray-500">Location</dt>
-                <dd className="text-gray-700">
+                <dt className="text-muted">Location</dt>
+                <dd className="text-strong">
                   {arrest.StringLocation || `${x}°X, ${z}°Z`}
                 </dd>
               </div>
               <div className="flex flex-col justify-between gap-x-4 pt-3 lg:flex-row">
-                <dt className="text-gray-500">Reason</dt>
+                <dt className="text-muted">Reason</dt>
               </div>
             </dl>
-            <div className="px-6 pb-6 text-sm text-gray-600">
+            <div className="text-muted px-6 pb-6 text-sm">
               {arrest.Description || "N/A"}
             </div>
           </li>
@@ -438,15 +437,15 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
         return (
           <li
             key={summon.Reference}
-            className="overflow-hidden rounded-xl border border-gray-200"
+            className="border-edge overflow-hidden rounded-xl border"
           >
-            <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 px-6 py-4">
+            <div className="bg-surface-muted flex items-center gap-x-4 border-b border-gray-900/5 px-6 py-4">
               {/* <img
               src={client.imageUrl}
               alt={client.name}
-              className="size-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
+              className="size-12 flex-none rounded-lg bg-surface object-cover ring-1 ring-gray-900/10"
             /> */}
-              <div className="text-sm leading-6 font-medium text-gray-900">
+              <div className="text-strong text-sm leading-6 font-medium">
                 {summon.Reference}
               </div>
               <div
@@ -461,28 +460,28 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
 
             <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
-                <dt className="text-gray-500">Time</dt>
-                <dd className="text-gray-700">
+                <dt className="text-muted">Time</dt>
+                <dd className="text-strong">
                   <time dateTime={timeOffence.toLocaleString()}>
                     {timeOffence.toLocaleString()}
                   </time>
                 </dd>
               </div>
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
-                <dt className="text-gray-500">Amount</dt>
-                <dd className="text-gray-700">
+                <dt className="text-muted">Amount</dt>
+                <dd className="text-strong">
                   {`${summon.FineAmount.toFixed(2)}`}
                 </dd>
               </div>
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
-                <dt className="text-gray-500">Officer ID</dt>
-                <dd className="text-gray-700">{summon.Officer}</dd>
+                <dt className="text-muted">Officer ID</dt>
+                <dd className="text-strong">{summon.Officer}</dd>
               </div>
               <div className="flex flex-col justify-between gap-x-4 pt-3 lg:flex-row">
-                <dt className="text-gray-500">Description</dt>
+                <dt className="text-muted">Description</dt>
               </div>
             </dl>
-            <div className="px-6 pb-6 text-sm text-gray-600">
+            <div className="text-muted px-6 pb-6 text-sm">
               {summon.OffenceDescription || "N/A"}
             </div>
           </li>
@@ -500,14 +499,12 @@ export default function MysverseStats({ data }: { data: MYSverseData }) {
   return (
     <>
       <header>
-        <h3 className="mb-10 text-center text-2xl font-bold text-slate-900">
+        <h3 className="text-strong mb-10 text-center text-2xl font-bold">
           Bandaraya Insights
         </h3>
       </header>
-      <DefaultTransitionLayout show={!!data} appear={true}>
-        <BandarStats bandarData={data.bandarData} />
-      </DefaultTransitionLayout>
-      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
+      <BandarStats bandarData={data.bandarData} />
+      <div className="bg-surface mt-8 rounded-lg px-5 py-6 shadow-sm sm:px-6">
         <header className="mb-6">
           <h3 className="mb-2 text-xl font-bold">Arrests</h3>
           <ul className="ml-4 flex list-disc flex-col gap-y-1">
@@ -518,7 +515,7 @@ export default function MysverseStats({ data }: { data: MYSverseData }) {
         <Arrests arrests={data.arrests ?? []} />
       </div>
 
-      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
+      <div className="bg-surface mt-8 rounded-lg px-5 py-6 shadow-sm sm:px-6">
         <header className="mb-6">
           <h3 className="mb-2 text-xl font-bold">Summonses</h3>
           <ul className="ml-4 flex list-disc flex-col gap-y-1">

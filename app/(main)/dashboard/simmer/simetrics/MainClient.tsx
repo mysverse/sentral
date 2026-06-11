@@ -1,8 +1,8 @@
 "use client";
 
 import { InboxIcon } from "@heroicons/react/24/outline";
-import { Motion } from "components/motion";
 import { motion } from "motion/react";
+import { fadeIn, springUI } from "components/ui/motion";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
 
@@ -73,14 +73,14 @@ export default function MainClient({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="flex flex-col items-center justify-center rounded-lg bg-white py-16 shadow-sm"
+          transition={springUI}
+          className="bg-surface flex flex-col items-center justify-center rounded-lg py-16 shadow-sm"
         >
           <InboxIcon className="h-12 w-12 text-gray-300" />
-          <h3 className="mt-4 text-sm font-semibold text-gray-900">
+          <h3 className="text-strong mt-4 text-sm font-semibold">
             No duty records found
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="text-muted mt-1 text-sm">
             No data available for {selectedDate}. Try selecting a different
             date.
           </p>
@@ -90,13 +90,7 @@ export default function MainClient({
   }
 
   return (
-    <Motion
-      key={key}
-      className="grid grid-cols-1 gap-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
+    <motion.div key={key} className="grid grid-cols-1 gap-6" {...fadeIn}>
       <FilterBar
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
@@ -126,9 +120,9 @@ export default function MainClient({
 
       <DutyTimelineChart data={data} selectedDate={selectedDate} />
 
-      <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+      <div className="bg-surface rounded-lg px-4 py-4 shadow-sm sm:px-6">
         <SimetryTable dataset={data} />
       </div>
-    </Motion>
+    </motion.div>
   );
 }

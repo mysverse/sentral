@@ -1,6 +1,5 @@
 import GrowthInsights from "components/growthInsights";
 import GrowthUtils from "components/growthUtils";
-import DefaultTransitionLayout from "components/transition";
 import { GrowthEntry } from "components/apiTypes";
 import GrowthChartSection from "./chartSection";
 
@@ -37,8 +36,8 @@ export default function GrowthPageContent({
     growthUtils.getHighestRelativeGrowthMonth();
 
   return (
-    <div className="mx-auto my-auto max-w-7xl grow px-4 sm:px-6 lg:px-8">
-      <DefaultTransitionLayout show={true} appear={true}>
+    <div>
+      <div>
         <GrowthChartSection
           chartData={growthUtils.getLineChartDataPure(displayOption)}
           displayOptions={displayOptions}
@@ -65,7 +64,7 @@ export default function GrowthPageContent({
             used to calculate values due to incomplete data
           </p>
         </div>
-      </DefaultTransitionLayout>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import DefaultTransitionLayout from "components/transition";
 import Markdown from "react-markdown";
+import { Card } from "components/ui/card";
 
 const content = `
 ## OVERVIEW
@@ -130,14 +130,12 @@ MYSverse Digital Ventures
 
 export default function TermsOfServicePage() {
   return (
-    <DefaultTransitionLayout show={true} appear={true}>
-      <div className="mx-auto my-auto max-w-5xl grow px-4 sm:px-6 lg:px-8">
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
-          <div className="prose max-w-fit text-justify">
-            <Markdown>{content}</Markdown>
-          </div>
+    <div className="mx-auto my-auto max-w-5xl grow px-4 sm:px-6 lg:px-8">
+      <Card className="mt-6">
+        <div className="prose dark:prose-invert max-w-fit text-justify">
+          <Markdown>{content}</Markdown>
         </div>
-      </div>
-    </DefaultTransitionLayout>
+      </Card>
+    </div>
   );
 }

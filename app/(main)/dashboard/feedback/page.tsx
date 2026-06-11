@@ -5,7 +5,7 @@ import { Avatar } from "components/catalyst/avatar";
 import { InlineUnavailable } from "components/errorState";
 import { getAvatarThumbnails } from "components/fetcher";
 import { LocalTime } from "components/LocalTime";
-import { Motion } from "components/motion";
+import * as motion from "motion/react-client";
 import { fetchJsonResult } from "lib/http";
 import { getFeedbackResources } from "utils/feedback";
 import { getUserId } from "utils/user";
@@ -114,12 +114,8 @@ export default async function Page(props: Props) {
   );
 
   return (
-    <Motion
-      initial={{ opacity: 0, y: 64 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-    >
-      <div className="flex w-full items-center justify-around rounded-lg bg-white p-4 text-center shadow-sm">
+    <div>
+      <div className="bg-surface flex w-full items-center justify-around rounded-lg p-4 text-center shadow-sm">
         {resources.map((r) => (
           <Link
             key={r}
@@ -127,8 +123,8 @@ export default async function Page(props: Props) {
             className={clsx(
               "mr-4 inline-block text-base font-semibold transition",
               resource === r
-                ? "text-blue-600 hover:text-gray-700"
-                : "text-gray-700 hover:text-blue-600"
+                ? "text-primary-600 hover:text-strong"
+                : "text-strong hover:text-primary-600"
             )}
           >
             {r}
@@ -163,8 +159,8 @@ export default async function Page(props: Props) {
                 href={`https://roblox.com/users/${feedback.userId}/profile`}
                 target="_blank"
               >
-                <Motion
-                  className="group h-full w-full rounded-lg border border-gray-200 bg-white p-4 shadow-md transition hover:border-0 hover:bg-blue-600 hover:text-white"
+                <motion.div
+                  className="group border-edge bg-surface hover:bg-primary-600 h-full w-full rounded-lg border p-4 shadow-md transition hover:border-0 hover:text-white"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -190,11 +186,11 @@ export default async function Page(props: Props) {
                   <p className="overflow-hidden text-ellipsis opacity-70 group-hover:opacity-100">
                     {feedback.feedback}
                   </p>
-                </Motion>
+                </motion.div>
               </Link>
             );
           })}
       </div>
-    </Motion>
+    </div>
   );
 }

@@ -16,6 +16,7 @@ import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import BlacklistSlideover from "components/mecs/BlacklistSlideover";
 import { motion, AnimatePresence } from "motion/react";
+import { springUI } from "components/ui/motion";
 import { toast } from "sonner";
 
 const regex = /^(?=^[^_]+_?[^_]+$)\w{3,20}$/;
@@ -58,7 +59,7 @@ function MECSForm() {
   return (
     <>
       <form
-        className="space-y-8 divide-y divide-gray-200"
+        className="divide-edge space-y-8 divide-y"
         onSubmit={(e) => e.preventDefault()}
       >
         <AnimatePresence mode="wait">
@@ -70,13 +71,13 @@ function MECSForm() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+              <div className="divide-edge space-y-8 divide-y sm:space-y-5">
                 <div>
                   <div>
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    <h3 className="text-strong text-lg leading-6 font-medium">
                       Membership eligibility query
                     </h3>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="text-muted mt-1 text-sm">
                       Enter any valid username or user ID
                     </p>
                   </div>
@@ -86,30 +87,21 @@ function MECSForm() {
                         id="input_type"
                         name="input_type"
                         autoComplete="input_type"
-                        className="block w-full rounded-md border-gray-300 focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
+                        className="border-edge block w-full rounded-md focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
                         onChange={(e) => {
-                          setTreatAsUserId(
-                            e.target.value === "User ID"
-                          );
+                          setTreatAsUserId(e.target.value === "User ID");
                           setCurrentUsername("");
                           setChangeFlag(false);
                         }}
-                        defaultValue={
-                          treatAsUserId ? "User ID" : "Username"
-                        }
+                        defaultValue={treatAsUserId ? "User ID" : "Username"}
                       >
                         <option>Username</option>
                         <option>User ID</option>
                       </select>
                     </div>
                     <div className="mt-4 flex min-w-0 flex-1 rounded-md shadow-xs sm:mt-0 sm:ml-3">
-                      <label
-                        htmlFor="roblox_username"
-                        className="sr-only"
-                      >
-                        {isStandalonePWA()
-                          ? "Username"
-                          : "Roblox username"}
+                      <label htmlFor="roblox_username" className="sr-only">
+                        {isStandalonePWA() ? "Username" : "Roblox username"}
                       </label>
 
                       {treatAsUserId ? (
@@ -117,7 +109,7 @@ function MECSForm() {
                           type="text"
                           name="roblox_userid"
                           id="roblox_userid"
-                          className="block w-full min-w-0 flex-1 rounded-md border-gray-300 px-3 py-2 focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
+                          className="border-edge block w-full min-w-0 flex-1 rounded-md px-3 py-2 focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
                           placeholder={"Player user ID"}
                           onChange={(evt) => {
                             setUsername(evt.target.value);
@@ -129,22 +121,20 @@ function MECSForm() {
                           onKeyUp={(event) => {
                             if (event.key === "Enter") {
                               event.preventDefault();
-                              document
-                                .getElementById("btn_search")
-                                ?.click();
+                              document.getElementById("btn_search")?.click();
                             }
                           }}
                         />
                       ) : (
                         <>
-                          <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
+                          <span className="border-edge bg-surface-muted text-muted inline-flex items-center rounded-l-md border border-r-0 px-3 sm:text-sm">
                             @
                           </span>
                           <input
                             type="text"
                             name="roblox_username"
                             id="roblox_username"
-                            className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
+                            className="border-edge block w-full min-w-0 flex-1 rounded-none rounded-r-md px-3 py-2 focus:border-slate-500 focus:ring-slate-500 sm:text-sm"
                             placeholder={"Player username"}
                             onChange={(evt) => {
                               setUsername(evt.target.value);
@@ -156,9 +146,7 @@ function MECSForm() {
                             onKeyUp={(event) => {
                               if (event.key === "Enter") {
                                 event.preventDefault();
-                                document
-                                  .getElementById("btn_search")
-                                  ?.click();
+                                document.getElementById("btn_search")?.click();
                               }
                             }}
                           />
@@ -191,10 +179,7 @@ function MECSForm() {
                               );
                             }
                           } else {
-                            if (
-                              regex.test(username) &&
-                              changeFlag
-                            ) {
+                            if (regex.test(username) && changeFlag) {
                               setCurrentUsername(username);
                               setModalOpen(true);
                               plausible("mecsSubmit", {
@@ -210,7 +195,7 @@ function MECSForm() {
                             }
                           }
                         }}
-                        className="block w-full rounded-md border border-transparent bg-blue-700 px-5 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-800 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-hidden disabled:bg-slate-400 sm:px-24"
+                        className="bg-primary-700 block w-full rounded-md border border-transparent px-5 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-800 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-hidden disabled:bg-slate-400 sm:px-24"
                       >
                         Check
                       </motion.button>
@@ -227,7 +212,7 @@ function MECSForm() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-white">{modalContent}</div>
+              <div className="bg-surface">{modalContent}</div>
               {!isLoading ? (
                 <div className="mt-5 flex justify-center">
                   <motion.button
@@ -236,7 +221,7 @@ function MECSForm() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setModalOpen(false)}
-                    className="mt-4 block rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-hidden sm:px-24 sm:text-sm"
+                    className="border-edge bg-surface text-strong hover:bg-surface-muted mt-4 block rounded-md border px-4 py-2 text-base font-medium shadow-xs focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:outline-hidden sm:px-24 sm:text-sm"
                   >
                     Dismiss
                   </motion.button>
@@ -262,13 +247,13 @@ function BlacklistSection() {
         type={type}
         setType={setType}
       />
-      <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+      <div className="divide-edge space-y-8 divide-y sm:space-y-5">
         <div>
           <div>
-            <h3 className="text-lg leading-6 font-medium text-gray-900">
+            <h3 className="text-strong text-lg leading-6 font-medium">
               Check blacklists
             </h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="text-muted mt-1 text-sm">
               Browse by individual users or communities
             </p>
           </div>
@@ -306,7 +291,7 @@ function BlacklistSection() {
                   setType("users");
                   setOpen(true);
                 }}
-                className="relative inline-flex h-full items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden"
+                className="border-edge bg-surface text-strong hover:bg-surface-muted relative inline-flex h-full items-center rounded-l-md border px-4 py-2 text-sm font-medium focus:z-10 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden"
               >
                 List of blacklisted individuals
               </button>
@@ -316,7 +301,7 @@ function BlacklistSection() {
                   setType("groups");
                   setOpen(true);
                 }}
-                className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden"
+                className="border-edge bg-surface text-strong hover:bg-surface-muted relative -ml-px inline-flex items-center rounded-r-md border px-4 py-2 text-sm font-medium focus:z-10 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden"
               >
                 List of blacklisted communities
               </button>
@@ -330,55 +315,55 @@ function BlacklistSection() {
 
 export default function MecsPage() {
   return (
-    <div className="mx-auto my-auto max-w-7xl grow px-4 sm:px-6 lg:px-8">
+    <div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6"
+        viewport={{ once: true, amount: 0.3 }}
+        transition={springUI}
+        className="bg-surface rounded-lg px-5 py-6 shadow-sm sm:px-6"
       >
         <MECSForm />
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-        className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6"
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ ...springUI, delay: 0.05 }}
+        className="bg-surface mt-6 rounded-lg px-5 py-6 shadow-sm sm:px-6"
       >
         <BlacklistSection />
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-        className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6"
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ ...springUI, delay: 0.1 }}
+        className="bg-surface mt-6 rounded-lg px-5 py-6 shadow-sm sm:px-6"
       >
         <AuditStats />
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6"
+        viewport={{ once: true, amount: 0.3 }}
+        transition={springUI}
+        className="bg-surface mt-6 rounded-lg px-5 py-6 shadow-sm sm:px-6"
       >
         <StaffStats limit={4} />
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={springUI}
         whileHover={{ scale: 1.01 }}
-        className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6"
+        className="bg-surface mt-6 rounded-lg px-5 py-6 shadow-sm sm:px-6"
       >
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
+        <h3 className="text-strong text-lg leading-6 font-medium">
           Memberships granted and rejected
         </h3>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="text-muted mt-1 text-sm">
           Trend and values over the last 12 months
         </p>
         <div className="mt-6">
@@ -388,17 +373,17 @@ export default function MecsPage() {
         </div>
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={springUI}
         whileHover={{ scale: 1.01 }}
-        className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6"
+        className="bg-surface mt-6 rounded-lg px-5 py-6 shadow-sm sm:px-6"
       >
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
+        <h3 className="text-strong text-lg leading-6 font-medium">
           Membership approval rate
         </h3>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="text-muted mt-1 text-sm">
           Trend and values over the last 12 months
         </p>
         <div className="mt-6">
@@ -408,11 +393,11 @@ export default function MecsPage() {
         </div>
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6"
+        viewport={{ once: true, amount: 0.3 }}
+        transition={springUI}
+        className="bg-surface mt-6 rounded-lg px-5 py-6 shadow-sm sm:px-6"
       >
         <MECSFAQ />
       </motion.div>

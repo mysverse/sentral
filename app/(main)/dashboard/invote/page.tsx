@@ -2,6 +2,7 @@ import ConstituencyList from "./_components/ConstituencyList";
 import InvotePage from "./InvoteClient";
 import { Suspense } from "react";
 import Spinner from "components/spinner";
+import { Card } from "components/ui/card";
 
 import { type SearchParams } from "nuqs/server";
 
@@ -43,18 +44,18 @@ export default async function Page(props: PageProps) {
   return (
     <>
       <InvotePage seriesIdentifiers={seriesIdentifiers} />
-      <div className="mt-8 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
-        <h1 className="mb-4 text-lg font-semibold">Candidates</h1>
+      <Card className="mt-8">
+        <h1 className="text-strong mb-4 text-lg font-semibold">Candidates</h1>
         <Suspense
           fallback={
-            <div className="h-screen">
+            <div className="py-32">
               <Spinner />
             </div>
           }
         >
           {<ConstituencyList series={series ?? latestSeries} />}
         </Suspense>
-      </div>
+      </Card>
     </>
   );
 }

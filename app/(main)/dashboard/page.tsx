@@ -16,7 +16,11 @@ import MECSOGImage from "public/img/mecs/feature_image.webp";
 import GrowthOGImage from "public/img/growth/feature_image.webp";
 import InvoteOGImage from "public/img/invote/feature_image.webp";
 import TracerOGImage from "public/img/tracer/feature_image.webp";
-import DefaultTransitionLayout from "components/transition";
+import * as motion from "motion/react-client";
+import { enterUp, STAGGER } from "components/ui/motion";
+import { Badge } from "components/ui/badge";
+import { Card } from "components/ui/card";
+import { PageContainer } from "components/ui/page-container";
 
 const links = [
   {
@@ -72,52 +76,49 @@ export const metadata = {
 function AppList() {
   return (
     <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-      {links.map((link) => (
-        <DefaultTransitionLayout show={true} key={link.href} appear={true}>
-          <li className="col-span-1 flex flex-col divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-center shadow-sm">
-            <Image src={link.image} alt={"Marketing image for " + link.title} />
-            <div className="flex flex-1 flex-col p-8">
-              {/* <link.logo className="w-36 my-3 shrink-0 mx-auto fill-slate-700" /> */}
-              <h2 className="text-xl font-semibold text-gray-900">
-                {link.name}
-              </h2>
-              <h3 className="text-sm font-medium text-gray-700">
-                {link.title}
-              </h3>
-              <dl className="mt-3 flex grow flex-col justify-between">
-                <dt className="sr-only">Description</dt>
-                <dd className="text-sm text-gray-500">{link.description}</dd>
-                <dt className="sr-only">Status</dt>
-                <dd className="mt-3">
-                  <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500">
-                    {link.version}
+      {links.map((link, index) => (
+        <motion.li
+          key={link.href}
+          {...enterUp}
+          transition={{ ...enterUp.transition, delay: index * STAGGER }}
+          className="divide-edge bg-surface col-span-1 flex flex-col divide-y overflow-hidden rounded-lg text-center shadow-sm"
+        >
+          <Image src={link.image} alt={"Marketing image for " + link.title} />
+          <div className="flex flex-1 flex-col p-8">
+            {/* <link.logo className="w-36 my-3 shrink-0 mx-auto fill-slate-700" /> */}
+            <h2 className="text-strong text-xl font-semibold">{link.name}</h2>
+            <h3 className="text-strong text-sm font-medium">{link.title}</h3>
+            <dl className="mt-3 flex grow flex-col justify-between">
+              <dt className="sr-only">Description</dt>
+              <dd className="text-muted text-sm">{link.description}</dd>
+              <dt className="sr-only">Status</dt>
+              <dd className="mt-3">
+                <Badge>{link.version}</Badge>
+                {link.news ? (
+                  <span className="text-muted ml-3 text-xs font-medium italic">
+                    {link.news}
                   </span>
-                  {link.news ? (
-                    <span className="ml-3 text-xs font-medium text-slate-400 italic">
-                      {link.news}
-                    </span>
-                  ) : null}
-                </dd>
-              </dl>
-            </div>
-            <div>
-              <div className="-mt-px flex divide-x divide-gray-200">
-                <div className="flex w-0 flex-1">
-                  <Link
-                    href={link.href}
-                    className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
-                  >
-                    <ArrowTopRightOnSquareIcon
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <span className="ml-3">Launch applet</span>
-                  </Link>
-                </div>
+                ) : null}
+              </dd>
+            </dl>
+          </div>
+          <div>
+            <div className="divide-edge -mt-px flex divide-x">
+              <div className="flex w-0 flex-1">
+                <Link
+                  href={link.href}
+                  className="text-strong hover:text-muted relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium"
+                >
+                  <ArrowTopRightOnSquareIcon
+                    className="text-muted h-5 w-5"
+                    aria-hidden="true"
+                  />
+                  <span className="ml-3">Launch applet</span>
+                </Link>
               </div>
             </div>
-          </li>
-        </DefaultTransitionLayout>
+          </div>
+        </motion.li>
       ))}
     </ul>
   );
@@ -125,11 +126,11 @@ function AppList() {
 
 export default function MainPage() {
   return (
-    <div className="mx-auto my-auto max-w-7xl grow px-4 sm:px-6 lg:px-8">
+    <PageContainer>
       <AppList />
-      <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
+      <Card className="mt-6">
         <GeneralFAQ />
-      </div>
-    </div>
+      </Card>
+    </PageContainer>
   );
 }

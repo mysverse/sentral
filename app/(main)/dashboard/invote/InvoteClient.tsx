@@ -39,7 +39,8 @@ import { getCodeFromIndex } from "utils/invote";
 import ElectionMap from "components/electionMap";
 import ElectionSeatMap from "components/electionSeatMap";
 import Spinner from "components/spinner";
-import DefaultTransitionLayout from "components/transition";
+import { motion } from "motion/react";
+import { enterUp } from "components/ui/motion";
 import useNotificationSound from "hooks/playNotificationSound";
 
 ChartJS.register(
@@ -72,12 +73,12 @@ function VotesByParty({ stats }: { stats: InvoteStatsTimestamp[] }) {
       {newStats2.map((item) => (
         <div
           key={item.name}
-          className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6"
+          className="bg-surface overflow-hidden rounded-lg px-4 py-5 shadow-sm sm:p-6"
         >
-          <dt className="truncate text-sm font-medium text-gray-500">
+          <dt className="text-muted truncate text-sm font-medium">
             {item.name === "ROSAK" ? "Invalid" : item.name}
           </dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+          <dd className="text-strong mt-1 text-3xl font-semibold tracking-tight">
             <CountUp
               end={item.stat}
               enableScrollSpy={true}
@@ -138,12 +139,12 @@ function ParliamentSeatDistributionByParty({
       {newStats2.map((item) => (
         <div
           key={item.name}
-          className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6"
+          className="bg-surface overflow-hidden rounded-lg px-4 py-5 shadow-sm sm:p-6"
         >
-          <dt className="truncate text-sm font-medium text-gray-500">
+          <dt className="text-muted truncate text-sm font-medium">
             {item.name === "ROSAK" ? "Invalid" : item.name}
           </dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+          <dd className="text-strong mt-1 text-3xl font-semibold tracking-tight">
             <CountUp
               end={item.stat}
               enableScrollSpy={true}
@@ -268,15 +269,15 @@ export default function InvotePage({
 
   return (
     <>
-      <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
-        <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+      <div className="bg-surface rounded-lg px-5 py-6 shadow-sm sm:px-6">
+        <div className="divide-edge space-y-8 divide-y sm:space-y-5">
           <div>
             <div className="flex flex-row items-center justify-between">
               <div>
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                <h3 className="text-strong text-lg leading-6 font-medium">
                   Election series selection
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="text-muted mt-1 text-sm">
                   Select a series to view the results
                 </p>
               </div>
@@ -289,7 +290,7 @@ export default function InvotePage({
                 <select
                   id="series_identifier"
                   name="series_identifier"
-                  className="mt-3 block w-full rounded-md border-gray-300 py-2 pr-10 pl-3 text-base focus:border-slate-500 focus:ring-slate-500 focus:outline-hidden sm:text-sm"
+                  className="border-edge mt-3 block w-full rounded-md py-2 pr-10 pl-3 text-base focus:border-slate-500 focus:ring-slate-500 focus:outline-hidden sm:text-sm"
                   onChange={(e) => {
                     setSeries(e.target.value);
                   }}
@@ -309,68 +310,72 @@ export default function InvotePage({
 
       {stats && seatStats ? (
         <>
-          <DefaultTransitionLayout show={stats.length > 0} appear={true}>
-            <h3 className="mt-6 mb-4 text-center text-lg font-medium text-gray-900">
-              Votes by Party
-            </h3>
-            {stats ? (
-              stats.some((item) => item.results.hidden) ? (
-                <h3 className="mt-6 mb-4 text-center text-gray-900 italic">
-                  {
-                    "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
-                  }
-                </h3>
-              ) : stats.length === 0 ? (
-                <h3 className="mt-6 mb-4 text-center text-gray-900 italic">
-                  {"No data available for this series."}
-                </h3>
-              ) : null
-            ) : null}
+          {stats.length > 0 && (
+            <motion.div {...enterUp}>
+              <h3 className="text-strong mt-6 mb-4 text-center text-lg font-medium">
+                Votes by Party
+              </h3>
+              {stats ? (
+                stats.some((item) => item.results.hidden) ? (
+                  <h3 className="text-strong mt-6 mb-4 text-center italic">
+                    {
+                      "This series is currently ongoing, it may take up to 3 hours for accurate results to show up."
+                    }
+                  </h3>
+                ) : stats.length === 0 ? (
+                  <h3 className="text-strong mt-6 mb-4 text-center italic">
+                    {"No data available for this series."}
+                  </h3>
+                ) : null
+              ) : null}
 
-            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow-sm">
-              <VoteShareChart stats={stats} />
-            </div>
-
-            <div className="sm:px-6- mt-6 mb-8">
-              <VotesByParty stats={stats} />
-            </div>
-
-            <h3 className="mt-8 mb-6 text-center text-lg leading-6 font-medium text-gray-900">
-              Votes by Polling Session
-            </h3>
-            <div className="sm:px-6- rounded-lg bg-white px-5 py-8 shadow-sm">
-              <VoteSection stats={stats} />
-            </div>
-          </DefaultTransitionLayout>
-          <DefaultTransitionLayout show={seatStats.length > 0} appear={true}>
-            <h3 className="mt-8 mb-6 text-center text-lg leading-6 font-medium text-gray-900">
-              Parliament Seats Distribution
-            </h3>
-            <div className="mb-8">
-              <ParliamentSeatDistributionByParty
-                stats={stats}
-                seatStats={seatStats}
-              />
-            </div>
-            <div className="sm:px-6- mb-8 rounded-lg bg-white px-5 py-8 shadow-sm">
-              <div className="relative flex flex-col justify-center gap-6">
-                <SeatsGeoMap stats={stats} seatStats={seatStats} />
+              <div className="sm:px-6- bg-surface rounded-lg px-5 py-8 shadow-sm">
+                <VoteShareChart stats={stats} />
               </div>
-            </div>
-            <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div className="rounded-lg bg-white px-5 py-8 shadow-sm">
-                <div className="flex h-48 w-full justify-center">
-                  <SeatsParliamentMap stats={stats} seatStats={seatStats} />
+
+              <div className="sm:px-6- mt-6 mb-8">
+                <VotesByParty stats={stats} />
+              </div>
+
+              <h3 className="text-strong mt-8 mb-6 text-center text-lg leading-6 font-medium">
+                Votes by Polling Session
+              </h3>
+              <div className="sm:px-6- bg-surface rounded-lg px-5 py-8 shadow-sm">
+                <VoteSection stats={stats} />
+              </div>
+            </motion.div>
+          )}
+          {seatStats.length > 0 && (
+            <motion.div {...enterUp}>
+              <h3 className="text-strong mt-8 mb-6 text-center text-lg leading-6 font-medium">
+                Parliament Seats Distribution
+              </h3>
+              <div className="mb-8">
+                <ParliamentSeatDistributionByParty
+                  stats={stats}
+                  seatStats={seatStats}
+                />
+              </div>
+              <div className="sm:px-6- bg-surface mb-8 rounded-lg px-5 py-8 shadow-sm">
+                <div className="relative flex flex-col justify-center gap-6">
+                  <SeatsGeoMap stats={stats} seatStats={seatStats} />
                 </div>
               </div>
-              <div className="rounded-lg bg-white px-5 py-8 shadow-sm">
-                <SeatsPieChart stats={stats} seatStats={seatStats} />
-              </div>
-            </dl>
-          </DefaultTransitionLayout>
+              <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div className="bg-surface rounded-lg px-5 py-8 shadow-sm">
+                  <div className="flex h-48 w-full justify-center">
+                    <SeatsParliamentMap stats={stats} seatStats={seatStats} />
+                  </div>
+                </div>
+                <div className="bg-surface rounded-lg px-5 py-8 shadow-sm">
+                  <SeatsPieChart stats={stats} seatStats={seatStats} />
+                </div>
+              </dl>
+            </motion.div>
+          )}
         </>
       ) : (
-        <div className="sm:px-6- h-screen px-5 py-32">
+        <div className="sm:px-6- px-5 py-32">
           <Spinner />
         </div>
       )}

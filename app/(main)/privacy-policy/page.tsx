@@ -1,5 +1,5 @@
-import DefaultTransitionLayout from "components/transition";
 import Markdown from "react-markdown";
+import { Card } from "components/ui/card";
 
 const content = `
 **MYSverse** ("we", "us", or "our"), the developers and maintainers of this web application "Sentral", take your privacy very seriously, and hence this privacy policy serves to inform you, the user, of the ways our application may affect you in that regard.
@@ -38,14 +38,12 @@ If you have any further questions about this privacy policy, please send an emai
 
 export default function PrivacyPolicyPage() {
   return (
-    <DefaultTransitionLayout show={true} appear={true}>
-      <div className="mx-auto my-auto max-w-5xl grow px-4 sm:px-6 lg:px-8">
-        <div className="mt-6 rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
-          <div className="prose max-w-fit text-justify">
-            <Markdown>{content}</Markdown>
-          </div>
+    <div className="mx-auto my-auto max-w-5xl grow px-4 sm:px-6 lg:px-8">
+      <Card className="mt-6">
+        <div className="prose dark:prose-invert max-w-fit text-justify">
+          <Markdown>{content}</Markdown>
         </div>
-      </div>
-    </DefaultTransitionLayout>
+      </Card>
+    </div>
   );
 }

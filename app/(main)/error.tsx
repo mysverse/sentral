@@ -1,7 +1,9 @@
 "use client"; // Error components must be Client Components
 
-import { Transition } from "@headlessui/react";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import { motion } from "motion/react";
+import { Button } from "components/catalyst/button";
+import { enterUp } from "components/ui/motion";
 
 export default function Error({
   error,
@@ -11,19 +13,9 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <Transition
-      as="div"
-      show={true}
-      appear={true}
-      enter="transform transition duration-400"
-      enterFrom="opacity-0 -translate-y-36"
-      enterTo="opacity-100 translate-y-0"
-      leave="transform transition duration-400"
-      leaveFrom="opacity-100 translate-y-0"
-      leaveTo="opacity-0 -translate-y-36"
-    >
+    <motion.div {...enterUp}>
       <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="rounded-lg bg-white px-5 py-6 shadow-sm sm:px-6">
+        <div className="bg-surface rounded-lg px-5 py-6 shadow-sm sm:px-6">
           <div className="flex min-h-64 flex-col items-center justify-center">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
               <ExclamationCircleIcon
@@ -32,24 +24,18 @@ export default function Error({
               />
             </div>
             <div className="mt-6 max-w-md text-center">
-              <h3 className="text-lg leading-6 font-semibold text-gray-900">
+              <h3 className="text-strong text-lg leading-6 font-semibold">
                 Something went wrong
               </h3>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="text-muted mt-2 text-sm">
                 We could not load this page. Please try again — if the problem
                 keeps happening, contact support.
               </p>
               <div className="mt-6">
-                <button
-                  type="button"
-                  className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  onClick={reset}
-                >
-                  Try again
-                </button>
+                <Button onClick={reset}>Try again</Button>
               </div>
               {error.digest && (
-                <p className="mt-4 text-xs text-gray-400">
+                <p className="text-muted mt-4 text-xs">
                   Reference ID: {error.digest}
                 </p>
               )}
@@ -57,6 +43,6 @@ export default function Error({
           </div>
         </div>
       </div>
-    </Transition>
+    </motion.div>
   );
 }

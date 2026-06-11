@@ -2,6 +2,7 @@ import MysverseStats from "components/bandarStats";
 import LebuhrayaLeaderboard from "./components/LebuhrayaLeaderboard";
 import { getLeaderboardData, getMysverseData } from "components/fetcher";
 import { auth } from "auth";
+import { Card } from "components/ui/card";
 import { InlineUnavailable } from "components/errorState";
 
 export const metadata = {
@@ -41,7 +42,7 @@ export default async function Main() {
     mysverseResult.status === "fulfilled" ? mysverseResult.value : undefined;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+    <div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {leaderboardData ? (
           <LebuhrayaLeaderboard limit={10} data={leaderboardData} order={1} />
@@ -75,16 +76,16 @@ export default async function Main() {
         ) : userId ? (
           <InlineUnavailable label="Personal stats are temporarily unavailable." />
         ) : (
-          <div className="rounded-lg bg-white px-4 py-4 shadow-sm sm:px-6">
+          <Card padding="sm">
             <div className="text-center">
-              <h1 className="text-3xl font-extrabold text-gray-900">
+              <h1 className="text-strong text-3xl font-extrabold">
                 Roblox account not connected
               </h1>
-              <p className="mt-4 text-lg text-gray-500">
+              <p className="text-muted mt-4 text-lg">
                 You must have a linked Roblox account to access this content.
               </p>
             </div>
-          </div>
+          </Card>
         )}
       </div>
     </div>

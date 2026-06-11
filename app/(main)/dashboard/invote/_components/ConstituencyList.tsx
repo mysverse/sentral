@@ -9,7 +9,8 @@ import { regionNames } from "data/invote";
 
 import ConstituencyCard from "./ConstituencyCard";
 
-import { Motion } from "components/motion";
+import * as motion from "motion/react-client";
+import { springUI } from "components/ui/motion";
 
 export default async function ConstituencyList({ series }: { series: string }) {
   const [data, seats] = await Promise.all([
@@ -45,24 +46,24 @@ export default async function ConstituencyList({ series }: { series: string }) {
       {constituencies
         .filter((code) => groupedData[code].length > 0)
         .map((code) => (
-          <Motion
+          <motion.div
             key={`${series}:${code}`}
             className="mb-6"
             initial={"hidden"}
             whileInView={"visible"}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={{
               visible: {
                 transition: {
                   when: "beforeChildren",
-                  staggerChildren: 0.3
+                  staggerChildren: 0.08
                 }
               }
             }}
           >
             <div className="mb-4 flex flex-row space-x-2 text-lg font-semibold">
               <div className="flex flex-row items-center">
-                <span className="rounded-sm bg-gray-200 px-2 py-1 text-sm">
+                <span className="bg-edge rounded-sm px-2 py-1 text-sm">
                   {code}
                 </span>
               </div>
@@ -90,20 +91,17 @@ export default async function ConstituencyList({ series }: { series: string }) {
                   : undefined;
 
                 return (
-                  <Motion
+                  <motion.div
                     key={`${series}:${code}:${contestant.userId ?? contestant.username}`}
                     variants={{
                       visible: {
                         opacity: 1,
-                        x: 0,
-                        transition: {
-                          ease: "easeOut",
-                          duration: 0.3
-                        }
+                        y: 0,
+                        transition: springUI
                       },
                       hidden: {
                         opacity: 0,
-                        x: -16
+                        y: 16
                       }
                     }}
                   >
@@ -112,11 +110,11 @@ export default async function ConstituencyList({ series }: { series: string }) {
                       thumbnail={thumbnail}
                       won={won}
                     />
-                  </Motion>
+                  </motion.div>
                 );
               })}
             </div>
-          </Motion>
+          </motion.div>
         ))}
     </div>
   );
