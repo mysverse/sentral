@@ -5,8 +5,31 @@ const withBundleAnalyzer = NextBundleAnalyzer({
   enabled: process.env.ANALYZE === "true"
 });
 
+const securityHeaders = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=31536000; includeSubDomains"
+  },
+  {
+    // camera=(self) is required by the QR scanner in certifier/gentag
+    key: "Permissions-Policy",
+    value: "camera=(self), microphone=(), geolocation=()"
+  }
+];
+
 export default withSerwist(
   withBundleAnalyzer({
+    async headers() {
+      return [
+        {
+          source: "/(.*)",
+          headers: securityHeaders
+        }
+      ];
+    },
     async redirects() {
       return [
         {
