@@ -14,9 +14,9 @@ import Image from "next/image";
 import { format, formatDistanceToNow } from "date-fns";
 
 const statuses: { [key: string]: string } = {
-  pending: "text-yellow-700",
-  approved: "text-green-700",
-  rejected: "text-red-700"
+  pending: "text-yellow-700 dark:text-yellow-400",
+  approved: "text-green-700 dark:text-green-400",
+  rejected: "text-red-700 dark:text-red-400"
 };
 
 const regex = /https:\/\/(?:www\.)?roblox\.com\/catalog\/(\d+)(?:\/[\w-]+)?/g;
@@ -299,7 +299,7 @@ function PayoutRequestsTable({
                       name="comment"
                       onChange={(e) => setRejectionReason(e.target.value)}
                       id="comment"
-                      className="text-strong placeholder:text-muted block w-full rounded-md border-0 py-1.5 shadow-xs ring-1 ring-gray-300 ring-inset focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
+                      className="bg-surface text-strong placeholder:text-muted ring-edge block w-full rounded-md border-0 py-1.5 shadow-xs ring-1 ring-inset focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
                       defaultValue={""}
                     />
                   </div>

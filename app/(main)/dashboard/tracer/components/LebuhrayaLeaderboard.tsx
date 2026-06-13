@@ -33,8 +33,8 @@ export default function LebuhrayaLeaderboard({
           className={clsx(
             "flex h-20 flex-col items-center text-center align-middle text-lg font-bold",
             order === 1 && "text-white",
-            order === 2 && "text-black lg:text-white",
-            !order && "text-black"
+            order === 2 && "text-strong lg:text-white",
+            !order && "text-strong"
           )}
         >
           {type === "school" ? (

@@ -17,18 +17,18 @@ interface FAQProps {
 
 export default function FAQ(props: FAQProps) {
   return (
-    <div className="divide-y-2 divide-gray-200">
-      <h2 className="pb-2 text-lg leading-6 font-medium text-gray-900">
+    <div className="divide-edge divide-y-2">
+      <h2 className="text-strong pb-2 text-lg leading-6 font-medium">
         {props.title}
       </h2>
-      <dl className="mt-4 space-y-3 divide-y divide-gray-200">
+      <dl className="divide-edge mt-4 space-y-3 divide-y">
         {props.faqs.map((faq) => (
           <Disclosure as="div" key={faq.question} className="pt-1 pb-3">
             {({ open }) => (
               <>
                 <dt className="text-base">
-                  <DisclosureButton className="flex w-full items-start justify-between text-left text-gray-400">
-                    <span className="font-medium text-gray-900">
+                  <DisclosureButton className="text-muted flex w-full items-start justify-between text-left">
+                    <span className="text-strong font-medium">
                       {faq.question}
                     </span>
                     <span className="ml-6 flex h-7 items-center">
@@ -52,7 +52,7 @@ export default function FAQ(props: FAQProps) {
                   leaveTo="transform scale-95 opacity-0"
                 >
                   <DisclosurePanel as="dd" className="mt-2 pr-12">
-                    <p className="text-base text-gray-500">{faq.answer}</p>
+                    <p className="text-muted text-base">{faq.answer}</p>
                   </DisclosurePanel>
                 </Transition>
               </>

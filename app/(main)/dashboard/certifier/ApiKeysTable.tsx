@@ -71,7 +71,7 @@ export default function ApiKeysTable({ apiKeys }: ApiKeysTableProps) {
                 <span className="font-mono">{apiKey.key}</span>
                 <button
                   onClick={() => copyToClipboard(apiKey.key)}
-                  className="text-primary-600 ml-2 text-sm hover:text-blue-900"
+                  className="text-primary-600 ml-2 text-sm hover:text-blue-900 dark:hover:text-blue-400"
                 >
                   Copy
                 </button>
@@ -81,7 +81,7 @@ export default function ApiKeysTable({ apiKeys }: ApiKeysTableProps) {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span
-                  className={`inline-flex rounded-full px-2 text-xs leading-5 font-semibold ${apiKey.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                  className={`inline-flex rounded-full px-2 text-xs leading-5 font-semibold ${apiKey.isActive ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300" : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"}`}
                 >
                   {apiKey.isActive ? "Active" : "Inactive"}
                 </span>
@@ -89,7 +89,7 @@ export default function ApiKeysTable({ apiKeys }: ApiKeysTableProps) {
               <td className="px-6 py-4 whitespace-nowrap">
                 <button
                   onClick={() => handleDelete(apiKey.id)}
-                  className="text-red-600 hover:text-red-900"
+                  className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
                 >
                   Delete
                 </button>

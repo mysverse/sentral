@@ -77,7 +77,7 @@ export default function ApiKeyForm() {
         onChange={(e) => setCourseId(e.target.value)}
         required
         disabled={coursesLoading || courses.length === 0}
-        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge bg-surface text-strong w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       >
         {coursesLoading ? (
           <option>Loading courses...</option>
@@ -99,16 +99,18 @@ export default function ApiKeyForm() {
         {loading ? "Generating..." : "Generate API Key"}
       </Button>
       {generatedKey && (
-        <div className="mt-4 rounded-lg border border-green-300 bg-green-50 p-3">
-          <p className="text-sm text-green-700">
+        <div className="mt-4 rounded-lg border border-green-300 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
+          <p className="text-sm text-green-700 dark:text-green-300">
             New API Key (Save this key, it won&apos;t be shown again):
           </p>
           <div className="flex items-center justify-between">
-            <span className="font-mono text-green-800">{generatedKey}</span>
+            <span className="font-mono text-green-800 dark:text-green-300">
+              {generatedKey}
+            </span>
             <button
               type="button"
               onClick={() => copyToClipboard(generatedKey)}
-              className="text-primary-600 ml-2 text-sm hover:text-blue-900"
+              className="text-primary-600 ml-2 text-sm hover:text-blue-900 dark:hover:text-blue-400"
             >
               Copy
             </button>

@@ -179,7 +179,7 @@ function CustomSelect({
                 <Select.Item
                   key={index}
                   value={String(index)}
-                  className="text-strong cursor-pointer px-3 py-2 text-sm transition-colors duration-150 hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[highlighted]:bg-blue-50"
+                  className="text-strong hover:bg-surface-muted focus:bg-surface-muted data-[highlighted]:bg-surface-muted cursor-pointer px-3 py-2 text-sm transition-colors duration-150 focus:outline-none"
                 >
                   <Select.ItemText>
                     {!isStandalonePWA()
@@ -241,7 +241,7 @@ function FormHeader() {
         {!isStandalonePWA() && (
           <>
             <ChevronRightIcon className="inline h-4 w-4" aria-hidden="true" />
-            <span className="text-primary-600 underline visited:text-purple-600 hover:text-blue-800">
+            <span className="text-primary-600 dark:text-primary-400 underline visited:text-purple-600 hover:text-blue-800 dark:visited:text-purple-400 dark:hover:text-blue-300">
               <a
                 href="https://create.roblox.com/dashboard/creations/upload?assetType=TShirt"
                 target="_blank"
@@ -259,19 +259,19 @@ function FormHeader() {
 
 function KnownIssuesAlert() {
   return (
-    <div className="mt-4 rounded-md bg-yellow-50 p-4">
+    <div className="mt-4 rounded-md bg-yellow-50 p-4 dark:bg-yellow-950">
       <div className="flex">
         <div className="shrink-0">
           <ExclamationTriangleIcon
             aria-hidden="true"
-            className="size-5 text-yellow-400"
+            className="size-5 text-yellow-400 dark:text-yellow-500"
           />
         </div>
         <div className="ml-3">
-          <h3 className="text-sm font-medium text-yellow-800">
+          <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
             Known issues and limitations
           </h3>
-          <ul className="mt-2 list-disc text-sm text-yellow-700">
+          <ul className="mt-2 list-disc text-sm text-yellow-700 dark:text-yellow-400">
             <li>
               For templates using custom characters (police, army, navy), only{" "}
               <b>alphabets</b> are currently supported.
@@ -400,7 +400,7 @@ function NametagForm() {
                   autoComplete="nametag_name"
                   placeholder="12 characters max"
                   value={name}
-                  className="border-edge block w-full rounded-md px-3 py-2 text-sm shadow-xs transition-all duration-200 hover:border-gray-400 focus:scale-[1.01] focus:border-slate-500 focus:ring-blue-500"
+                  className="border-edge bg-surface text-strong placeholder:text-muted hover:border-muted block w-full rounded-md px-3 py-2 text-sm shadow-xs transition-all duration-200 focus:scale-[1.01] focus:border-slate-500 focus:ring-blue-500"
                   maxLength={NAMETAG_LENGTH_LIMIT}
                   whileFocus={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -486,7 +486,7 @@ function NametagForm() {
                       type="number"
                       name="tshirt_id"
                       id="tshirt_id"
-                      className="border-edge block w-full min-w-0 flex-1 rounded-none rounded-r-md px-3 py-2 text-sm transition-all duration-200 hover:border-gray-400 focus:border-slate-500 focus:ring-blue-500"
+                      className="border-edge bg-surface text-strong placeholder:text-muted hover:border-muted block w-full min-w-0 flex-1 rounded-none rounded-r-md px-3 py-2 text-sm transition-all duration-200 focus:border-slate-500 focus:ring-blue-500"
                       min={1}
                       step={1}
                       defaultValue={currentTShirtID}
@@ -530,12 +530,12 @@ function NametagForm() {
                   >
                     <ArrowPathIcon className="h-4 w-4 text-blue-500" />
                   </motion.div>
-                  <span className="text-primary-600">
+                  <span className="text-primary-600 dark:text-primary-400">
                     Generating nametag...
                   </span>
                 </>
               ) : shouldGenerate ? (
-                <span className="text-green-600">
+                <span className="text-green-600 dark:text-green-400">
                   ✓ Nametag ready! Click to download.
                 </span>
               ) : (

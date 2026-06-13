@@ -303,7 +303,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
           <button
             type="button"
             onClick={handleInsertSample}
-            className="text-primary-600 rounded border border-blue-200 px-3 py-1 text-sm transition hover:bg-blue-50"
+            className="text-primary-600 rounded border border-blue-200 px-3 py-1 text-sm transition hover:bg-blue-50 dark:border-blue-800 dark:hover:bg-blue-950"
           >
             Insert sample
           </button>
@@ -328,7 +328,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
             value={courseId}
             onChange={(event) => setCourseId(event.target.value)}
             required
-            className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            className="border-edge bg-surface text-strong w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             disabled={courses.length === 0}
           >
             <option value="" disabled>
@@ -382,7 +382,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
         onChange={(event) => setRawInput(event.target.value)}
         placeholder="Appreciation,CynicallyClash,290965021,Adjudicator"
         rows={8}
-        className="border-edge w-full rounded-lg border px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge bg-surface text-strong placeholder:text-muted w-full rounded-lg border px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
       <div className="text-muted flex flex-wrap items-center gap-4 text-sm">
@@ -394,7 +394,11 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
         </span>
         <span>
           Rows with errors:{" "}
-          <strong className={totalErrors > 0 ? "text-red-600" : undefined}>
+          <strong
+            className={
+              totalErrors > 0 ? "text-red-600 dark:text-red-400" : undefined
+            }
+          >
             {totalErrors}
           </strong>
         </span>
@@ -440,8 +444,8 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
                   <tr
                     key={line.index}
                     className={clsx(
-                      isError && "bg-red-50",
-                      isSuccess && "bg-green-50"
+                      isError && "bg-red-50 dark:bg-red-950",
+                      isSuccess && "bg-green-50 dark:bg-green-950"
                     )}
                   >
                     <td className="text-muted px-4 py-2 font-mono text-xs whitespace-nowrap">
@@ -463,18 +467,18 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
                     </td>
                     <td className="text-strong px-4 py-2">
                       {line.errors.length > 0 ? (
-                        <ul className="list-inside list-disc text-xs text-red-600">
+                        <ul className="list-inside list-disc text-xs text-red-600 dark:text-red-400">
                           {line.errors.map((error) => (
                             <li key={error}>{error}</li>
                           ))}
                         </ul>
                       ) : status ? (
                         status.type === "success" ? (
-                          <span className="text-xs font-medium text-green-600">
+                          <span className="text-xs font-medium text-green-600 dark:text-green-400">
                             Issued · Code: {status.code}
                           </span>
                         ) : (
-                          <span className="text-xs font-medium text-red-600">
+                          <span className="text-xs font-medium text-red-600 dark:text-red-400">
                             {status.message}
                           </span>
                         )
@@ -497,7 +501,7 @@ export default function BulkIssuanceForm({ courses }: BulkIssuanceFormProps) {
             successfully.
           </p>
           {result.failureCount > 0 && (
-            <p className="text-red-600">
+            <p className="text-red-600 dark:text-red-400">
               <strong>{result.failureCount}</strong> certificates failed to
               issue. Review the table above for details.
             </p>

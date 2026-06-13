@@ -37,19 +37,21 @@ function Notice({
     <div
       className={clsx(
         "rounded-md p-4",
-        type === "urgent" ? "bg-red-50" : "bg-yellow-50"
+        type === "urgent"
+          ? "bg-red-50 dark:bg-red-950"
+          : "bg-yellow-50 dark:bg-yellow-950"
       )}
     >
       <div className="flex">
         <div className="shrink-0">
           {type === "urgent" ? (
             <ExclamationTriangleIcon
-              className="h-5 w-5 text-red-400"
+              className="h-5 w-5 text-red-400 dark:text-red-500"
               aria-hidden="true"
             />
           ) : (
             <ExclamationTriangleIcon
-              className="h-5 w-5 text-yellow-400"
+              className="h-5 w-5 text-yellow-400 dark:text-yellow-500"
               aria-hidden="true"
             />
           )}
@@ -58,7 +60,9 @@ function Notice({
           <h3
             className={clsx(
               "text-sm font-medium",
-              type === "urgent" ? "text-red-800" : "text-yellow-800"
+              type === "urgent"
+                ? "text-red-800 dark:text-red-300"
+                : "text-yellow-800 dark:text-yellow-300"
             )}
           >
             {title}
@@ -66,7 +70,9 @@ function Notice({
           <div
             className={clsx(
               "mt-2 text-sm",
-              type === "urgent" ? "text-red-700" : "text-yellow-700"
+              type === "urgent"
+                ? "text-red-700 dark:text-red-400"
+                : "text-yellow-700 dark:text-yellow-400"
             )}
           >
             <p>{content}</p>
@@ -312,7 +318,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
               name="sim_agency"
               required
               defaultValue=""
-              className="border-edge mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="border-edge bg-surface text-strong mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             >
               <option disabled value="">
                 Select a Sim agency
@@ -342,7 +348,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             required
             onChange={(e) => setCategory(e.target.value)}
             defaultValue=""
-            className="border-edge mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="border-edge bg-surface text-strong mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           >
             <option disabled value="">
               Select a request category
@@ -374,7 +380,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
                 id="visit_link"
                 name="visit_link"
                 placeholder="https://roblox.com/games/123456789/Example"
-                className="border-edge mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="border-edge bg-surface text-strong placeholder:text-muted mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
               />
             </div>
@@ -389,7 +395,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
                 type="date"
                 id="visit_date"
                 name="visit_date"
-                className="border-edge mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="border-edge bg-surface text-strong mt-1 block w-full rounded-md [color-scheme:light_dark] shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 required
                 min={new Date().toISOString().split("T")[0]} // Restrict past dates
               />
@@ -489,7 +495,7 @@ function PayoutRequestComponent({ groups }: { groups: RbxGroupData[] }) {
             name="reason"
             rows={5}
             maxLength={4096}
-            className="border-edge mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="border-edge bg-surface text-strong placeholder:text-muted mt-1 block w-full rounded-md shadow-xs focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => setReason(e.target.value)}
             required
           ></textarea>

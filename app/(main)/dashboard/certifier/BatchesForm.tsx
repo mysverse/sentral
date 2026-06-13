@@ -68,14 +68,14 @@ export default function BatchesForm({ batches, courses }: BatchesFormProps) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge bg-surface text-strong placeholder:text-muted w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
         <select
           name="courseId"
           value={courseId}
           onChange={(e) => setCourseId(e.target.value)}
           required
-          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge bg-surface text-strong w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           disabled={courses.length === 0}
         >
           <option value="" disabled={courseId !== ""}>

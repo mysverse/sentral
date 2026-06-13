@@ -66,7 +66,7 @@ export default function BatchForm() {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge bg-surface text-strong placeholder:text-muted w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
       <select
         name="courseId"
@@ -74,7 +74,7 @@ export default function BatchForm() {
         onChange={(e) => setCourseId(e.target.value)}
         required
         disabled={coursesLoading || courses.length === 0}
-        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge bg-surface text-strong w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       >
         {coursesLoading ? (
           <option>Loading courses...</option>

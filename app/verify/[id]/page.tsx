@@ -47,7 +47,7 @@ function DetailRow({
     <>
       {divider && <hr className="my-4" />}
       <div className="mb-4">
-        <dt className="text-gray-700">{label}</dt>
+        <dt className="text-gray-700 dark:text-gray-300">{label}</dt>
         <dd
           className="text-lg font-semibold"
           suppressHydrationWarning={suppressHydrationWarning}
@@ -102,7 +102,7 @@ export default async function VerifyPage(props: Props) {
           <h1 className="text-xl font-bold text-red-600 sm:text-2xl">
             Invalid Certificate Code
           </h1>
-          <p className="text-gray-700">
+          <p className="text-gray-700 dark:text-gray-300">
             The certificate code provided is invalid or does not exist.
           </p>
         </>
@@ -110,7 +110,7 @@ export default async function VerifyPage(props: Props) {
 
       <Link
         href="/verify"
-        className="text-sm text-gray-400 underline transition hover:text-gray-300 hover:no-underline"
+        className="text-muted hover:text-strong text-sm underline transition hover:no-underline"
       >
         Verify another certificate
       </Link>

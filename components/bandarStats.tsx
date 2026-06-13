@@ -45,7 +45,7 @@ function Stats({ bandarData }: { bandarData: MYSverseData["bandarData"] }) {
     // }
   ];
   return (
-    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5">
+    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 dark:bg-white/10">
       {stats.map((stat) => (
         <div
           key={stat.name}
@@ -104,7 +104,7 @@ function PosStats({
     }
   ];
   return (
-    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5">
+    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 dark:bg-white/10">
       {stats.map((stat) => (
         <div
           key={stat.name}
@@ -152,7 +152,7 @@ function TaxiStats({
     }
   ];
   return (
-    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5">
+    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 dark:bg-white/10">
       {stats.map((stat) => (
         <div
           key={stat.name}
@@ -223,7 +223,7 @@ function AgencyTimeStats({
     });
   }
   return (
-    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5">
+    <dl className="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 dark:bg-white/10">
       {stats.map((stat) => (
         <div
           key={stat.name}
@@ -338,9 +338,11 @@ function BandarStats({
 
 function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
   const statuses = {
-    Served: "text-green-700 bg-green-50 ring-green-600/20",
+    Served:
+      "text-green-700 bg-green-50 ring-green-600/20 dark:bg-green-950 dark:text-green-300",
     Ongoing: "text-muted bg-surface-muted ring-gray-500/10",
-    Issue: "text-red-700 bg-red-50 ring-red-600/10"
+    Issue:
+      "text-red-700 bg-red-50 ring-red-600/10 dark:bg-red-950 dark:text-red-300"
   };
 
   return arrests.length > 0 ? (
@@ -357,7 +359,7 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
             key={arrest.Reference}
             className="border-edge overflow-hidden rounded-xl border"
           >
-            <div className="bg-surface-muted flex items-center gap-x-4 border-b border-gray-900/5 px-6 py-4">
+            <div className="bg-surface-muted flex items-center gap-x-4 border-b border-gray-900/5 px-6 py-4 dark:border-white/10">
               {/* <img
               src={client.imageUrl}
               alt={client.name}
@@ -376,7 +378,7 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
               </div>
             </div>
 
-            <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
+            <dl className="divide-edge -my-3 divide-y px-6 py-4 text-sm leading-6">
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
                 <dt className="text-muted">Time arrested</dt>
                 <dd className="text-strong">
@@ -423,8 +425,9 @@ function Arrests({ arrests }: { arrests: MYSverseData["arrests"] }) {
 
 function Summons({ summons }: { summons: MYSverseData["summons"] }) {
   const statuses = {
-    Paid: "text-green-700 bg-green-50 ring-green-600/20",
-    Dispute: "text-red-700 bg-red-50 ring-red-600/10"
+    Paid: "text-green-700 bg-green-50 ring-green-600/20 dark:bg-green-950 dark:text-green-300",
+    Dispute:
+      "text-red-700 bg-red-50 ring-red-600/10 dark:bg-red-950 dark:text-red-300"
   };
 
   return summons.length > 0 ? (
@@ -439,7 +442,7 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
             key={summon.Reference}
             className="border-edge overflow-hidden rounded-xl border"
           >
-            <div className="bg-surface-muted flex items-center gap-x-4 border-b border-gray-900/5 px-6 py-4">
+            <div className="bg-surface-muted flex items-center gap-x-4 border-b border-gray-900/5 px-6 py-4 dark:border-white/10">
               {/* <img
               src={client.imageUrl}
               alt={client.name}
@@ -458,7 +461,7 @@ function Summons({ summons }: { summons: MYSverseData["summons"] }) {
               </div>
             </div>
 
-            <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
+            <dl className="divide-edge -my-3 divide-y px-6 py-4 text-sm leading-6">
               <div className="flex flex-col justify-between gap-x-4 py-3 lg:flex-row">
                 <dt className="text-muted">Time</dt>
                 <dd className="text-strong">

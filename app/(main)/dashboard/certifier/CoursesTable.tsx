@@ -60,7 +60,7 @@ export default function CoursesTable({ courses }: CoursesTableProps) {
               <td className="px-6 py-4 whitespace-nowrap">
                 <button
                   onClick={() => handleDelete(course.id)}
-                  className="text-red-600 hover:text-red-900"
+                  className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
                 >
                   Delete
                 </button>

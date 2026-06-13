@@ -22,7 +22,7 @@ export default function RobloxAccountRequired() {
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
           <DialogPanel
             transition
-            className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:data-closed:translate-y-0 sm:data-closed:scale-95"
+            className="bg-surface relative transform overflow-hidden rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:data-closed:translate-y-0 sm:data-closed:scale-95"
           >
             <div>
               <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-red-100">
@@ -34,11 +34,11 @@ export default function RobloxAccountRequired() {
               <div className="mt-3 text-center sm:mt-5">
                 <DialogTitle
                   as="h3"
-                  className="text-base font-semibold text-gray-900"
+                  className="text-strong text-base font-semibold"
                 >
                   Linked Roblox account required
                 </DialogTitle>
-                <div className="mt-2 flex flex-col space-y-2 text-sm text-gray-500">
+                <div className="text-muted mt-2 flex flex-col space-y-2 text-sm">
                   <p>
                     You must have a linked Roblox account to access this page.
                   </p>

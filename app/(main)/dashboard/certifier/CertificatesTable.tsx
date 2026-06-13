@@ -143,19 +143,19 @@ export default function CertificatesTable({
               <td className="space-x-3 px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                 <Link
                   href={`/api/certifier/${certificate.id}`}
-                  className="text-primary-600 hover:text-blue-900"
+                  className="text-primary-600 hover:text-blue-900 dark:hover:text-blue-400"
                 >
                   Download
                 </Link>
                 <Link
                   href={`/api/certifier/${certificate.id}?view=true`}
-                  className="text-primary-600 hover:text-blue-900"
+                  className="text-primary-600 hover:text-blue-900 dark:hover:text-blue-400"
                 >
                   View
                 </Link>
                 <button
                   onClick={() => openModal(certificate.id)}
-                  className="text-red-600 hover:text-red-900"
+                  className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
                 >
                   Revoke
                 </button>

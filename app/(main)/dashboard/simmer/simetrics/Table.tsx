@@ -93,7 +93,9 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
 
   const SortIcon = ({ columnKey }: { columnKey: SortKey }) => {
     if (sortKey !== columnKey) {
-      return <ChevronDownIcon className="ml-1 inline h-4 w-4 text-gray-300" />;
+      return (
+        <ChevronDownIcon className="ml-1 inline h-4 w-4 text-gray-300 dark:text-gray-600" />
+      );
     }
     return sortOrder === "desc" ? (
       <ChevronDownIcon className="text-primary-600 ml-1 inline h-4 w-4" />
@@ -124,7 +126,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
-              className="border-edge w-full rounded-md py-2 pr-3 pl-9 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-64"
+              className="border-edge bg-surface text-strong placeholder:text-muted w-full rounded-md py-2 pr-3 pl-9 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-64"
             />
           </div>
         </div>
@@ -213,7 +215,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             className={clsx(
               "rounded-md px-2.5 py-1.5 text-sm transition",
               safePage === 1
-                ? "cursor-not-allowed text-gray-300"
+                ? "cursor-not-allowed text-gray-300 dark:text-gray-600"
                 : "text-muted hover:bg-surface-muted"
             )}
           >
@@ -255,7 +257,7 @@ export default function SimetryTable({ dataset }: { dataset: User[] }) {
             className={clsx(
               "rounded-md px-2.5 py-1.5 text-sm transition",
               safePage === totalPages
-                ? "cursor-not-allowed text-gray-300"
+                ? "cursor-not-allowed text-gray-300 dark:text-gray-600"
                 : "text-muted hover:bg-surface-muted"
             )}
           >

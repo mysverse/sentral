@@ -39,7 +39,7 @@ export default function CourseForm() {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge bg-surface text-strong placeholder:text-muted w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
       <textarea
         name="description"
@@ -47,7 +47,7 @@ export default function CourseForm() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         rows={3}
-        className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="border-edge bg-surface text-strong placeholder:text-muted w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
       <Button type="submit" disabled={loading} className="w-full">
         {loading ? "Creating..." : "Create Course"}

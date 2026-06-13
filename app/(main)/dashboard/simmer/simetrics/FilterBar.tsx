@@ -54,7 +54,7 @@ export default function FilterBar({
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="border-t border-gray-100 px-4 pb-4 sm:px-6">
+                    <div className="border-edge border-t px-4 pb-4 sm:px-6">
                       <div className="flex flex-col gap-4 pt-4 sm:flex-row sm:items-end">
                         <div className="flex flex-col gap-1.5 sm:flex-1">
                           <label className="text-strong flex items-center gap-1.5 text-sm font-medium">
@@ -66,7 +66,7 @@ export default function FilterBar({
                             value={selectedDate}
                             max={maxDate}
                             onChange={(e) => onDateChange(e.target.value)}
-                            className="border-edge rounded-md text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            className="border-edge bg-surface text-strong rounded-md text-sm [color-scheme:light_dark] shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5 sm:flex-1">
@@ -78,7 +78,7 @@ export default function FilterBar({
                             type="time"
                             value={startTime}
                             onChange={(e) => onStartTimeChange(e.target.value)}
-                            className="border-edge rounded-md text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            className="border-edge bg-surface text-strong rounded-md text-sm [color-scheme:light_dark] shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5 sm:flex-1">
@@ -90,7 +90,7 @@ export default function FilterBar({
                             type="time"
                             value={endTime}
                             onChange={(e) => onEndTimeChange(e.target.value)}
-                            className="border-edge rounded-md text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            className="border-edge bg-surface text-strong rounded-md text-sm [color-scheme:light_dark] shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           />
                         </div>
                       </div>

@@ -99,7 +99,7 @@ export default function QRCodeScanner() {
           >
             {/* Show a list of devices from the useDevices hook */}
             <select
-              className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 focus:outline-hidden sm:text-sm"
+              className="border-edge bg-surface text-strong block w-full rounded-md border px-3 py-2 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 focus:outline-hidden sm:text-sm"
               onChange={(e) => {
                 if (!e.target.disabled) setDeviceId(e.target.value);
               }}
@@ -158,7 +158,7 @@ export default function QRCodeScanner() {
               if (e.key === "Enter") handleManualSubmit();
             }}
             required
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-hidden"
+            className="border-edge bg-surface text-strong placeholder:text-muted w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-hidden"
             ref={inputRef}
           />
           <button

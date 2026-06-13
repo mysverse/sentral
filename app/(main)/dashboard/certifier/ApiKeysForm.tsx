@@ -71,7 +71,7 @@ export default function ApiKeysForm({ apiKeys, courses }: ApiKeysFormProps) {
           value={courseId}
           onChange={(e) => setCourseId(e.target.value)}
           required
-          className="border-edge w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="border-edge bg-surface text-strong w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           disabled={courses.length === 0}
         >
           <option value="" disabled={courseId !== ""}>
@@ -123,8 +123,8 @@ export default function ApiKeysForm({ apiKeys, courses }: ApiKeysFormProps) {
                     className={clsx(
                       "ml-2 rounded-full px-2 py-0.5 text-xs",
                       apiKey.isActive
-                        ? "bg-green-200 text-green-800"
-                        : "bg-red-200 text-red-800"
+                        ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                        : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
                     )}
                   >
                     {apiKey.isActive ? "Active" : "Inactive"}
