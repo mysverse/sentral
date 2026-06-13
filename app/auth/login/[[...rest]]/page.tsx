@@ -9,8 +9,8 @@ export default function LoginContent() {
   return (
     <SignIn
       appearance={{
-        baseTheme: resolvedTheme === "dark" ? dark : undefined,
-        layout: {
+        theme: resolvedTheme === "dark" ? dark : undefined,
+        options: {
           logoPlacement: "none",
           termsPageUrl: "/terms-of-service",
           privacyPageUrl: "/privacy-policy"
