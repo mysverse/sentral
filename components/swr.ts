@@ -1,9 +1,14 @@
 import useSWR from "swr";
 import type { SWRConfiguration } from "swr";
+import {
+  avatarReadKey,
+  GENTAG_TEMPLATES_KEY,
+  invoteSeatsKey,
+  invoteStatsKey,
+  MECS_READ_KEYS
+} from "lib/readKeys";
 
 import { DefaultAPIResponse, NametagTemplate, StaffDecision } from "./apiTypes";
-
-import { endpoints } from "./constants/endpoints";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === "object";
@@ -12,21 +17,6 @@ const isNumber = (value: unknown): value is number =>
   typeof value === "number" && Number.isFinite(value);
 
 const isString = (value: unknown): value is string => typeof value === "string";
-
-const endpointUrl = (base: string | undefined, path: string) => {
-  if (!base) {
-    return null;
-  }
-
-  const normalizedBase = base.replace(/\/$/, "");
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-
-  try {
-    return new URL(`${normalizedBase}${normalizedPath}`).toString();
-  } catch {
-    return null;
-  }
-};
 
 const readJson = async (response: Response) => {
   const text = await response.text();
@@ -97,7 +87,7 @@ class FetchError extends Error {
   }
 }
 
-const fetcher = async (url: string) => {
+export const readFetcher = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);
   const data = await readJson(response);
 
@@ -108,7 +98,10 @@ const fetcher = async (url: string) => {
     );
   }
 
-  return data;
+  if (isRecord(data) && "data" in data && "fetchedAt" in data) {
+    return data.data as T;
+  }
+  return data as T;
 };
 
 /**
@@ -137,7 +130,29 @@ export const swrOnErrorRetry: SWRConfiguration["onErrorRetry"] = (
 export const defaultSwrOptions: SWRConfiguration = {
   onErrorRetry: swrOnErrorRetry,
   dedupingInterval: 10_000,
+  focusThrottleInterval: 30_000,
+  revalidateOnReconnect: true
+};
+
+export const dashboardSwrOptions: SWRConfiguration = {
+  dedupingInterval: 5 * 60 * 1000,
+  focusThrottleInterval: 5 * 60 * 1000
+};
+
+export const liveSwrOptions: SWRConfiguration = {
+  dedupingInterval: 15_000,
   focusThrottleInterval: 30_000
+};
+
+export const immutableSwrOptions: SWRConfiguration = {
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  dedupingInterval: 60 * 60 * 1000
+};
+
+export const privateSwrOptions: SWRConfiguration = {
+  dedupingInterval: 30_000,
+  revalidateOnFocus: false
 };
 
 const unexpectedResponseError = (label: string) =>
@@ -224,14 +239,9 @@ export function useInvoteStats(
   seriesIdentifier?: string
 ) {
   const { data, error } = useSWR(
-    shouldFetch && seriesIdentifier
-      ? `${
-          endpoints.invote
-        }/stats/timestamp?series_identifier=${encodeURIComponent(
-          seriesIdentifier
-        )}`
-      : null,
-    fetcher
+    shouldFetch && seriesIdentifier ? invoteStatsKey(seriesIdentifier) : null,
+    readFetcher,
+    liveSwrOptions
   );
 
   return {
@@ -250,12 +260,11 @@ export function useInvoteSeatStats(
   shouldFetch: boolean,
   seriesIdentifier?: string
 ) {
-  const url =
-    seriesIdentifier &&
-    `${endpoints.invote}/stats/seats/${encodeURIComponent(seriesIdentifier)}`;
+  const url = seriesIdentifier && invoteSeatsKey(seriesIdentifier);
   const { data, error } = useSWR(
     shouldFetch && seriesIdentifier ? url : null,
-    fetcher
+    readFetcher,
+    liveSwrOptions
   );
 
   return {
@@ -336,20 +345,14 @@ export function useAvatarThumbnails(shouldFetch: boolean, userIds: number[]) {
   const shouldLoad = shouldFetch && validUserIds.length > 0;
 
   const { data, error } = useSWR(
-    shouldLoad
-      ? `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
-          `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${validUserIds.join(
-            ","
-          )}&size=100x100&format=Png&isCircular=false`
-        )}`
-      : null,
-    fetcher
+    shouldLoad ? avatarReadKey(validUserIds, 100, "headshot") : null,
+    readFetcher,
+    dashboardSwrOptions
   );
 
-  const stats =
-    isRecord(data) && Array.isArray(data.data)
-      ? ({ data: data.data.filter(isAvatarData) } satisfies AvatarResponse)
-      : undefined;
+  const stats = Array.isArray(data)
+    ? ({ data: data.filter(isAvatarData) } satisfies AvatarResponse)
+    : undefined;
 
   return {
     stats,
@@ -362,8 +365,12 @@ export function useAvatarThumbnails(shouldFetch: boolean, userIds: number[]) {
 }
 
 export function useStaffStats(shouldFetch: boolean) {
-  const url = endpointUrl(endpoints.mecs, "/audit/staff");
-  const { data, error } = useSWR(shouldFetch ? url : null, fetcher);
+  const url = MECS_READ_KEYS.staff;
+  const { data, error } = useSWR(
+    shouldFetch ? url : null,
+    readFetcher,
+    dashboardSwrOptions
+  );
   const staffStats = Array.isArray(data)
     ? data.filter(isStaffStatsItem)
     : undefined;
@@ -387,8 +394,12 @@ interface TimeCaseStats {
 }
 
 export function useTimeCaseStats(shouldFetch: boolean) {
-  const url = endpointUrl(endpoints.mecs, "/stats/case");
-  const { data, error } = useSWR(shouldFetch ? url : null, fetcher);
+  const url = MECS_READ_KEYS.caseStats;
+  const { data, error } = useSWR(
+    shouldFetch ? url : null,
+    readFetcher,
+    dashboardSwrOptions
+  );
   const stats = Array.isArray(data) ? data.filter(isTimeCaseStats) : undefined;
 
   return {
@@ -404,8 +415,12 @@ export function useTimeCaseStats(shouldFetch: boolean) {
 }
 
 export function useAuditStats(shouldFetch: boolean) {
-  const url = endpointUrl(endpoints.mecs, "/audit/accuracy");
-  const { data, error } = useSWR(shouldFetch ? url : null, fetcher);
+  const url = MECS_READ_KEYS.audit;
+  const { data, error } = useSWR(
+    shouldFetch ? url : null,
+    readFetcher,
+    dashboardSwrOptions
+  );
   const auditStats = isAuditStats(data) ? data : undefined;
 
   return {
@@ -425,28 +440,21 @@ export function useUserData(
   shouldFetch: boolean,
   treatAsUserId?: boolean
 ) {
-  const urlString = endpointUrl(
-    endpoints.mecs,
-    `/user/${encodeURIComponent(username.toLowerCase())}`
-  );
-  const url = urlString ? new URL(urlString) : null;
+  const url = username
+    ? `/api/read/mecs/user?query=${encodeURIComponent(
+        username.toLowerCase()
+      )}&type=${treatAsUserId ? "id" : "name"}`
+    : null;
 
-  if (url && typeof treatAsUserId !== "undefined") {
-    url.searchParams.set("paramType", treatAsUserId ? "id" : "name");
-  }
-
-  const { data, error } = useSWR(
-    shouldFetch ? url?.toString() : null,
-    fetcher,
-    {
-      revalidateOnFocus: false
-    }
-  );
+  const { data, error } = useSWR(shouldFetch ? url : null, readFetcher, {
+    ...privateSwrOptions,
+    keepPreviousData: false
+  });
   const apiResponse = isDefaultAPIResponse(data) ? data : undefined;
 
   return {
     apiResponse,
-    isLoading: shouldFetch && !!url && !error && !hasData(data),
+    isLoading: shouldFetch && Boolean(url) && !error && !hasData(data),
     isError: (error ||
       (shouldFetch && !url
         ? new Error("The MECS API is not configured.")
@@ -474,8 +482,9 @@ const isNewBlacklistData = (data: unknown): data is NewBlacklistData =>
 
 export function useCombinedBlacklistData(shouldFetch: boolean) {
   const { data, isLoading, error } = useSWR(
-    shouldFetch ? `https://mysverse-blacklist.yan3321.workers.dev/new` : null,
-    fetcher
+    shouldFetch ? MECS_READ_KEYS.blacklist : null,
+    readFetcher,
+    dashboardSwrOptions
   );
 
   const response = Array.isArray(data)
@@ -495,7 +504,7 @@ export function useCombinedBlacklistData(shouldFetch: boolean) {
   };
 }
 
-const blobFetcher = async (input: RequestInfo) => {
+export const blobFetcher = async (input: RequestInfo) => {
   const res = await fetch(input);
   if (!res.ok) {
     throw new Error(
@@ -510,8 +519,9 @@ const blobFetcher = async (input: RequestInfo) => {
 
 export function useNametagTemplates(shouldFetch: boolean) {
   const { data, error } = useSWR(
-    shouldFetch ? `${endpoints.gentag}/nametag/options` : null,
-    fetcher
+    shouldFetch ? GENTAG_TEMPLATES_KEY : null,
+    readFetcher,
+    immutableSwrOptions
   );
 
   return {
@@ -528,17 +538,22 @@ export function useImageData(
   tShirtIDs: number[] = [],
   shouldFetch: boolean
 ) {
-  const url = new URL(
-    `${endpoints.gentag}/nametag/${
-      preview ? "preview" : "create"
-    }/${encodeURIComponent(index)}/${encodeURIComponent(name)}`
-  );
+  const search = new URLSearchParams({
+    name,
+    index: String(index),
+    preview: preview ? "1" : "0"
+  });
   for (const id of tShirtIDs) {
-    url.searchParams.append("assetId", id.toString());
+    search.append("assetId", id.toString());
   }
   const { data, error } = useSWR(
-    shouldFetch ? url.toString() : null,
-    blobFetcher
+    shouldFetch ? `/api/read/gentag/image?${search}` : null,
+    blobFetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60 * 60 * 1000
+    }
   );
   return {
     image: data as Blob,

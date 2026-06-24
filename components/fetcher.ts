@@ -1,15 +1,22 @@
-import { safeRedisMget, safeRedisMset } from "lib/redis";
+import { safeRedisHmget, safeRedisHset } from "lib/redis";
 import { GrowthEntry } from "./apiTypes";
 
 import { endpoints } from "./constants/endpoints";
 import { Leaderboard } from "./constants/types";
 import { fetchJsonOrThrow, readJsonSafe, THUMBNAIL_TIMEOUT } from "lib/http";
 import { logAppError, toAppError } from "lib/errors";
+import { cacheLife, cacheTag } from "next/cache";
+import {
+  avatarCacheKey,
+  mergeCachedByNumericId,
+  normalizeNumericIds
+} from "lib/cacheKeys";
 
 export async function getGrowthData() {
-  const data = await fetchJsonOrThrow<GrowthEntry[]>(`${endpoints.growth}`, {
-    next: { revalidate: 60 }
-  });
+  "use cache";
+  cacheLife("dashboard");
+  cacheTag("growth:data");
+  const data = await fetchJsonOrThrow<GrowthEntry[]>(`${endpoints.growth}`);
   return data;
 }
 
@@ -115,6 +122,7 @@ interface AvatarResponse {
 }
 
 const AVATAR_TTL_SECONDS = 60 * 60;
+const PENDING_AVATAR_TTL_SECONDS = 30;
 
 async function fetchAvatarThumbnails(
   userIds: number[],
@@ -151,18 +159,24 @@ async function fetchAvatarThumbnails(
 
       if (response.ok) {
         const data = (await readJsonSafe(response)) as AvatarResponse;
-        const filteredData = data.data.filter(
-          (item) => item.state === "Completed"
-        );
-
-        if (filteredData.length > 0) {
-          const cacheRecords: Record<string, AvatarData> = {};
-          for (const item of filteredData) {
-            if (item.targetId) {
-              cacheRecords[`avatar:${type}:${size}:${item.targetId}`] = item;
-            }
+        const completed: Record<string, AvatarData> = {};
+        const pending: Record<string, AvatarData> = {};
+        for (const item of data.data) {
+          if (!item.targetId) {
+            continue;
           }
-          await safeRedisMset(cacheRecords, AVATAR_TTL_SECONDS);
+          const target = item.state === "Completed" ? completed : pending;
+          target[String(item.targetId)] = item;
+        }
+        if (Object.keys(completed).length > 0) {
+          await safeRedisHset(avatarCacheKey(type, size), completed, {
+            ttlSeconds: AVATAR_TTL_SECONDS
+          });
+        }
+        if (Object.keys(pending).length > 0) {
+          await safeRedisHset(avatarCacheKey(type, size), pending, {
+            ttlSeconds: PENDING_AVATAR_TTL_SECONDS
+          });
         }
 
         combinedData = combinedData.concat(data.data);
@@ -186,14 +200,15 @@ export async function getAvatarThumbnails(
   size = 100,
   type: "headshot" | "bust" = "headshot"
 ) {
-  userIds = userIds.sort();
+  userIds = normalizeNumericIds(userIds);
 
   if (userIds.length === 0) {
     return [];
   }
 
-  const cachedThumbnails = await safeRedisMget<AvatarData>(
-    userIds.map((id) => `avatar:${type}:${size}:${id}`)
+  const cachedThumbnails = await safeRedisHmget<AvatarData>(
+    avatarCacheKey(type, size),
+    userIds.map(String)
   );
 
   const available = cachedThumbnails.filter((item) => item !== null);
@@ -201,7 +216,12 @@ export async function getAvatarThumbnails(
 
   if (missingIds.length > 0) {
     const missingData = await fetchAvatarThumbnails(missingIds, size, type);
-    return available.concat(missingData);
+    return mergeCachedByNumericId(
+      userIds,
+      cachedThumbnails,
+      missingData,
+      (item) => item.targetId
+    );
   } else {
     return available;
   }
@@ -425,6 +445,9 @@ interface Summon {
 }
 
 export async function getLeaderboardData(type?: string) {
+  "use cache";
+  cacheLife("rapid");
+  cacheTag(`tracer:leaderboard:${type ?? "default"}`);
   const url = new URL(`${endpoints.mysverse}/`);
   url.searchParams.set("type", "lebuhraya_jersik_leaderboard");
 
@@ -432,9 +455,7 @@ export async function getLeaderboardData(type?: string) {
     url.searchParams.set("leaderboardType", type);
   }
 
-  const data = await fetchJsonOrThrow<Leaderboard[]>(url.toString(), {
-    next: { revalidate: 60 }
-  });
+  const data = await fetchJsonOrThrow<Leaderboard[]>(url.toString());
 
   return data;
 }
@@ -446,9 +467,7 @@ export async function getMysverseData(userId?: number) {
     url.searchParams.set("userId", userId.toString());
   }
 
-  const data = await fetchJsonOrThrow<MYSverseData>(url.toString(), {
-    next: { revalidate: 60 }
-  });
+  const data = await fetchJsonOrThrow<MYSverseData>(url.toString());
 
   return normalizeMysverseData(data);
 }
