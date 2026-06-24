@@ -1,7 +1,10 @@
 # Caching rollout runbook
 
-This release requires Clerk claims and the Redis v2 data migration to be ready
-before production traffic is switched to the new code.
+Production Vercel builds now run the pending rollout steps automatically before
+`next build`. A versioned Redis status hash makes the process idempotent and
+resumable: completed steps are skipped on later deploys, and a short-lived
+distributed lock prevents concurrent production builds from doing the same
+work.
 
 ## 1. Configure Clerk
 
@@ -21,27 +24,30 @@ the complete public metadata or external-account objects.
 Create a webhook pointing to `/api/webhooks/clerk`, subscribe to `user.created`
 and `user.updated`, and set `CLERK_WEBHOOK_SIGNING_SECRET`.
 
-Backfill and verify existing users:
+The next production deployment backfills existing users automatically. These
+commands remain available for inspection or an explicit manual run:
 
 ```bash
 pnpm clerk:backfill-roblox
-pnpm clerk:backfill-roblox --apply
+pnpm rollout:status
+pnpm rollout:production
 ```
 
-Sign out and back in, or wait for Clerk's session token to refresh, then verify
-that `roblox_id` and `roblox_username` are present.
+The navigation detects linked users with stale claims and calls Clerk's
+`user.reload()` once, forcing a fresh session token without adding routine
+Clerk Backend API calls to navigation.
 
 ## 2. Migrate Redis
 
-The migration is dry-run by default:
+The standalone migration remains dry-run by default:
 
 ```bash
 pnpm redis:migrate-v2
-pnpm redis:migrate-v2 --apply
+pnpm rollout:production
 ```
 
-Deploy only after the v2 hashes are populated. Keep legacy keys for the
-24-hour rollback window, then remove them:
+The automated rollout retains legacy keys. After the new deployment has been
+healthy for 24 hours, remove them explicitly:
 
 ```bash
 pnpm redis:migrate-v2 --apply --cleanup
@@ -49,6 +55,9 @@ pnpm redis:migrate-v2 --apply --cleanup
 
 The production identity reconciliation cron runs every six hours and should use
 three Redis commands when mappings exist.
+
+Set `SKIP_PRODUCTION_ROLLOUTS=1` only as an emergency Vercel environment
+override. Preview and local builds skip production rollout work automatically.
 
 ## 3. Deploy and validate
 

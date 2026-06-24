@@ -15,7 +15,9 @@
     "knip": "knip",
     "redis:migrate-v2": "dotenv -e .env.local -- tsx scripts/migrate-redis-v2.ts",
     "clerk:backfill-roblox": "dotenv -e .env.local -- tsx scripts/backfill-clerk-roblox.ts",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build"
+    "rollout:status": "dotenv -e .env.local -- tsx scripts/run-production-rollouts.ts --status",
+    "rollout:production": "dotenv -e .env.local -- tsx scripts/run-production-rollouts.ts --force",
+    "vercel-build": "prisma generate && prisma migrate deploy && tsx scripts/run-production-rollouts.ts && next build"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.5.2",
