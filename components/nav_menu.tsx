@@ -17,12 +17,16 @@ import TracerLogo from "public/img/tracer/MYS_Tracer_Logo.svg";
 import SimmerLogo from "public/img/simmer/simmer_logo.svg";
 import SimetricsLogo from "public/img/simetrics/MYS_Simetrics_Logo.svg";
 import Link from "next/link";
+import IntentPrefetchLink from "components/IntentPrefetchLink";
 import { clsx } from "clsx";
 import PrivacyBanner from "./privacy/privacyBanner";
 import ThemeToggle from "components/ui/theme-toggle";
 import { motion } from "motion/react";
 import { springUI } from "components/ui/motion";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
+import useSWR from "swr";
+import { invoteSeatsKey, invoteStatsKey, MECS_READ_KEYS } from "lib/readKeys";
 
 import { ReactNode } from "react";
 
@@ -34,14 +38,33 @@ type NavigationItem = {
   logo?: any; // Replace `any` with a more specific type if needed
 };
 
-export default function NavMenu({
-  avatar,
-  sim
-}: {
-  avatar?: ReactNode;
-  sim?: boolean;
-}) {
+export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
   const pathname = usePathname();
+  const { isSignedIn } = useAuth();
+  const { data: access } = useSWR<{ data: { authorised: boolean } }>(
+    isSignedIn ? "/api/read/access/simmer" : null,
+    async (url: string) => {
+      const response = await fetch(url);
+      if (!response.ok) {
+        return { data: { authorised: false } };
+      }
+      return response.json();
+    },
+    {
+      dedupingInterval: 5 * 60 * 1000,
+      revalidateOnFocus: false
+    }
+  );
+  const sim = access?.data.authorised ?? false;
+  const prefetchData: Record<string, string[]> = {
+    "/dashboard/mecs": [
+      MECS_READ_KEYS.staff,
+      MECS_READ_KEYS.caseStats,
+      MECS_READ_KEYS.audit,
+      MECS_READ_KEYS.blacklist
+    ],
+    "/dashboard/invote": [invoteStatsKey("GE25"), invoteSeatsKey("GE25")]
+  };
 
   let navigation: NavigationItem[] = [
     { name: "Home", href: "/dashboard", current: false },
@@ -217,15 +240,16 @@ export default function NavMenu({
                               {label}
                             </a>
                           ) : (
-                            <Link
+                            <IntentPrefetchLink
                               key={item.name}
                               href={item.href}
+                              swrKeys={prefetchData[item.href]}
                               className={linkClasses}
                               aria-current={item.current ? "page" : undefined}
                             >
                               {activePill}
                               {label}
-                            </Link>
+                            </IntentPrefetchLink>
                           );
                         })}
                     </div>

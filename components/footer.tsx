@@ -5,6 +5,8 @@ import { isStandalonePWA } from "./utils";
 import Link from "next/link";
 import VerifyACertificate from "./VerifyACertificate";
 
+const COPYRIGHT_YEAR = 2026;
+
 // import PlayStoreBadge from "public/img/store_badges/store_badge_google.svg";
 // import MicrosoftStoreBadge from "public/img/store_badges/store_badge_microsoft.svg";
 
@@ -93,8 +95,7 @@ export default function Footer() {
           ))}
         </div>
         <p className="mt-8 text-center text-sm font-light text-white">
-          &copy; {new Date().getFullYear()} MYSverse Digital Ventures
-          (AS0469188-M).
+          &copy; {COPYRIGHT_YEAR} MYSverse Digital Ventures (AS0469188-M).
         </p>
         <p className="mt-2 text-center text-sm font-light text-white">
           All trademarks are property of their respective owners.

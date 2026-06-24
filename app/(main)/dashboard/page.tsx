@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import IntentPrefetchLink from "components/IntentPrefetchLink";
+import { invoteSeatsKey, invoteStatsKey, MECS_READ_KEYS } from "lib/readKeys";
 
 import { isStandalonePWA } from "components/utils";
 import GeneralFAQ from "components/generalFaq";
@@ -105,8 +106,20 @@ function AppList() {
           <div>
             <div className="divide-edge -mt-px flex divide-x">
               <div className="flex w-0 flex-1">
-                <Link
+                <IntentPrefetchLink
                   href={link.href}
+                  swrKeys={
+                    link.href === "/dashboard/mecs"
+                      ? [
+                          MECS_READ_KEYS.staff,
+                          MECS_READ_KEYS.caseStats,
+                          MECS_READ_KEYS.audit,
+                          MECS_READ_KEYS.blacklist
+                        ]
+                      : link.href === "/dashboard/invote"
+                        ? [invoteStatsKey("GE25"), invoteSeatsKey("GE25")]
+                        : undefined
+                  }
                   className="text-strong hover:text-muted relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium"
                 >
                   <ArrowTopRightOnSquareIcon
@@ -114,7 +127,7 @@ function AppList() {
                     aria-hidden="true"
                   />
                   <span className="ml-3">Launch applet</span>
-                </Link>
+                </IntentPrefetchLink>
               </div>
             </div>
           </div>
