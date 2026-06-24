@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { sessionFromClaims } from "./authClaims";
+import { sessionFromClaims, shouldRefreshRobloxClaims } from "./authClaims";
 
 describe("sessionFromClaims", () => {
   it("returns null for signed-out requests", () => {
@@ -29,5 +29,25 @@ describe("sessionFromClaims", () => {
         name: "User"
       }
     });
+  });
+
+  it("refreshes a linked user's stale session claims only once", () => {
+    expect(
+      shouldRefreshRobloxClaims({
+        isSignedIn: true,
+        robloxId: undefined,
+        hasLinkedRobloxAccount: true,
+        attempted: false
+      })
+    ).toBe(true);
+
+    expect(
+      shouldRefreshRobloxClaims({
+        isSignedIn: true,
+        robloxId: undefined,
+        hasLinkedRobloxAccount: true,
+        attempted: true
+      })
+    ).toBe(false);
   });
 });

@@ -23,12 +23,13 @@ import PrivacyBanner from "./privacy/privacyBanner";
 import ThemeToggle from "components/ui/theme-toggle";
 import { motion } from "motion/react";
 import { springUI } from "components/ui/motion";
-import { usePathname } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth, useUser } from "@clerk/nextjs";
 import useSWR from "swr";
 import { invoteSeatsKey, invoteStatsKey, MECS_READ_KEYS } from "lib/readKeys";
+import { shouldRefreshRobloxClaims } from "lib/authClaims";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 type NavigationItem = {
   name: string;
@@ -40,9 +41,20 @@ type NavigationItem = {
 
 export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
   const pathname = usePathname();
-  const { isSignedIn } = useAuth();
+  const router = useRouter();
+  const { isSignedIn, sessionClaims } = useAuth();
+  const { user } = useUser();
+  const refreshAttempted = useRef(false);
+  const robloxId =
+    typeof sessionClaims?.roblox_id === "string"
+      ? sessionClaims.roblox_id
+      : undefined;
+  const hasLinkedRobloxAccount =
+    user?.externalAccounts.some(
+      (account) => account.provider === "custom_roblox"
+    ) ?? false;
   const { data: access } = useSWR<{ data: { authorised: boolean } }>(
-    isSignedIn ? "/api/read/access/simmer" : null,
+    isSignedIn && robloxId ? "/api/read/access/simmer" : null,
     async (url: string) => {
       const response = await fetch(url);
       if (!response.ok) {
@@ -55,6 +67,34 @@ export default function NavMenu({ avatar }: { avatar?: ReactNode }) {
       revalidateOnFocus: false
     }
   );
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      refreshAttempted.current = false;
+      return;
+    }
+
+    if (
+      !user ||
+      !shouldRefreshRobloxClaims({
+        isSignedIn,
+        robloxId,
+        hasLinkedRobloxAccount,
+        attempted: refreshAttempted.current
+      })
+    ) {
+      return;
+    }
+
+    refreshAttempted.current = true;
+    void user
+      .reload()
+      .then(() => router.refresh())
+      .catch(() => {
+        refreshAttempted.current = false;
+      });
+  }, [hasLinkedRobloxAccount, isSignedIn, robloxId, router, user]);
+
   const sim = access?.data.authorised ?? false;
   const prefetchData: Record<string, string[]> = {
     "/dashboard/mecs": [

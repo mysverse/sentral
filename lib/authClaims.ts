@@ -6,6 +6,20 @@ export type RobloxSession = {
   };
 };
 
+export function shouldRefreshRobloxClaims({
+  isSignedIn,
+  robloxId,
+  hasLinkedRobloxAccount,
+  attempted
+}: {
+  isSignedIn: boolean;
+  robloxId?: string;
+  hasLinkedRobloxAccount: boolean;
+  attempted: boolean;
+}) {
+  return isSignedIn && !robloxId && !attempted && hasLinkedRobloxAccount;
+}
+
 export function sessionFromClaims(
   userId: string | null | undefined,
   claims: Record<string, unknown> | null | undefined
