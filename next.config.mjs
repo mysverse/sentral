@@ -22,6 +22,34 @@ const securityHeaders = [
 
 export default withSerwist(
   withBundleAnalyzer({
+    cacheComponents: true,
+    cacheLife: {
+      live: {
+        stale: 5,
+        revalidate: 15,
+        expire: 5 * 60
+      },
+      rapid: {
+        stale: 30,
+        revalidate: 60,
+        expire: 10 * 60
+      },
+      dashboard: {
+        stale: 60,
+        revalidate: 5 * 60,
+        expire: 60 * 60
+      },
+      metadata: {
+        stale: 5 * 60,
+        revalidate: 60 * 60,
+        expire: 24 * 60 * 60
+      },
+      historical: {
+        stale: 60 * 60,
+        revalidate: 24 * 60 * 60,
+        expire: 7 * 24 * 60 * 60
+      }
+    },
     experimental: {
       // React ViewTransition support — powers AnimateView page transitions
       viewTransition: true
