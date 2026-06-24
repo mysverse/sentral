@@ -3,8 +3,9 @@
 import { SignIn } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
+import { Suspense } from "react";
 
-export default function LoginContent() {
+function ThemedSignIn() {
   const { resolvedTheme } = useTheme();
   return (
     <SignIn
@@ -18,5 +19,13 @@ export default function LoginContent() {
         variables: { colorPrimary: "rgb(59, 130, 246)" }
       }}
     />
+  );
+}
+
+export default function LoginContent() {
+  return (
+    <Suspense fallback={<div className="h-[32rem] w-full max-w-sm" />}>
+      <ThemedSignIn />
+    </Suspense>
   );
 }

@@ -24,5 +24,5 @@ export async function GET(request: NextRequest) {
   }
 
   const results = await updateRobloxToClerkMap();
-  return Response.json({ success: true, cache: results });
+  return Response.json({ success: true, ...results });
 }

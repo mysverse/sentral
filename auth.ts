@@ -1,22 +1,7 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { auth as clerkAuth } from "@clerk/nextjs/server";
+import { sessionFromClaims } from "lib/authClaims";
 
 export async function auth() {
-  const user = await currentUser();
-  if (!user) {
-    return null;
-  }
-  const robloxAccount = user?.externalAccounts?.find(
-    (account) => account.provider === "oauth_custom_roblox"
-  );
-  return {
-    user: {
-      clerkId: user.id,
-      id: robloxAccount?.externalId,
-      image: robloxAccount?.imageUrl ?? user.imageUrl,
-      name:
-        robloxAccount?.username ??
-        user.primaryEmailAddress?.emailAddress ??
-        "User"
-    }
-  };
+  const { userId, sessionClaims } = await clerkAuth();
+  return sessionFromClaims(userId, sessionClaims);
 }
