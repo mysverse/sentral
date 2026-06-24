@@ -7,70 +7,82 @@ export const redis = Redis.fromEnv();
 // Safe wrappers: a Redis outage degrades to uncached origin fetches
 // instead of failing the whole request.
 
-export async function safeRedisGet<T>(key: string): Promise<T | null> {
-  try {
-    return await redis.get<T>(key);
-  } catch (error) {
-    logAppError(toAppError(error, { service: "redis" }));
-    return null;
-  }
-}
-
-export async function safeRedisMget<T>(keys: string[]): Promise<(T | null)[]> {
-  if (keys.length === 0) {
+export async function safeRedisHmget<T>(
+  key: string,
+  fields: string[]
+): Promise<(T | null)[]> {
+  if (fields.length === 0) {
     return [];
   }
   try {
-    return await redis.mget<(T | null)[]>(...keys);
+    const values = await redis.hmget<Record<string, T | null>>(key, ...fields);
+    return fields.map((field) => values?.[field] ?? null);
   } catch (error) {
     logAppError(toAppError(error, { service: "redis" }));
-    return keys.map(() => null);
+    return fields.map(() => null);
   }
 }
 
-export async function safeRedisSet(
+export async function safeRedisHset(
   key: string,
-  value: unknown,
-  opts?: { ttlSeconds?: number }
-): Promise<void> {
-  try {
-    if (opts?.ttlSeconds) {
-      await redis.set(key, value, { ex: opts.ttlSeconds });
-    } else {
-      await redis.set(key, value);
-    }
-  } catch (error) {
-    logAppError(toAppError(error, { service: "redis" }));
-  }
-}
-
-// Upstash mset cannot set TTLs, so expiring batch writes go through a pipeline
-export async function safeRedisMset(
   record: Record<string, unknown>,
-  ttlSeconds?: number
+  opts?: { ttlSeconds?: number }
 ): Promise<void> {
   if (Object.keys(record).length === 0) {
     return;
   }
   try {
-    if (ttlSeconds) {
-      const pipeline = redis.pipeline();
-      for (const [key, value] of Object.entries(record)) {
-        pipeline.set(key, value, { ex: ttlSeconds });
-      }
-      await pipeline.exec();
+    if (opts?.ttlSeconds) {
+      await redis.hsetex(key, { expiration: { ex: opts.ttlSeconds } }, record);
     } else {
-      await redis.mset(record);
+      await redis.hset(key, record);
     }
   } catch (error) {
     logAppError(toAppError(error, { service: "redis" }));
   }
 }
 
-export async function safeRedisDel(key: string): Promise<void> {
+export async function safeRedisHdel(
+  key: string,
+  fields: string[]
+): Promise<void> {
+  if (fields.length === 0) {
+    return;
+  }
   try {
-    await redis.del(key);
+    await redis.hdel(key, ...fields);
   } catch (error) {
     logAppError(toAppError(error, { service: "redis" }));
+  }
+}
+
+export async function safeRedisReplaceHash(
+  key: string,
+  record: Record<string, unknown>,
+  ttlSeconds: number
+): Promise<void> {
+  if (Object.keys(record).length === 0) {
+    try {
+      await redis.del(key);
+    } catch (error) {
+      logAppError(toAppError(error, { service: "redis" }));
+    }
+    return;
+  }
+
+  const stagingKey = `${key}:staging:${crypto.randomUUID()}`;
+  try {
+    const pipeline = redis.pipeline();
+    pipeline.hset(stagingKey, record);
+    pipeline.expire(stagingKey, ttlSeconds);
+    pipeline.rename(stagingKey, key);
+    await pipeline.exec();
+  } catch (error) {
+    logAppError(toAppError(error, { service: "redis" }));
+    try {
+      await redis.del(stagingKey);
+    } catch {
+      // Best-effort cleanup only.
+    }
   }
 }
