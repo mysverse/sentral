@@ -18,6 +18,9 @@ export async function getMecsStaff() {
   "use cache";
   cacheLife("dashboard");
   cacheTag("mecs:staff");
+  if (!endpoints.mecs) {
+    return [];
+  }
   return fetchMecs("audit/staff");
 }
 
@@ -25,6 +28,9 @@ export async function getMecsCaseStats() {
   "use cache";
   cacheLife("dashboard");
   cacheTag("mecs:case-stats");
+  if (!endpoints.mecs) {
+    return [];
+  }
   return fetchMecs("stats/case");
 }
 
@@ -32,6 +38,9 @@ export async function getMecsAuditStats() {
   "use cache";
   cacheLife("dashboard");
   cacheTag("mecs:audit-stats");
+  if (!endpoints.mecs) {
+    return null;
+  }
   return fetchMecs("audit/accuracy");
 }
 

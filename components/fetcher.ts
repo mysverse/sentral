@@ -16,6 +16,9 @@ export async function getGrowthData() {
   "use cache";
   cacheLife("dashboard");
   cacheTag("growth:data");
+  if (!endpoints.growth) {
+    return [];
+  }
   const data = await fetchJsonOrThrow<GrowthEntry[]>(`${endpoints.growth}`);
   return data;
 }
@@ -448,6 +451,9 @@ export async function getLeaderboardData(type?: string) {
   "use cache";
   cacheLife("rapid");
   cacheTag(`tracer:leaderboard:${type ?? "default"}`);
+  if (!endpoints.mysverse) {
+    return [];
+  }
   const url = new URL(`${endpoints.mysverse}/`);
   url.searchParams.set("type", "lebuhraya_jersik_leaderboard");
 

@@ -9,6 +9,11 @@ export async function getNametagTemplates() {
   "use cache";
   cacheLife("metadata");
   cacheTag("gentag:templates");
+
+  if (!endpoints.gentag) {
+    return [];
+  }
+
   return fetchJsonOrThrow<NametagTemplate[]>(
     `${endpoints.gentag}/nametag/options`,
     { service: "gentag-templates" }

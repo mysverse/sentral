@@ -8,6 +8,9 @@ export async function getInvoteSeries() {
   "use cache";
   cacheLife("metadata");
   cacheTag("invote:series");
+  if (!endpoints.invote) {
+    return [];
+  }
   return fetchJsonOrThrow<string[]>(
     `${endpoints.invote}/stats/series-identifiers`,
     { service: "invote-series" }
@@ -18,6 +21,9 @@ export async function getInvoteStats(series: string) {
   "use cache";
   cacheLife("live");
   cacheTag(`invote:stats:${series}`);
+  if (!endpoints.invote) {
+    return [];
+  }
   return fetchJsonOrThrow<unknown>(
     `${endpoints.invote}/stats/timestamp?series_identifier=${encodeURIComponent(series)}`,
     { service: "invote-stats" }
@@ -28,6 +34,9 @@ export async function getInvoteSeatStats(series: string) {
   "use cache";
   cacheLife("live");
   cacheTag(`invote:seats:${series}`);
+  if (!endpoints.invote) {
+    return [];
+  }
   return fetchJsonOrThrow<unknown>(
     `${endpoints.invote}/stats/seats/${encodeURIComponent(series)}`,
     { service: "invote-seats" }
