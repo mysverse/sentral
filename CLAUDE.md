@@ -68,7 +68,9 @@ Located in `actions/` and feature-specific `actions.ts` files. Use `"use server"
 
 ### Auth Helper
 
-`auth.ts` wraps Clerk's `currentUser()` and extracts the linked Roblox account (`oauth_custom_roblox`), returning `{ user: { clerkId, id (robloxId), image, name } }`.
+`auth.ts` reads compact `roblox_id` and `roblox_username` Clerk session
+claims via Clerk's `auth()` helper, avoiding routine Backend API calls. It
+returns `{ user: { clerkId, id (robloxId), name } }`.
 
 ### Database
 

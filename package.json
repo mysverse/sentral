@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start -p 4300",
     "lint": "eslint app/ components/ actions/ utils/ hooks/ lib/",
+    "test": "vitest run",
     "generate": "dotenv -e .env.local prisma generate",
     "migrate:dev": "dotenv -e .env.local prisma migrate dev",
     "migrate:deploy": "dotenv -e .env.local prisma migrate deploy",
     "format": "prettier --config .prettierrc \"{pages,app,components,actions,utils,hooks,lib}/**/*.{ts,tsx}\" --write",
     "knip": "knip",
+    "redis:migrate-v2": "dotenv -e .env.local -- tsx scripts/migrate-redis-v2.ts",
+    "clerk:backfill-roblox": "dotenv -e .env.local -- tsx scripts/backfill-clerk-roblox.ts",
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
@@ -85,7 +88,9 @@
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "serwist": "^9.5.11",
-    "typescript": "^6.0.3"
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   },
   "packageManager": "pnpm@11.5.3"
 }
