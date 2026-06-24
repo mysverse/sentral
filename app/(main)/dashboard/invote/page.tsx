@@ -6,25 +6,24 @@ import { Card } from "components/ui/card";
 
 import { type SearchParams } from "nuqs/server";
 
-import { endpoints } from "components/constants/endpoints";
 import { searchParamsCache } from "utils/searchParams";
-import { readJsonSafe } from "lib/http";
+import {
+  getInvoteSeatStats,
+  getInvoteSeries,
+  getInvoteStats
+} from "lib/data/invote";
+import SWRFallback from "components/SWRFallback";
+import { invoteSeatsKey, invoteStatsKey } from "lib/readKeys";
 
 const currentSeries = "GE25";
 
 async function getInvoteSeriesIdentifiers() {
   try {
-    const response = await fetch(
-      `${endpoints.invote}/stats/series-identifiers`
-    );
-
-    if (response.ok) {
-      const data = (await readJsonSafe(response)) as string[];
-      if (data.find((item) => item === currentSeries) === undefined) {
-        return [currentSeries, ...data];
-      }
-      return data;
+    const data = await getInvoteSeries();
+    if (data.find((item) => item === currentSeries) === undefined) {
+      return [currentSeries, ...data];
     }
+    return data;
   } catch {
     // fall through to default
   }
@@ -40,10 +39,19 @@ export default async function Page(props: PageProps) {
   const seriesIdentifiers = await getInvoteSeriesIdentifiers();
   const { series } = await searchParamsCache.parse(props.searchParams);
   const latestSeries = seriesIdentifiers[0];
+  const selectedSeries = series ?? latestSeries;
+  const [stats, seats] = await Promise.all([
+    getInvoteStats(selectedSeries),
+    getInvoteSeatStats(selectedSeries)
+  ]);
+  const statsKey = invoteStatsKey(selectedSeries);
+  const seatsKey = invoteSeatsKey(selectedSeries);
 
   return (
     <>
-      <InvotePage seriesIdentifiers={seriesIdentifiers} />
+      <SWRFallback fallback={{ [statsKey]: stats, [seatsKey]: seats }}>
+        <InvotePage seriesIdentifiers={seriesIdentifiers} />
+      </SWRFallback>
       <Card className="mt-8">
         <h1 className="text-strong mb-4 text-lg font-semibold">Candidates</h1>
         <Suspense
@@ -53,7 +61,7 @@ export default async function Page(props: PageProps) {
             </div>
           }
         >
-          {<ConstituencyList series={series ?? latestSeries} />}
+          {<ConstituencyList series={selectedSeries} />}
         </Suspense>
       </Card>
     </>

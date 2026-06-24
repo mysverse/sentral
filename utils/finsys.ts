@@ -5,11 +5,10 @@ import {
 import { endpoints } from "components/constants/endpoints";
 import { extractRobloxIDs } from "./roblox";
 import {
-  safeRedisDel,
-  safeRedisGet,
-  safeRedisMget,
-  safeRedisMset,
-  safeRedisSet
+  safeRedisHdel,
+  safeRedisHmget,
+  safeRedisHset,
+  safeRedisReplaceHash
 } from "lib/redis";
 import { clerkClient, User } from "@clerk/nextjs/server";
 import { AppError, logAppError, toAppError, toApiError } from "lib/errors";
@@ -20,6 +19,7 @@ import {
   FINSYS_PENDING_TIMEOUT,
   THUMBNAIL_TIMEOUT
 } from "lib/http";
+import { mergeCachedByNumericId } from "lib/cacheKeys";
 
 export { toApiError };
 
@@ -91,32 +91,34 @@ const ROBLOSECURITY = process.env.ROBLOSECURITY;
 const ASSET_TTL_SECONDS = 24 * 60 * 60;
 const USER_TTL_SECONDS = 12 * 60 * 60;
 const THUMBNAIL_TTL_SECONDS = 6 * 60 * 60; // CDN URLs rotate
-const ROBLOX_CLERK_MAP_TTL_SECONDS = 48 * 60 * 60; // refreshed by 30-min cron
+const ROBLOX_CLERK_MAP_TTL_SECONDS = 48 * 60 * 60; // refreshed by 6-hour cron
+const ASSET_CACHE_KEY = "cache:v2:assets";
+const USER_CACHE_KEY = "cache:v2:users";
+const THUMBNAIL_CACHE_KEY = "cache:v2:thumbnails";
+export const ROBLOX_CLERK_MAP_KEY = "identity:v2:roblox-clerk";
 
 // Function to fetch asset details from the catalog
 async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
-  // Replace individual redis.get with mget
-  const assetKeys = assetIds.map((id) => `asset:${id}`);
-  const assetData = await safeRedisMget<ItemDetail>(assetKeys);
-
-  if (assetData.every((item) => item !== null)) {
-    // console.log("All assets found in cache");
-    return assetData;
-  }
-
   if (assetIds.length === 0) {
     return [];
   }
 
+  const fields = assetIds.map(String);
+  const cached = await safeRedisHmget<ItemDetail>(ASSET_CACHE_KEY, fields);
+  const missingIds = assetIds.filter((_, index) => cached[index] === null);
+
+  if (missingIds.length === 0) {
+    return cached as ItemDetail[];
+  }
+
   let retries = 0;
   const maxRetries = 3;
-
-  let csrf = await safeRedisGet<string>("x-csrf-token");
+  let csrf: string | undefined;
 
   while (retries < maxRetries) {
     const url = "https://catalog.roblox.com/v1/catalog/items/details";
     const body: AssetDetailsRequest = {
-      items: assetIds.map((id) => ({ itemType: 1, id }))
+      items: missingIds.map((id) => ({ itemType: 1, id }))
     };
 
     const headers: Record<string, string> = {
@@ -133,8 +135,7 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
     const response = await fetch(url, {
       method: "POST",
       headers,
-      body: JSON.stringify(body),
-      cache: "force-cache"
+      body: JSON.stringify(body)
     });
 
     if (!response.ok) {
@@ -162,14 +163,20 @@ async function fetchAssetDetails(assetIds: number[]): Promise<ItemDetail[]> {
       creatorName: item.creatorName
     }));
 
-    // Replace individual redis.set with mset
-    const assetDataToCache: Record<string, string> = {};
+    const assetDataToCache: Record<string, ItemDetail> = {};
     returnData.forEach((item) => {
-      assetDataToCache[`asset:${item.id}`] = JSON.stringify(item);
+      assetDataToCache[String(item.id)] = item;
     });
-    await safeRedisMset(assetDataToCache, ASSET_TTL_SECONDS);
+    await safeRedisHset(ASSET_CACHE_KEY, assetDataToCache, {
+      ttlSeconds: ASSET_TTL_SECONDS
+    });
 
-    return returnData;
+    return mergeCachedByNumericId(
+      assetIds,
+      cached,
+      returnData,
+      (item) => item.id
+    );
   }
 
   throw new Error("Unable to get CSRF token while fetching asset details");
@@ -201,12 +208,15 @@ async function fetchUserData(userIds: number[]) {
     data: RobloxUser[];
   }
 
-  // Replace individual redis.get with mget
-  const userKeys = userIds.map((id) => `user:${id}`);
-  const userData = await safeRedisMget<RobloxUser>(userKeys);
-  if (userData.every((item) => item !== null)) {
-    // console.log("All users found in cache");
-    return { data: userData };
+  if (userIds.length === 0) {
+    return { data: [] };
+  }
+
+  const fields = userIds.map(String);
+  const cached = await safeRedisHmget<RobloxUser>(USER_CACHE_KEY, fields);
+  const missingIds = userIds.filter((_, index) => cached[index] === null);
+  if (missingIds.length === 0) {
+    return { data: cached as RobloxUser[] };
   }
 
   const data = await fetchJsonOrThrow<RobloxUserResponse>(
@@ -217,20 +227,25 @@ async function fetchUserData(userIds: number[]) {
         "Content-Type": "application/json",
         Accept: "application/json"
       },
-      body: JSON.stringify({ userIds, excludeBannedUsers: true }),
-      next: { revalidate: 5 * 60 },
+      body: JSON.stringify({
+        userIds: missingIds,
+        excludeBannedUsers: true
+      }),
       service: "roblox-users"
     }
   );
 
-  // Replace individual redis.set with mset
-  const userDataToCache: Record<string, string> = {};
+  const userDataToCache: Record<string, RobloxUser> = {};
   data.data.forEach((item) => {
-    userDataToCache[`user:${item.id}`] = JSON.stringify(item);
+    userDataToCache[String(item.id)] = item;
   });
-  await safeRedisMset(userDataToCache, USER_TTL_SECONDS);
+  await safeRedisHset(USER_CACHE_KEY, userDataToCache, {
+    ttlSeconds: USER_TTL_SECONDS
+  });
 
-  return data;
+  return {
+    data: mergeCachedByNumericId(userIds, cached, data.data, (item) => item.id)
+  };
 }
 
 async function fetchThumbnails(assetIds: number[]) {
@@ -239,16 +254,18 @@ async function fetchThumbnails(assetIds: number[]) {
 
   type ThumbnailData = RobloxThumbnailAssetApiResponse["data"][number];
 
-  // Replace individual redis.get with mget
-  const thumbnailKeys = assetIds.map((id) => `thumbnail:${id}`);
-  const thumbnailData = await safeRedisMget<ThumbnailData>(thumbnailKeys);
-  if (thumbnailData.every((item) => item !== null)) {
-    // console.log("All thumbnails found in cache");
-    return { data: thumbnailData };
-  }
-
   if (assetIds.length === 0) {
     return { data: [] };
+  }
+
+  const fields = assetIds.map(String);
+  const cached = await safeRedisHmget<ThumbnailData>(
+    THUMBNAIL_CACHE_KEY,
+    fields
+  );
+  const missingIds = assetIds.filter((_, index) => cached[index] === null);
+  if (missingIds.length === 0) {
+    return { data: cached as ThumbnailData[] };
   }
 
   while (retries < maxRetries) {
@@ -260,11 +277,10 @@ async function fetchThumbnails(assetIds: number[]) {
     try {
       const response = await fetch(
         `https://myx-proxy.yan3321.workers.dev/myxProxy/?apiurl=${encodeURIComponent(
-          `${url}?assetIds=${assetIds.join(",")}&format=Png&isCircular=false&size=420x420`
+          `${url}?assetIds=${missingIds.join(",")}&format=Png&isCircular=false&size=420x420`
         )}`,
         {
           method: "GET",
-          next: { revalidate: 5 * 60 },
           signal: controller.signal
         } as RequestInit
       );
@@ -274,14 +290,21 @@ async function fetchThumbnails(assetIds: number[]) {
         const data = (await readJsonSafe(
           response
         )) as RobloxThumbnailAssetApiResponse;
-        // Replace individual redis.set with mset
-        const thumbnailDataToCache: Record<string, string> = {};
+        const thumbnailDataToCache: Record<string, ThumbnailData> = {};
         data.data.forEach((item) => {
-          thumbnailDataToCache[`thumbnail:${item.targetId}`] =
-            JSON.stringify(item);
+          thumbnailDataToCache[String(item.targetId)] = item;
         });
-        await safeRedisMset(thumbnailDataToCache, THUMBNAIL_TTL_SECONDS);
-        return data;
+        await safeRedisHset(THUMBNAIL_CACHE_KEY, thumbnailDataToCache, {
+          ttlSeconds: THUMBNAIL_TTL_SECONDS
+        });
+        return {
+          data: mergeCachedByNumericId(
+            assetIds,
+            cached,
+            data.data,
+            (item) => item.targetId
+          )
+        };
       } else {
         const errorBody = await readJsonSafe(response).catch(() => null);
         console.error(errorBody);
@@ -308,12 +331,9 @@ async function fetchThumbnails(assetIds: number[]) {
 
 const ownershipDisabled = false;
 
-const generateCacheKey = (robloxId: number) =>
-  `roblox_user_id_to_clerk:${robloxId}`;
-
 export async function cacheRobloxId(robloxId: number, clerkUserId: string) {
-  await safeRedisSet(generateCacheKey(robloxId), clerkUserId, {
-    ttlSeconds: ROBLOX_CLERK_MAP_TTL_SECONDS
+  await safeRedisHset(ROBLOX_CLERK_MAP_KEY, {
+    [String(robloxId)]: clerkUserId
   });
 }
 
@@ -346,7 +366,7 @@ export async function getRobloxOauthTokenFromClerkUserId(
     console.log(
       `Failed to get oauth token for user ${robloxId}, deleting cache key`
     );
-    await safeRedisDel(generateCacheKey(robloxId));
+    await safeRedisHdel(ROBLOX_CLERK_MAP_KEY, [String(robloxId)]);
   }
   return result;
 }
@@ -358,8 +378,10 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
   }
 
   try {
-    const key = generateCacheKey;
-    const clerkUserIds = await safeRedisMget<string>(userIds.map(key));
+    const clerkUserIds = await safeRedisHmget<string>(
+      ROBLOX_CLERK_MAP_KEY,
+      userIds.map(String)
+    );
 
     const client = await clerkClient();
 
@@ -386,6 +408,7 @@ async function getOauthTokenFromRobloxUserIds(userIds: number[]) {
 }
 
 export async function updateRobloxToClerkMap() {
+  const startedAt = Date.now();
   const client = await clerkClient();
 
   const users: User[] = [];
@@ -411,32 +434,23 @@ export async function updateRobloxToClerkMap() {
     );
     if (robloxAccount) {
       const robloxId = parseInt(robloxAccount.externalId);
-      const key = generateCacheKey(robloxId);
-      idCache[key] = user.id;
-      console.log(`Caching ${robloxId} -> ${user.id}`);
+      idCache[String(robloxId)] = user.id;
     }
   }
 
   if (Object.keys(idCache).length > 0) {
-    await safeRedisMset(idCache, ROBLOX_CLERK_MAP_TTL_SECONDS);
+    await safeRedisReplaceHash(
+      ROBLOX_CLERK_MAP_KEY,
+      idCache,
+      ROBLOX_CLERK_MAP_TTL_SECONDS
+    );
   }
 
-  const tokens = await Promise.all(
-    Object.keys(idCache).map(async (key) => {
-      const clerkId = idCache[key];
-      const oauthToken = await getRobloxOauthTokenFromClerkUserId(
-        client,
-        clerkId
-      );
-      return {
-        key,
-        value: clerkId,
-        token: oauthToken ? true : false
-      };
-    })
-  );
-
-  return tokens;
+  return {
+    usersScanned: users.length,
+    mappingsWritten: Object.keys(idCache).length,
+    durationMs: Date.now() - startedAt
+  };
 }
 
 // Function to check if a user owns a specific asset

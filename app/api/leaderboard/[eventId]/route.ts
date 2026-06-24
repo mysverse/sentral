@@ -5,6 +5,7 @@ import { broadcastLeaderboardUpdate } from "../../../../lib/sse-connections";
 import { AppError, toApiError, toValidationApiError } from "lib/errors";
 import { secureCompare } from "lib/secureCompare";
 import { enforceRateLimit, leaderboardSubmitLimiter } from "lib/ratelimit";
+import { revalidateTag } from "next/cache";
 
 const addScoreSchema = z.object({
   playerName: z.string().min(1).max(50),
@@ -149,6 +150,7 @@ export async function POST(
 
     // Broadcast update to SSE connections
     broadcastLeaderboardUpdate(eventId);
+    revalidateTag(`leaderboard:${eventId}`, "max");
 
     return NextResponse.json({
       ...result,

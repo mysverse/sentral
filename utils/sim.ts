@@ -2,10 +2,9 @@
 import "server-only";
 
 import { auth } from "auth";
-import { safeRedisGet, safeRedisSet } from "lib/redis";
 import { fetchJsonOrThrow } from "lib/http";
-import { cache } from "react";
 import { allowedGroups } from "data/sim";
+import { cacheLife, cacheTag } from "next/cache";
 
 interface RbxGroupResponse {
   data: RbxGroupData[];
@@ -51,29 +50,19 @@ async function getUserData() {
   };
 }
 
-export const getGroups = cache(async (userId: number) => {
-  const groups = await safeRedisGet<RbxGroupResponse>(`groups:${userId}`);
-  if (groups) {
-    return groups;
-  }
-  const response = await fetch(
-    `https://groups.roblox.com/v2/users/${userId}/groups/roles`
+export async function getGroups(userId: number) {
+  "use cache";
+  cacheLife({
+    stale: 60,
+    revalidate: 5 * 60,
+    expire: 30 * 60
+  });
+  cacheTag(`roblox:groups:${userId}`);
+  return fetchJsonOrThrow<RbxGroupResponse>(
+    `https://groups.roblox.com/v2/users/${userId}/groups/roles`,
+    { service: "roblox-groups" }
   );
-  if (!response.ok) {
-    if (groups) return groups;
-  } else {
-    const text = await response.text();
-    let data: RbxGroupResponse;
-    try {
-      data = JSON.parse(text) as RbxGroupResponse;
-    } catch {
-      throw new Error("Failed to parse groups response");
-    }
-    await safeRedisSet(`groups:${userId}`, data, { ttlSeconds: 60 });
-    return data;
-  }
-  throw new Error("Failed to fetch groups");
-});
+}
 
 export async function getGroupRoles(userId: number) {
   const groups = await getGroups(userId);

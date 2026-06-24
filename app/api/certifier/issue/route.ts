@@ -3,11 +3,13 @@ import { z } from "zod";
 import prisma from "lib/prisma"; // Added for ApiKey check
 
 import {
+  certifierTags,
   certificateSchema,
   generateGenericCertificate
 } from "../../../(main)/dashboard/certifier/utils"; // Corrected import path
 import { AppError, toApiError, toValidationApiError } from "lib/errors";
 import { certIssueLimiter, enforceRateLimit } from "lib/ratelimit";
+import { revalidateTag } from "next/cache";
 
 export async function POST(request: Request) {
   try {
@@ -63,6 +65,8 @@ export async function POST(request: Request) {
     }
 
     const code = await generateGenericCertificate(parsedSchema.data);
+    revalidateTag(certifierTags.certificates, "max");
+    revalidateTag(certifierTags.certificate(code), "max");
 
     return NextResponse.json({ code });
   } catch (error) {

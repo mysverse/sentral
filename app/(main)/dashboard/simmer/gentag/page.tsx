@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   ArrowPathIcon,
   ChevronRightIcon,
@@ -47,7 +47,8 @@ function NametagImage({
     shouldTry &&
     name?.trim().length > 0 &&
     name.length <= NAMETAG_LENGTH_LIMIT &&
-    index >= 0;
+    index >= 0 &&
+    tShirtIDs.every((id) => Number.isSafeInteger(id) && id > 0);
 
   const { image, isLoading, isError } = useImageData(
     name,
@@ -58,6 +59,19 @@ function NametagImage({
   );
 
   const showLoadingState = isGenerating || isLoading;
+  const objectUrl = useMemo(
+    () => (image ? URL.createObjectURL(image) : undefined),
+    [image]
+  );
+
+  useEffect(
+    () => () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    },
+    [objectUrl]
+  );
 
   return (
     <AnimatePresence mode="wait">
@@ -88,10 +102,10 @@ function NametagImage({
               aria-hidden="true"
             />
           </div>
-        ) : image ? (
+        ) : image && objectUrl ? (
           <div className="m-auto">
             <a
-              href={preview ? undefined : URL.createObjectURL(image)}
+              href={preview ? undefined : objectUrl}
               download={`nametag_${sanitizeName(name)}`}
             >
               <motion.div
@@ -102,7 +116,7 @@ function NametagImage({
                 <Image
                   height={128}
                   width={128}
-                  src={URL.createObjectURL(image)}
+                  src={objectUrl}
                   alt={`Nametag with name "${name}"`}
                   unoptimized
                 />
@@ -339,8 +353,9 @@ function NametagForm() {
 
   const handleTShirtIDChange = useCallback((value: string) => {
     const id = parseInt(value);
-    setCurrentTShirtID(id);
-    setTShirtIDs([id]);
+    const validId = Number.isSafeInteger(id) && id > 0 ? id : undefined;
+    setCurrentTShirtID(validId);
+    setTShirtIDs(validId ? [validId] : []);
     setShouldGenerate(false);
   }, []);
 

@@ -5,6 +5,15 @@ import { auth } from "auth";
 import { CertificateType } from "generated/client";
 import { z } from "zod";
 import { certificateRequiresReason } from "./certificateTypeConfig";
+import { cacheLife, cacheTag } from "next/cache";
+
+export const certifierTags = {
+  certificates: "certifier:certificates",
+  courses: "certifier:courses",
+  batches: "certifier:batches",
+  apiKeys: "certifier:api-keys",
+  certificate: (code: string) => `certifier:certificate:${code}`
+};
 
 const allowed = [
   "1055048", // yan3321
@@ -63,6 +72,9 @@ export const apiKeySchema = z.object({
 });
 
 export async function getCertificates() {
+  "use cache";
+  cacheLife("dashboard");
+  cacheTag(certifierTags.certificates);
   const data = await prisma.certificate.findMany({
     select: {
       id: true,
@@ -96,9 +108,12 @@ export async function getCertificates() {
 }
 
 export async function getCertificateByCode(code?: string) {
+  "use cache";
+  cacheLife("metadata");
   if (!code) {
     return null;
   }
+  cacheTag(certifierTags.certificates, certifierTags.certificate(code));
   const data = await prisma.certificate.findUnique({
     where: { code },
     include: {
@@ -224,6 +239,9 @@ export async function deleteGenericCertificate(id: string) {
 
 // Functions for Courses
 export async function getCourses() {
+  "use cache";
+  cacheLife("dashboard");
+  cacheTag(certifierTags.courses);
   return prisma.course.findMany();
 }
 
@@ -244,6 +262,9 @@ export async function deleteCourse(id: string) {
 
 // Functions for Batches
 export async function getBatches() {
+  "use cache";
+  cacheLife("dashboard");
+  cacheTag(certifierTags.batches);
   return prisma.batch.findMany({
     include: {
       course: {
@@ -267,6 +288,9 @@ export async function deleteBatch(id: string) {
 
 // Functions for API Keys
 export async function getApiKeys() {
+  "use cache";
+  cacheLife("dashboard");
+  cacheTag(certifierTags.apiKeys);
   return prisma.apiKey.findMany({
     include: {
       course: {

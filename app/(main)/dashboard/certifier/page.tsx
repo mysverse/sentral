@@ -1,4 +1,10 @@
-import { getCertificates, getCourses, getBatches, getApiKeys } from "./utils";
+import {
+  checkPermissions,
+  getCertificates,
+  getCourses,
+  getBatches,
+  getApiKeys
+} from "./utils";
 import CertificatesTable from "./CertificatesTable";
 import IssuanceForm from "./IssuanceForm";
 import BulkIssuanceForm from "./BulkIssuanceForm";
@@ -7,10 +13,15 @@ import BatchesForm from "./BatchesForm";
 import ApiKeysForm from "./ApiKeysForm";
 
 export default async function CertifierPage() {
-  const certificates = await getCertificates();
-  const courses = await getCourses();
-  const batches = await getBatches();
-  const apiKeys = await getApiKeys();
+  if (!(await checkPermissions())) {
+    return null;
+  }
+  const [certificates, courses, batches, apiKeys] = await Promise.all([
+    getCertificates(),
+    getCourses(),
+    getBatches(),
+    getApiKeys()
+  ]);
 
   return (
     <>

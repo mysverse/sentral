@@ -1,11 +1,8 @@
 import { getAvatarThumbnails } from "components/fetcher";
-import {
-  ConstituencyData,
-  getCodeFromIndex,
-  getConstituencyData,
-  getInvoteSeats
-} from "utils/invote";
+import { ConstituencyData, getCodeFromIndex } from "utils/invote";
 import { regionNames } from "data/invote";
+import { getInvoteCandidates, getInvoteSeatStats } from "lib/data/invote";
+import type { InvoteSeats } from "components/fetcher";
 
 import ConstituencyCard from "./ConstituencyCard";
 
@@ -14,8 +11,8 @@ import { springUI } from "components/ui/motion";
 
 export default async function ConstituencyList({ series }: { series: string }) {
   const [data, seats] = await Promise.all([
-    getConstituencyData(series),
-    getInvoteSeats(series)
+    getInvoteCandidates(series) as Promise<ConstituencyData[]>,
+    getInvoteSeatStats(series) as Promise<InvoteSeats[]>
   ]);
 
   if (!data || data.length === 0) {

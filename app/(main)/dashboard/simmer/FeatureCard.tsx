@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
-import Link from "next/link";
+import IntentPrefetchLink from "components/IntentPrefetchLink";
+import { GENTAG_TEMPLATES_KEY } from "lib/readKeys";
 import React from "react";
 
 interface FeatureCardProps {
@@ -32,12 +33,15 @@ export default function FeatureCard({
         )}
       </h2>
       <p className="text-muted mb-4">{description}</p>
-      <Link href={href}>
+      <IntentPrefetchLink
+        href={href}
+        swrKeys={href.includes("/gentag") ? [GENTAG_TEMPLATES_KEY] : undefined}
+      >
         <button className="bg-primary-600 hover:bg-surface hover:text-primary-600 flex w-full flex-row items-center justify-center gap-2 rounded-lg px-6 py-3 text-white outline outline-0 transition hover:font-semibold hover:outline-2 hover:outline-blue-600">
           <ArrowTopRightOnSquareIcon className="h-5 w-5" aria-hidden="true" />{" "}
           Access application
         </button>
-      </Link>
+      </IntentPrefetchLink>
     </div>
   );
 }
